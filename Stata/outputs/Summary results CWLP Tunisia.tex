@@ -1,0 +1,40 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{stata}
+\usepackage{float}
+\usepackage{caption} 
+\usepackage{setspace}
+\usepackage{pdflscape}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black,
+}
+\usepackage{longtable}
+\usepackage{booktabs}
+
+\begin{document}
+	
+	\title{Summary Result Tunisia CWLP}\maketitle
+	
+	\pagebreak
+	
+	\tableofcontents
+	
+	\pagebreak
+	
+\section{Main Table}
+
+\begin{table}[H]\centering\caption{CWLP impact on indexes} 
+	\resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}
+\end{table}
+
+\end{document}
+
