@@ -32,8 +32,23 @@
 	
 \section{Main Table}
 
-\begin{table}[H]\centering\caption{CWLP impact on indexes} 
-	\resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}
+Table 1 summarize program effect on different outcomes index. We report the results of three specification. In the first column we report the \textit{Between Village Effect} specification measuring the effect of program assignment (at the community level). Second column report the effect of the \textit{Within Village Effect} specification measuring the effect of being enrolled in CWLP program and randomized into treatment group. Finally, third column report the spillovers effect which can be interpreted as the effect of having beneficiary assigned to CWLP on the overall communities. \\
+
+
+We estimate the following equation:
+\begin{itemize}
+	\item Between Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{v} + \epsilon_{v} \end{equation}
+	
+	\item Within Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}EMPLOYMENT_{iv} + \beta_{2}X_{v} + \epsilon_{iv} \end{equation}
+	
+	\item Spillovers: \begin{equation} Y_{jv} = \beta_{0} + \beta_{1}Z_{jv} + \beta_{2}X_{jv} + \epsilon_{jv} \end{equation}
+\end{itemize}
+
+Where $CWLP_{v}$ is a dummy indicating whether a community (\textit{v}) was recipient of a CWLP infrastructure project, $EMPLOYMENT_{iv}$ is a dummy indicating whether individual \textit{i} in village \textit{v} was offered an employment in a CWLP infrastructure project. Concerning the last specification, $Z_{jv}$ is a vector of cluster and individual level proxies for closer interaction between treated individual \textit{i} and non treated individual \textit{j} in village \textit{v}, comparing eligible beneficiary not offered employment in treated communities to eligible beneficiaries in control communities . All error terms are clustered at the village level. 
+
+
+\begin{table}[H]\centering\caption{Main Results} 
+	\resizebox{\textwidth}{!}{\input{Main/Table_Index_formatted_2.tex}}\caption*{\footnotesize{* p$<$0.1, ** p$<$0.05, *** p$<$0.01. We report the average value of the index for the sample used for each specifications.}}
 \end{table}
 
 \end{document}
