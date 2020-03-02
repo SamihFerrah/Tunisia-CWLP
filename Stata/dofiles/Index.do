@@ -1,5 +1,5 @@
 
-use $stata/enquete_All, clear
+use "$stata/enquete_All", clear
 *drop earned_main_winbis earned_main_win5bis
  
 *INDEX CALCULATION
@@ -100,10 +100,10 @@ rename	`signvar' 		`signvar'I
 rename	`signvar'_t	 	`signvar'
 }
 
-save $stata/enquete_All2, replace
+save "$stata/enquete_All2", replace
 
 *calculation of indexes by category of variables
-do $do/command_index
+do "$do/command_index"
 
 /*
 We have six "types" of individuals in our sample
@@ -137,7 +137,7 @@ file open myfile using "$report/index.xls", write replace
 
 *A)      Between villages effects on the workers:
 *a.      ITT: [(1) + (2)] vs (6)
-use $stata/enquete_All2, replace 
+use "$stata/enquete_All2", replace 
 keep if (parti==1 | desist==1 | enquete==3) 
 
  file write myfile "<!DOCTYPE html><html lang='en'><head>"
@@ -152,13 +152,13 @@ keep if (parti==1 | desist==1 | enquete==3)
  
 keep key IAa*
 sort key
-save $stata/indexAa, replace
+save "$stata/indexAa", replace
 
 
 *B)      Within village effects on the workers:
 *a.      ITT: [(1) + (2)] vs (3)
 
-use $stata/enquete_All2, replace 
+use "$stata/enquete_All2", replace 
 gen program=(parti==1 | desist==1)
 keep if (parti==1 | desist==1 | control==1)
 
@@ -174,11 +174,11 @@ keep if (parti==1 | desist==1 | control==1)
  
 keep key IBa*
 sort key
-save $stata/indexBa, replace
+save "$stata/indexBa", replace
 
 *B)      Within village effects on the workers:
 *b.      ATE: (1) vs (3)
-use $stata/enquete_All2, replace 
+use "$stata/enquete_All2", replace 
 keep if (parti==1 | control==1)
 
  file write myfile "<!DOCTYPE html><html lang='en'><head>"
@@ -193,11 +193,11 @@ keep if (parti==1 | control==1)
  
 keep key IBb*
 sort key
-save $stata/indexBb, replace
+save "$stata/indexBb", replace
 
 *C)      Spillover effects (two types)
 *a.      (4) vs (5)
-use $stata/enquete_All2, replace 
+use "$stata/enquete_All2", replace 
 keep if enquete==1
 
  file write myfile "<!DOCTYPE html><html lang='en'><head>"
@@ -212,11 +212,11 @@ keep if enquete==1
 
 keep key ICa*
 sort key
-save $stata/indexCa, replace
+save "$stata/indexCa", replace
 
 *C)      Spillover effects (two types)
 *b.      (3) vs (6)
-use $stata/enquete_All2, replace 
+use "$stata/enquete_All2", replace 
 keep if (control==1 | enquete==3) 
 
  file write myfile "<!DOCTYPE html><html lang='en'><head>"
@@ -232,25 +232,25 @@ file close myfile
  
 keep key ICb*
 sort key
-save $stata/indexCb, replace
+save "$stata/indexCb", replace
 
 
 *merge with main dataset
-use $stata/enquete_All2, clear
+use "$stata/enquete_All2", clear
 sort key
-merge 1:1 key using $stata/indexAa
+merge 1:1 key using "$stata/indexAa"
 sum IAa* if _merge==1
 drop _merge
-merge 1:1 key using $stata/indexBa
+merge 1:1 key using "$stata/indexBa"
 sum IBa* if _merge==1
 drop _merge
-merge 1:1 key using $stata/indexBb
+merge 1:1 key using "$stata/indexBb"
 sum IBb* if _merge==1
 drop _merge
-merge 1:1 key using $stata/indexCa
+merge 1:1 key using "$stata/indexCa"
 sum ICa* if _merge==1
 drop _merge
-merge 1:1 key using $stata/indexCb
+merge 1:1 key using "$stata/indexCb"
 sum ICb* if _merge==1
 drop _merge
 
@@ -305,7 +305,7 @@ foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win5 c3_a_5_win
 	rename	`signvar'I 		`signvar'
 	}
 
-save $stata/enquete_All3, replace
+save "$stata/enquete_All3", replace
 
 *****************************
 

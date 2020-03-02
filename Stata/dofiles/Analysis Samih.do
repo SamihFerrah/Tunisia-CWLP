@@ -296,8 +296,284 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 	
 	// Spillovers 
 
+* Generate program indicator 
+gen program=(parti==1 | desist==1)
+
+		
+* Generate variable identifyin the sample used for every analysis 
+
+g 		Between = .
+replace Between = 1 if (parti==1 | desist==1 | enquete==3)
+
+g 		Within = .
+replace Within = 1 if (parti==1 | desist==1 | control==1) 
+
+g 		Spillovers = .
+replace Spillovers = 1 if (control==1 | enquete==3)
+
+g 		Infrastructure = .
+replace Infrastructure = 1 if enquete==1
+
+
+
+
+	// Create Normalize version of Index 
+{
+	/*
+
+*do "$git_tunisia/dofiles/Normalize Index.do"
+
+gen program=(parti==1 | desist==1)
+
+cap file close summary_table
+
+file open  summary_table using Table_Summary.tex, text write replace 
+
+file write summary_table ///
+	"\begin{tabular}{l*{9}{c}}\hline&\multicolumn{3}{c}{Between Village}&\multicolumn{3}{c}{Within Village (ITT)}&\multicolumn{3}{c}{Spillovers} \hline \\" _n
+
+file close summary_table
+
+file open  summary_table using Table_Summary.tex, text write append
+
+foreach outcome in `Index_ALL' {											// Loop over every Indexes
+	
+	*desc IAa`outcome'
+	
+	pause
+	*local l_`outcome' : variable label IAa`outcome'
+	
+	
+	// Between Specification 
+	preserve 
+	keep if (parti==1 | desist==1 | enquete==3) 
+	
+	regress IAa`outcome' beneficiaire `ctrl_Aa' , vce (cluster imada)
+	
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.1 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 > 0.05{
+			file write summary_table ///
+				"`l_`outcome'' & + * & & \\"   _n 
+		}
+		
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.05 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 > 0.01{
+			file write summary_table ///
+				"`l_`outcome'' & + ** & &"     _n
+		}
+		
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.01{
+			file write summary_table ///
+				"`l_`outcome'' & + *** & &"    _n
+		}
+	
+	restore
+
+	
+	// Within specification 
+		
+	preserve 
+	keep if (parti==1 | desist==1 | control==1)
+	
+	regress IBa`outcome' program `ctrl_Ba'  , vce (cluster imada)
+	
+		if _b[program] > 0 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 <= 0.1 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 > 0.05{
+			file write summary_table ///
+				"`l_`outcome'' & & + * &"   _n 
+		}
+		
+		if _b[program] > 0 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 <= 0.05 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 > 0.01{
+			file write summary_table ///
+				"`l_`outcome'' & & + **  & \\"     _n
+		}
+		
+		if _b[program] > 0 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 <= 0.01{
+			file write summary_table ///
+				"`l_`outcome'' &  & + *** &"    _n
+		}
+	restore
+
+	
+	// Spillovers 
+
 	preserve 
 	keep if (control==1 | enquete==3)
+	
+	regres ICb`outcome' beneficiaire `ctrl_Cb' , vce (cluster imada)
+	pause
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.1 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 > 0.05{
+			file write summary_table ///
+				"`l_`outcome'' &  & & + *"   _n 
+		}
+		
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.05 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 > 0.01{
+			file write summary_table ///
+				"`l_`outcome'' & & & + **"     _n
+		}
+		
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.01{
+			file write summary_table ///
+				"`l_`outcome'' &  & & + *** \\"   _n
+		}
+	restore
+}
+	file close summary_table
+
+*/
+
+}	
+
+{
+/*	
+********************************************************************************
+********************************************************************************
+* 1) Descriptive Statistics (Index Only) 
+********************************************************************************
+********************************************************************************
+{
+
+	***************************
+	* Between
+	***************************
+		
+	preserve 
+	
+	keep if (parti==1 | desist==1 | enquete==3) 
+	
+		local num : list sizeof local(IndexAa) 									// Create local with number of observations per group of variables
+			
+		mat def descriptive = J(`num'*2,16,.)									// Define matrix
+		
+		local counter_outcome = 1
+		local counter_empty   = 2
+		
+		global rowname ""
+		global substit ""
+		
+		foreach outcome of varlist `IndexAa' {														// Loop over every Indexes
+			
+			local l_`outcome' : variable label `outcome'
+			
+			global rowname  "$rowname row`counter_outcome' row`counter_empty'"		                   // Use to define row in matrix 
+			global substit `"row`counter_empty' "" row`counter_outcome' "`l_`outcome''" $substit "'		// Use to label row in table
+			
+			sum `outcome' if beneficiaire == 0 , d
+			
+				mat descriptive[`counter_outcome',1] = `r(mean)'
+				mat descriptive[`counter_outcome',2] = `r(sd)'
+				mat descriptive[`counter_outcome',3] = `r(min)'
+				mat descriptive[`counter_outcome',4] = `r(max)'
+				
+			sum `outcome' if beneficiaire == 1 , d
+			
+				mat descriptive[`counter_outcome',5] = `r(mean)'
+				mat descriptive[`counter_outcome',6] = `r(sd)'
+				mat descriptive[`counter_outcome',7] = `r(min)'
+				mat descriptive[`counter_outcome',8] = `r(max)'
+				
+			local counter_outcome = `counter_outcome' + 2
+			local counter_empty   = `counter_empty'   + 2
+				
+		}
+		
+	restore
+	
+	***************************
+	* Within (ITT)
+	***************************
+
+	
+	
+	preserve
+		gen program=(parti==1 | desist==1)
+		keep if (parti==1 | desist==1 | control==1) 
+		
+		local counter_outcome = 1
+		local counter_empty   = 2
+		
+		foreach outcome of varlist `IndexBa' {	
+		
+			sum `outcome' if program == 0 , d
+			
+				mat descriptive[`counter_outcome',9] = `r(mean)'
+				mat descriptive[`counter_outcome',10] = `r(sd)'
+				mat descriptive[`counter_outcome',11] = `r(min)'
+				mat descriptive[`counter_outcome',12] = `r(max)'
+				
+			sum `outcome' if program == 1 , d
+			
+				mat descriptive[`counter_outcome',13]  = `r(mean)'
+				mat descriptive[`counter_outcome',14]  = `r(sd)'
+				mat descriptive[`counter_outcome',15]  = `r(min)'
+				mat descriptive[`counter_outcome',16] = `r(max)'
+				
+			local counter_outcome = `counter_outcome' + 2
+			local counter_empty   = `counter_empty'   + 2 
+		
+	}
+	
+	restore 
+	****************************************
+	* Export tables 
+	****************************************
+		
+		mata descriptive = st_matrix("descriptive")
+		cap drop __*
+		
+		mmat2tex descriptive using Table_Descriptive.tex, replace ///
+						preheader("\begin{tabular}{l*{16}{c}}\hline&\multicolumn{8}{c}{Between Village}&\multicolumn{8}{c}{Within Village (ITT)} \\ \cmidrule(r){2-9}\cmidrule(r){10-17} &\multicolumn{4}{c}{Control}&\multicolumn{4}{c}{Treatment}&\multicolumn{4}{c}{Control}&\multicolumn{4}{c}{Treatment} \\ \cmidrule(r){2-5}\cmidrule(l){6-9}\cmidrule(l){10-13}\cmidrule(l){14-17} & {Mean} & {St.D} & {Min} & {Max} & {Mean} & {St.D} & {Min} & {Max} & {Mean} & {St.D} & {Min} & {Max} & {Mean} & {St.D} & {Min} & {Max} \\ \midrule ") ///
+						bottom("\hline \end{tabular}") ///
+						rownames($rowname )   ///
+						substitute($substit ) ///
+						fmt(%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f)
+
+}		
+*/	
+}
+********************************************************************************
+********************************************************************************
+* 2) Main Table (only indexes) --> Table_Index.tex 
+********************************************************************************
+********************************************************************************
+
+	// Prepare excel file with results 
+	putexcel set Results_Summary.xlsx, replace 
+	
+	*putexcel A1 "" 
+	
+	putexcel (B1:D1), merge 
+	putexcel (B1:D1) = "Between"
+	
+	putexcel (E1:G1), merge 
+	putexcel (E1:G1) = "Within"
+	
+	putexcel (H1:J1), merge 
+	putexcel (H1:J1) = "Spillovers"
+	
+	putexcel B2 = "Control Mean"
+	putexcel E2 = "Control Mean"
+	putexcel H2 = "Control Mean"
+	
+	putexcel C2 = "Treatment"
+	putexcel F2 = "Treatment"
+	putexcel I2 = "Treatment"
+	
+	putexcel D2 = "P-value"
+	putexcel G2 = "P-value"
+	putexcel J2 = "P-value"
+	
+	
+	local cells = 3
+	
+	foreach outcome of varlist `IndexAa' {														// Loop over every Indexes
+			
+			local l_`outcome' : variable label `outcome'
+			
+			putexcel A`cells' = "`l_`outcome''"
+			
+			local cells = `cells' + 2
+	}
+
+
+
 	
 	regres ICb`outcome' beneficiaire `ctrl_Cb' , vce (cluster imada)
 	pause
@@ -455,6 +731,10 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 		global rowname ""
 		global substit ""
 		
+		local index_num   = 3
+		local index_num_2 = 4
+		
+		
 		foreach outcome of varlist `IndexAa' {														// Loop over every Indexes
 			
 			local l_`outcome' : variable label `outcome'
@@ -463,18 +743,48 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 			global substit `"row`counter_reg_se' " " row`counter_reg_coeff' "`l_`outcome''" $substit "'		// Use to label row in table
 			
 			regress `outcome' beneficiaire `ctrl_Aa', vce (cluster imada)							// Regress indexes 
-				
-					mat def result[`counter_reg_coeff',2] =  _b[beneficiaire]											// Coefficients
-					mat def result[`counter_reg_se',2]    = _se[beneficiaire]											// Standard Error 
+			
+			di in red "Between: `l_`outcome''" 
+					
 					mat def result[`counter_reg_coeff',3] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2	// P-value
+						putexcel D`index_num' = result[`counter_reg_coeff',3], nformat(number_d2)
+					
+					
+					local pval 	= ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2	
+					local coeff =round( _b[beneficiaire],0.01)
+					
+					pause
+					
+					if `pval' < 0.1{
+						putexcel C`index_num' = "`coeff'*"
+					}
+					if `pval' < 0.5{
+						putexcel C`index_num' = "`coeff'**"
+					}
+					if  `pval' < 0.01{
+						putexcel C`index_num' = "`coeff'***"
+					}
+					
+					mat def result[`counter_reg_coeff',2] =  _b[beneficiaire]											// Coefficients
+						
+						
+					mat def result[`counter_reg_se',2]    = _se[beneficiaire]											// Standard Error 
+						putexcel C`index_num_2' = _se[beneficiaire], nformat(number_d2)
+						
+					
+					
 					
 			sum `outcome' // if beneficiaire == 0 
 			
 					mat def result[`counter_reg_coeff',1] = `r(mean)'
+						putexcel B`index_num' = `r(mean)', nformat(number_d2)
 						 
 			local counter_reg_coeff = `counter_reg_coeff' + 2										// Use to fill coeff value in matrix 
 			local counter_reg_se    = `counter_reg_se'    + 2										// Use to fill se value in matrix
 			
+			local index_num   = `index_num'   + 2
+			local index_num_2 = `index_num_2' + 2
+		
 			}	
 		mat list result 
 		
@@ -497,20 +807,47 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 		local counter_reg_coeff = 1
 		local counter_reg_se    = 2
 		
+		local index_num   = 3
+		local index_num_2 = 4
+		
 		foreach outcome of varlist `IndexBa' {
 		
 			regres `outcome' program `ctrl_Ba', robust
 				
-				mat def result[`counter_reg_coeff',5] =  _b[program]											// Coefficients
-				mat def result[`counter_reg_se',5]    = _se[program]											// Standard Error 
 				mat def result[`counter_reg_coeff',6] = ttail(e(df_r),abs(_b[program]/_se[program]))*2			// P-value
+					putexcel G`index_num' = result[`counter_reg_coeff',6], nformat(number_d2)
+				
+				local pval 	= ttail(e(df_r),abs(_b[program]/_se[program]))*2	
+				local coeff = round(_b[program],0.01)
+				
+					if `pval' < 0.1{
+						putexcel C`index_num' = "`coeff'*"
+					}
+					if `pval' < 0.5{
+						putexcel C`index_num' = "`coeff'**"
+					}
+					if `pval' < 0.01{
+						putexcel C`index_num' = "`coeff'***"
+					}
 					
+			
+				mat def result[`counter_reg_coeff',5] =  _b[program]											// Coefficients
+					putexcel F`index_num' = _b[program], nformat(number_d2)
+					
+				mat def result[`counter_reg_se',5]    = _se[program]											// Standard Error 
+					putexcel F`index_num_2' = _se[program], nformat(number_d2)
+				
+				
 			sum `outcome' // if program == 0 
 			
 					mat def result[`counter_reg_coeff',4] = `r(mean)'
+						putexcel  E`index_num' = `r(mean)', nformat(number_d2)
 					
 			local counter_reg_coeff = `counter_reg_coeff' + 2					// Use to fill coeff value in matrix 
 			local counter_reg_se    = `counter_reg_se'    + 2					// Use to fill se value in matrix
+			
+			local index_num   = `index_num'   + 2
+			local index_num_2 = `index_num_2' + 2
 			
 			}	
 		mat list result 
@@ -530,21 +867,49 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 		local counter_reg_coeff = 1
 		local counter_reg_se    = 2
 		
+		local index_num   = 3
+		local index_num_2 = 4
+		
 		foreach outcome of varlist `IndexCb' {
 			
 			regres `outcome' beneficiaire `ctrl_Cb', vce (cluster imada)
 				
-				mat def result[`counter_reg_coeff',8] =  _b[beneficiaire]											// Coefficients
-				mat def result[`counter_reg_se',8]    = _se[beneficiaire]											// Standard Error 
 				mat def result[`counter_reg_coeff',9] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2    // P-value
+					putexcel J`index_num' =  result[`counter_reg_coeff',9], nformat(number_d2)
+					
+					local pval	= ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
+					local coeff = round(_b[beneficiaire],0.01)
+					
+					if `pval' < 0.1{
+						putexcel C`index_num' = "`coeff'*"
+					}
+					if `pval' < 0.5{
+						putexcel C`index_num' = "`coeff'**"
+					}
+					if `pval' < 0.01{
+						putexcel C`index_num' = "`coeff'***"
+					}
+					
+					
+				mat def result[`counter_reg_coeff',8] =  _b[beneficiaire]											// Coefficients
+					putexcel I`index_num' = _b[beneficiaire], nformat(number_d2)
+				
+				mat def result[`counter_reg_se',8]    = _se[beneficiaire]											// Standard Error 
+					putexcel I`index_num_2' = _se[beneficiaire], nformat(number_d2)
+				
 				
 			
 		sum `outcome' // if beneficiaire == 0 
 			
 				mat def result[`counter_reg_coeff',7] = `r(mean)'
+					putexcel H`index_num' = `r(mean)', nformat(number_d2)
+				
 					
 		local counter_reg_coeff = `counter_reg_coeff' + 2					// Use to fill coeff value in matrix 
 		local counter_reg_se    = `counter_reg_se'    + 2					// Use to fill se value in matrix
+		
+		local index_num   = `index_num'   + 2
+		local index_num_2 = `index_num_2' + 2
 			
 		}	
 		
@@ -565,9 +930,11 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 						bottom("\hline \textit{Cluster} & & Yes &  & & Yes &  & & Yes &  \\ \textit{Control} & & Yes &  & & Yes &  & & Yes &   \\ \hline \end{tabular}") ///
 						rownames($rowname )   ///
 						substitute($substit ) ///
-						coeff(pos((1,2) (70,2) (1,5) (70,5) (1,8) (70,8)) par) fmt(%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f)
+
+						coeff(pos((1,2) (70,8)) par) fmt(%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f)
 						
-						
+
+		
 		**************************************************************
 		**************************************************************
 		
@@ -579,6 +946,7 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 	***************************
 	* Between
 	***************************
+
 	
 	estimates clear
 		
@@ -628,7 +996,6 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 	* Within (ITT)
 	***************************
 
-	
 	
 	preserve
 		gen program=(parti==1 | desist==1)
@@ -710,10 +1077,11 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 						
 					
 
+/*
 ********************************************************************************
 ********************************************************************************
 
-/*
+
 *******[TABLE 1 - FOOD CONSUMPTION ANALYSIS]******
 
 
@@ -759,13 +1127,17 @@ label variable IAafood_consump_win 	"Food_Consumption_Index"
 	}
 	
 		regres IAafood_consump_win beneficiaire `ctrl_Aa', vce (cluster imada)
+		
+		
+		pause 
+		
 		estimates store Food_Consumption_Index
 		local RAa `RAa' Food_Consumption_Index
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RAa'	using	"$report/Food_Consumption.xls", 		replace 				///
+								estout `RAa'	using	"$report/Food_Consumption_SAMIH.xls", 		replace 				///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(hhsize drepondant_mat g1_3 g1_4 g1_5 g1_7 _cons)	label 	///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)		eqlabels(none) 	collabels(none) ///
 								title			("Between Villages: direct effects on all workers")	varlabels(beneficiaire "Treatment Community") 
@@ -789,13 +1161,16 @@ label variable IAafood_consump_win 	"Food_Consumption_Index"
 
 		}
 		regres IBafood_consump_win program `ctrl_Ba', vce (cluster imada)
+		
+		pause 
+		
 		estimates store IBafood_consump_win
 		local RBa `RBa' IBafood_consump_win
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RBa'	using	"$report/Food_Consumption.xls", 		append 			///
+								estout `RBa'	using	"$report/Food_Consumption_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(extra _cons)	label 			///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none)	///
 								title			("Within Villages: direct effects on all workers") varlabels(program "Worker")
@@ -827,7 +1202,7 @@ label variable IAafood_consump_win 	"Food_Consumption_Index"
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RBb'	using	"$report/Food_Consumption.xls", 		append 			///
+								estout `RBb'	using	"$report/Food_Consumption_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(extra repondant_sex _cons)	label 			///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none)	///
 								title			("Within Villages: direct effects on PWP completers") varlabels(parti "PWP completer")
@@ -857,7 +1232,7 @@ label variable IAafood_consump_win 	"Food_Consumption_Index"
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RCa'	using	"$report/Food_Consumption.xls", 		append 			///
+								estout `RCa'	using	"$report/Food_Consumption_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		label 	drop(_cons)		///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none) 	///
 								title			("Infrastructure Effects")		varlabels(beneficiaire "Treatment Community")
@@ -882,13 +1257,16 @@ label variable IAafood_consump_win 	"Food_Consumption_Index"
 
 		}
 		regres ICbfood_consump_win beneficiaire `ctrl_Cb', vce (cluster imada)
+		
+		pause 
+		
 		estimates store ICbfood_consump_win
 		local RCb `RCb' ICbfood_consump_win
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RCb'	using	"$report/Food_Consumption.xls", 		append 							///
+								estout `RCb'	using	"$report/Food_Consumption_SAMIH.xls", 		append 							///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(hhsize g1_4 _cons)	label 					///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) 	///
 								eqlabels(none) 	title("Spillover Effects")		varlabels(beneficiaire "Treatment Community")	///
@@ -898,7 +1276,7 @@ label variable IAafood_consump_win 	"Food_Consumption_Index"
 		estimates clear
 		restore
 
-		filefilter "$report/Food_Consumption.xls" "$report/1Food_Consumption.xls", from("_") to(" ") replace
+		filefilter "$report/Food_Consumption_SAMIH.xls" "$report/1Food_Consumption_SAMIH.xls", from("_") to(" ") replace
 
 		
 *******[TABLE 2 - EXPENDITURE ANALYSIS]******
@@ -945,13 +1323,16 @@ label variable IAaexpenditure_win 		"Expenditure Index"
 	}
 	
 		regres IAaexpenditure_win beneficiaire `ctrl_Aa', vce (cluster imada)
+		
+		pause 
+		
 		estimates store Expenditure_Index
 		local RAa `RAa' Expenditure_Index
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]
 
 
-								estout `RAa'	using	"$report/Expenditure.xls", 		replace 								///
+								estout `RAa'	using	"$report/Expenditure_SAMIH.xls", 		replace 								///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(hhsize drepondant_mat g1_3 g1_4 g1_5 g1_7 _cons)	label 	///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)		eqlabels(none) 	collabels(none) ///
 								title			("Between Villages: direct effects on all workers")	varlabels(_cons "Control Mean" beneficiaire "Treatment Community") 
@@ -975,13 +1356,15 @@ label variable IAaexpenditure_win 		"Expenditure Index"
 
 		}
 		regres IBaexpenditure_win program `ctrl_Ba', vce (cluster imada)
+		
+		pause 
 		estimates store IBaexpenditure_win
 		local RBa `RBa' IBaexpenditure_win
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RBa'	using	"$report/Expenditure.xls", 		append 			///
+								estout `RBa'	using	"$report/Expenditure_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(extra _cons)	label 			///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none)	///
 								title			("Within Villages: direct effects on all workers") varlabels(_cons "Control Mean" program "Worker")
@@ -1004,13 +1387,14 @@ label variable IAaexpenditure_win 		"Expenditure Index"
 
 		}
 		regres IBbexpenditure_win parti `ctrl_Bb', vce (cluster imada)
+		
 		estimates store IBbexpenditure_win
 		local RBb `RBb' IBbexpenditure_win
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RBb'	using	"$report/Expenditure.xls", 		append 			///
+								estout `RBb'	using	"$report/Expenditure_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(extra repondant_sex _cons)	label 			///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none)	///
 								title			("Within Villages: direct effects on PWP completers") varlabels(_cons "Control Mean" parti "PWP completer")
@@ -1039,7 +1423,7 @@ label variable IAaexpenditure_win 		"Expenditure Index"
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RCa'	using	"$report/Expenditure.xls", 		append 			///
+								estout `RCa'	using	"$report/Expenditure_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))			label 		drop(_cons)	///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none) 	///
 								title			("Infrastructure Effects")		varlabels(_cons "Control Mean" beneficiaire "Treatment Community")
@@ -1054,6 +1438,7 @@ label variable IAaexpenditure_win 		"Expenditure Index"
 		local RCb ""
 		foreach outcome of local expenditure_win			{
 			regres `outcome'  beneficiaire `ctrl_Cb', vce(cluster imada)
+						
 			estimates store `outcome'
 			local RCb `RCb' `outcome'
 	*control mean non-logged 
@@ -1062,6 +1447,7 @@ label variable IAaexpenditure_win 		"Expenditure Index"
 
 		}
 		regres ICbexpenditure_win beneficiaire `ctrl_Cb', vce (cluster imada)
+		pause
 		estimates store ICbexpenditure_win
 		local RCb `RCb' ICbexpenditure_win
 		
@@ -1069,7 +1455,7 @@ label variable IAaexpenditure_win 		"Expenditure Index"
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RCb'	using	"$report/Expenditure.xls", 		append 			///
+								estout `RCb'	using	"$report/Expenditure_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(hhsize g1_4 _cons)	label 			///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none) 	///
 								title			("Spillover Effects")		varlabels(_cons "Control Mean" beneficiaire "Treatment Community")	///
@@ -1080,7 +1466,7 @@ label variable IAaexpenditure_win 		"Expenditure Index"
 
 
 
-		filefilter "$report/Expenditure.xls" "$report/2Expenditure.xls", from("_") to(" ") replace
+		filefilter "$report/Expenditure_SAMIH.xls" "$report/2Expenditure_SAMIH.xls", from("_") to(" ") replace
 
 		
 		
@@ -1135,12 +1521,15 @@ label variable g2_15		"Draw upon savings"
 	}
 	
 		regres IAacoping_mechanisms beneficiaire `ctrl_Aa', vce (cluster imada)
+		
+		pause 
+		
 		estimates store Coping_Mechanism_Index
 		local RAa `RAa' Coping_Mechanism_Index
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
-								estout `RAa'	using	"$report/Coping_Mechanisms.xls", 		replace 				///
+								estout `RAa'	using	"$report/Coping_Mechanisms_SAMIH.xls", 		replace 				///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(hhsize drepondant_mat g1_3 g1_4 g1_5 g1_7 _cons)	label 	///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)		eqlabels(none) 	collabels(none) ///
 								title			("Between Villages: direct effects on all workers")	varlabels(beneficiaire "Treatment Community") 
@@ -1156,6 +1545,7 @@ label variable g2_15		"Draw upon savings"
 		local RBa ""
 		foreach outcome of local coping_mechanisms			{
 			glm `outcome'  program `ctrl_Ba', family(binomial) link(probit) vce(cluster imada)
+					
 			eststo `outcome'	: margins, dydx(program) atmeans post
 			local RBa `RBa' `outcome'
 		
@@ -1166,13 +1556,16 @@ label variable g2_15		"Draw upon savings"
 		}
 		*index
 		regres IBacoping_mechanisms program `ctrl_Ba', vce (cluster imada)
+		
+		pause
+		
 		estimates store IBacoping_mechanisms
 		local RBa `RBa' IBacoping_mechanisms
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RBa'	using	"$report/Coping_Mechanisms.xls", 		append 			///
+								estout `RBa'	using	"$report/Coping_Mechanisms_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(extra _cons)	label 			///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none)	///
 								title			("Within Villages: direct effects on all workers") varlabels(program "Worker")
@@ -1189,6 +1582,7 @@ label variable g2_15		"Draw upon savings"
 		local RBb ""
 		foreach outcome of local coping_mechanisms			{
 			glm `outcome'  parti `ctrl_Bb', family(binomial) link(probit) vce(cluster imada)
+					
 			eststo `outcome'	: margins, dydx(parti) atmeans post			
 			local RBb `RBb' `outcome'
 
@@ -1198,13 +1592,16 @@ label variable g2_15		"Draw upon savings"
 
 		}
 		regres IBbcoping_mechanisms parti `ctrl_Bb', vce (cluster imada)
+		
+		pause
+		
 		estimates store IBbcoping_mechanisms
 		local RBb `RBb' IBbcoping_mechanisms
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RBb'	using	"$report/Coping_Mechanisms.xls", 		append 			///
+								estout `RBb'	using	"$report/Coping_Mechanisms_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(extra repondant_sex _cons)	label 			///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none)	///
 								title			("Within Villages: direct effects on PWP completers") varlabels(parti "PWP completer")
@@ -1219,6 +1616,7 @@ label variable g2_15		"Draw upon savings"
 		local RCa ""
 		foreach outcome of local coping_mechanisms			{
 			glm `outcome'  beneficiaire `ctrl_Ca', family(binomial) link(probit) vce(cluster imada)
+					
 			eststo `outcome'	: margins, dydx(beneficiaire) atmeans post
 			local RCa `RCa' `outcome'
 
@@ -1228,13 +1626,16 @@ label variable g2_15		"Draw upon savings"
 
 		}
 		regres ICacoping_mechanisms beneficiaire `ctrl_Ca', vce (cluster imada)
+		
+		pause
+		
 		estimates store ICacoping_mechanisms
 		local RCa `RCa' ICacoping_mechanisms
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RCa'	using	"$report/Coping_Mechanisms.xls", 		append 			///
+								estout `RCa'	using	"$report/Coping_Mechanisms_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))	label 	drop(_cons)		///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none) 	///
 								title			("Infrastructure Effects")		varlabels(beneficiaire "Treatment Community")
@@ -1249,6 +1650,7 @@ label variable g2_15		"Draw upon savings"
 		local RCb ""
 		foreach outcome of local coping_mechanisms			{
 			glm `outcome'  beneficiaire `ctrl_Cb', family(binomial) link(probit) vce(cluster imada)
+						
 			eststo `outcome'	: margins, dydx(beneficiaire) atmeans post
 			local RCb `RCb' `outcome'
 
@@ -1258,13 +1660,14 @@ label variable g2_15		"Draw upon savings"
 
 		}
 		regres ICbcoping_mechanisms beneficiaire `ctrl_Cb', vce (cluster imada)
+		pause
 		estimates store ICbcoping_mechanisms
 		local RCb `RCb' ICbcoping_mechanisms
 		*control mean	
 			estadd scalar Control_Mean= _b[_cons]	
 
 
-								estout `RCb'	using	"$report/Coping_Mechanisms.xls", 		append 			///
+								estout `RCb'	using	"$report/Coping_Mechanisms_SAMIH.xls", 		append 			///
 								cells			(b(star fmt(2)) se(par([ ]) fmt(2)))		drop(hhsize g1_4 _cons)	label 			///			 	 					
 								stats(Control_Mean N)  		starlevels(* 0.10 ** 0.05 *** 0.01)	collabels(none) mlabels(none) eqlabels(none) 	///
 								title			("Spillover Effects")		varlabels(beneficiaire "Treatment Community")			///
@@ -1274,10 +1677,10 @@ label variable g2_15		"Draw upon savings"
 		restore
 
 		
-		filefilter "$report/Coping_Mechanisms.xls" "$report/3Coping_Mechanisms.xls", from("_") to(" ") replace
+		filefilter "$report/Coping_Mechanisms_SAMIH.xls" "$report/3Coping_Mechanisms_SAMIH.xls", from("_") to(" ") replace
 		
 		
-	
+	/*
 		
 		
 *******[TABLE 4 - HOUSEHOLD ASSETS]******
