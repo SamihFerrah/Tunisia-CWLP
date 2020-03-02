@@ -194,9 +194,107 @@ local ctrl_Cb hhsize g1_4
 	label variable g1_7 					"Failure to harvest" 
 	label variable extra 					"Obs from second randomization"
 	label variable repondant_sex			"Respondent gender"
+	
+	
+
+* Generate program indicator 
+
+gen program=(parti==1 | desist==1)
+
+		
+* Generate variable identifyin the sample used for every analysis 
+
+g 		Between = .
+replace Between = 1 if (parti==1 | desist==1 | enquete==3)
+
+g 		Within = .
+replace Within = 1 if (parti==1 | desist==1 | control==1) 
+
+g 		Spillovers = .
+replace Spillovers = 1 if (control==1 | enquete==3)
+
+g 		Infrastructure = .
+replace Infrastructure = 1 if enquete==1
 
 
 
+
+	// Create Normalize version of Index 
+{
+	/*
+
+*do "$git_tunisia/dofiles/Normalize Index.do"
+
+gen program=(parti==1 | desist==1)
+
+cap file close summary_table
+
+file open  summary_table using Table_Summary.tex, text write replace 
+
+file write summary_table ///
+	"\begin{tabular}{l*{9}{c}}\hline&\multicolumn{3}{c}{Between Village}&\multicolumn{3}{c}{Within Village (ITT)}&\multicolumn{3}{c}{Spillovers} \hline \\" _n
+
+file close summary_table
+
+file open  summary_table using Table_Summary.tex, text write append
+
+foreach outcome in `Index_ALL' {											// Loop over every Indexes
+	
+	*desc IAa`outcome'
+	
+	pause
+	*local l_`outcome' : variable label IAa`outcome'
+	
+	
+	// Between Specification 
+	preserve 
+	keep if (parti==1 | desist==1 | enquete==3) 
+	
+	regress IAa`outcome' beneficiaire `ctrl_Aa' , vce (cluster imada)
+	
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.1 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 > 0.05{
+			file write summary_table ///
+				"`l_`outcome'' & + * & & \\"   _n 
+		}
+		
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.05 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 > 0.01{
+			file write summary_table ///
+				"`l_`outcome'' & + ** & &"     _n
+		}
+		
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.01{
+			file write summary_table ///
+				"`l_`outcome'' & + *** & &"    _n
+		}
+	
+	restore
+
+	
+	// Within specification 
+		
+	preserve 
+	keep if (parti==1 | desist==1 | control==1)
+	
+	regress IBa`outcome' program `ctrl_Ba'  , vce (cluster imada)
+	
+		if _b[program] > 0 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 <= 0.1 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 > 0.05{
+			file write summary_table ///
+				"`l_`outcome'' & & + * &"   _n 
+		}
+		
+		if _b[program] > 0 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 <= 0.05 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 > 0.01{
+			file write summary_table ///
+				"`l_`outcome'' & & + **  & \\"     _n
+		}
+		
+		if _b[program] > 0 & ttail(e(df_r),abs(_b[program]/_se[program]))*2 <= 0.01{
+			file write summary_table ///
+				"`l_`outcome'' &  & + *** &"    _n
+		}
+	restore
+
+	
+	// Spillovers 
 
 * Generate program indicator 
 gen program=(parti==1 | desist==1)
@@ -473,7 +571,145 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 			
 			local cells = `cells' + 2
 	}
+
+
+
 	
+	regres ICb`outcome' beneficiaire `ctrl_Cb' , vce (cluster imada)
+	pause
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.1 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 > 0.05{
+			file write summary_table ///
+				"`l_`outcome'' &  & & + *"   _n 
+		}
+		
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.05 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 > 0.01{
+			file write summary_table ///
+				"`l_`outcome'' & & & + **"     _n
+		}
+		
+		if _b[beneficiaire] > 0 & ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2 <= 0.01{
+			file write summary_table ///
+				"`l_`outcome'' &  & & + *** \\"   _n
+		}
+	restore
+}
+	file close summary_table
+
+*/
+
+}	
+
+	
+********************************************************************************
+********************************************************************************
+* 1) Descriptive Statistics (Index Only) 
+********************************************************************************
+********************************************************************************
+{
+
+	***************************
+	* Between
+	***************************
+		
+	preserve 
+	
+	keep if (parti==1 | desist==1 | enquete==3) 
+	
+		local num : list sizeof local(IndexAa) 									// Create local with number of observations per group of variables
+			
+		mat def descriptive = J(`num'*2,16,.)									// Define matrix
+		
+		local counter_outcome = 1
+		local counter_empty   = 2
+		
+		global rowname ""
+		global substit ""
+		
+		foreach outcome of varlist `IndexAa' {														// Loop over every Indexes
+			
+			local l_`outcome' : variable label `outcome'
+			
+			global rowname  "$rowname row`counter_outcome' row`counter_empty'"		                   // Use to define row in matrix 
+			global substit `"row`counter_empty' "" row`counter_outcome' "`l_`outcome''" $substit "'		// Use to label row in table
+			
+			sum `outcome' if beneficiaire == 0 , d
+			
+				mat descriptive[`counter_outcome',1] = `r(mean)'
+				mat descriptive[`counter_outcome',2] = `r(sd)'
+				mat descriptive[`counter_outcome',3] = `r(min)'
+				mat descriptive[`counter_outcome',4] = `r(max)'
+				
+			sum `outcome' if beneficiaire == 1 , d
+			
+				mat descriptive[`counter_outcome',5] = `r(mean)'
+				mat descriptive[`counter_outcome',6] = `r(sd)'
+				mat descriptive[`counter_outcome',7] = `r(min)'
+				mat descriptive[`counter_outcome',8] = `r(max)'
+				
+			local counter_outcome = `counter_outcome' + 2
+			local counter_empty   = `counter_empty'   + 2
+				
+		}
+		
+	restore
+	
+	***************************
+	* Within (ITT)
+	***************************
+
+	
+	
+	preserve
+		gen program=(parti==1 | desist==1)
+		keep if (parti==1 | desist==1 | control==1) 
+		
+		local counter_outcome = 1
+		local counter_empty   = 2
+		
+		foreach outcome of varlist `IndexBa' {	
+		
+			sum `outcome' if program == 0 , d
+			
+				mat descriptive[`counter_outcome',9] = `r(mean)'
+				mat descriptive[`counter_outcome',10] = `r(sd)'
+				mat descriptive[`counter_outcome',11] = `r(min)'
+				mat descriptive[`counter_outcome',12] = `r(max)'
+				
+			sum `outcome' if program == 1 , d
+			
+				mat descriptive[`counter_outcome',13]  = `r(mean)'
+				mat descriptive[`counter_outcome',14]  = `r(sd)'
+				mat descriptive[`counter_outcome',15]  = `r(min)'
+				mat descriptive[`counter_outcome',16] = `r(max)'
+				
+			local counter_outcome = `counter_outcome' + 2
+			local counter_empty   = `counter_empty'   + 2 
+		
+	}
+	
+	restore 
+	****************************************
+	* Export tables 
+	****************************************
+		
+		mata descriptive = st_matrix("descriptive")
+		cap drop __*
+		
+		mmat2tex descriptive using Table_Descriptive.tex, replace ///
+						preheader("\begin{tabular}{l*{16}{c}}\hline&\multicolumn{8}{c}{Between Village}&\multicolumn{8}{c}{Within Village (ITT)} \\ \cmidrule(r){2-9}\cmidrule(r){10-17} &\multicolumn{4}{c}{Control}&\multicolumn{4}{c}{Treatment}&\multicolumn{4}{c}{Control}&\multicolumn{4}{c}{Treatment} \\ \cmidrule(r){2-5}\cmidrule(l){6-9}\cmidrule(l){10-13}\cmidrule(l){14-17} & {Mean} & {St.D} & {Min} & {Max} & {Mean} & {St.D} & {Min} & {Max} & {Mean} & {St.D} & {Min} & {Max} & {Mean} & {St.D} & {Min} & {Max} \\ \midrule ") ///
+						bottom("\hline \end{tabular}") ///
+						rownames($rowname )   ///
+						substitute($substit ) ///
+						fmt(%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f)
+
+}		
+	
+********************************************************************************
+********************************************************************************
+* 2) Main Table (only indexes) --> Table_Index.tex 
+********************************************************************************
+********************************************************************************
+
 	***************************
 	* Between
 	***************************
@@ -694,6 +930,7 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 						bottom("\hline \textit{Cluster} & & Yes &  & & Yes &  & & Yes &  \\ \textit{Control} & & Yes &  & & Yes &  & & Yes &   \\ \hline \end{tabular}") ///
 						rownames($rowname )   ///
 						substitute($substit ) ///
+
 						coeff(pos((1,2) (70,8)) par) fmt(%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f)
 						
 
@@ -709,6 +946,7 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 	***************************
 	* Between
 	***************************
+
 	
 	estimates clear
 		
@@ -758,7 +996,6 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 	* Within (ITT)
 	***************************
 
-	
 	
 	preserve
 		gen program=(parti==1 | desist==1)
@@ -839,6 +1076,7 @@ foreach outcome in `Index_ALL' {											// Loop over every Indexes
 						coeff(pos((1,2) (70,2) (1,5) (70,5) (1,8) (70,8)) par) fmt(%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f)
 						
 					
+
 /*
 ********************************************************************************
 ********************************************************************************
