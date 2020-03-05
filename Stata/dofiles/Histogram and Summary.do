@@ -219,7 +219,7 @@ replace Infrastructure = 1 if enquete==1
 foreach index in `Index_ALL'{
 	mat def `index' 			= J(3,5,.)
 }
-	
+/*	
 
 preserve 
 
@@ -292,7 +292,7 @@ drop I* nominative hh_id hh_id_2 superviseur enqueteur date_v  q1 dup3 extra par
 	di in red  "Potential LASSO SELECTION: `e(controls)'"
 	di as text "****************************************************************"
 	di as text "****************************************************************"
-	pause 
+	 
 	
 	local lasso_sel "`e(controls_sel)'"
 	
@@ -300,7 +300,7 @@ drop I* nominative hh_id hh_id_2 superviseur enqueteur date_v  q1 dup3 extra par
 
 restore
 
-
+*/
 
 
 * Loop over every specification 
@@ -402,6 +402,7 @@ local counter_table = `counter_table' + 1
 }
 
 */
+*/
 * Export regression results 
 
 	* Create interaction between treatment and treatment intensity variable 
@@ -424,7 +425,7 @@ local counter_table = `counter_table' + 1
 					
 foreach outcome in `Index_ALL' {
 
-		mat def `outcome'_reg = J(8,6,.)
+		mat def `outcome'_reg = J(6,4,.)
 		
 		* Between 
 			
@@ -468,7 +469,8 @@ foreach outcome in `Index_ALL' {
 				
 				local N4 = e(N)
 				local R4 = round(e(r2),0.001)
-				
+		
+		/*		
 		* Interacted 
 		
 			eststo spill3: regres ICb`outcome' beneficiaire habXtrt NbHabitants `ctrl_Cb' if spillovers == 1, vce (cluster imada)
@@ -496,188 +498,191 @@ foreach outcome in `Index_ALL' {
 				local R6 = round(e(r2),0.001)
 			
 			eststo full2 : ivregress 2sls IDa`outcome' beneficiaire (programs = emploi_2015_a f15 source_info_internalbis2I), vce (cluster imada) first
+		*/
+		
+	esttab between within spill1 spill2, se keep (beneficiaire programs NbHabitants) ///
+											order(beneficiaire programs NbHabitants)
 	
-	esttab between within spill1 spill2 spill3 full full2, se keep (beneficiaire programs NbHabitants habXtrt) ///
-															  order(beneficiaire programs NbHabitants habXtrt)
-	
-	pause 
-	/*			
+				
 	mata `outcome'_reg = st_matrix("`outcome'_reg")
 	
 	mmat2tex `outcome'_reg using "Tables/Regression/Table_`counter_reg'.tex", replace ///
-	preheader("\begin{tabular}{l*{6}{c}}\hline&\multicolumn{1}{c}{Between}&\multicolumn{1}{c}{Within}&\multicolumn{1}{c}{Spillovers}&\multicolumn{1}{c}{Intensity}&\multicolumn{1}{c}{Intensity Interacted}&\multicolumn{1}{c}{Full}\\ \hline") ///
-						bottom("\hline \textit{Obs} & `N1' & `N2' & `N3' & `N4' & `N5' & `N6' \\ \textit{R2} & `R1' & `R2' & `R3' & `R4' & `R5' & `R6' \\ \hline \end{tabular}") ///
-						rownames(row1 row2 row3 row4 row5 row6 row7 row8)   ///
-						substitute(row1 "CWLP" row2 "" row3 "Workers" row4 "" row5 "\# Habitants" row6 "" row7 "Habitants X CWLP" row8 "") ///
-						fmt(%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f) ///
-						coeff(pos((1,1) (8,6)) par)
+	preheader("\begin{tabular}{l*{6}{c}}\hline&\multicolumn{1}{c}{Between}&\multicolumn{1}{c}{Within}&\multicolumn{1}{c}{Spillovers}&\multicolumn{1}{c}{Intensity}\\ \hline") ///
+						bottom("\hline \textit{Obs} & `N1' & `N2' & `N3' & `N4'  \\ \textit{R2} & `R1' & `R2' & `R3' & `R4' \\ \hline \end{tabular}") ///
+						rownames(row1 row2 row3 row4 row5 row6)   ///
+						substitute(row1 "CWLP" row2 "" row3 "Workers" row4 "" row5 "\# Habitants" row6 " ") ///
+						fmt(%12.4f %12.4f %12.4f %12.4f) ///
+						coeff(pos((1,1) (6,4)) par)
 						
 	local counter_reg = `counter_reg' +1
-	*/
+	
 }
 
 
-
+/*
 /* --> Avoid running this part as some contens have been manually added to the 
 	   Tex file (estimation strategy)
-
+*/
 
 * Prepare Tex File 
 
-	file open tex_histo using "Histogram.tex", text write replace 
-
+	file open tex_histo using "Tunisia Result.tex", text write replace
 	file write tex_histo "\documentclass[10pt,a4paper]{article}"				_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage[latin1]{inputenc}"						_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{amsmath}"									_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{amsfonts}"								_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{amssymb}"									_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{graphicx}"								_n
 	file close tex_histo	
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{stata}"									_n
 	file close tex_histo		
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{float}"									_n
-	file close tex_histo		
-	file open tex_histo using "Histogram.tex", text write append
+	file close tex_histo	
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{caption}"									_n 
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{setspace}"								_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{pdflscape}"								_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{hyperref}"								_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\hypersetup{"											_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo 	"colorlinks,"										_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo 	"citecolor=black,"									_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo 	"filecolor=black,"									_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo 	"linkcolor=black,"									_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo 	"urlcolor=black"									_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "}"													_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\usepackage{longtable}"								_n
 	file close tex_histo		
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\begin{document}"										_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\author{Ferrah Samih}\title{Tunisia CWLP: Histogram}\maketitle"	_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\pagebreak"											_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\listoffigures"										_n
 	file close tex_histo
-	file open tex_histo using "Histogram.tex", text write append
 	
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\pagebreak"											_n
 	file close tex_histo
 
 	forvalue i = 1/35{
 		
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\section{`caption_`i''}"							_n
 		file close tex_histo	
 		
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\begin{table}[H]\centering"						_n
 		file close tex_histo
 		
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\input{Tables/Summary/Table_`i'.tex}"				_n
 		file close tex_histo
 		
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\end{table}"										_n
 		file close tex_histo
 		
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\begin{figure}[H]\centering"						_n
 		file close tex_histo
 			
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\includegraphics[scale=0.75]{Graph/Combined/Figure_`i'.pdf}" _n
 		file close tex_histo
 			
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\caption{`caption_`i''} \label{fig:Fig_`i'}"		_n
 		file close tex_histo
 			
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\end{figure}"										_n
 		file close tex_histo
 		
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\begin{table}[H]\centering"						_n
 		file close tex_histo
 		
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\input{Tables/Regression/Table_`i'.tex}"			_n
 		file close tex_histo
 		
-		file open tex_histo using "Histogram.tex", text write append
+		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\end{table}"										_n
+		file close tex_histo
+		
+		file open tex_histo using "Tunisia Result.tex", text write append
+		file write tex_histo "\pagebreak" 										_n
 		file close tex_histo
 		
 		}
 		
-	file open tex_histo using "Histogram.tex", text write append
+	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\end{document}"										_n
 	file close tex_histo	
 		
-*/		
+
 
 
 
