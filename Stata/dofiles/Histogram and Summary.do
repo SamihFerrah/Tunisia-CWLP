@@ -300,7 +300,7 @@ drop I* nominative hh_id hh_id_2 superviseur enqueteur date_v  q1 dup3 extra par
 
 restore
 
-*/
+
 
 
 * Loop over every specification 
@@ -402,7 +402,7 @@ local counter_table = `counter_table' + 1
 }
 
 */
-*/
+
 * Export regression results 
 
 	* Create interaction between treatment and treatment intensity variable 
@@ -436,7 +436,7 @@ foreach outcome in `Index_ALL' {
 				
 				local N1 = e(N)
 				local R1 = round(e(r2),0.001)
-			
+			pause
 			
 		* Within 
 		
