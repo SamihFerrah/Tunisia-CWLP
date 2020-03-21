@@ -80,7 +80,8 @@ local sign 			emploi_comp_inut conflit_dispute_in conflit_dispute_out migration_
 					psy_accepte_dum1bis psy_a_menage_dum1bis epargne_dette epargne_dette_cb_win			 ///
 					epargne_dettebis epargne_dette_cb_winbis g2_1 g2_2 g2_3 g2_4 g2_5 g2_6 g2_7 g2_8 	///
 					g2_9 g2_10 g2_11 g2_12 g2_13 g2_14 g2_15 intrahh_7bis2 intrahh_11bis2				///
-					source_info_internalbis2 source_info2_internbis2
+					source_info_internalbis2 source_info2_internbis2 distance_dispensaire  distance_ecoleprim distance_ecolesec distance_eau ///
+					distance_marche  distance_transpublic
 
 					
 					

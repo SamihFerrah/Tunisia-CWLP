@@ -11,23 +11,30 @@
 ********************************************************************************
 ********************************************************************************
 set graph off
+cap file close tex_histo
 pause on 
 clear 
 eststo clear 
 cd "$git_tunisia/outputs/"
 do  "$git_tunisia/dofiles/Ado/mmat2tex.do"
 
-
+/*
 local Index_ALL ///
 					 food_consump_win  expenditure_win  coping_mechanisms  hh_assets2  house_ownership					///
 					 large_assets  small_assets  home_assets  comms_assets  productive_assets  human_capital2 			///
-					 wage_employment2  other_employment /* non_agri_enterp  agri_prod_income*/  debts_and_savings2 		///
-					 debts  savings																						///
-					 employ_aspirations  social_cohesion2  comm_groups  local_conflict  recent_migration				///
-					 local_security  civic_engag  initiatives  initiatives_meeting  initiatives_acting					///
-					 information_sources  utopia  isolation  psycho_wellbeing2  psycho_internal  psycho_external		///
-					/* pearlin_index*/  overall_intrahouse2  womens_decision  violence_ag_women 
-					
+					 wage_employment2  other_employment non_agri_enterp  agri_prod_income  debts_and_savings2 			///
+					 debts  savings	 employ_aspirations  social_cohesion2  comm_groups  local_conflict  				///
+					 recent_migration	ocal_security  civic_engag  initiatives  initiatives_meeting  					///
+					 initiatives_acting	information_sources  utopia  isolation  psycho_wellbeing2  						///
+					 psycho_internal  psycho_external pearlin_index*  overall_intrahouse2  								///
+					 womens_decision  violence_ag_women 
+*/
+local Index_ALL ///
+					 food_consump_win  expenditure_win  coping_mechanisms  hh_assets2   human_capital2 					///
+					 wage_employment2  other_employment /*non_agri_enterp*/   debts  savings  								///
+					 service_access	social_cohesion2 civic_engag psycho_wellbeing2 womens_decision violence_ag_women
+					 
+			
 local allgroups2	food_consump_win expenditure_win coping_mechanisms hh_assets2 house_ownership		///
 					large_assets small_assets home_assets comms_assets productive_assets human_capital2 ///
 					wage_employment2 other_employment non_agri_enterp /*agri_prod_income*/ debts_and_savings2 ///
@@ -49,43 +56,7 @@ local ctrl_Cb hhsize g1_4
 use "$stata/enquete_All3", clear 
 
 	{																			// Define multiple local (index and individual measures)
-	label variable IAafood_consump_win 		"Food Consumption"
-	label variable IAaexpenditure_win 		"Other Expenditure"
-	label variable IAacoping_mechanisms 	"Coping Mechanisms"
-	label variable IAahh_assets2 			"HH Assets"
-	label variable IAahouse_ownership		"House Ownership"
-	label variable IAalarge_assets 			"Large Assets"
-	label variable IAasmall_assets 			"Small Assets"
-	label variable IAahome_assets 			"Home Assets"
-	label variable IAacomms_assets 			"Communications Assets"
-	label variable IAaproductive_assets 	"Productive Assets"
-	label variable IAahuman_capital2 		"Human Capital"
-	label variable IAawage_employment2		"Wage Employment"
-	label variable IAaother_employment		"Other Employment"
-	*label variable IAanon_agri_enterp 		"Non-Agricultural Enterprise"
-	label variable IAadebts_and_savings2 	"Debts and Savings"
-	label variable IAadebts				 	"Debts"
-	label variable IAasavings 				"Savings"
-	label variable IAaemploy_aspirations 	"Employment Aspirations"
-	label variable IAasocial_cohesion2 		"Social Cohesion"
-	label variable IAacomm_groups 			"Community Groups"
-	label variable IAalocal_conflict 		"Local Conflict"
-	label variable IAarecent_migration		"Recent Migration"
-	label variable IAalocal_security 		"Local Security"
-	label variable IAacivic_engag 			"Civic Engagement"
-	label variable IAainitiatives 			"Local Participation"
-	label variable IAainitiatives_meeting 	"Local Meeting"
-	label variable IAainitiatives_acting	"Local Acting"
-	label variable IAainformation_sources 	"Information Sources"
-	label variable IAautopia 				"Liberal Norms"
-	label variable IAaisolation 			"Isolation"
-	label variable IAapsycho_wellbeing2 	"Psychological Wellbeing"	
-	*label variable IAapearlin_index 		"Pearlin Index"
-	label variable IAaoverall_intrahouse2 	"Intrahousehold Dynamics"
-	label variable IAawomens_decision 		"Female Decisionmaking"
-	label variable IAaviolence_ag_women 	"Violence against Women"
-	label variable IAapsycho_internal 		"Internal Wellbeing"
-	label variable IAapsycho_external		"External Wellbeing"
+	
 	label variable hhsize 					"Number of household member"
 	label variable drepondant_mat 			"Marital Status 1)Unmarried 0)Married" 
 	label variable g1_3 					"Serious illness of head" 
@@ -196,7 +167,7 @@ use "$stata/enquete_All3", clear
 ********************************************************************************
 
 * Generate program indicator 
-
+/*
 gen programs=(parti==1 | desist==1)
 
 		
@@ -214,13 +185,13 @@ replace spillovers = 1 if (control==1 | enquete==3)
 g 		Infrastructure = .
 replace Infrastructure = 1 if enquete==1
 
-
+*/
 * Create matrix to store results while looping over index
 foreach index in `Index_ALL'{
 	mat def `index' 			= J(3,5,.)
 }
-/*	
 
+/*
 preserve 
 
 keep if within == 1
@@ -299,7 +270,7 @@ drop I* nominative hh_id hh_id_2 superviseur enqueteur date_v  q1 dup3 extra par
 	// 3) Test validity of instrument selected
 
 restore
-
+*/
 
 
 
@@ -309,14 +280,14 @@ foreach specification in Between Within Spillovers{
 	local counter_graph = 0 
 	
 	if "`specification'" == "Between"{
-	local cond_index 	"IAa"
+	local cond_index 	"IAaS"
 	local cond_trt		"beneficiaire"
 	local cond_sample 	"between"
 	local row_summary = 1
 	}
 	
 	if "`specification'" == "Within"{
-	local cond_index	"IBa"
+	local cond_index	"IBaS"
 	local cond_trt		"programs"
 	local cond_sample 	"within"
 	local row_summary = 2
@@ -324,7 +295,7 @@ foreach specification in Between Within Spillovers{
 	}
 	
 	if "`specification'" == "Spillovers"{
-	local cond_index 	"ICb"
+	local cond_index 	"ICbS"
 	local cond_trt 		"beneficiaire"
 	local cond_sample 	"spillovers"
 	local row_summary = 3
@@ -335,7 +306,7 @@ foreach specification in Between Within Spillovers{
 		
 		local counter_graph = `counter_graph' + 1 
 		
-		local title : variable label IAa`index'
+		local title : variable label `cond_index'`index'
 		
 		local caption_`counter_graph' "`title'"
 		
@@ -363,9 +334,9 @@ foreach specification in Between Within Spillovers{
 			mat def `index'[`row_summary',5] = `r(max)'
 	}
 }
-/*
+
 * Combine graph produce above 
-forvalue i = 1/35{
+forvalue i = 1/15{
 	
 	grc1leg "Graph/Between/Figure_`i'.gph" ///
 			"Graph/Within/Figure_`i'.gph" ///
@@ -374,10 +345,10 @@ forvalue i = 1/35{
 	graph export "Graph/Combined/Figure_`i'.pdf", replace 
 
 }
-*/
+
 * Clean graph folder 
 
-forvalue i = 1/35{
+forvalue i = 1/15{
 
 	rm "Graph/Between/Figure_`i'.gph"
 	rm "Graph/Within/Figure_`i'.gph"
@@ -401,7 +372,7 @@ foreach index in `Index_ALL'{
 local counter_table = `counter_table' + 1
 }
 
-*/
+
 
 * Export regression results 
 
@@ -413,34 +384,24 @@ local counter_table = `counter_table' + 1
 	
 	local counter_reg = 1
 
-	local Index_ALL ///
-					 food_consump_win  expenditure_win  coping_mechanisms  hh_assets2  house_ownership					///
-					 large_assets  small_assets  home_assets  comms_assets  productive_assets  human_capital2 			///
-					 wage_employment2  other_employment /* non_agri_enterp  agri_prod_income*/  debts_and_savings2 		///
-					 debts  savings																						///
-					 employ_aspirations  social_cohesion2  comm_groups  local_conflict  recent_migration				///
-					 local_security  civic_engag  initiatives  initiatives_meeting  initiatives_acting					///
-					 information_sources  utopia  isolation  psycho_wellbeing2  psycho_internal  psycho_external		///
-					/* pearlin_index*/  overall_intrahouse2  womens_decision  violence_ag_women 
-					
 foreach outcome in `Index_ALL' {
 
 		mat def `outcome'_reg = J(6,4,.)
 		
 		* Between 
 			
-			eststo between: regress IAa`outcome' beneficiaire `ctrl_Aa' if between == 1, vce (cluster imada)
+			eststo between: regress IAaS`outcome' beneficiaire `ctrl_Aa' if between == 1, vce (cluster imada)
 				
 				mat def `outcome'_reg[1,1] = _b[beneficiaire]
 				mat def `outcome'_reg[2,1] = _se[beneficiaire]
 				
 				local N1 = e(N)
 				local R1 = round(e(r2),0.001)
-			pause
+			
 			
 		* Within 
 		
-			eststo within: regres IBa`outcome' programs `ctrl_Ba' if within == 1, robust
+			eststo within: regres IBaS`outcome' programs `ctrl_Ba' if within == 1, robust
 			
 				mat def `outcome'_reg[3,2] = _b[programs]
 				mat def `outcome'_reg[4,2] = _se[programs]
@@ -450,7 +411,7 @@ foreach outcome in `Index_ALL' {
 			
 		* Spillovers classic 
 		
-			eststo spill1: regres ICb`outcome' beneficiaire `ctrl_Cb'  if spillovers == 1, vce (cluster imada)
+			eststo spill1: regres ICbS`outcome' beneficiaire `ctrl_Cb'  if spillovers == 1, vce (cluster imada)
 			
 				mat def `outcome'_reg[1,3] = _b[beneficiaire]
 				mat def `outcome'_reg[2,3] = _se[beneficiaire]
@@ -460,7 +421,7 @@ foreach outcome in `Index_ALL' {
 			
 		* Spillover and intensity
 			
-			eststo spill2: regres ICb`outcome' beneficiaire NbHabitants  `ctrl_Cb' if spillovers == 1, vce (cluster imada)
+			eststo spill2: regres ICbS`outcome' beneficiaire NbHabitants  `ctrl_Cb' if spillovers == 1, vce (cluster imada)
 			
 				mat def `outcome'_reg[1,4] = _b[beneficiaire]
 				mat def `outcome'_reg[2,4] = _se[beneficiaire]
@@ -470,36 +431,7 @@ foreach outcome in `Index_ALL' {
 				local N4 = e(N)
 				local R4 = round(e(r2),0.001)
 		
-		/*		
-		* Interacted 
-		
-			eststo spill3: regres ICb`outcome' beneficiaire habXtrt NbHabitants `ctrl_Cb' if spillovers == 1, vce (cluster imada)
-				
-				mat def `outcome'_reg[1,5] = _b[beneficiaire]
-				mat def `outcome'_reg[2,5] = _se[beneficiaire]
-				mat def `outcome'_reg[5,5] = _b[NbHabitants]
-				mat def `outcome'_reg[6,5] = _se[NbHabitants]
-				mat def `outcome'_reg[7,5] = _b[habXtrt]
-				mat def `outcome'_reg[8,5] = _se[habXtrt]
-				
-				local N5 = e(N)
-				local R5 = round(e(r2),0.01)
-				
-		* Full specification 
-		
-			eststo full: regress IDa`outcome' beneficiaire programs, vce (cluster imada)
-				
-				mat def `outcome'_reg[1,6] = _b[beneficiaire]
-				mat def `outcome'_reg[2,6] = _se[beneficiaire]
-				mat def `outcome'_reg[3,6] = _b[programs]
-				mat def `outcome'_reg[4,6] = _se[programs]
-				
-				local N6 = e(N)
-				local R6 = round(e(r2),0.001)
-			
-			eststo full2 : ivregress 2sls IDa`outcome' beneficiaire (programs = emploi_2015_a f15 source_info_internalbis2I), vce (cluster imada) first
-		*/
-		
+	
 	esttab between within spill1 spill2, se keep (beneficiaire programs NbHabitants) ///
 											order(beneficiaire programs NbHabitants)
 	
@@ -519,7 +451,7 @@ foreach outcome in `Index_ALL' {
 }
 
 
-/*
+
 /* --> Avoid running this part as some contens have been manually added to the 
 	   Tex file (estimation strategy)
 */
@@ -625,8 +557,24 @@ foreach outcome in `Index_ALL' {
 	file open tex_histo using "Tunisia Result.tex", text write append
 	file write tex_histo "\pagebreak"											_n
 	file close tex_histo
-
-	forvalue i = 1/35{
+	
+	file open tex_histo using "Tunisia Result.tex", text write append
+	file write tex_histo 														_n ///
+	"\section{Empirical Methodology}"	_n ///
+	"We estimate the following equation:"	_n ///
+	"\begin{itemize}"	_n ///
+	"\item Between Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{v} + \epsilon_{v} \end{equation}"	_n ///
+	"\item Within Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}WORKERS_{iv} + \beta_{2}X_{v} + \epsilon_{iv} \end{equation}"	_n ///
+	"\item Spillovers: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{iv} + \epsilon_{iv} \end{equation}" 	_n ///
+	"\item Intensity: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}HABITANTS_{v} + \beta_{3}X_{iv} + \epsilon_{iv} \end{equation}"	_n ///
+	"\item Intensity Interacted: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}HABITANTS_{v} + \beta_{3}CWLP_{v}*HABITANTS_{v} + \beta_{4}X_{iv} + \epsilon_{jv} \end{equation}"	_n ///
+	"\item Full: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}WORKERS_{v} + \beta_{3}X_{v} + \epsilon_{v} \end{equation}" _n ///
+	"\end{itemize}"		_n ///
+	"Where $CWLP_{v}$ is a dummy indicating whether a community (\textit{v}) was recipient of a CWLP infrastructure project, $WORKERS_{iv}$ is a dummy indicating whether individual \textit{i} in village \textit{v} was offered an employment in a CWLP infrastructure project. Last specification compare eligible beneficiary not offered employment in treated communities to eligible beneficiaries in control communities. $HABITANTS_{v}$ is a continuous variable measuring the size of the village \textbf{(NOTE THAT THE NUMBER OF HABITANTS IN THE IMADA IS CORRELATED TO THE TREATMENT ASSIGNMENT (BOTH FOR CWLP AND WORKERS))}." 	_n ///
+	"\pagebreak"	_n 
+	file close tex_histo
+	
+	forvalue i = 1/15{
 		
 		file open tex_histo using "Tunisia Result.tex", text write append
 		file write tex_histo "\section{`caption_`i''}"							_n

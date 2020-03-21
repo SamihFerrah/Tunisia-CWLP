@@ -107,7 +107,10 @@ local violence_ag_women 	violence_1_2 violence_1_3 violence_1_4 violence_1_5 vio
 							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 ///
 							violence_1_16 violence_1_17 violence_1_18
 	
-	
+local service_access		distance_dispensaire  distance_ecoleprim distance_ecolesec distance_eau ///
+							sante_qualite_a sante_qualite_b sante_qualite_c sante_qualite_d 		///
+							ecole_qualite_a ecole_qualite_b ecole_qualite_c ecole_qualite_d			///
+							distance_marche  distance_transpublic
 	
 *********************************************************************************************************************************	
 
@@ -144,7 +147,7 @@ local allgroups2	food_consump_win expenditure_win coping_mechanisms hh_assets2 h
 					information_sources utopia isolation psycho_wellbeing2 psycho_internal psycho_external ///
 					/*pearlin_index*/ overall_intrahouse2 womens_decision violence_ag_women debts savings	///
 					five_years_chef local_sec_all intrahh_prt social_capital cooperation participation 	///
-					utopie pol_isolation
+					utopie pol_isolation service_access
 
 
 * local condTC beneficiaire

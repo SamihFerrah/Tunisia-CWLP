@@ -19,34 +19,23 @@ urlcolor=black
 }
 \usepackage{longtable}
 \begin{document}
-\author{Ferrah Samih}\title{Tunisia CWLP: Memo}\maketitle
+\author{Ferrah Samih}\title{Tunisia CWLP: Histogram}\maketitle
 \pagebreak
-\tableofcontents
+\listoffigures
 \pagebreak
 
 \section{Empirical Methodology}
-
-
 We estimate the following equation:
 \begin{itemize}
-	\item Between Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{v} + \epsilon_{v} \end{equation}
-	
-	\item Within Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}WORKERS_{iv} + \beta_{2}X_{v} + \epsilon_{iv} \end{equation}
-	
-	\item Spillovers: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{iv} + \epsilon_{iv} \end{equation}
-	
-	\item Intensity: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}HABITANTS_{v} + \beta_{3}X_{iv} + \epsilon_{iv} \end{equation}
-	
-	\item Intensity Interacted: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}HABITANTS_{v} + \beta_{3}CWLP_{v}*HABITANTS_{v} + \beta_{4}X_{iv} + \epsilon_{jv} \end{equation}
-	
-	\item Full: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}WORKERS_{v} + \beta_{3}X_{v} + \epsilon_{v} \end{equation}
-	
+\item Between Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{v} + \epsilon_{v} \end{equation}
+\item Within Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}WORKERS_{iv} + \beta_{2}X_{v} + \epsilon_{iv} \end{equation}
+\item Spillovers: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{iv} + \epsilon_{iv} \end{equation}
+\item Intensity: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}HABITANTS_{v} + \beta_{3}X_{iv} + \epsilon_{iv} \end{equation}
+\item Intensity Interacted: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}HABITANTS_{v} + \beta_{3}CWLP_{v}*HABITANTS_{v} + \beta_{4}X_{iv} + \epsilon_{jv} \end{equation}
+\item Full: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}WORKERS_{v} + \beta_{3}X_{v} + \epsilon_{v} \end{equation}
 \end{itemize}
-
-Where $CWLP_{v}$ is a dummy indicating whether a community (\textit{v}) was recipient of a CWLP infrastructure project, $WORKERS_{iv}$ is a dummy indicating whether individual \textit{i} in village \textit{v} was offered an employment in a CWLP infrastructure project. Last specification compare eligible beneficiary not offered employment in treated communities to eligible beneficiaries in control communities. $HABITANTS_{v}$ is a continuous variable measuring the size of the village \textbf{(NOTE THAT THE NUMBER OF HABITANTS IN THE IMADA IS CORRELATED TO THE TREATMENT ASSIGNMENT (BOTH FOR CWLP AND WORKERS))}. 
-
+Where {v}$ is a dummy indicating whether a community (\textit{v}) was recipient of a CWLP infrastructure project, {iv}$ is a dummy indicating whether individual \textit{i} in village \textit{v} was offered an employment in a CWLP infrastructure project. Last specification compare eligible beneficiary not offered employment in treated communities to eligible beneficiaries in control communities. {v}$ is a continuous variable measuring the size of the village \textbf{(NOTE THAT THE NUMBER OF HABITANTS IN THE IMADA IS CORRELATED TO THE TREATMENT ASSIGNMENT (BOTH FOR CWLP AND WORKERS))}.
 \pagebreak
-
 \section{Food Consumption}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_1.tex}
@@ -95,376 +84,136 @@ Where $CWLP_{v}$ is a dummy indicating whether a community (\textit{v}) was reci
 \input{Tables/Regression/Table_4.tex}
 \end{table}
 \pagebreak
-\section{House Ownership}
+\section{Human Capital}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_5.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_5.pdf}
-\caption{House Ownership} \label{fig:Fig_5}
+\caption{Human Capital} \label{fig:Fig_5}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_5.tex}
 \end{table}
 \pagebreak
-\section{Large Assets}
+\section{Wage Employment}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_6.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_6.pdf}
-\caption{Large Assets} \label{fig:Fig_6}
+\caption{Wage Employment} \label{fig:Fig_6}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_6.tex}
 \end{table}
 \pagebreak
-\section{Small Assets}
+\section{Other Employment}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_7.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_7.pdf}
-\caption{Small Assets} \label{fig:Fig_7}
+\caption{Other Employment} \label{fig:Fig_7}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_7.tex}
 \end{table}
 \pagebreak
-\section{Home Assets}
+\section{Debts}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_8.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_8.pdf}
-\caption{Home Assets} \label{fig:Fig_8}
+\caption{Debts} \label{fig:Fig_8}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_8.tex}
 \end{table}
 \pagebreak
-\section{Communications Assets}
+\section{Savings}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_9.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_9.pdf}
-\caption{Communications Assets} \label{fig:Fig_9}
+\caption{Savings} \label{fig:Fig_9}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_9.tex}
 \end{table}
 \pagebreak
-\section{Productive Assets}
+\section{Access to services}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_10.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_10.pdf}
-\caption{Productive Assets} \label{fig:Fig_10}
+\caption{Access to services} \label{fig:Fig_10}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_10.tex}
 \end{table}
 \pagebreak
-\section{Human Capital}
+\section{Social Cohesion}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_11.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_11.pdf}
-\caption{Human Capital} \label{fig:Fig_11}
+\caption{Social Cohesion} \label{fig:Fig_11}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_11.tex}
 \end{table}
 \pagebreak
-\section{Wage Employment}
+\section{Civic Engagement}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_12.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_12.pdf}
-\caption{Wage Employment} \label{fig:Fig_12}
+\caption{Civic Engagement} \label{fig:Fig_12}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_12.tex}
 \end{table}
 \pagebreak
-\section{Other Employment}
+\section{Psychological Wellbeing}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_13.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_13.pdf}
-\caption{Other Employment} \label{fig:Fig_13}
+\caption{Psychological Wellbeing} \label{fig:Fig_13}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_13.tex}
 \end{table}
 \pagebreak
-\section{Debts and Savings}
+\section{Female Decisionmaking}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_14.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_14.pdf}
-\caption{Debts and Savings} \label{fig:Fig_14}
+\caption{Female Decisionmaking} \label{fig:Fig_14}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_14.tex}
 \end{table}
 \pagebreak
-\section{Debts}
+\section{Violence against Women}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_15.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_15.pdf}
-\caption{Debts} \label{fig:Fig_15}
+\caption{Violence against Women} \label{fig:Fig_15}
 \end{figure}
 \begin{table}[H]\centering
 \input{Tables/Regression/Table_15.tex}
-\end{table}
-\pagebreak
-\section{Savings}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_16.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_16.pdf}
-\caption{Savings} \label{fig:Fig_16}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_16.tex}
-\end{table}
-\pagebreak
-\section{Employment Aspirations}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_17.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_17.pdf}
-\caption{Employment Aspirations} \label{fig:Fig_17}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_17.tex}
-\end{table}
-\pagebreak
-\section{Social Cohesion}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_18.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_18.pdf}
-\caption{Social Cohesion} \label{fig:Fig_18}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_18.tex}
-\end{table}
-\pagebreak
-\section{Community Groups}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_19.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_19.pdf}
-\caption{Community Groups} \label{fig:Fig_19}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_19.tex}
-\end{table}
-\pagebreak
-\section{Local Conflict}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_20.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_20.pdf}
-\caption{Local Conflict} \label{fig:Fig_20}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_20.tex}
-\end{table}
-\pagebreak
-\section{Recent Migration}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_21.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_21.pdf}
-\caption{Recent Migration} \label{fig:Fig_21}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_21.tex}
-\end{table}
-\pagebreak
-\section{Local Security}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_22.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_22.pdf}
-\caption{Local Security} \label{fig:Fig_22}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_22.tex}
-\end{table}
-\pagebreak
-\section{Civic Engagement}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_23.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_23.pdf}
-\caption{Civic Engagement} \label{fig:Fig_23}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_23.tex}
-\end{table}
-\pagebreak
-\section{Local Participation}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_24.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_24.pdf}
-\caption{Local Participation} \label{fig:Fig_24}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_24.tex}
-\end{table}
-\pagebreak
-\section{Local Meeting}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_25.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_25.pdf}
-\caption{Local Meeting} \label{fig:Fig_25}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_25.tex}
-\end{table}
-\pagebreak
-\section{Local Acting}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_26.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_26.pdf}
-\caption{Local Acting} \label{fig:Fig_26}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_26.tex}
-\end{table}
-\pagebreak
-\section{Information Sources}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_27.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_27.pdf}
-\caption{Information Sources} \label{fig:Fig_27}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_27.tex}
-\end{table}
-\pagebreak
-\section{Liberal Norms}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_28.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_28.pdf}
-\caption{Liberal Norms} \label{fig:Fig_28}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_28.tex}
-\end{table}
-\pagebreak
-\section{Isolation}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_29.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_29.pdf}
-\caption{Isolation} \label{fig:Fig_29}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_29.tex}
-\end{table}
-\pagebreak
-\section{Psychological Wellbeing}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_30.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_30.pdf}
-\caption{Psychological Wellbeing} \label{fig:Fig_30}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_30.tex}
-\end{table}
-\pagebreak
-\section{Internal Wellbeing}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_31.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_31.pdf}
-\caption{Internal Wellbeing} \label{fig:Fig_31}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_31.tex}
-\end{table}
-\pagebreak
-\section{External Wellbeing}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_32.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_32.pdf}
-\caption{External Wellbeing} \label{fig:Fig_32}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_32.tex}
-\end{table}
-\pagebreak
-\section{Intrahousehold Dynamics}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_33.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_33.pdf}
-\caption{Intrahousehold Dynamics} \label{fig:Fig_33}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_33.tex}
-\end{table}
-\pagebreak
-\section{Female Decisionmaking}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_34.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_34.pdf}
-\caption{Female Decisionmaking} \label{fig:Fig_34}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_34.tex}
-\end{table}
-\pagebreak
-\section{Violence against Women}
-\begin{table}[H]\centering
-\input{Tables/Summary/Table_35.tex}
-\end{table}
-\begin{figure}[H]\centering
-\includegraphics[scale=0.75]{Graph/Combined/Figure_35.pdf}
-\caption{Violence against Women} \label{fig:Fig_35}
-\end{figure}
-\begin{table}[H]\centering
-\input{Tables/Regression/Table_35.tex}
 \end{table}
 \pagebreak
 \end{document}

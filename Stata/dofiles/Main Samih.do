@@ -8,7 +8,9 @@
 	set more off, perm
 	
 	capture log close
-
+	
+	*cap ssc install labutil
+	
 /*CB's*/
 
 	* Sarah Home		1
@@ -51,7 +53,7 @@
 */
 
 	if $user_number == 7 {
-		global dropbox	"/Users/Samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/Replicate"
+		global dropbox	"/Users/Samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
 	}
 	
 		*location of the temporary data, temp;
@@ -67,7 +69,7 @@
 		global do   "$dropbox/do"
 		
 		*location of the do files, report;
-		global report "$dropbox/Resultats_Samih"
+		*global report "$dropbox/Resultats_Samih"
 		
 		if $user_number == 7{
 			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"
@@ -77,32 +79,41 @@
 ***INDIV
 
 *Prepare dataset
-do "$do/Prepare_indiv_db"
+do "$git_tunisia/dofiles/Prepare_indiv_db_Samih"
 
 *Prepare outcomes
-do "$do/Prepare_indiv_outcomes"
+do "$git_tunisia/dofiles/Prepare_indiv_outcomes_Samih"
 
 ***COMMUNITY
 
 *Préparer datasets
-do "$do/Prepare_chefs_db"
+do "$git_tunisia/dofiles/Prepare_chefs_db_Samih"
 
 *Préparer outcomes
-do "$do/Prepare_chefs_outcomes"
+do "$git_tunisia/dofiles/Prepare_chefs_outcomes_Samih"
+
+* Final data 
+
+do "$git_tunisia/dofiles/analysis_dataset_Samih"
 
 ***ALL
 
 *Balance Analysis
-do "$do/Balance_outcomes_all"
+*do "$do/Balance_outcomes_all"
 
 *Creation of indexes
-do "$do/Index"
+do "$git_tunisia/dofiles/Index_Samih"
+
+*Histogram and Sumamry 
+
+do "$git_tunisia/dofiles/Histogram and Summary.do"
 
 *Analysis
-do "$do/Analysis"
+
+do "$git_tunisia/dofiles/Analysis Samih"
 
 *Heterogeneous Analysis
-do "$do/Analysis_heterog"
+*do "$do/Analysis_heterog"
 
 *Table with all Outcomes
 *do $do/All_Outcomes
