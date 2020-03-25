@@ -76,6 +76,9 @@
 		}
 
 		
+* Run user written command 
+do "$git_tunisia/dofiles/Ado/FDR_CWLP"
+
 ***INDIV
 
 *Prepare dataset
@@ -110,7 +113,7 @@ do "$git_tunisia/dofiles/Histogram and Summary.do"
 
 *Analysis
 
-do "$git_tunisia/dofiles/Analysis Samih"
+do "$git_tunisia/dofiles/Main Analysis Samih"
 
 *Heterogeneous Analysis
 *do "$do/Analysis_heterog"

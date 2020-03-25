@@ -1,6 +1,6 @@
 
 use "$stata/tunisia_chefs_benef", clear
-
+mvdecode _all, mv(.98=.n\-98=.n\.99=.a\-99=.a\.97=.d\-97=.d)
 
 sort imada
 by imada: count //2, one 3 per imada
@@ -11,7 +11,7 @@ by imada: count //2, one 3 per imada
 	*QUESTIONNAIRE CHEFS
 	*cours d'eau
 	tab q0_1, nol m //no missings; vary little
-	mvdecode q0_1, mv(-99)
+	
 
 	tab q1_1, m //string of list 
 	gen q1_1_1=regexm(q1_1,"1")

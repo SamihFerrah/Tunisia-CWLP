@@ -5,7 +5,7 @@
 3.5) WINSORIZE: ok
 4) LABELER (LABELDUM POUR NEW DUMMIES): ok
 5) REMPLACER MISSINGS PAR ZERO S'IL Y A LIEU; REF À VAR MÈRE POUR LES _WIN: ok
-6) TROUVER LES CENSORED (HIST): ok
+6) TROUVER LES CENSORED (* hist): ok
 7) RENAME REPETITION OF SAME VARS
 8) read question and see if makes sense
 9) CRÉER LES VARS EN LISTES DES STRING: ok
@@ -13,7 +13,7 @@
 
 set more off, perm
 use "$stata/enquete_indiv4", clear
-mvdecode _all, mv(.98=.n\-98=.n\.99=.a\-99=.a)
+mvdecode _all, mv(.98=.n\-98=.n\.99=.a\-99=.a\.97=.d\-97=.d)
 
 *run command for labeling vars from categorical
 do "$do/command_dumlab"
@@ -55,12 +55,12 @@ list repondant_age if repondant_age>100
 2832. |      507 |
       +----------+
 */
-histogram repondant_age if repondant_age<=100
+* histogram repondant_age if repondant_age<=100
 replace repondant_age=(2016-1975) if repondant_age==1975
 replace repondant_age=(2016-1977) if repondant_age==1977
 replace repondant_age=. if repondant_age==507
 codebook repondant_age //[18,78]
-hist repondant_age
+* hist repondant_age
 
 codebook repondant_sex //18 missings
 tab repondant_sex, nol m //46% H, 53% F
@@ -91,7 +91,7 @@ sum educ_dum* //4, 6, 7 don't vary much
 */
 /*
 codebook hhsize //no missings, 1-13 NO BECAUSE POST-TREATMENT
-histogram hhsize
+* histogram hhsize
 */
 /*codebook jeunes_lireecrire //attn -99 NO BECAUSE POST-TREATMENT
 tab jeunes_lireecrire
@@ -133,7 +133,7 @@ tab calcul_2, m //lol: doit corriger le résultat.
 																				//what expenditure is feasible?
 		forvalues x = 1/11	{
 			foreach y of local letter		{
-				histogram		c3_`y'_`x'
+				* histogram		c3_`y'_`x'
 				replace 		c3_`y'_`x' = 0		if   c3_`y'_`x'  == .
 				sum 			c3_`y'_`x', d
 				
@@ -152,7 +152,7 @@ tab calcul_2, m //lol: doit corriger le résultat.
 	local letter				a													//more winsorisation needed - what units are being understood (should be expenditure)?
 		forvalues x = 1/2							{
 				foreach y of local letter		{
-				histogram		c3_`y'_`x'
+				* histogram		c3_`y'_`x'
 				replace 		c3_`y'_`x' = 0		if   c3_`y'_`x'  == .
 				sum 			c3_`y'_`x', d
 				
@@ -167,7 +167,7 @@ tab calcul_2, m //lol: doit corriger le résultat.
 
 egen exp_food=rowtotal(c3_a_1 c3_a_2 c3_a_3 c3_a_4 c3_a_5 c3_a_6 c3_a_7 c3_a_8 c3_a_9 c3_a_10 c3_a_11), m
 tab exp_food, m
-hist exp_food 
+* hist exp_food 
 replace exp_food=0 if exp_food==.
 /*
 winsor exp_food, gen(exp_food_win) p(0.01)
@@ -179,9 +179,9 @@ label variable exp_food_win5 "`exp_food_lab'"
 replace exp_food_win=0 if exp_food==.
 replace exp_food_win5=0 if exp_food==.
 tab exp_food_win, m
-hist exp_food_win
+* hist exp_food_win
 */
-egen exp_food_win=rowtotal	(c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win5 c3_a_5_win5 c3_a_6_win5 c3_a_7_win5 ///
+egen exp_food_win5=rowtotal	(c3_a_1_win5 c3_a_2_win5 c3_a_3_win5 c3_a_4_win5 c3_a_5_win5 c3_a_6_win5 c3_a_7_win5 ///
 							c3_a_8_win5 c3_a_9_win c3_a_10_win c3_a_11_win5), m											// too much cut?
 
 		
@@ -190,120 +190,120 @@ egen exp_food_win=rowtotal	(c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win5 c3_a_
 **Food and beverages
 *Value of meat and fish consumed
 tab c3_a_3, m 
-hist c3_a_3 
+* hist c3_a_3 
 replace c3_a_3=0 if c3_a_3==.
 winsor c3_a_3, gen(c3_a_3_win) p(0.01)
 local c3_a_3_lab: variable label c3_a_3 
 label variable c3_a_3_win "`c3_a_3_lab'"
 replace c3_a_3_win=0 if c3_a_3==.
 tab c3_a_3_win, m
-hist c3_a_3_win
+* hist c3_a_3_win
 
 tab c3_a_4, m 
-hist c3_a_4
+* hist c3_a_4
 replace c3_a_4=0 if c3_a_4==.
 winsor c3_a_4, gen(c3_a_4_win) p(0.01)
 local c3_a_4_lab: variable label c3_a_4 
 label variable c3_a_4_win "`c3_a_4_lab'"
 replace c3_a_4_win=0 if c3_a_4==.
 tab c3_a_4_win
-hist c3_a_4_win
+* hist c3_a_4_win
 
 *Value of fruit and legumes/vegetables consumed 
 tab c3_a_6, m 
-hist c3_a_6
+* hist c3_a_6
 replace c3_a_6=0 if c3_a_6==.
 winsor c3_a_6, gen(c3_a_6_win) p(0.01)
 local c3_a_6_lab: variable label c3_a_6 
 label variable c3_a_6_win "`c3_a_6_lab'"
 replace c3_a_6_win=0 if c3_a_6==.
 tab c3_a_6_win
-hist c3_a_6_win
+* hist c3_a_6_win
 
 *Value of egg and milk consumed 
 tab c3_a_5, m 
-hist c3_a_5
+* hist c3_a_5
 replace c3_a_5=0 if c3_a_5==.
 winsor c3_a_5, gen(c3_a_5_win) p(0.01)
 local c3_a_5_lab: variable label c3_a_5 
 label variable c3_a_5_win "`c3_a_5_lab'"
 replace c3_a_5_win=0 if c3_a_5==.
 tab c3_a_5_win
-hist c3_a_5_win
+* hist c3_a_5_win
 
 *Value of oil an fat consumed 
 tab c3_a_8, m 
-hist c3_a_8
+* hist c3_a_8
 replace c3_a_8=0 if c3_a_8==.
 winsor c3_a_8, gen(c3_a_8_win) p(0.01)
 local c3_a_8_lab: variable label c3_a_8 
 label variable c3_a_8_win "`c3_a_8_lab'"
 replace c3_a_8_win=0 if c3_a_8==.
 tab c3_a_8_win
-hist c3_a_8_win
+* hist c3_a_8_win
 
 *Value of beverages consumed 
 tab c3_a_9, m
-hist c3_a_9
+* hist c3_a_9
 replace c3_a_9=0 if c3_a_9==.
 winsor c3_a_9, gen(c3_a_9_win) p(0.01)
 local c3_a_9_lab: variable label c3_a_9 
 label variable c3_a_9_win "`c3_a_9_lab'"
 replace c3_a_9_win=0 if c3_a_9==.
 tab c3_a_9_win
-hist c3_a_9_win
+* hist c3_a_9_win
 
 *Value of cigarette, coffee and tea consumed 
 tab c3_a_11, m
-hist c3_a_11
+* hist c3_a_11
 replace c3_a_11=0 if c3_a_11==.
 winsor c3_a_11, gen(c3_a_11_win) p(0.01)
 local c3_a_11_lab: variable label c3_a_11 
 label variable c3_a_11_win "`c3_a_11_lab'"
 replace c3_a_11_win=0 if c3_a_11==.
 tab c3_a_11_win
-hist c3_a_11_win
+* hist c3_a_11_win
 
 *Value of other consumption, etc. 
 tab c3_a_1, m
-hist c3_a_1
+* hist c3_a_1
 replace c3_a_1=0 if c3_a_1==.
 winsor c3_a_1, gen(c3_a_1_win) p(0.01)
 local c3_a_1_lab: variable label c3_a_1 
 label variable c3_a_1_win "`c3_a_1_lab'"
 replace c3_a_1_win=0 if c3_a_1==.
 tab c3_a_1_win
-hist c3_a_1_win
+* hist c3_a_1_win
 
 tab c3_a_2, m
-hist c3_a_2
+* hist c3_a_2
 replace c3_a_2=0 if c3_a_2==.
 winsor c3_a_2, gen(c3_a_2_win) p(0.01)
 local c3_a_2_lab: variable label c3_a_2 
 label variable c3_a_2_win "`c3_a_2_lab'"
 replace c3_a_2_win=0 if c3_a_2==.
 tab c3_a_2_win
-hist c3_a_2_win
+* hist c3_a_2_win
 
 tab c3_a_7, m
-hist c3_a_7
+* hist c3_a_7
 replace c3_a_7=0 if c3_a_7==.
 winsor c3_a_7, gen(c3_a_7_win) p(0.01)
 local c3_a_7_lab: variable label c3_a_7 
 label variable c3_a_7_win "`c3_a_7_lab'"
 replace c3_a_7_win=0 if c3_a_7==.
 tab c3_a_7_win
-hist c3_a_7_win
+* hist c3_a_7_win
 
 tab c3_a_10, m
-hist c3_a_10
+* hist c3_a_10
 replace c3_a_10=0 if c3_a_10==.
 winsor c3_a_10, gen(c3_a_10_win) p(0.01)
 local c3_a_10_lab: variable label c3_a_10 
 label variable c3_a_10_win "`c3_a_10_lab'"
 replace c3_a_10_win=0 if c3_a_10==.
 tab c3_a_10_win
-hist c3_a_10_win
+* hist c3_a_10_win
 */
 label variable c3_a_1_win 	"Pains, farine, orge, sorgho"
 label variable c3_a_2_win 	"Pâtes, riz et semoule"
@@ -337,7 +337,7 @@ label variable c3_a_10 		"Epices (sels,  poivre , curcuma,…)"
 		
 		forvalues x = 4/9			{
 												
-			histogram		c`x'
+			* histogram		c`x'
 			replace 		c`x' = 0		if   c`x'  == .
 			sum 			c`x', d
 			
@@ -354,7 +354,7 @@ label variable c3_a_10 		"Epices (sels,  poivre , curcuma,…)"
 		}
 		
 		forvalues x = 11/16			{
-			histogram		c`x'
+			* histogram		c`x'
 			replace 		c`x' = 0		if   c`x'  == .
 			sum 			c`x', d
 			
@@ -371,7 +371,7 @@ label variable c3_a_10 		"Epices (sels,  poivre , curcuma,…)"
 
 			
 			sum c18, d
-			histogram		c18
+			* histogram		c18
 			replace 		c18 = 0		if   c18  == .
 			sum 			c18
 			
@@ -404,108 +404,108 @@ tab exp_food, m
 
 *Expenditures on healthcare (medical expenses) 
 tab c12, m 
-hist c12
+* hist c12
 winsor c12, gen(c12_win) p(0.01)
 local c12_lab: variable label c12 
 label variable c12_win "`c12_lab'"
 tab c12_win
-hist c12_win
+* hist c12_win
 
 *Expenditures on education 
 tab c13, m 
-hist c13
+* hist c13
 winsor c13, gen(c13_win) p(0.01) high
 local c13_lab: variable label c13 
 label variable c13_win "`c13_lab'"
 tab c13_win, m
-hist c13_win 
+* hist c13_win 
 
 *Expenditures on leisure 
 tab c18, m 
-hist c18
+* hist c18
 winsor c18, gen(c18_win) p(0.01)
 local c18_lab: variable label c18 
 label variable c18_win "`c18_lab'"
 tab c18_win
-hist c18_win
+* hist c18_win
 
 *Expenditure on transportation 
 tab c8, m
-hist c8
+* hist c8
 winsor c8, gen(c8_win) p(0.01)
 local c8_lab: variable label c8 
 label variable c8_win "`c8_lab'"
 tab c8_win
-hist c8_win
+* hist c8_win
 
 *Expenditures on electricity, gas water, etc. 
 tab c5, m
-hist c5
+* hist c5
 winsor c5, gen(c5_win) p(0.01)
 local c5_lab: variable label c5 
 label variable c5_win "`c5_lab'"
 tab c5_win
-hist c5_win
+* hist c5_win
 
 *Expenditures on communication (telephone, internet, etc.) 
 tab c6, m
-hist c6
+* hist c6
 winsor c6, gen(c6_win) p(0.01) high
 local c6_lab: variable label c6 
 label variable c6_win "`c6_lab'"
 tab c6_win, m
-hist c6_win //lots of zeros
+* hist c6_win //lots of zeros
 
 *Expenditures on household chores (e.g., soap, detergent, cosmetics, etc.) 
 tab c7, m
-hist c7
+* hist c7
 winsor c7, gen(c7_win) p(0.01)
 local c7_lab: variable label c7 
 label variable c7_win "`c7_lab'"
 tab c7_win
-hist c7_win
+* hist c7_win
 
 *Expenditures on rent and/or housing repairs 
 tab c4, m 
-hist c4
+* hist c4
 winsor c4, gen(c4_win) p(0.01)
 local c4_lab: variable label c4 
 label variable c4_win "`c4_lab'"
 tab c4_win
-hist c4_win
+* hist c4_win
 
 tab c11, m
-hist c11
+* hist c11
 winsor c11, gen(c11_win) p(0.01)
 local c11_lab: variable label c11 
 label variable c11_win "`c11_lab'"
 tab c11_win
-hist c11_win
+* hist c11_win
 
 *Expenditures on other services 
 tab c14, m
-hist c14
+* hist c14
 winsor c14, gen(c14_win) p(0.01)
 local c14_lab: variable label c14 
 label variable c14_win "`c14_lab'"
 tab c14_win
-hist c14_win
+* hist c14_win
 
 tab c9, m
-hist c9
+* hist c9
 winsor c9, gen(c9_win) p(0.01)
 local c9_lab: variable label c9 
 label variable c9_win "`c9_lab'"
 tab c9_win
-hist c9_win
+* hist c9_win
 
 tab c16, m 
-hist c16
+* hist c16
 winsor c16, gen(c16_win) p(0.01)
 local c16_lab: variable label c16 
 label variable c16_win "`c16_lab'"
 tab c16_win
-hist c16_win
+* hist c16_win
 *Expenditures index: weighted standardized average of the above variables.
 
 */
@@ -627,7 +627,7 @@ tab g2_2, m
 
 		forvalues x = 2/23			{		
 										//winsorise superficie more and some assets
-			histogram		q2_1_`x'
+			* histogram		q2_1_`x'
 			replace 		q2_1_`x' = 0		if   q2_1_`x'  == .
 			sum 			q2_1_`x', d
 			
@@ -644,7 +644,7 @@ tab g2_2, m
 
 		local					area			superficie superficie_m  				//don't winsorise time spent...
 		foreach var of local 	area	{
-			histogram		`var'
+			* histogram		`var'
 			replace 		`var' = 0		if   `var'  == .
 			sum 			`var', d
 			
@@ -671,23 +671,23 @@ replace q2_1_10=0 if q2_1_10==.
 
 *Livestock (e.g., cows, goats, chickens, etc.)  // will be considered censored
 tab q2_1_18, m
-hist q2_1_18
+* hist q2_1_18
 replace q2_1_18=0 if q2_1_18==.
 winsor q2_1_18, gen(q2_1_18_win) p(0.01)
 local q2_1_18_lab: variable label q2_1_18 
 label variable q2_1_18_win "`q2_1_18_lab'"
 tab q2_1_18_win
-hist q2_1_18_win
+* hist q2_1_18_win
 
 tab q2_1_19, m
-hist q2_1_19
+* hist q2_1_19
 replace q2_1_19=0 if q2_1_19==.
 winsor q2_1_19, gen(q2_1_19_win) p(0.01)
 local q2_1_19_lab: variable label q2_1_19 
 label variable q2_1_19_win "`q2_1_19_lab'"
 replace q2_1_19_win=0 if q2_1_19==.
 tab q2_1_19_win
-hist q2_1_19_win
+* hist q2_1_19_win
 
 tab q2_1_20, m
 replace q2_1_20=0 if q2_1_20==.
@@ -696,29 +696,29 @@ tab q2_1_21, m
 replace q2_1_21=0 if q2_1_21==.
 
 tab q2_1_22, m
-hist q2_1_22
+* hist q2_1_22
 replace q2_1_22=0 if q2_1_22==.
 
 tab q2_1_23, m
-hist q2_1_23
+* hist q2_1_23
 replace q2_1_23=0 if q2_1_23==.
 winsor q2_1_23, gen(q2_1_23_win) p(0.01)
 local q2_1_23_lab: variable label q2_1_23 
 label variable q2_1_23_win "`q2_1_23_lab'"
 replace q2_1_23_win=0 if q2_1_23==.
 tab q2_1_23_win
-hist q2_1_23_win
+* hist q2_1_23_win
 
 *Furniture (e.g., bed, mattress, bicycles, etc.) // will be considered censored 
 tab q2_1_2, m
-hist q2_1_2
+* hist q2_1_2
 replace q2_1_2=0 if q2_1_2==.
 winsor q2_1_2, gen(q2_1_2_win) p(0.01)
 local q2_1_2_lab: variable label q2_1_2 
 label variable q2_1_2_win "`q2_1_2_lab'"
 replace q2_1_2_win=0 if q2_1_2==.
 tab q2_1_2_win
-hist q2_1_2_win
+* hist q2_1_2_win
 
 tab q2_1_3, m
 replace q2_1_3=0 if q2_1_3==.
@@ -746,14 +746,14 @@ tab q2_1_12, m
 replace q2_1_12=0 if q2_1_12==.
 
 tab q2_1_13, m
-hist q2_1_13
+* hist q2_1_13
 replace q2_1_13=0 if q2_1_13==.
 winsor q2_1_13, gen(q2_1_13_win) p(0.01)
 local q2_1_13_lab: variable label q2_1_13 
 label variable q2_1_13_win "`q2_1_13_lab'"
 replace q2_1_13_win=0 if q2_1_13==.
 tab q2_1_13_win
-hist q2_1_13_win
+* hist q2_1_13_win
 
 tab q2_1_14, m
 replace q2_1_14=0 if q2_1_14==.
@@ -762,14 +762,14 @@ tab q2_1_15, m
 replace q2_1_15=0 if q2_1_15==.
 
 tab q2_1_16, m
-hist q2_1_16
+* hist q2_1_16
 replace q2_1_16=0 if q2_1_16==.
 winsor q2_1_16, gen(q2_1_16_win) p(0.01)
 local q2_1_16_lab: variable label q2_1_16 
 label variable q2_1_16_win "`q2_1_16_lab'"
 replace q2_1_16_win=0 if q2_1_16==.
 tab q2_1_16_win
-hist q2_1_16_win
+* hist q2_1_16_win
 
 tab q2_1_17, m
 replace q2_1_17=0 if q2_1_17==.
@@ -832,21 +832,21 @@ tab superficie, m
 replace superficie=. if superficie==-96
 
 tab superficie, m
-hist superficie
+* hist superficie
 winsor superficie, gen(superficie_win) p(0.01)
 local superficie_lab: variable label superficie 
 label variable superficie_win "`superficie_lab'"
 tab superficie_win
-hist superficie_win
+* hist superficie_win
 
 tab superficie_m, m
 tab superficie_m, m
-hist superficie_m
+* hist superficie_m
 winsor superficie_m, gen(superficie_m_win) p(0.01)
 local superficie_m_lab: variable label superficie_m 
 label variable superficie_m_win "`superficie_m_lab'"
 tab superficie_m_win
-hist superficie_m_win
+* hist superficie_m_win
 */
 tab titre_terre, m
 
@@ -987,15 +987,15 @@ label variable earned_main "Received wage from main job last month"
 
 		local					income			earned_main  				//don't winsorise time spent...
 		foreach var of local 	income	{
-			histogram		`var'
+			* histogram		`var'
 			sum 			`var', d
 			replace			`var'  = 0		if   `var'  == . 
 			
 			winsor			`var', gen(`var'_win)  p(0.002)
 			winsor			`var', gen(`var'_win5) p(0.05)
 			local 			`var'_lab: 	variable label `var' 
-			label variable 	`var'_win 		"``var'_lab'"
-			label variable 	`var'_win5		"``var'_lab'"
+			label variable 	`var'_win 		"``var'_lab' (win = 0.01)"
+			label variable 	`var'_win5		"``var'_lab'  "
 
 			sum 			`var'_win, d
 			sum 			`var'_win5, d
@@ -1007,12 +1007,12 @@ type_emploi_q3_5 type_emploi_q3_6 type_emploi_q3_7 type_emploi_q3_8 type_emploi_
 type_emploi_q3_11 type_emploi_q3_12 type_emploi_q3_13 type_emploi_q3_14)
 label variable earned_main "Received wage from main job last month"
 tab earned_main
-hist earned_main
+* hist earned_main
 winsor earned_main, gen(earned_main_win) p(0.01)
 local earned_main_lab: variable label earned_main 
 label variable earned_main_win "`earned_main_lab'"
 tab earned_main_win
-hist earned_main_win
+* hist earned_main_win
 */
 
 *Looked for paid work in the last 30 days 
@@ -1037,12 +1037,14 @@ type_emploi_q1_11 type_emploi_q1_12 type_emploi_q1_13 type_emploi_q1_14), m
 gen tspent_sec=(tspent_sec1-tspent_main)
 label variable tspent_sec "Days spent working on this activity in the last 30 days"
 tab tspent_sec, m
-hist tspent_sec
+* hist tspent_sec
 winsor tspent_sec, gen(tspent_sec_win) p(0.01)
+winsor tspent_sec, gen(tspent_sec_win5) p(0.05)
 local tspent_sec_lab: variable label tspent_sec 
-label variable tspent_sec_win "`tspent_sec_lab'"
+label variable tspent_sec_win  "`tspent_sec_lab' (win = 0.01)"
+label variable tspent_sec_win5 "`tspent_sec_lab'  "
 tab tspent_sec_win
-hist tspent_sec_win
+* hist tspent_sec_win
 
 *Money earned with this activity in the last 30 days
 egen earned_sec1=rowtotal(type_emploi_q3_1 type_emploi_q3_2 type_emploi_q3_3 type_emploi_q3_4 ///
@@ -1050,8 +1052,13 @@ type_emploi_q3_5 type_emploi_q3_6 type_emploi_q3_7 type_emploi_q3_8 type_emploi_
 type_emploi_q3_11 type_emploi_q3_12 type_emploi_q3_13 type_emploi_q3_14), m
 gen earned_sec=(earned_sec1-earned_main)
 label variable earned_sec "Money earned with this activity in the last 30 days"
+winsor earned_sec, gen(earned_sec_win) p(0.01)
+winsor earned_sec, gen(earned_sec_win5) p(0.05)
+local earned_sec_lab: variable label earned_sec 
+label variable earned_sec_win  "`earned_sec_lab' (win = 0.01)"
+label variable earned_sec_win5 "`earned_sec_lab'  "
 tab earned_sec, m
-hist earned_sec
+* hist earned_sec
 
 *Other employment index: weighted standardized average of the above variables.
 *5.1.7	NON-AGRICULTURAL ENTERPRISE
@@ -1236,7 +1243,7 @@ type_emploi_q9_11 type_emploi_q9_12 type_emploi_q9_13 type_emploi_q9_14) if type
 gen hoursperm_employ=(daysperm_employ1*hoursperd_employ1)/pers_employ
 label variable hoursperm_employ "Number of hours employees worked in the past month"
 tab hoursperm_employ, m
-hist hoursperm_employ
+* hist hoursperm_employ
 
 replace hoursperm_employ = 0 if pers_employ == 0								// Imput to 0 if no employee
 
@@ -1262,7 +1269,7 @@ type_emploi_q10_11 type_emploi_q10_12 type_emploi_q10_13 type_emploi_q10_14) if 
 gen paid_employ=paid_employ1/pers_employ
 label variable paid_employ "Wages paid to employees in the past month (average)"
 tab paid_employ, m
-hist paid_employ
+* hist paid_employ
 
 replace paid_employ = 0 if pers_employ == 0										// Imput to 0 if no employees
 
@@ -1274,12 +1281,12 @@ replace paid_employ = 0 if pers_employ == 0										// Imput to 0 if no employe
 *Agricultural income (sales) 
 
 tab business_q5, m
-hist business_q5
+* hist business_q5
 /*winsor business_q5, gen(business_q5_win) p(0.01)
 local business_q5_lab: variable label business_q5 
 label variable business_q5_win "`business_q5_lab'"
 tab business_q5_win
-hist business_q5_win*/
+* hist business_q5_win*/
 
 gen agri_income=business_q5 if type_emploi_1==1 //NO OBSERVATION
 /*gen agri_income_win=business_q5_win if type_emploi_1==1*/
@@ -1289,12 +1296,12 @@ gen agri_income=business_q5 if type_emploi_1==1 //NO OBSERVATION
 *Took loan to buy equipment or other inputs 
 *Invested
 tab business_q3, m
-hist business_q3
+* hist business_q3
 /*winsor business_q3, gen(business_q3_win) p(0.01)
 local business_q3_lab: variable label business_q3 
 label variable business_q3_win "`business_q3_lab'"
 tab business_q3_win
-hist business_q3_win*/
+* hist business_q3_win*/
 
 gen agri_invest=business_q3 if type_emploi_1==1 //NO OBSERVATION
 /*gen agri_invest_win=business_q3_win if type_emploi_1==1*/
@@ -1335,7 +1342,7 @@ tab epargne_forme_3, m
 
 		local					saving			cb dette_cb						//pret dette 
 		foreach type of local 	saving	{
-			histogram		epargne_`type'
+			* histogram		epargne_`type'
 			replace 		epargne_`type' = 0		if   epargne_`type'  == .
 			sum 			epargne_`type', d
 			
@@ -1354,14 +1361,14 @@ tab epargne_forme_3, m
 		
 /*
 tab epargne_cb, m
-hist epargne_cb
+* hist epargne_cb
 replace epargne_cb=0 if epargne_cb==.
 winsor epargne_cb, gen(epargne_cb_win) p(0.01)
 local epargne_cb_lab: variable label epargne_cb 
 label variable epargne_cb_win "`epargne_cb_lab'"
 replace epargne_cb_win=0 if epargne_cb==.
 tab epargne_cb_win
-hist epargne_cb_win
+* hist epargne_cb_win
 */
 *Had debt before participation in ELIIP
 *Was able to pay debts 
@@ -1385,6 +1392,9 @@ recode emploi_futur (1=1)(2=1)(3=1)(4=1)(5=0)(6=0)(7=0)(8=0)(9=0)(10=0)(11=0) //
 recode emploi_futur (1=0)(2=0)(3=0)(4=0)(5=0)(6=1)(7=1)(8=1)(9=1)(10=0)(11=0) ///
 					(12=1)(13=1)(14=0), gen(futur_services)
 
+label var futur_agriculture "Desire work in: agriculture"
+label var futur_services 	"Desire work in: services"
+
 
 *How much money you expect to earn from this job 
 
@@ -1402,8 +1412,8 @@ recode emploi_futur (1=0)(2=0)(3=0)(4=0)(5=0)(6=1)(7=1)(8=1)(9=1)(10=0)(11=0) //
 		winsor				emp_futur_cb, gen(emp_futur_cb_win5) p(0.05)
 
 		local 				emp_futur_cb_lab: variable label emp_futur_cb 
-		label variable 		emp_futur_cb_win 	"`emp_futur_cb_lab'"
-		label variable 		emp_futur_cb_win5	"`emp_futur_cb_lab'"
+		label variable 		emp_futur_cb_win 	"Income Aspiration (win = 0.01)"
+		label variable 		emp_futur_cb_win5	"Income Aspiration  "
 
 		sum 				emp_futur_cb_win , d
 		sum 				emp_futur_cb_win5, d		
@@ -1413,12 +1423,12 @@ recode emploi_futur (1=0)(2=0)(3=0)(4=0)(5=0)(6=1)(7=1)(8=1)(9=1)(10=0)(11=0) //
 /*
 tab emploi_futur_cb, m
 ren emploi_futur_cb emp_futur_cb
-hist emp_futur_cb
+* hist emp_futur_cb
 winsor emp_futur_cb, gen(emp_futur_cb_win) p(0.01)
 local emp_futur_cb_lab: variable label emp_futur_cb 
 label variable emp_futur_cb_win "`emp_futur_cb_lab'"
 tab emp_futur_cb_win
-hist emp_futur_cb_win
+* hist emp_futur_cb_win
 */
 
 *5.1.12	EMPLOYMENT AND INCOME BY OTHER HOUSEHOLD MEMBERS
@@ -1433,9 +1443,11 @@ type_emploi_q3_5 type_emploi_q3_6 type_emploi_q3_7 type_emploi_q3_8 type_emploi_
 type_emploi_q3_11 type_emploi_q3_12 type_emploi_q3_13 type_emploi_q3_14) if repondant_rel==1, m
 label variable earnedhh "Income head of HH earned in the last month"
 replace earnedhh = 0 if (repondant_rel == 1 & earnedhh == .)
-winsor earnedhh, gen(earnedhh_win) p(0.003)
+winsor earnedhh, gen(earnedhh_win) p(0.01)
+winsor earnedhh, gen(earnedhh_win5) p(0.05)
 local earnedhh_lab: variable label earnedhh 
-label variable earnedhh_win "`earnedhh_lab'"
+label variable earnedhh_win "`earnedhh_lab' (win = 0.01)"
+label variable earnedhh_win5 "`earnedhh_lab'  "
 
 
 *Head of HH has other income generating activities 
@@ -1454,6 +1466,11 @@ type_emploi_q3_11 type_emploi_q3_12 type_emploi_q3_13 type_emploi_q3_14) if repo
 label variable earnedoth "Income other members of HH earned in the last month"
 replace earnedoth = 1500 if earnedoth == 11000
 replace earnedoth = 0 if (repondant_rel ~= 1 & earnedoth == .)
+winsor earnedoth, gen(earnedoth_win) p(0.01)
+winsor earnedoth, gen(earnedoth_win5) p(0.05)
+local earnedoth_lab: variable label earnedhh 
+label variable earnedoth_win "`earnedoth_lab' (win = 0.01)"
+label variable earnedoth_win5 "`earnedoth_lab'  "
 
 
 *Members of HH engage in additional income generating activities 
@@ -1483,7 +1500,7 @@ tab sante_lieux_dum1
 		local					service			dispensaire ecoleprim ecolesec eau		///
 												marche transpublic cheflieu
 		foreach type of local 	service	{
-			histogram		distance_`type'
+			* histogram		distance_`type'
 			replace 		distance_`type' = 0		if   distance_`type'  == .
 			sum 			distance_`type', d
 			
@@ -1500,38 +1517,38 @@ tab sante_lieux_dum1
 		
 /*
 tab distance_dispensaire, m
-hist distance_dispensaire
+* hist distance_dispensaire
 winsor distance_dispensaire, gen(distance_dispensaire_win) p(0.01)
 local distance_dispensaire_lab: variable label distance_dispensaire 
 label variable distance_dispensaire_win "`distance_dispensaire_lab'"
 tab distance_dispensaire_win
-hist distance_dispensaire_win
+* hist distance_dispensaire_win
 
 *Access to education 
 tab distance_ecoleprim, m
-hist distance_ecoleprim
+* hist distance_ecoleprim
 winsor distance_ecoleprim, gen(distance_ecoleprim_win) p(0.01)
 local distance_ecoleprim_lab: variable label distance_ecoleprim 
 label variable distance_ecoleprim_win "`distance_ecoleprim_lab'"
 tab distance_ecoleprim_win
-hist distance_ecoleprim_win
+* hist distance_ecoleprim_win
 
 tab distance_ecolesec, m
-hist distance_ecolesec
+* hist distance_ecolesec
 winsor distance_ecolesec, gen(distance_ecolesec_win) p(0.01)
 local distance_ecolesec_lab: variable label distance_ecolesec 
 label variable distance_ecolesec_win "`distance_ecolesec_lab'"
 tab distance_ecolesec_win
-hist distance_ecolesec_win
+* hist distance_ecolesec_win
 
 *Having a source of potable water in the house 
 tab distance_eau, m
-hist distance_eau
+* hist distance_eau
 winsor distance_eau, gen(distance_eau_win) p(0.01)
 local distance_eau_lab: variable label distance_eau 
 label variable distance_eau_win "`distance_eau_lab'"
 tab distance_eau_win
-hist distance_eau_win
+* hist distance_eau_win
 */
 *Sickness of any HH member in the past year 
 tab sante_soins, m
@@ -1540,12 +1557,12 @@ tab sante_soins, m
 tab sante_hopital, m 
 replace sante_hopital=2 if sante_hopital==-2
 tab sante_hopital, m 
-hist sante_hopital
+* hist sante_hopital
 winsor sante_hopital, gen(sante_hopital_win) p(0.01) high //lots of exageration
 local sante_hopital_lab: variable label sante_hopital 
 label variable sante_hopital_win "`sante_hopital_lab'"
 tab sante_hopital_win, m
-hist sante_hopital_win //lots of zeros
+* hist sante_hopital_win //lots of zeros
 
 tab c12, m
 
@@ -1589,33 +1606,33 @@ tab distance_eau, m
 
 tab distance_marche, m 
 replace distance_marche=. if distance_marche==-96
-hist distance_marche
+* hist distance_marche
 winsor distance_marche, gen(distance_marche_win) p(0.01)
 local distance_marche_lab: variable label distance_marche 
 label variable distance_marche_win "`distance_marche_lab'"
 tab distance_marche_win
-hist distance_marche_win
+* hist distance_marche_win
 
 tab distance_transpublic, m
 replace distance_transpublic=. if distance_marche==-96
-hist distance_transpublic
+* hist distance_transpublic
 winsor distance_transpublic, gen(distance_transpublic_win) p(0.01)
 local distance_transpublic_lab: variable label distance_transpublic 
 label variable distance_transpublic_win "`distance_transpublic_lab'"
 tab distance_transpublic_win
-hist distance_transpublic_win
+* hist distance_transpublic_win
 
 tab distance_ecoleprim, m
 tab distance_ecolesec, m
 tab distance_dispensaire, m
 
 tab distance_cheflieu, m
-hist distance_cheflieu
+* hist distance_cheflieu
 winsor distance_cheflieu, gen(distance_cheflieu_win) p(0.01)
 local distance_cheflieu_lab: variable label distance_cheflieu 
 label variable distance_cheflieu_win "`distance_cheflieu_lab'"
 tab distance_cheflieu_win
-hist distance_cheflieu_win
+* hist distance_cheflieu_win
 */
 
 *Access to basic services index: weighted standardized average of the above variables.
@@ -1650,7 +1667,7 @@ gen 	association_dummy = 0
 replace association_dummy = 1 	if  association_1 == 1 | association_2 == 1 | association_3 == 1 |		///
 									association_4 == 1 | association_5 == 1 | association_6 == 1 |		///
 									association_7 == 1 | association_8 == 1 | association_9 == 1
-label variable			association_dummy "member of any local association"
+label variable			association_dummy "Member of any local association"
 
 *Collective action 
 sum comite*
@@ -1873,12 +1890,12 @@ sum psy_accepte_dum* //1, 2 don't vary much
 
 tab psycho_depart, m // will be considered censored
 ren psycho_depart psy_depart
-hist psy_depart
+* hist psy_depart
 winsor psy_depart, gen(psy_depart_win) p(0.01)
 local psy_depart_lab: variable label psy_depart 
 label variable psy_depart_win "`psy_depart_lab'"
 tab psy_depart_win
-hist psy_depart_win
+* hist psy_depart_win
 
 codebook psycho_menage
 ren psycho_menage psy_menage
@@ -1986,6 +2003,154 @@ label variable violence_emotional	"using violence variable - any emotional manif
 *Overall intra-household index: weighted standardized average of women’s decision making index and violence against women index.
 
 
+* Label variables
+
+label variable futur_services		"Aspire to work in service"
+label variable emp_futur_cb_win5	"Income aspiration"
+label variable emploi				"Had an IGA during the last 4 weeks"
+label variable tspent_main			"Days spent in main IGA"
+label variable earned_main_win5		"Wage from main activity last month"
+label variable employedhh			"HH head main IGA"
+label variable earnedhh_win5		"HH head main income last month"
+label variable paidjobhh			"HH head second IGA"
+label variable earnedoth_win5		"Other HH member income last month"
+label variable paidjoboth			"HH members IGA"
+label variable sec_empl				"Other IGA"
+label variable tspent_sec_win5		"Days spent in other IGA"
+label variable earned_sec_win5		"Wage from other IGA activity last month"
+label variable c3_a_1_win5 	"Bread, flour..."
+label variable c3_a_2_win5 	"Pasta, rice..."
+label variable c3_a_3_win5 	"Fish"
+label variable c3_a_4_win5 	"Meat"
+label variable c3_a_5_win5 	"Eggs and diary"
+label variable c3_a_6_win5 	"Vegetables"
+label variable c3_a_7_win5 	"Fruits"
+label variable c3_a_8_win5 	"Oil"
+label variable c3_a_9_win5 	"Water and soda"
+label variable c3_a_10_win5 "Seasonning"
+label variable c3_a_11_win5 "Tobacco, coffee and tea"
+label variable c4_win5 		"Rent"
+label variable c5_win5 		"Electricity, gaz, petrol..."
+label variable c6_win5 		"Phone"
+label variable c7_win5 		"Soap"
+label variable c8_win5 		"Transport"
+label variable c9_win5 		"Hairdresser"
+label variable c11_win5 	"household small repairs"
+label variable c12_win5 	"Medical expenses"
+label variable c13_win5 	"Education expenses"
+label variable c14_win5 	"Clothes"
+label variable c15_win5 	"Assets"
+label variable c16_win5 	"Taxes"
+label variable c18_win5 	"Festivity"
+label variable q2_1_2_win5 			"Stove"
+label variable q2_1_3_win5 			"Fridge"
+label variable q2_1_4_win5 			"Heating"
+label variable q2_1_5_win5 			"Air conditionner"
+label variable q2_1_6_win5 			"Washing machine"
+label variable q2_1_7_win5 			"Bed"
+label variable q2_1_8_win5 			"Shelf"
+label variable q2_1_9_win5 			"Automobile"
+label variable q2_1_10_win5 		"Moto"
+label variable q2_1_11_win5 		"Bike"
+label variable q2_1_12_win5 		"Television"
+label variable q2_1_13_win5 		"Satellite"
+label variable q2_1_14_win5 		"Camera"
+label variable q2_1_16_win5 		"Phone"
+label variable q2_1_17_win5 		"Computer"
+label variable q2_1_18_win5 		"Sheep"
+label variable q2_1_19_win5 		"Poultry"
+label variable q2_1_20_win5 		"Hives"
+label variable q2_1_21_win5 		"Cattle"
+label variable q2_1_22_win5 		"Horses"
+label variable q2_1_23_win5 		"Dog or cat"
+label variable mur_dummy 			"Cement or brick wall"
+label variable toit_dummy 			"Cement or tiles roof"
+label variable proprietaire_dum1 	"Proprietary: house"
+label variable titre 				"Tilting property"	
+label variable proprietaire_terre 	"Proprietary: land"
+label variable superficie_m 		"Size land"
+label variable titre_terre 			"Titling land"
+label variable g2_1 	"Reduce food consumption"
+label variable g2_2 	"Withdraw children from school"
+label variable g2_3 	"Debt with friends"
+label variable g2_4 	"Debt with coop"
+label variable g2_5 	"Debt with neighbors"
+label variable g2_6 	"Help from family outside of village"
+label variable g2_7 	"Send children away"
+label variable g2_8 	"Help from community member"
+label variable g2_9		"Help from Omda"
+label variable g2_10 	"Help from other Omda"
+label variable g2_11 	"Help from NGO"
+label variable g2_12 	"Help from Gov."
+label variable g2_13 	"Selling assets"
+label variable g2_14 	"Selling cattles"
+label variable g2_15 	"Use savings"
+label variable g1_1 	"Death of HH head (or main income earner)"
+label variable g1_2 	"Death of other HH members"
+label variable g1_3 	"Serious disease HH head (or main income earner)"
+label variable g1_4 	"Serious disease of other HH members"
+label variable g1_5 	"Loss of employment or fail business in HH"
+label variable g1_6 	"Loss of means because of incident (fire, war..)"
+label variable g1_7 	"Bad harvest"
+label variable g1_8 	"Land Seizure"
+label variable g1_9		"Other"
+label variable association_1	"Farmer association"
+label variable association_2	"Women association"								
+label variable association_3	"Religious association"
+label variable association_4	"Youth association"
+label variable association_5	"Veteran association"
+label variable association_6	"Saving association"
+label variable association_7	"Political association"
+label variable association_8	"Human right association"
+label variable association_9	"Other association"
+label variable initiatives_1 	"Participate in townhall"
+label variable initiatives_2 	"Meet the Omda"
+label variable initiatives_3 	"Meet the Imam"
+label variable initiatives_4 	"Contact police or court"
+label variable initiatives_5 	"Meet other state representative"
+label variable initiatives_6 	"Meet NGO"
+label variable initiatives_7 	"Meet village representative at House"
+label variable initiatives_8 	"Meet influencial but not official people"
+label variable initiatives_9 	"Friends or Family"								
+label variable initiatives_10 	"Maintain school or clinic"
+label variable initiatives_11 	"Maintain road"
+label variable initiatives_12 	"Maintain wells"
+label variable initiatives_13 	"Security in village"
+label variable initiatives_14 	"Maintain mosquee"
+label variable initiatives_15 	"Maintain market"
+label variable psy_anxiete			"No fear of losing control"
+label variable psy_exploit			"No feeling of being exploited"
+label variable psy_depress5			"No useless for others"
+label variable psy_accepte_dum3		"Accepted by family"
+label variable psy_menage_dum3		"Good relation between HH member"
+label variable psy_a_menage_dum3	"Accepted by other HH"
+label variable psycho_depress4		"No loss of appetite"
+label variable psycho_depress3		"Not feeling irritable"
+label variable psycho_depress2		"No loss of interest for activity"
+label variable psycho_depress1		"Feeling joy"
+label variable violence_1_2 		"Humiliated"
+label variable violence_1_3 		"Intimidated"
+label variable violence_1_4 		"Threatened"
+label variable violence_1_5 		"Threatened relatives"
+label variable violence_1_6 		"Slapped"
+label variable violence_1_7 		"Pushed"
+label variable violence_1_8 		"Punched (hand)"
+label variable violence_1_9 		"Punched (feet)"
+label variable violence_1_10 		"Burned or strangled"
+label variable violence_1_11 		"Threatened with a knife"
+label variable violence_1_16 		"Prevented from going to work"
+label variable violence_1_17 		"Stole your money"
+label variable violence_1_18 		"Laid off"
+label variable intrahh_1	"Earn income"
+label variable intrahh_2	"Decide by self how own's income is used"
+label variable intrahh_7	"Husband doesn't decide by itself how its income is used"
+label variable intrahh_11	"Income not being confiscated"
+label variable emploiw		"Women IGA"
+
+
+
+
+
 save "$stata/enquete_indiv5", replace
 */
 
@@ -2036,7 +2201,7 @@ tab chomage, m
 local chomage_lab: variable label chomage 
 *label variable chomage_win "`chomage_lab'"
 *tab chomage_win, m
-hist chomage
+* hist chomage
 
 codebook chomage_recherche
 tab chomage_recherche, nol m //-98
@@ -2047,12 +2212,12 @@ codebook reserv_wage //-99, -98, 0 missings
 tab reserv_wage, m
 *mvdecode reserv_wage, mv(-99=.a\-98=.n)
 tab reserv_wage, m
-hist reserv_wage
+* hist reserv_wage
 winsor reserv_wage, gen(reserv_wage_win) p(0.01) high //POUR COUPER LES EXAGÉRATIONS 
 local reserv_wage_lab: variable label reserv_wage 
 label variable reserv_wage_win "`reserv_wage_lab'"
 tab reserv_wage_win, m 
-hist reserv_wage_win
+* hist reserv_wage_win
 
 codebook emploi_2015_a //-99, -98, 0 miss
 tab emploi_2015_a, m nol
@@ -2065,12 +2230,12 @@ replace rev_total=-98 if rev_total==-96
 replace rev_total=-99 if rev_total>.99 & rev_total<1 //.99000001
 *mvdecode rev_total, mv(-99=.a \-98=.n)
 tab rev_total, m
-hist rev_total
+* hist rev_total
 winsor rev_total, gen(rev_total_win) p(0.01) high
 local rev_total_lab: variable label rev_total 
 label variable rev_total_win "`rev_total_lab'"
 tab rev_total_win, m
-hist rev_total_win //looks like a chi
+* hist rev_total_win //looks like a chi
 
 codebook type_emploi_q1_1 //-99; vast majority are missing
 tab type_emploi_q1_1 //-99
@@ -2167,12 +2332,12 @@ tab f2_val_2, m nol //77% missings NEW, -99
 *missings report f2_val_2, p
 *mvdecode f2_val_2, mv(-99=.a) 
 tab f2_val_2, m nol 
-hist f2_val_2
+* hist f2_val_2
 winsor f2_val_2, gen(f2_val_2_win) p(0.01) high //QU'EST-CE QUI EST RÉALISTE?
 local f2_val_2_lab: variable label f2_val_2 
 label variable f2_val_2_win "`f2_val_2_lab'"
 tab f2_val_2_win, m
-hist f2_val_2_win //lots of zeros: negative binomial...?
+* hist f2_val_2_win //lots of zeros: negative binomial...?
 
 *Consumption (basic needs and luxury) CASE FOR WINSORISATION
 codebook c3_a_1 //-99
@@ -2193,41 +2358,41 @@ replace c4=-98 if c4>.98 & c4<99
 gen pain = c3_a_1* c3_b_1 if c3_a_1>=0 & c3_b_1>=0
 label variable pain "fréquence * valeur d'achat de pain"
 tab pain,m 
-hist pain
+* hist pain
 winsor pain, gen(pain_win) h(4) high //choix discrétionaire
 *winsor pain, gen(pain_win) p(0.01) high //choix discrétionaire
 local pain_lab: variable label pain 
 label variable pain_win "`pain_lab'"
 tab pain_win, m
-hist pain_win //lots of zeros
+* hist pain_win //lots of zeros
 
 gen legumes = c3_a_6* c3_b_6 if c3_a_6>=0 & c3_b_6>=0
 label variable legumes "fréquence * valeur d'achat de légumes"
 tab legumes, m 
-hist legumes
+* hist legumes
 winsor legumes, gen(legumes_win) h(6) high
 local legumes_lab: variable label legumes 
 label variable legumes_win "`legumes_lab'"
 tab legumes_win, m
-hist legumes_win //lots of zeros
+* hist legumes_win //lots of zeros
 
 gen tabac = c3_a_11* c3_b_11 if c3_a_11>=0 & c3_b_11>=0
 label variable tabac "fréquence * valeur d'achat de tabac"
 tab tabac, m
-hist tabac
+* hist tabac
 winsor tabac, gen(tabac_win) h(3) high
 local tabac_lab: variable label tabac 
 label variable tabac_win "`tabac_lab'"
 tab tabac_win, m
-hist tabac_win
+* hist tabac_win
 
 codebook c12 //no missings
 tab c12 //.98 .99 -98 -99
 *mvdecode c12, mv(.98=.n\-98=.n\.99=.a\-99=.a)
-hist c12
+* hist c12
 winsor c12, gen(c12_win) p(0.01)
 tab c12_win
-hist c12_win
+* hist c12_win
 
 *Human capital
 codebook c13 //-99
@@ -2235,12 +2400,12 @@ tab c13, m //-99 -98 .99
 replace c13=-99 if c13>.99 & c13<1
 *mvdecode c13, mv(-99=.a\-98=.n)
 tab c13, m
-hist c13
+* hist c13
 winsor c13, gen(c13_win) p(0.01) high
 local c13_lab: variable label c13 
 label variable c13_win "`c13_lab'"
 tab c13_win, m
-hist c13_win //chi!!!
+* hist c13_win //chi!!!
 
 codebook formation //-98//88% non
 tab formation, m nol
@@ -2261,12 +2426,12 @@ replace c6=-99 if c6>.99 & c6<1
 replace c6=-98 if c6>.98 & c6<99
 *mvdecode c6, mv(-99=.a\-98=.n)
 tab c6, nol
-hist c6
+* hist c6
 winsor c6, gen(c6_win) p(0.01) high
 local c6_lab: variable label c6 
 label variable c6_win "`c6_lab'"
 tab c6_win, m
-hist c6_win //lots of zeros
+* hist c6_win //lots of zeros
 
 codebook c15 //-99
 tab c15, m //-99 -98 .99 .98
@@ -2274,12 +2439,12 @@ replace c15=-99 if c15>.99 & c15<1
 replace c15=-98 if c15>.98 & c15<99
 *mvdecode c15, mv(-99=.a\-98=.n)
 tab c15, nol
-hist c15
+* hist c15
 winsor c15, gen(c15_win) p(0.01) high
 local c15_lab: variable label c15 
 label variable c15_win "`c15_lab'"
 tab c15_win, m
-hist c15_win //lots of zeros
+* hist c15_win //lots of zeros
 
 codebook epargne //-99 -98
 tab epargne, m nol
@@ -2305,24 +2470,24 @@ tab c20, nol
 codebook migration_q5 //-99; max à 200 000
 tab migration_q5, m //93% missing
 *mvdecode migration_q5, mv(-99=.a\-98=.n)
-histogram migration_q5 
+* histogram migration_q5 
 tab migration_q5, m 
 winsor migration_q5, gen(migration_q5_win) p(0.01) high
 local migration_q5_lab: variable label migration_q5 
 label variable migration_q5_win "`migration_q5_lab'"
 tab migration_q5_win, m
-hist migration_q5_win //chi!!
+* hist migration_q5_win //chi!!
 
 codebook migration_cm_q5 //-99 
 tab migration_cm_q5, m //97% missing
 *mvdecode migration_cm_q5, mv(-99=.a)
 tab migration_cm_q5, m 
-hist migration_cm_q5
+* hist migration_cm_q5
 winsor migration_cm_q5, gen(migration_cm_q5_win) p(0.01) high
 local migration_cm_q5_lab: variable label migration_cm_q5 
 label variable migration_cm_q5_win "`migration_cm_q5_lab'"
 tab migration_cm_q5_win, m
-hist migration_cm_q5_win //lots of zeros
+* hist migration_cm_q5_win //lots of zeros
  
 *epargne_dette
 
@@ -2333,12 +2498,12 @@ tab sante_hopital, m //-99 -98 -2
 replace sante_hopital=2 if sante_hopital==-2
 *mvdecode sante_hopital, mv(-99=.a\-98=.n)
 tab sante_hopital, m 
-hist sante_hopital
+* hist sante_hopital
 winsor sante_hopital, gen(sante_hopital_win) p(0.01) high //lots of exageration
 local sante_hopital_lab: variable label sante_hopital 
 label variable sante_hopital_win "`sante_hopital_lab'"
 tab sante_hopital_win, m
-hist sante_hopital_win //lots of zeros
+* hist sante_hopital_win //lots of zeros
 
 codebook sante_qualite_a sante_qualite_b sante_qualite_c sante_qualite_d
 tab sante_qualite_a, nol m
@@ -2602,40 +2767,40 @@ label variable violence_2_17 "a pris votre revenu contre votre volonté."
 label variable violence_2_18 "été jeté hors de la maison."
 
 *identifiy the censored among the continuous
-hist repondant_age
-hist handicap
-hist chomage //oui!
-hist reserv_wage //oui!
-hist reserv_wage_win //oui!
-hist rev_total
-hist rev_total_win //oui
-hist h_per_day
-hist d_per_m
-hist f2_val_2
-hist f2_val_2_win
-hist c12
-hist c3_a_1 //could be
-hist c3_b_1 //could be
-hist c3_a_6 //could be
-hist c3_b_6 //could be
-hist c3_a_11 //could be
-hist c3_b_11 //could be
-hist c4
-hist pain //could be
-hist pain_win //could be
-hist legumes //could be
-hist legumes_win //could be
-hist tabac //could be
-hist tabac_win //could be
-hist c13 //could be
-hist c13_win //could be
-hist c6 //could be
-hist c6_win //could be
-hist c15 //could be
-hist c15_win //could be
-hist migration_q5
-hist migration_q5_win
-hist sante_hopital
-hist sante_hopital_win
+* hist repondant_age
+* hist handicap
+* hist chomage //oui!
+* hist reserv_wage //oui!
+* hist reserv_wage_win //oui!
+* hist rev_total
+* hist rev_total_win //oui
+* hist h_per_day
+* hist d_per_m
+* hist f2_val_2
+* hist f2_val_2_win
+* hist c12
+* hist c3_a_1 //could be
+* hist c3_b_1 //could be
+* hist c3_a_6 //could be
+* hist c3_b_6 //could be
+* hist c3_a_11 //could be
+* hist c3_b_11 //could be
+* hist c4
+* hist pain //could be
+* hist pain_win //could be
+* hist legumes //could be
+* hist legumes_win //could be
+* hist tabac //could be
+* hist tabac_win //could be
+* hist c13 //could be
+* hist c13_win //could be
+* hist c6 //could be
+* hist c6_win //could be
+* hist c15 //could be
+* hist c15_win //could be
+* hist migration_q5
+* hist migration_q5_win
+* hist sante_hopital
+* hist sante_hopital_win
 
 */
