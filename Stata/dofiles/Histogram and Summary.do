@@ -508,15 +508,15 @@ foreach outcome in `Index_ALL' {
 	"\pagebreak"																_n ///
 	"\section{Balance Test}"													_n ///
 	"\begin{table}[H]\centering\caption{Individual balance test}" 				_n ///
-	"\resizebox{\textwidth}{!}{\input{\input{Main/Table_Balance_Individual.tex}}"	_n ///
+	"\resizebox{\textwidth}{!}{\input{Main/Table_Balance_Individual.tex}}"		_n ///
 	"\end{table}" 																_n ///
 	"\begin{table}[H]\centering\caption{Community balance test}" 				_n ///
-	"\resizebox{\textwidth}{!}{\input{\input{Main/Table_Balance_Community.tex}}"	_n ///
+	"\resizebox{\textwidth}{!}{\input{Main/Table_Balance_Community.tex}}"		_n ///
 	"\end{table}" 																_n ///
 	"\pagebreak"																_n ///
 	"\section{Main Table}"														_n ///
 	"\begin{table}[H]\centering\caption{Main results}" 							_n ///
-	"\resizebox{\textwidth}{!}{\input{\input{Main/Table_Index.tex}}"				_n ///
+	"\resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}"					_n ///
 	"\end{table}" 																_n ///
 	"\pagebreak"																_n
 	
