@@ -1,4 +1,4 @@
-use "$stata/enquete_indiv5", clear 
+use "$stata/enquete_indiv5_imputed", clear 
 
 
 preserve 

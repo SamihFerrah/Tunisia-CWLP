@@ -75,49 +75,88 @@
 			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"
 		}
 
-		
+
+global import_individual		= 0
+global construct_individual		= 1
+global import_community			= 0 
+global construct_community		= 0
+global construct_analysis		= 1
+global codebook_				= 1
+global sum_stat					= 1
+global desc_index				= 0
+global main_table				= 0
+
+********************************************************************************
+********************************************************************************
+*				CLEANING INDIVIDUAL LEVEL DATASET 						
+********************************************************************************
+********************************************************************************
+
+
+*Prepare dataset
+if $import_individual == 1	{
+	do "$git_tunisia/dofiles/Prepare_indiv_db_Samih"
+}
+
+*Prepare outcomes
+if $construct_individual == 1	{
+	do "$git_tunisia/dofiles/Prepare_indiv_outcomes_Samih"						// Prepare outcomes and other relevant variables
+	do "$git_tunisia/dofiles/Missing Imputation.do"								// Imput missing outcomes variables 
+}
+
+********************************************************************************
+********************************************************************************
+*				CLEANING COMMUNITY LEVEL DATASET 						
+********************************************************************************
+********************************************************************************
+
+
+* Prepare dataset
+if $import_community == 1{
+	do "$git_tunisia/dofiles/Prepare_chefs_db_Samih"
+}
+
+* Prepare community level outcomes 
+if $construct_community == 1{
+	do "$git_tunisia/dofiles/Prepare_chefs_outcomes_Samih"
+}
+
+
+* Construct analysis dataset 
+if $construct_analysis == 1{
+	do "$git_tunisia/dofiles/analysis_dataset_Samih"
+	do "$git_tunisia/dofiles/Index_Samih"
+}
+
+
+********************************************************************************
+********************************************************************************
+*							ANALYSIS
+********************************************************************************
+********************************************************************************
+
+
 * Run user written command 
 do "$git_tunisia/dofiles/Ado/FDR_CWLP"
 
-***INDIV
 
-*Prepare dataset
-do "$git_tunisia/dofiles/Prepare_indiv_db_Samih"
+* Produce codebook of outcomes 
+if $codebook_ == 1{
+	do "$git_tunisia/dofiles/Codebook.do"
+}
 
-*Prepare outcomes
-do "$git_tunisia/dofiles/Prepare_indiv_outcomes_Samih"
+* Produce summary statistics of outcomes
+if $sum_stat == 1{
+	do "$git_tunisia/dofiles/Summary Statistics.do"
+}
 
-***COMMUNITY
+*Produce Histogram and Summary and Tex results document
+if $desc_index == 1{
+	do "$git_tunisia/dofiles/Histogram and Summary.do"
+}
 
-*Préparer datasets
-do "$git_tunisia/dofiles/Prepare_chefs_db_Samih"
 
-*Préparer outcomes
-do "$git_tunisia/dofiles/Prepare_chefs_outcomes_Samih"
-
-* Final data 
-
-do "$git_tunisia/dofiles/analysis_dataset_Samih"
-
-***ALL
-
-*Balance Analysis
-*do "$do/Balance_outcomes_all"
-
-*Creation of indexes
-do "$git_tunisia/dofiles/Index_Samih"
-
-*Histogram and Sumamry 
-
-do "$git_tunisia/dofiles/Histogram and Summary.do"
-
-*Analysis
-
-do "$git_tunisia/dofiles/Main Analysis Samih"
-
-*Heterogeneous Analysis
-*do "$do/Analysis_heterog"
-
-*Table with all Outcomes
-*do $do/All_Outcomes
-
+* Produce main tables of index 
+if $main_table == 1{
+	do "$git_tunisia/dofiles/Main Analysis Samih "
+}

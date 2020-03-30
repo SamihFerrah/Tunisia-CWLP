@@ -11,24 +11,32 @@
 ********************************************************************************
 cd "$git_tunisia/outputs/Main/"
 cap file close Table
-local Index_ALL 	lab_market_main lab_market_sec eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-					shocks social civic well_being woman_violence woman_bargain
+pause on 
+
+local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
+					shocks social civic well_being woman_empowerment
+
 	
-	local ctrl_Aa 	hhsize drepondant_mat ///
-					h_18_65 f_18_65 trauma_abus q0_1_c q0_3_c q2_2_c q2_3_c q2_4_c
+	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+					h_18_65 missing_h_18_65  f_18_65 missing_f_18_65  trauma_abus missing_trauma_abus 				///
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c  missing_q2_3_c	///
+					q2_4_c  missing_q2_4_c
 				  
 	local ctrl_Ba 
 	
-	local ctrl_Cb 	hhsize drepondant_mat ///
-					h_18_65 f_18_65 trauma_abus q0_1_c q0_3_c q2_2_c q2_3_c q2_4_c
+	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+					h_18_65 missing_h_18_65  f_18_65 missing_f_18_65  trauma_abus missing_trauma_abus 				///
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c  missing_q2_3_c	///
+					q2_4_c  missing_q2_4_c
+					
 
 ********************************************************************************
 ********************************************************************************	
 use "$stata/enquete_All3", clear 
 
-
+				
 local count_out = 0 
-mat def pvalue = J(13,3,.)
+mat def pvalue = J(11,3,.)
 
 foreach outcome in `Index_ALL' {
 
@@ -74,7 +82,6 @@ foreach outcome in `Index_ALL' {
 				
 				mat def pvalue[`count_out',3] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
 				
-				
 }
 		
 	* Store P-value vector name in global 
@@ -91,7 +98,7 @@ foreach outcome in `Index_ALL' {
 	
 	local count_outcomes = 1
 	
-	forvalue i = 1/13{
+	forvalue i = 1/11{
 		
 		* Between specification
 		
@@ -170,9 +177,14 @@ file write Table  _n ///
 " 				&	 (`se_1_10') & &								&   	(`se_2_10') & &								&	(`se_3_10') & &	\\ " 	_n ///
 " `l_11'		& 	`c_1_11'`s_1_11' 	& `pval_1_11' & `n_1_11' 	& 	`c_2_11'`s_2_11' & `pval_2_11' & `n_2_11'		& `c_3_11'`s_3_11' & `pval_3_11' & `n_3_11' 	  \\ " 	_n ///
 " 				&	 (`se_1_11') & &								&   	(`se_2_11') & &								&	(`se_3_11') & &	\\ " 	_n ///
+"\hline \end{tabular}														 					   "	
+file close Table		
+
+
+
+/*
 " `l_12'		& 	`c_1_12'`s_1_12' 	& `pval_1_12' & `n_1_12' 	& 	`c_2_12'`s_2_12' & `pval_2_12' & `n_2_12'		& `c_3_12'`s_3_12' & `pval_3_12' & `n_3_12' 	  \\ " 	_n ///
 " 				&	 (`se_1_12') & &								&   	(`se_2_12') & &								&	(`se_3_12') & &	\\ " 	_n ///
 " `l_13'		& 	`c_1_13'`s_1_13' 	& `pval_1_13' & `n_1_13' 	& 	`c_2_13'`s_2_13' & `pval_2_13' & `n_2_13'		& `c_3_13'`s_3_13' & `pval_3_13' & `n_3_13' 	 \\ " 	_n ///
 " 				&	 (`se_1_13') & &								&   	(`se_2_13') & &								&	(`se_3_13') & &	\\ " 	_n ///
-"\hline \end{tabular}														 					   "	
-file close Table		
+*/

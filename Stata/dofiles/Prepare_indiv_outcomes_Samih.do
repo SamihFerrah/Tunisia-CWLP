@@ -1433,7 +1433,9 @@ tab emp_futur_cb_win
 
 *5.1.12	EMPLOYMENT AND INCOME BY OTHER HOUSEHOLD MEMBERS
 *The head of HH has employment 
-gen employedhh = emploi if repondant_rel==1
+
+gen employedhh = 0 
+replace employedhh = 1 if repondant_rel==1 & emploi == 1 
 label variable employedhh "The head of HH has employment"
 
 
@@ -2003,6 +2005,79 @@ label variable violence_emotional	"using violence variable - any emotional manif
 *Overall intra-household index: weighted standardized average of women’s decision making index and violence against women index.
 
 
+* Labor market outcome 
+
+g emploi_main = emploi 
+label var emploi_main "Had an IGA last 4 weeks"
+g emploi_sec  = emploi if repondant_rel != 1
+label var emploi_sec  "Had an IGA last 4 weeks (HH other)"
+
+
+egen days_work_main 	= rowtotal(type_emploi_q1_?), mis
+label var days_work_main "Number of days work main IGA last 4 weeks"
+
+egen hours_work_main 	= rowtotal(type_emploi_q2_?) if repondant_rel == 1, mis
+label var hours_work_main "Number of hours work main IGA last 4 weeks"
+
+egen inc_work_main 		= rowtotal(type_emploi_q3_?), mis
+label var inc_work_main "Income from main IGA last 4 weeks"
+
+egen profit_work_main	= rowtotal(type_emploi_q5_?), mis
+label var profit_work_main "Profit from main IGA last 4 weeks"
+
+egen days_work_sec 	= rowtotal(type_emploi_q1_?) if repondant_rel != 1, mis
+label var days_work_sec "Number of days work main IGA last 4 weeks"
+
+egen hours_work_sec 	= rowtotal(type_emploi_q2_?) if repondant_rel != 1, mis
+label var hours_work_sec "Number of hours work main IGA last 4 weeks"
+
+egen inc_work_sec 		= rowtotal(type_emploi_q3_?) if repondant_rel != 1, mis
+label var inc_work_sec "Income from main IGA last 4 weeks"
+
+egen profit_work_sec	= rowtotal(type_emploi_q5_?) if repondant_rel != 1, mis
+label var profit_work_sec "Profit from main IGA last 4 weeks"
+
+g business_q0_main = business_q0 
+g business_q3_main = business_q3 
+g business_q5_main = business_q5 
+
+g business_q0_sec 	= business_q0 if repondant_rel != 1
+g business_q3_sec  	= business_q3 if repondant_rel != 1
+g business_q5_sec	= business_q5 if repondant_rel != 1
+
+label var business_q0_main "Have own business"
+label var business_q3_main "Investment in business last 4 weeks"
+label var business_q5_main "Profit from business last 4 weeks"
+
+label var business_q0_sec "Have own business"
+label var business_q3_sec "Investment in business last 4 weeks"
+label var business_q5_sec "Profit from business last 4 weeks"
+
+* Manual imputation of labor market outcomes 
+
+foreach var in days_work_main hours_work_main inc_work_main profit_work_main{
+
+	replace `var' = 0 if emploi_main == 0
+}
+
+foreach var in business_q3_main business_q5_main{
+
+	replace `var' = 0 if business_q0_main == 0
+}
+
+* Manual imputation of labor market outcomes 
+
+foreach var in days_work_sec hours_work_sec inc_work_sec profit_work_sec{
+
+	replace `var' = 0 if emploi_sec == 0
+}
+
+foreach var in business_q3_sec business_q5_sec{
+
+	replace `var' = 0 if business_q0_sec == 0
+}
+
+
 * Label variables
 
 label variable futur_services		"Aspire to work in service"
@@ -2148,659 +2223,111 @@ label variable intrahh_11	"Income not being confiscated"
 label variable emploiw		"Women IGA"
 
 
+local lab_market_main 	 		emploi_main days_work_main hours_work_main inc_work_main profit_work_main								///
+								business_q0_main business_q3_main business_q5_main
+								
+/*local lab_market_sec 	 		emploi_sec days_work_sec hours_work_sec inc_work_sec 													///
+								profit_work_sec business_q0_sec business_q3_sec business_q5_sec*/
+														
+local eco_welfare 				c3_a_1_win5 c3_a_2_win5 c3_a_3_win5 c3_a_4_win5 c3_a_5_win5 c3_a_6_win5 c3_a_7_win5 					///
+								c3_a_8_win5 c3_a_9_win5 c3_a_10_win5 c3_a_11_win5 c4_win5 c5_win5 c6_win5 								///
+								c7_win5 c8_win5 c9_win5 c11_win5 c12_win5 c13_win5 c14_win5 c16_win5 c18_win5 
+
+local assets					q2_1_2_win5 q2_1_3_win5 q2_1_4_win5 q2_1_5_win5 q2_1_6_win5 q2_1_7_win5 q2_1_8_win5 					///
+								q2_1_9_win5 q2_1_10_win5 q2_1_11_win5 q2_1_12_win5 q2_1_13_win5 q2_1_14_win5 							///
+								q2_1_15_win5 q2_1_16_win5 q2_1_17_win5 q2_1_18_win q2_1_19_win5 										///
+								q2_1_20_win5 q2_1_21_win5 q2_1_22_win5 
+
+local credit_access				epargne_dette epargne_dette_cb_win5 epargne epargne_cb epargne_pret											
 
 
+local pos_coping_mechanisms		g2_3 g2_4 g2_5 g2_6  g2_8 g2_9 g2_10 g2_11 g2_12 
+
+local neg_coping_mechanisms		g2_1 g2_2 g2_7 g2_13 g2_14 g2_15	
+
+
+local shocks					g1_1 g1_2 g1_3 g1_4 g1_5 g1_6 g1_7 g1_8 g1_9
+
+
+local social				association_1 association_2 initiatives_9 association_9											///
+							association_3 association_4 association_6 /*association_7 association_8*/  
+							
+							
+local civic					initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 			///
+							initiatives_7 initiatives_8  initiatives_10 initiatives_11 										///
+							initiatives_12 initiatives_13 initiatives_14 initiatives_15									
+
+							
+
+local well_being 			psy_anxiete psy_exploit psy_depress5 /*psy_accepte_dum1*/ psy_accepte_dum3 						///
+							psy_menage_dum3 /*psy_a_menage_dum1*/ psy_a_menage_dum3	 										///
+							psycho_depress4 psycho_depress3 psycho_depress2 psycho_depress1
+
+
+local woman_violence		violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
+							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
+							violence_1_16 violence_1_17 violence_1_18  	
+							
+
+local woman_bargain 		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw /*association_2*/
+
+
+local Index_ALL 			lab_market_main lab_market_sec eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
+							shocks social civic well_being woman_violence woman_bargain
+gen programs=(parti==1 | desist==1)
+
+		
+* Generate variable identifyin the sample used for every analysis 
+
+g 		between = .
+replace between = 1 if (parti==1 | desist==1 | enquete==3)
+
+g 		within = .
+replace within = 1 if (parti==1 | desist==1 | control==1) 
+
+g 		spillovers = .
+replace spillovers = 1 if (control==1 | enquete==3) 
+
+g 		Infrastructure = .
+replace Infrastructure = 1 if enquete==1
+
+g 		full = . 
+replace full = 1 if parti==1 | desist==1 | enquete==3 | control==1
+
+g 		trt_full = 1 if full == 1
+replace trt_full = 0 if beneficiaire == 0 & programs == 0  & full == 1
+
+
+foreach spec in between within spillovers full{
+
+	if "`spec'" == "between"{
+	local prg_condition = "between"
+	local var_prefix 	= "b"
+	}
+	
+	if "`spec'" == "within"{
+	local prg_condition = "within"
+	local var_prefix 	= "w"
+	}
+	
+	if "`spec'" == "spillovers"{
+	local prg_condition = "spillovers"
+	local var_prefix 	= "s"
+	}
+	
+	if "`spec'" == "full"{
+	local prg_condition = "full"
+	local var_prefix 	= "f"
+	}
+	
+	foreach index of local Index_ALL{
+
+		foreach indiv of local `index'{
+		
+		g `indiv'_`var_prefix' = `indiv' if `prg_condition' == 1
+		
+		}
+	}
+}
 
 save "$stata/enquete_indiv5", replace
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*OUTCOMES USED FROM SEPT 2016 TO APRIL 2017
-/*
-*PRIMARY
-*Employment & productivity
-codebook emploi //-99 ne sais pas, -98 ne veut pas répondre, no miss
-tab emploi, m nol //15% had a job.
-*mvdecode emploi, mv(-99=.a\-98=.n)
-tab emploi, nol
-
-codebook chomage //-99, -98, -12, -9, .99, 1000, 2012, 2555 
-tab chomage, m
-replace chomage=12 if chomage==-12
-replace chomage=9 if chomage==-9
-replace chomage=2016-2012 if chomage==2012 //**je peux faire cette interprétation?
-replace chomage=-99 if chomage>.99 & chomage<1 // .99000001
-*mvdecode chomage, mv(-99=.a\-98=.n)
-tab chomage, m
-*winsor chomage if (chomage !=.a & chomage !=.n), gen(chomage_win) h(5) high// not work well==risky
-*mvdecode chomage, mv(2555=.a\ 9999=.a\ 99999=.a)
-local chomage_lab: variable label chomage 
-*label variable chomage_win "`chomage_lab'"
-*tab chomage_win, m
-* hist chomage
-
-codebook chomage_recherche
-tab chomage_recherche, nol m //-98
-*mvdecode chomage_recherche, mv(-98=.n)
-tab chomage_recherche, nol 
-
-codebook reserv_wage //-99, -98, 0 missings
-tab reserv_wage, m
-*mvdecode reserv_wage, mv(-99=.a\-98=.n)
-tab reserv_wage, m
-* hist reserv_wage
-winsor reserv_wage, gen(reserv_wage_win) p(0.01) high //POUR COUPER LES EXAGÉRATIONS 
-local reserv_wage_lab: variable label reserv_wage 
-label variable reserv_wage_win "`reserv_wage_lab'"
-tab reserv_wage_win, m 
-* hist reserv_wage_win
-
-codebook emploi_2015_a //-99, -98, 0 miss
-tab emploi_2015_a, m nol
-*mvdecode emploi_2015_a, mv(-99=.a \-98=.n)
-tab emploi_2015_a, m nol
-
-codebook rev_total //-99
-tab rev_total, m
-replace rev_total=-98 if rev_total==-96
-replace rev_total=-99 if rev_total>.99 & rev_total<1 //.99000001
-*mvdecode rev_total, mv(-99=.a \-98=.n)
-tab rev_total, m
-* hist rev_total
-winsor rev_total, gen(rev_total_win) p(0.01) high
-local rev_total_lab: variable label rev_total 
-label variable rev_total_win "`rev_total_lab'"
-tab rev_total_win, m
-* hist rev_total_win //looks like a chi
-
-codebook type_emploi_q1_1 //-99; vast majority are missing
-tab type_emploi_q1_1 //-99
-tab type_emploi_q1_2
-tab type_emploi_q1_3
-tab type_emploi_q1_4
-tab type_emploi_q1_5 //-99
-tab type_emploi_q1_6 //-99
-tab type_emploi_q1_7 //-99
-tab type_emploi_q1_8
-tab type_emploi_q1_9 //-99
-tab type_emploi_q1_10 //-99
-tab type_emploi_q1_11 //-99
-tab type_emploi_q1_12
-tab type_emploi_q1_13
-tab type_emploi_q1_14 //-99
-
-*nb j par mois
-*mvdecode type_emploi_q1_1 type_emploi_q1_2 type_emploi_q1_3 type_emploi_q1_4 type_emploi_q1_5 type_emploi_q1_6 ///
-type_emploi_q1_7 type_emploi_q1_8 type_emploi_q1_9 type_emploi_q1_10 type_emploi_q1_11 type_emploi_q1_12 ///
-type_emploi_q1_13 type_emploi_q1_14, mv(-99=.a)
-	
-tab type_emploi_q1_1, m //-99; .25/4.2 .a
-tab type_emploi_q1_5, m //-99; .22/4.95 .a
-tab type_emploi_q1_6, m //-99; .02/.45
-tab type_emploi_q1_7, m //-99; .02/.22
-tab type_emploi_q1_9, m //-99; .02/.25
-tab type_emploi_q1_10, m //-99; .12/.85
-tab type_emploi_q1_11, m //-99; .02/1.27
-tab type_emploi_q1_14, m //-99; .07/2.33
-
-egen d_per_m=rowtotal(type_emploi_q1_1 type_emploi_q1_2 type_emploi_q1_3 type_emploi_q1_4 type_emploi_q1_5 type_emploi_q1_6 ///
-type_emploi_q1_7 type_emploi_q1_8 type_emploi_q1_9 type_emploi_q1_10 type_emploi_q1_11 type_emploi_q1_12 ///
-type_emploi_q1_13 type_emploi_q1_14), m
-tab d_per_m, m //86% missings
-replace d_per_m=30.5 if d_per_m>31
-label variable d_per_m "jours au travail par mois"
-*winsor d_per_m, gen(d_per_m_win) p(0.01) high
-local d_per_m_lab: variable label d_per_m 
-*label variable d_per_m_win "`d_per_m_lab'"
-*tab d_per_m_win, m
-
-codebook type_emploi_q2_1 //-99
-tab type_emploi_q2_1 //-99
-tab type_emploi_q2_2 //-99
-tab type_emploi_q2_3
-tab type_emploi_q2_4
-tab type_emploi_q2_5 //-99
-tab type_emploi_q2_6 //-99
-tab type_emploi_q2_7 //-99
-tab type_emploi_q2_8
-tab type_emploi_q2_9 //-99
-tab type_emploi_q2_10 //-99
-tab type_emploi_q2_11 //-99
-tab type_emploi_q2_12 //-99
-tab type_emploi_q2_13
-tab type_emploi_q2_14 //-99
-	
-*nb h par j
-*mvdecode type_emploi_q2_1 type_emploi_q2_2 type_emploi_q2_3 type_emploi_q2_4 type_emploi_q2_5 type_emploi_q2_6 ///
-type_emploi_q2_7 type_emploi_q2_8 type_emploi_q2_9 type_emploi_q2_10 type_emploi_q2_11 type_emploi_q2_12 ///
-type_emploi_q2_13 type_emploi_q2_14, mv(-99=.a)
-	
-tab type_emploi_q2_1, m //-99; .32
-tab type_emploi_q2_2, m //-99; .02
-tab type_emploi_q2_5, m //-99; .17
-tab type_emploi_q2_6, m //-99; .07
-tab type_emploi_q2_7, m //-99; .07
-tab type_emploi_q2_9, m //-99; .02
-tab type_emploi_q2_10, m //-99; .12
-tab type_emploi_q2_11, m //-99; .05
-tab type_emploi_q2_12, m //-99; .02
-tab type_emploi_q2_14, m //-99; .12
-	
-egen h_per_day=rowtotal(type_emploi_q2_1 type_emploi_q2_2 type_emploi_q2_3 type_emploi_q2_4 type_emploi_q2_5 type_emploi_q2_6 ///
-type_emploi_q2_7 type_emploi_q2_8 type_emploi_q2_9 type_emploi_q2_10 type_emploi_q2_11 type_emploi_q2_12 ///
-type_emploi_q2_13 type_emploi_q2_14), m
-tab h_per_day, m //86% missing
-replace h_per_day=24 if h_per_day>24
-label variable h_per_day "heures au travail par jr (moyenne sur 4 sem)"
-*winsor h_per_day, gen(h_per_day_win) p(0.01) high
-local h_per_day_lab: variable label h_per_day 
-*label variable h_per_day_win "`h_per_day_lab'"
-*tab h_per_day_win, m
-
-*Income
-*rev_total //checked earlier
-
-codebook business_q0 
-tab business_q0 , m nol //very little variation; 99%==0
-
-codebook f2_val_2 //-99, lots of missings
-tab f2_val_2, m nol //77% missings NEW, -99
-*missings report f2_val_2, p
-*mvdecode f2_val_2, mv(-99=.a) 
-tab f2_val_2, m nol 
-* hist f2_val_2
-winsor f2_val_2, gen(f2_val_2_win) p(0.01) high //QU'EST-CE QUI EST RÉALISTE?
-local f2_val_2_lab: variable label f2_val_2 
-label variable f2_val_2_win "`f2_val_2_lab'"
-tab f2_val_2_win, m
-* hist f2_val_2_win //lots of zeros: negative binomial...?
-
-*Consumption (basic needs and luxury) CASE FOR WINSORISATION
-codebook c3_a_1 //-99
-tab c3_a_1, m //3.5/85
-tab c3_b_1, m //-99; 11.4/.85
-tab c3_a_4, m //-99 -98
-tab c3_b_4, m //-99
-codebook c3_a_6
-tab c3_a_6, m //-99
-tab c3_b_6, m //-99 -98
-tab c3_a_11, m //-99
-tab c3_b_11, m //-99 -98
-tab c4, m //-99 -98 .99 .98
-replace c4=-99 if c4>.99 & c4<1
-replace c4=-98 if c4>.98 & c4<99
-*browse c4 if c4>.9 & c4<1 //none
-*mvdecode c3_a_1 c3_a_4 c3_a_6 c3_a_11 c3_b_1 c3_b_4 c3_b_6 c3_b_11 c4, mv(-99=.a\ -98=.n)
-gen pain = c3_a_1* c3_b_1 if c3_a_1>=0 & c3_b_1>=0
-label variable pain "fréquence * valeur d'achat de pain"
-tab pain,m 
-* hist pain
-winsor pain, gen(pain_win) h(4) high //choix discrétionaire
-*winsor pain, gen(pain_win) p(0.01) high //choix discrétionaire
-local pain_lab: variable label pain 
-label variable pain_win "`pain_lab'"
-tab pain_win, m
-* hist pain_win //lots of zeros
-
-gen legumes = c3_a_6* c3_b_6 if c3_a_6>=0 & c3_b_6>=0
-label variable legumes "fréquence * valeur d'achat de légumes"
-tab legumes, m 
-* hist legumes
-winsor legumes, gen(legumes_win) h(6) high
-local legumes_lab: variable label legumes 
-label variable legumes_win "`legumes_lab'"
-tab legumes_win, m
-* hist legumes_win //lots of zeros
-
-gen tabac = c3_a_11* c3_b_11 if c3_a_11>=0 & c3_b_11>=0
-label variable tabac "fréquence * valeur d'achat de tabac"
-tab tabac, m
-* hist tabac
-winsor tabac, gen(tabac_win) h(3) high
-local tabac_lab: variable label tabac 
-label variable tabac_win "`tabac_lab'"
-tab tabac_win, m
-* hist tabac_win
-
-codebook c12 //no missings
-tab c12 //.98 .99 -98 -99
-*mvdecode c12, mv(.98=.n\-98=.n\.99=.a\-99=.a)
-* hist c12
-winsor c12, gen(c12_win) p(0.01)
-tab c12_win
-* hist c12_win
-
-*Human capital
-codebook c13 //-99
-tab c13, m //-99 -98 .99
-replace c13=-99 if c13>.99 & c13<1
-*mvdecode c13, mv(-99=.a\-98=.n)
-tab c13, m
-* hist c13
-winsor c13, gen(c13_win) p(0.01) high
-local c13_lab: variable label c13 
-label variable c13_win "`c13_lab'"
-tab c13_win, m
-* hist c13_win //chi!!!
-
-codebook formation //-98//88% non
-tab formation, m nol
-*mvdecode formation, mv(-98=.n)
-tab formation, nol
-
-codebook formation_type //88% missings
-tab formation_type, nol m //"8" is missing
-tab formation_type, gen(formation_dum)
-rename formation_dum9 formation_dum10
-rename formation_dum8 formation_dum9
-sum formation_dum* //1, 2, 4, 6, 9, 10 don't vary much
-
-*Assets holding savings, and investments 
-codebook c6 //-99
-tab c6 //-99 .99 .98 
-replace c6=-99 if c6>.99 & c6<1
-replace c6=-98 if c6>.98 & c6<99
-*mvdecode c6, mv(-99=.a\-98=.n)
-tab c6, nol
-* hist c6
-winsor c6, gen(c6_win) p(0.01) high
-local c6_lab: variable label c6 
-label variable c6_win "`c6_lab'"
-tab c6_win, m
-* hist c6_win //lots of zeros
-
-codebook c15 //-99
-tab c15, m //-99 -98 .99 .98
-replace c15=-99 if c15>.99 & c15<1
-replace c15=-98 if c15>.98 & c15<99
-*mvdecode c15, mv(-99=.a\-98=.n)
-tab c15, nol
-* hist c15
-winsor c15, gen(c15_win) p(0.01) high
-local c15_lab: variable label c15 
-label variable c15_win "`c15_lab'"
-tab c15_win, m
-* hist c15_win //lots of zeros
-
-codebook epargne //-99 -98
-tab epargne, m nol
-*mvdecode epargne, mv(-99=.a\-98=.n)
-tab epargne, nol //don't vary much; 98%==0
-
-codebook epargne_dette //-99 -98 cest quoi cte cb??
-tab epargne_dette, m nol
-*mvdecode epargne_dette, mv(-99=.a\-98=.n)
-tab epargne_dette, nol
-
-codebook epargne_pret
-tab epargne_pret, nol m //-99 -98
-*mvdecode epargne_pret, mv(-99=.a\-98=.n)
-tab epargne_pret, nol //don't vary much; 97%==0
-
-*Credit resources 
-codebook c20 //-99 -98
-tab c20, nol m //95% no NEW
-*mvdecode c20, mv(-99=.a\-98=.n)
-tab c20, nol
-
-codebook migration_q5 //-99; max à 200 000
-tab migration_q5, m //93% missing
-*mvdecode migration_q5, mv(-99=.a\-98=.n)
-* histogram migration_q5 
-tab migration_q5, m 
-winsor migration_q5, gen(migration_q5_win) p(0.01) high
-local migration_q5_lab: variable label migration_q5 
-label variable migration_q5_win "`migration_q5_lab'"
-tab migration_q5_win, m
-* hist migration_q5_win //chi!!
-
-codebook migration_cm_q5 //-99 
-tab migration_cm_q5, m //97% missing
-*mvdecode migration_cm_q5, mv(-99=.a)
-tab migration_cm_q5, m 
-* hist migration_cm_q5
-winsor migration_cm_q5, gen(migration_cm_q5_win) p(0.01) high
-local migration_cm_q5_lab: variable label migration_cm_q5 
-label variable migration_cm_q5_win "`migration_cm_q5_lab'"
-tab migration_cm_q5_win, m
-* hist migration_cm_q5_win //lots of zeros
- 
-*epargne_dette
-
-*SECONDARY
-*Access to & quality of service 
-codebook sante_hopital //-99 
-tab sante_hopital, m //-99 -98 -2
-replace sante_hopital=2 if sante_hopital==-2
-*mvdecode sante_hopital, mv(-99=.a\-98=.n)
-tab sante_hopital, m 
-* hist sante_hopital
-winsor sante_hopital, gen(sante_hopital_win) p(0.01) high //lots of exageration
-local sante_hopital_lab: variable label sante_hopital 
-label variable sante_hopital_win "`sante_hopital_lab'"
-tab sante_hopital_win, m
-* hist sante_hopital_win //lots of zeros
-
-codebook sante_qualite_a sante_qualite_b sante_qualite_c sante_qualite_d
-tab sante_qualite_a, nol m
-*mvdecode sante_qualite_a, mv(-99=.a\-98=.n)
-tab sante_qualite_a, nol
-tab sante_qualite_a, gen(sante_qualite_a_dum)
-recode sante_qualite_a (2=3) (1=2) (0=1)
-labeldum sante_qualite_a sante_qualite_a_dum
-sum sante_qualite_a_dum*
-
-tab sante_qualite_b, nol m
-*mvdecode sante_qualite_b, mv(-99=.a\-98=.n)
-tab sante_qualite_b, nol
-tab sante_qualite_b, gen(sante_qualite_b_dum)
-recode sante_qualite_b (2=3) (1=2) (0=1)
-labeldum sante_qualite_b sante_qualite_b_dum
-sum sante_qualite_b_dum*
-
-tab sante_qualite_c, nol m
-*mvdecode sante_qualite_c, mv(-99=.a\-98=.n)
-tab sante_qualite_c, nol
-tab sante_qualite_c, gen(sante_qualite_c_dum)
-recode sante_qualite_c (2=3) (1=2) (0=1)
-labeldum sante_qualite_c sante_qualite_c_dum
-sum sante_qualite_c_dum*
-
-tab sante_qualite_d, nol m
-*mvdecode sante_qualite_d, mv(-99=.a\-98=.n)
-tab sante_qualite_d, nol
-tab sante_qualite_d, gen(sante_qualite_d_dum)
-recode sante_qualite_d (2=3) (1=2) (0=1)
-labeldum sante_qualite_d sante_qualite_d_dum
-sum sante_qualite_d_dum*
-
-
-*Social cohesion: altruism/trust
-codebook responsability //-99 -98 -97
-tab responsability, m nol
-*mvdecode responsability, mv(-99=.a\-98=.n)
-replace responsability=7 if responsability==-97
-tab responsability, nol
-tab responsability, gen (responsability_dum)
-labeldum responsability responsability_dum
-sum responsability_dum* //3 and 6 don't vary much
-
-codebook utopie_accord_f //-99 -98
-*mvdecode utopie_accord_f, mv(-99=.a\-98=.n)
-tab utopie_accord_f, nol
-tab utopie_accord_f, gen(utopie_accord_dum)
-labeldum utopie_accord_f utopie_accord_dum
-sum utopie_accord_dum* //2, 3 don't vary much
-
-codebook psycho_partage_qui //-99 -98 -97 
-ren psycho_partage_qui psy_partage_qui 
-*mvdecode psy_partage_qui, mv(-99=.a\-98=.n)
-replace psy_partage_qui=4 if psy_partage_qui==-97
-tab psy_partage_qui, nol
-tab psy_partage_qui, gen(psy_partage_dum)
-label variable psy_partage_dum4 " psy_partage_qui==personne"
-labeldum psy_partage_qui psy_partage_dum
-sum psy_partage_dum* //2, 3 don't vary much
-
-codebook psycho_accepte_menage //-99 -98
-ren psycho_accepte_menage psy_a_menage 
-tab psy_a_menage, m nol
-*mvdecode psy_a_menage, mv(-99=.a\-98=.n)
-tab psy_a_menage, nol
-tab psy_a_menage, gen(psy_a_menage_dum)
-labeldum psy_a_menage psy_a_menage_dum
-sum psy_a_menage_dum* //all don't vary much 
-
-codebook psycho_solitude
-ren psycho_solitude psy_solitude 
-tab psy_solitude, nol m //-99 -98
-*mvdecode psy_solitude, mv(-99=.a\-98=.n)
-tab psy_solitude, nol
-tab psy_solitude, gen(psy_solitude_dum)
-labeldum psy_solitude psy_solitude_dum
-sum psy_solitude_dum* //1 don't vary much
-
-codebook psycho_exploit //-98
-ren psycho_exploit psy_exploit 
-tab psy_exploit, nol
-*mvdecode psy_exploit, mv(-98=.n)
-tab psy_exploit, nol
-
-*Propensity to engage in crime and violence
-codebook conflit_dispute_in //-99 -98
-tab conflit_dispute_in, nol
-*mvdecode conflit_dispute_in, mv(-99=.a\-98=.n)
-tab conflit_dispute_in, nol //don't vary much
-
-codebook conflit_dispute_out
-tab conflit_dispute_out, nol
-*mvdecode conflit_dispute_out, mv(-99=.a)
-tab conflit_dispute_out, nol //don't vary much
-
-
-*Mental health
-codebook f17 //-99 -98
-tab f17, m nol
-*mvdecode f17, mv(-99=.a\-98=.n)
-tab f17, m nol
-tab f17, gen(f17_dum)
-labeldum f17 f17_dum
-sum f17_dum* //3 don't vary much
-
-codebook emploi_competence_inutilisee //-99 -98
-ren emploi_competence_inutilisee emploi_comp_inut
-tab emploi_comp_inut, m nol
-*mvdecode emploi_comp_inut, mv(-99=.a\-98=.n)
-tab emploi_comp_inut, m nol
-
-codebook emploi_difficulte_salarie
-tab emploi_difficulte_salarie, m //CRÉÉER LES DUMMIES
-gen emploidiffsal_1=(strpos(emploi_difficulte_salarie,"1 ")!=0)
-gen emploidiffsal_2=(strpos(emploi_difficulte_salarie,"2 ")!=0)
-gen emploidiffsal_3=(strpos(emploi_difficulte_salarie,"3 ")!=0)
-gen emploidiffsal_4=(strpos(emploi_difficulte_salarie,"4 ")!=0)
-gen emploidiffsal_5=(strpos(emploi_difficulte_salarie,"5 ")!=0)
-gen emploidiffsal_6=(strpos(emploi_difficulte_salarie,"6 ")!=0)
-gen emploidiffsal_7=(strpos(emploi_difficulte_salarie,"7 ")!=0)
-sum emploidiffsal_1-emploidiffsal_7 // 1 4 5 varient
-label variable emploidiffsal_1 "Manque d'intérêt"
-label variable emploidiffsal_2 "Manque d'idée ou d'information"
-label variable emploidiffsal_3 "Manque de qualifications ou compétences"
-label variable emploidiffsal_4 "Absence ou insuffisance des moyens financiers"
-label variable emploidiffsal_5 "Manque de réseaux ou contacts"
-label variable emploidiffsal_6 "Il n'existe pas d'emploi"
-label variable emploidiffsal_7 "Autre"
- 
-codebook emploi_difficulte_independant
-tab emploi_difficulte_independant //CRÉÉER LES DUMMIES
-gen emploidiffindep_1=(strpos(emploi_difficulte_independant,"1 ")!=0)
-gen emploidiffindep_2=(strpos(emploi_difficulte_independant,"2 ")!=0)
-gen emploidiffindep_3=(strpos(emploi_difficulte_independant,"3 ")!=0)
-gen emploidiffindep_4=(strpos(emploi_difficulte_independant,"4 ")!=0)
-gen emploidiffindep_5=(strpos(emploi_difficulte_independant,"5 ")!=0)
-gen emploidiffindep_6=(strpos(emploi_difficulte_independant,"6 ")!=0)
-gen emploidiffindep_7=(strpos(emploi_difficulte_independant,"7 ")!=0)
-sum emploidiffindep_1-emploidiffindep_7 // 1 4 varient
-label variable emploidiffindep_1 "Manque d'intérêt"
-label variable emploidiffindep_2 "Manque d'idée ou d'information"
-label variable emploidiffindep_3 "Manque de qualifications ou compétences"
-label variable emploidiffindep_4 "Absence ou insuffisance des moyens financiers"
-label variable emploidiffindep_5 "Manque de réseaux ou contacts"
-label variable emploidiffindep_6 "Il n'existe pas d'emploi"
-label variable emploidiffindep_7 "Autre"
-
-codebook pearlin_1 
-tab pearlin_1, nol m
-*mvdecode pearlin_1, mv(-98=.n)
-tab pearlin_1, nol m
-
-*psy_a_menage 
-
-codebook psycho_depress5
-ren psycho_depress5 psy_depress5 
-tab psy_depress5, nol m
-*mvdecode psy_depress5, mv(-98=.n)
-tab psy_depress5, nol m
-
-*Quality of family relationships
-codebook te_3 //-99
-tab te_3, m nol //78% missings
-label define te3 1 "Très dangereux" 2 "Dangereux" 3 "Peu dangereux" 4 "Pas du tout dangereux"
-label values te_3 te3
-*mvdecode te_3, mv(-99=.a)
-tab te_3, m nol
-tab te_3, gen(te_3_dum)
-labeldum te_3 te_3_dum
-sum te_3_dum* //1 don't vary much
-
-codebook psycho_accepte //-99 -98
-ren psycho_accepte psy_accepte
-tab psy_accepte, m nol
-*mvdecode psy_accepte, mv(-99=.a\-98=.n)
-tab psy_accepte, m nol
-tab psy_accepte, gen(psy_accepte_dum)
-labeldum psy_accepte psy_accepte_dum
-sum psy_accepte_dum* //1, 2 don't vary much
-
-codebook psycho_menage //-99-98
-ren psycho_menage psy_menage
-tab psy_menage, m nol
-*mvdecode psy_menage, mv(-99=.a\-98=.n)
-tab psy_menage, m nol
-tab psy_menage, gen(psy_menage_dum)
-labeldum psy_menage psy_menage_dum
-sum psy_menage_dum* //1 don't vary much
-
-codebook intrahh_11 //-99 -98
-tab intrahh_11, m nol //47% missing
-*mvdecode intrahh_11, mv(-99=.a\-98=.n)
-tab intrahh_11, m nol //minimal variation
-
-codebook violence_1 //151 unique values, -97 -98 //85% missing
-tab violence_1 //CRÉER LES DUMMIES
-gen violence_1_1=violence_1=="1"
-replace violence_1_1=1 if strpos(violence_1,"1 ")!=0
-gen violence_1_2=(strpos(violence_1,"2")!=0)
-gen violence_1_3=(strpos(violence_1,"3")!=0)
-gen violence_1_4=(strpos(violence_1,"4")!=0)
-gen violence_1_5=(strpos(violence_1,"5")!=0)
-gen violence_1_6=(strpos(violence_1,"6")!=0)
-gen violence_1_7=(strpos(violence_1,"7")!=0)
-gen violence_1_8=(strpos(violence_1,"8")!=0)
-gen violence_1_9=(strpos(violence_1,"9")!=0)
-gen violence_1_10=(strpos(violence_1,"10")!=0)
-gen violence_1_11=(strpos(violence_1,"11")!=0)
-gen violence_1_16=(strpos(violence_1,"16")!=0)
-gen violence_1_17=(strpos(violence_1,"17")!=0)
-gen violence_1_18=(strpos(violence_1,"18")!=0)
-sum violence_1_1-violence_1_18 //seuls 7 et 9 varient
-label variable violence_1_1 "Dernier an: été délibérément insulté (e)."
-label variable violence_1_2 "Dernier an:été rabaissé (e) ou humilié (e)."
-label variable violence_1_3 "Dernier an:été intentionnellement intimidé (e) ou effrayé (e)."
-label variable violence_1_4 "Dernier an:été menacé (e)."
-label variable violence_1_5 "Dernier an:a menacé quelqu’un que vous chérissez."
-label variable violence_1_6 "Dernier an:été giflé (e) ou on a jeté quelque chose sur vous."
-label variable violence_1_7 "Dernier an:été poussé (e), bousculé (e) ou tiré (e) par les cheveux."
-label variable violence_1_8 "Dernier an:été frappé (e) avec un coup de poing ou avec qq chose."
-label variable violence_1_9 "Dernier an:été frappé (e) par des coups de pied."
-label variable violence_1_10 "Dernier an:été volontairement étouffé (e) ou brûlé (e)."
-label variable violence_1_11 "Dernier an:été menacé (e) ou on a effectivement utilisé des armes."
-label variable violence_1_16 "Dernier an:été interdite d’obtenir un emploi."
-label variable violence_1_17 "Dernier an:a pris votre revenu contre votre volonté."
-label variable violence_1_18 "Dernier an:été jeté hors de la maison."
-
-codebook violence_2 //263 unique values, -97 -98 //69% missing
-tab violence_2 //CRÉER LES DUMMIES
-gen violence_2_1=violence_2=="1"
-replace violence_2_1=1 if strpos(violence_2,"1 ")!=0
-gen violence_2_2=(strpos(violence_2,"2")!=0)
-gen violence_2_3=(strpos(violence_2,"3")!=0)
-gen violence_2_4=(strpos(violence_2,"4")!=0)
-gen violence_2_5=(strpos(violence_2,"5")!=0)
-gen violence_2_6=(strpos(violence_2,"6")!=0)
-gen violence_2_7=(strpos(violence_2,"7")!=0)
-gen violence_2_8=(strpos(violence_2,"8")!=0)
-gen violence_2_9=(strpos(violence_2,"9")!=0)
-gen violence_2_10=(strpos(violence_2,"10")!=0)
-gen violence_2_11=(strpos(violence_2,"11")!=0)
-gen violence_2_16=(strpos(violence_2,"16")!=0)
-gen violence_2_17=(strpos(violence_2,"17")!=0)
-gen violence_2_18=(strpos(violence_2,"18")!=0)
-sum violence_2_1-violence_2_18 // 1, 2, 3, 7, 9 varient
-label variable violence_2_1 "été délibérément insulté (e)."
-label variable violence_2_2 "été rabaissé (e) ou humilié (e)."
-label variable violence_2_3 "été intentionnellement intimidé (e) ou effrayé (e)."
-label variable violence_2_4 "été menacé (e)."
-label variable violence_2_5 "a menacé quelqu’un que vous chérissez."
-label variable violence_2_6 "été giflé (e) ou on a jeté quelque chose sur vous."
-label variable violence_2_7 "été poussé (e), bousculé (e) ou tiré (e) par les cheveux."
-label variable violence_2_8 "été frappé (e) avec un coup de poing ou avec qq chose."
-label variable violence_2_9 "été frappé (e) par des coups de pied."
-label variable violence_2_10 "été volontairement étouffé (e) ou brûlé (e)."
-label variable violence_2_11 "été menacé (e) ou on a effectivement utilisé des armes."
-label variable violence_2_16 "été interdite d’obtenir un emploi."
-label variable violence_2_17 "a pris votre revenu contre votre volonté."
-label variable violence_2_18 "été jeté hors de la maison."
-
-*identifiy the censored among the continuous
-* hist repondant_age
-* hist handicap
-* hist chomage //oui!
-* hist reserv_wage //oui!
-* hist reserv_wage_win //oui!
-* hist rev_total
-* hist rev_total_win //oui
-* hist h_per_day
-* hist d_per_m
-* hist f2_val_2
-* hist f2_val_2_win
-* hist c12
-* hist c3_a_1 //could be
-* hist c3_b_1 //could be
-* hist c3_a_6 //could be
-* hist c3_b_6 //could be
-* hist c3_a_11 //could be
-* hist c3_b_11 //could be
-* hist c4
-* hist pain //could be
-* hist pain_win //could be
-* hist legumes //could be
-* hist legumes_win //could be
-* hist tabac //could be
-* hist tabac_win //could be
-* hist c13 //could be
-* hist c13_win //could be
-* hist c6 //could be
-* hist c6_win //could be
-* hist c15 //could be
-* hist c15_win //could be
-* hist migration_q5
-* hist migration_q5_win
-* hist sante_hopital
-* hist sante_hopital_win
-
-*/
