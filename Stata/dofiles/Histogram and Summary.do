@@ -18,26 +18,30 @@ eststo clear
 cd "$git_tunisia/outputs/"
 do  "$git_tunisia/dofiles/Ado/mmat2tex.do"
 
-					 
-local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-					shocks social civic well_being woman_empowerment
-
-							
+local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other					///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 					
 * Controls : ADJUSTED TO REFLECT THE ONES THAT ARE NOT BALANCED.
 
 	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					h_18_65 missing_h_18_65  f_18_65 missing_f_18_65  trauma_abus missing_trauma_abus 				///
-					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c  missing_q2_3_c	///
-					q2_4_c  missing_q2_4_c
+					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
+					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 				  
 	local ctrl_Ba 
 	
 	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					h_18_65 missing_h_18_65  f_18_65 missing_f_18_65  trauma_abus missing_trauma_abus 				///
-					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c  missing_q2_3_c	///
-					q2_4_c  missing_q2_4_c
+					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
+					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 					
+global summary_stat = 0
+global main 		= 0
+global imada_fe		= 1
+global hete_woman	= 0
+global hete_men		= 0
 
 ********************************************************************************
 ********************************************************************************
@@ -61,15 +65,12 @@ use "$stata/enquete_All3", clear
 ********************************************************************************
 ********************************************************************************
 
-{
-/*
+if $summary_stat == 1{
+
 * Create matrix to store results while looping over index
 foreach index in `Index_ALL'{
 	mat def `index' 			= J(3,5,.)
 }
-
-
-
 
 * Loop over every specification 
 foreach specification in Between Within Spillovers{
@@ -133,7 +134,7 @@ foreach specification in Between Within Spillovers{
 }
 
 * Combine graph produce above 
-forvalue i = 1/11{
+forvalue i = 1/18{
 	
 	grc1leg "Graph/Between/Figure_`i'.gph" ///
 			"Graph/Within/Figure_`i'.gph" ///
@@ -145,7 +146,7 @@ forvalue i = 1/11{
 
 * Clean graph folder 
 
-forvalue i = 1/11{
+forvalue i = 1/18{
 
 	rm "Graph/Between/Figure_`i'.gph"
 	rm "Graph/Within/Figure_`i'.gph"
@@ -179,7 +180,7 @@ local counter_table = `counter_table' + 1
 ********************************************************************************
 ********************************************************************************
 
-{
+if $main == 1 {
 
 	* Create interaction between treatment and treatment intensity variable 
 	
@@ -189,7 +190,7 @@ local counter_table = `counter_table' + 1
 	
 	local counter_reg = 1
 	
-	mat def pvalue = J(11,5,.)
+	mat def pvalue = J(18,6,.)
 	
 	local count_out = 0 
 
@@ -256,6 +257,27 @@ local counter_table = `counter_table' + 1
 				mat def pvalue[`count_out',4] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
 				
 				mat def pvalue[`count_out',5] = ttail(e(df_r),abs(_b[programs]/_se[programs]))*2
+				
+				count 
+				local full_sample = `r(N)'
+				
+				count if beneficiaire 	== 1
+				local communities 		= `r(N)'
+				
+				count if programs 	== 1
+				local workers 		= `r(N)'
+				
+				local share_communities = `communities'/`full_sample'
+				local share_worker 		= `workers'/`full_sample'
+				
+				local t_1_`count_out' 	=  _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker'
+				local t_1_`count_out'	: di%12.3f `t_1_`count_out'' 
+			
+				local set_1_`count_out' = _se[beneficiaire]*`share_communities' + _se[programs]*`share_worker'
+				local set_1_`count_out'	: di%12.3f `set_1_`count_out'' 
+			
+				test _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker' = 0 
+				mat def pvalue[`count_out',6] = `r(p)'
 			
 		/*
 		* Spillover and intensity
@@ -274,7 +296,6 @@ local counter_table = `counter_table' + 1
 	esttab between within spill1 full , se keep (beneficiaire programs NbHabitants) ///
 								           order(beneficiaire programs NbHabitants)
 										   
-	pause
 }
 
 	* Store P-value vector name in global 
@@ -286,15 +307,23 @@ local counter_table = `counter_table' + 1
 	FDR_CWLP_3
 	FDR_CWLP_4
 	FDR_CWLP_5
+	FDR_CWLP_6
+	
 
 	
 	* Store significance level based on p-value adjustment 
-	pause on
 	
 	local count_outcomes = 1
 	
-	forvalue i = 1/11{
-	
+	forvalue i = 1/18{
+		
+		local s_1_`i' 	""
+		local s_2_`i' 	""
+		local s_3_`i'	""
+		local s1_4_`i' 	""
+		local s2_4_`i' 	""
+		local st_1_`i' 	""
+			
 		local qval1 = Qval1[`i',1]
 		
 		* Between specification
@@ -373,23 +402,42 @@ local counter_table = `counter_table' + 1
 			local s2_4_`i' "***"
 		}
 		
-		di in red "`s1_4_`i''"
+		di in red "`s2_4_`i''"
+		
+		* Full coeff (total)
+		
+		local qval6 = Qval6[`i',1]
+		
+		local pvalt_1_`i' : di%12.3f `qval6'
+		
+		if `qval6' < 0.1{
+			local st_1_`i' "*"
+		}
+		if `qval6' < 0.05{
+			local st_1_`i' "**"
+		}
+		if `qval6' < 0.01{
+			local st_1_`i' "***"
+		}
+		
 	}
 
-	
+
 	* Export table 
 	
-	forvalue i = 1/11{
+	forvalue i = 1/18{
 	
 	file open Table_`i' using "Tables/Regression/Table_`i'.tex", text write replace
 	
 	file write Table_`i'  _n ///
 	"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{Between}&\multicolumn{1}{c}{Within}&\multicolumn{1}{c}{Spillovers}&\multicolumn{1}{c}{Full}\\ \hline" 	_n ///
-	" Community		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
+	" PWP		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
 	" 				&	 (`se_1_`i'')		&   					&	(`se_3_`i'')	 &	(`se1_4_`i'')						\\ " 	_n ///
-	" Beneficiary 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
+	" Workers 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
 	" 				&	  					& (`se_2_`i'')  		&					 &	(`se2_4_`i'')						\\ " 	_n ///
 	"\hline															   			   					   							   " 	_n ///
+	" Full			&						&						&					 & 	`t_1_`i''`st_1_`i''					\\ "	_n ///
+	" P-value		&						&						&					 &	`pvalt_1_`i'' 						\\ "	_n ///
 	" Obs			& 		`n_1_`i''		&	`n_2_`i''			&	`n_3_`i''		 &		`n_4_`i''						\\ " 	_n ///
 	" R2			&		`r2_1_`i''		&	`r2_2_`i''			&	`r2_3_`i''		 &		`r2_4_`i''						\\ "	_n ///
 	"\hline \end{tabular}														 					   							   "	
@@ -407,20 +455,21 @@ local counter_table = `counter_table' + 1
 ********************************************************************************
 ********************************************************************************
 
-{
-	* Adapt control by removing community level since adding imada fixed effect
+if $imada_fe == 1 {
 
 	* Create interaction between treatment and treatment intensity variable 
 	
 	local counter_reg = 1
 	
-	mat def pvalue = J(12,5,.)
+	mat def pvalue = J(18,6,.)
 	
 	local count_out = 0 
 
 	foreach outcome in `Index_ALL' {
-
-		if "`outcome'" == "woman_violence" | "`outcome'" == "woman_bargain"{
+	
+	preserve 
+	
+		if "`outcome'" == "woman_violence" | "`outcome'" == "woman_bargain" | "`outcome'" == "woman_empowerment" {
 			keep if repondant_sex == 0
 		}
 		
@@ -481,25 +530,35 @@ local counter_table = `counter_table' + 1
 				mat def pvalue[`count_out',4] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
 				
 				mat def pvalue[`count_out',5] = ttail(e(df_r),abs(_b[programs]/_se[programs]))*2
-			
-		/*
-		* Spillover and intensity
-			
-			eststo spill2: regres ICbS`outcome' beneficiaire NbHabitants  `ctrl_Cb' if spillovers == 1, vce (cluster imada)
-			
-				mat def `outcome'_reg[1,4] = _b[beneficiaire]
-				mat def `outcome'_reg[2,4] = _se[beneficiaire]
-				mat def `outcome'_reg[5,4] = _b[NbHabitants]
-				mat def `outcome'_reg[6,4] = _se[NbHabitants]
 				
-				local N4 = e(N)
-				local R4 = round(e(r2),0.001)
-		
-		*/	
+				count 
+				local full_sample = `r(N)'
+				
+				count if beneficiaire 	== 1
+				local communities 		= `r(N)'
+				
+				count if programs 	== 1
+				local workers 		= `r(N)'
+				
+				local share_communities = `communities'/`full_sample'
+				local share_worker 		= `workers'/`full_sample'
+				
+				local t_1_`count_out' 	=  _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker'
+				local t_1_`count_out'	: di%12.3f `t_1_`count_out'' 
+			
+				local set_1_`count_out' = _se[beneficiaire]*`share_communities' + _se[programs]*`share_worker'
+				local set_1_`count_out'	: di%12.3f `set_1_`count_out'' 
+			
+				test _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker' = 0 
+				mat def pvalue[`count_out',6] = `r(p)'
+				
+
 	esttab between within spill1 full , se keep (beneficiaire programs NbHabitants) ///
 								           order(beneficiaire programs NbHabitants)
-										   
-	pause
+	
+	pause 
+	
+	restore 
 }
 
 	* Store P-value vector name in global 
@@ -511,15 +570,22 @@ local counter_table = `counter_table' + 1
 	FDR_CWLP_3
 	FDR_CWLP_4
 	FDR_CWLP_5
+	FDR_CWLP_6
 
 	
 	* Store significance level based on p-value adjustment 
-	pause on
 	
 	local count_outcomes = 1
 	
-	forvalue i = 1/11{
+	forvalue i = 1/18{
 	
+		local s_1_`i' 	""
+		local s_2_`i' 	""
+		local s_3_`i'	""
+		local s1_4_`i' 	""
+		local s2_4_`i' 	""
+		local st_1_`i' 	""
+		
 		local qval1 = Qval1[`i',1]
 		
 		* Between specification
@@ -599,22 +665,40 @@ local counter_table = `counter_table' + 1
 		}
 		
 		di in red "`s1_4_`i''"
+		
+		* Full coeff (total)
+		
+		local qval6 = Qval6[`i',1]
+		
+		local pvalt_1_`i' : di%12.3f `qval6'
+		
+		if `qval6' < 0.1{
+			local st_1_`i' "*"
+		}
+		if `qval6' < 0.05{
+			local st_1_`i' "**"
+		}
+		if `qval6' < 0.01{
+			local st_1_`i' "***"
+		}
 	}
 
 	
 	* Export table 
 	
-	forvalue i = 1/11{
+	forvalue i = 1/18{
 	
 	file open Table_`i' using "Tables/Regression/Table_`i'_b.tex", text write replace
 	
 	file write Table_`i'  _n ///
 	"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{Between}&\multicolumn{1}{c}{Within}&\multicolumn{1}{c}{Spillovers}&\multicolumn{1}{c}{Full}\\ \hline" 	_n ///
-	" Community		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
+	" PWP		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
 	" 				&	 (`se_1_`i'')		&   					&	(`se_3_`i'')	 &	(`se1_4_`i'')						\\ " 	_n ///
-	" Beneficiary 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
+	" Workers 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
 	" 				&	  					& (`se_2_`i'')  		&					 &	(`se2_4_`i'')						\\ " 	_n ///
 	"\hline															   			   					   							   " 	_n ///
+	" Full			&						&						&					 & 	`t_1_`i''`st_1_`i''					\\ "	_n ///
+	" P-value		&						&						&					 &	`pvalt_1_`i'' 						\\ "	_n ///
 	" Obs			& 		`n_1_`i''		&	`n_2_`i''			&	`n_3_`i''		 &		`n_4_`i''						\\ " 	_n ///
 	" R2			&		`r2_1_`i''		&	`r2_2_`i''			&	`r2_3_`i''		 &		`r2_4_`i''						\\ "	_n ///
 	"\hline \end{tabular}														 					   							   "	
@@ -632,11 +716,29 @@ local counter_table = `counter_table' + 1
 ********************************************************************************
 ********************************************************************************
 
-{
+if $hete_woman == 1{
 use "$stata/enquete_All3", clear 
 
-local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+* Controls : ADJUSTED TO REFLECT THE ONES THAT ARE NOT BALANCED.
+
+	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
+					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
+				  
+	local ctrl_Ba 
+	
+	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
+					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
+					
+					
+
+local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other					///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					
 							
 keep if repondant_sex == 0
 
@@ -650,7 +752,7 @@ keep if repondant_sex == 0
 	
 	local counter_reg = 1
 	
-	mat def pvalue = J(11,5,.)
+	mat def pvalue = J(18,6,.)
 	
 	local count_out = 0 
 
@@ -716,7 +818,28 @@ keep if repondant_sex == 0
 				mat def pvalue[`count_pval',4] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
 				
 				mat def pvalue[`count_pval',5] = ttail(e(df_r),abs(_b[programs]/_se[programs]))*2
+				
+				count 
+				local full_sample = `r(N)'
+				
+				count if beneficiaire 	== 1
+				local communities 		= `r(N)'
+				
+				count if programs 	== 1
+				local workers 		= `r(N)'
+				
+				local share_communities = `communities'/`full_sample'
+				local share_worker 		= `workers'/`full_sample'
+				
+				local t_1_`count_out' 	=  _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker'
+				local t_1_`count_out'	: di%12.3f `t_1_`count_out'' 
 			
+				local set_1_`count_out' = _se[beneficiaire]*`share_communities' + _se[programs]*`share_worker'
+				local set_1_`count_out'	: di%12.3f `set_1_`count_out'' 
+			
+				test _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker' = 0 
+				mat def pvalue[`count_out',6] = `r(p)'
+				
 		/*
 		* Spillover and intensity
 			
@@ -745,15 +868,22 @@ keep if repondant_sex == 0
 	FDR_CWLP_3
 	FDR_CWLP_4
 	FDR_CWLP_5
+	FDR_CWLP_6
 
 	
 	* Store significance level based on p-value adjustment 
-	pause on
 	
 	local count_outcomes = 1
 	
-	forvalue i = 1/11{
-	
+	forvalue i = 1/18{
+		
+		local s_1_`i' 	""
+		local s_2_`i' 	""
+		local s_3_`i'	""
+		local s1_4_`i' 	""
+		local s2_4_`i' 	""
+		local st_1_`i' 	""
+		
 		local qval1 = Qval1[`i',1]
 		
 		* Between specification
@@ -833,22 +963,40 @@ keep if repondant_sex == 0
 		}
 		
 		di in red "`s1_4_`i''"
+		
+		* Full coeff (total)
+		
+		local qval6 = Qval6[`i',1]
+		
+		local pvalt_1_`i' : di%12.3f `qval6'
+		
+		if `qval6' < 0.1{
+			local st_1_`i' "*"
+		}
+		if `qval6' < 0.05{
+			local st_1_`i' "**"
+		}
+		if `qval6' < 0.01{
+			local st_1_`i' "***"
+		}
 	}
 
 	
 	* Export table 
 	
-	forvalue i = 1/11{
+	forvalue i = 1/18{
 	
 	file open Table_`i' using "Tables/Regression/Table_`i'_w.tex", text write replace
 	
 	file write Table_`i'  _n ///
 	"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{Between}&\multicolumn{1}{c}{Within}&\multicolumn{1}{c}{Spillovers}&\multicolumn{1}{c}{Full}\\ \hline" 	_n ///
-	" Community		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
+	" PWP		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
 	" 				&	 (`se_1_`i'')		&   					&	(`se_3_`i'')	 &	(`se1_4_`i'')						\\ " 	_n ///
-	" Beneficiary 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
+	" Workers 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
 	" 				&	  					& (`se_2_`i'')  		&					 &	(`se2_4_`i'')						\\ " 	_n ///
 	"\hline															   			   					   							   " 	_n ///
+	" Full			&						&						&					 & 	`t_1_`i''`st_1_`i''					\\ "	_n ///
+	" P-value		&						&						&					 &	`pvalt_1_`i'' 						\\ "	_n ///
 	" Obs			& 		`n_1_`i''		&	`n_2_`i''			&	`n_3_`i''		 &		`n_4_`i''						\\ " 	_n ///
 	" R2			&		`r2_1_`i''		&	`r2_2_`i''			&	`r2_3_`i''		 &		`r2_4_`i''						\\ "	_n ///
 	"\hline \end{tabular}														 					   							   "	
@@ -868,11 +1016,28 @@ keep if repondant_sex == 0
 ********************************************************************************
 ********************************************************************************
 
-{
+if $hete_men == 1{
+* Controls : ADJUSTED TO REFLECT THE ONES THAT ARE NOT BALANCED.
+
+	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
+					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
+				  
+	local ctrl_Ba 
+	
+	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
+					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
+					
 use "$stata/enquete_All3", clear 
 
-local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being /*woman_empowerment*/
+
+local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other					///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being /*woman_bargain woman_violence woman_empowerment*/					
 							
 keep if repondant_sex == 1
 
@@ -886,7 +1051,7 @@ keep if repondant_sex == 1
 	
 	local counter_reg = 1
 	
-	mat def pvalue = J(11,5,.)
+	mat def pvalue = J(18,6,.)
 	
 	local count_out = 0 
 
@@ -949,6 +1114,27 @@ keep if repondant_sex == 1
 				mat def pvalue[`count_out',4] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
 				
 				mat def pvalue[`count_out',5] = ttail(e(df_r),abs(_b[programs]/_se[programs]))*2
+				
+				count 
+				local full_sample = `r(N)'
+				
+				count if beneficiaire 	== 1
+				local communities 		= `r(N)'
+				
+				count if programs 	== 1
+				local workers 		= `r(N)'
+				
+				local share_communities = `communities'/`full_sample'
+				local share_worker 		= `workers'/`full_sample'
+				
+				local t_1_`count_out' 	=  _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker'
+				local t_1_`count_out'	: di%12.3f `t_1_`count_out'' 
+			
+				local set_1_`count_out' = _se[beneficiaire]*`share_communities' + _se[programs]*`share_worker'
+				local set_1_`count_out'	: di%12.3f `set_1_`count_out'' 
+			
+				test _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker' = 0 
+				mat def pvalue[`count_out',6] = `r(p)'
 			
 		/*
 		* Spillover and intensity
@@ -967,7 +1153,6 @@ keep if repondant_sex == 1
 	esttab between within spill1 full , se keep (beneficiaire programs NbHabitants) ///
 								           order(beneficiaire programs NbHabitants)
 										   
-	pause
 }
 
 	* Store P-value vector name in global 
@@ -979,15 +1164,22 @@ keep if repondant_sex == 1
 	FDR_CWLP_3
 	FDR_CWLP_4
 	FDR_CWLP_5
+	FDR_CWLP_6
 
 	
 	* Store significance level based on p-value adjustment 
-	pause on
 	
 	local count_outcomes = 1
 	
-	forvalue i = 1/11{
-	
+	forvalue i = 1/18{
+		
+		local s_1_`i' 	""
+		local s_2_`i' 	""
+		local s_3_`i'	""
+		local s1_4_`i' 	""
+		local s2_4_`i' 	""
+		local st_1_`i' 	""
+		
 		local qval1 = Qval1[`i',1]
 		
 		* Between specification
@@ -1067,22 +1259,38 @@ keep if repondant_sex == 1
 		}
 		
 		di in red "`s1_4_`i''"
+		
+		* Full coeff (total)
+		
+		local qval6 = Qval6[`i',1]
+
+		if `qval6' < 0.1{
+			local st_1_`i' "*"
+		}
+		if `qval6' < 0.05{
+			local st_1_`i' "**"
+		}
+		if `qval6' < 0.01{
+			local st_1_`i' "***"
+		}
 	}
 
 	
 	* Export table 
 	
-	forvalue i = 1/11{
+	forvalue i = 1/18{
 	
 	file open Table_`i' using "Tables/Regression/Table_`i'_m.tex", text write replace
 	
 	file write Table_`i'  _n ///
 	"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{Between}&\multicolumn{1}{c}{Within}&\multicolumn{1}{c}{Spillovers}&\multicolumn{1}{c}{Full}\\ \hline" 	_n ///
-	" Community		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
+	" PWP		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
 	" 				&	 (`se_1_`i'')		&   					&	(`se_3_`i'')	 &	(`se1_4_`i'')						\\ " 	_n ///
-	" Beneficiary 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
+	" Workers 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
 	" 				&	  					& (`se_2_`i'')  		&					 &	(`se2_4_`i'')						\\ " 	_n ///
 	"\hline															   			   					   							   " 	_n ///
+	" Full			&						&						&					 & 	`t_1_`i''`st_1_`i''					\\ "	_n ///
+	" P-value		&						&						&					 &	`pvalt_1_`i'' 						\\ "	_n ///
 	" Obs			& 		`n_1_`i''		&	`n_2_`i''			&	`n_3_`i''		 &		`n_4_`i''						\\ " 	_n ///
 	" R2			&		`r2_1_`i''		&	`r2_2_`i''			&	`r2_3_`i''		 &		`r2_4_`i''						\\ "	_n ///
 	"\hline \end{tabular}														 					   							   "	
@@ -1096,236 +1304,7 @@ keep if repondant_sex == 1
 }
 
 
-/* --> Avoid running this part as some contens have been manually added to the 
-	   Tex file (estimation strategy) */
 
-
-* Prepare Tex File 
-
-	file open tex_histo using "Tunisia Result.tex", text write replace
-	file write tex_histo "\documentclass[10pt,a4paper]{article}"				_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage[latin1]{inputenc}"						_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{amsmath}"									_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{amsfonts}"								_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{amssymb}"									_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{graphicx}"								_n
-	file close tex_histo	
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{stata}"									_n
-	file close tex_histo		
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{float}"									_n
-	file close tex_histo	
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{caption}"									_n 
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{setspace}"								_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{pdflscape}"								_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{hyperref}"								_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\hypersetup{"											_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo 	"colorlinks,"										_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo 	"citecolor=black,"									_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo 	"filecolor=black,"									_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo 	"linkcolor=black,"									_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo 	"urlcolor=black"									_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "}"													_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{longtable}"								_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\usepackage{booktabs}"								_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\begin{document}"										_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\author{Ferrah Samih}\title{Tunisia CWLP: Histogram}\maketitle"	_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\pagebreak"											_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\listoffigures"										_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\pagebreak"											_n
-	file close tex_histo
-	
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo 														_n ///
-	"\section{Empirical Methodology}"	_n ///
-	"We estimate the following equation:"	_n ///
-	"\begin{itemize}"	_n ///
-	"\item Between Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{v} + \epsilon_{v} \end{equation}"	_n ///
-	"\item Within Village: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}WORKERS_{iv} + \beta_{2}X_{v} + \epsilon_{iv} \end{equation}"	_n ///
-	"\item Spillovers: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{iv} + \epsilon_{iv} \end{equation}" 	_n ///
-	"\item Full: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}WORKERS_{v} + \beta_{3}X_{v} + \epsilon_{v} \end{equation}" _n ///
-	"\end{itemize}"		_n ///
-	"Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was recipient of a CWLP infrastructure project, $ WORKERS_{iv} $ is a dummy indicating whether individual \textit{i} in village \textit{v} was offered an employment in a CWLP infrastructure project. Last specification compare eligible beneficiary not offered employment in treated communities to eligible beneficiaries in control communities." 	_n ///
-	"\pagebreak"																_n ///
-	"\section{Balance Test}"													_n ///
-	"\begin{table}[H]\centering\caption{Individual balance test}" 				_n ///
-	"\resizebox{\textwidth}{!}{\input{Main/Table_Balance_Individual.tex}}"		_n ///
-	"\end{table}" 																_n ///
-	"\begin{table}[H]\centering\caption{Community balance test}" 				_n ///
-	"\resizebox{\textwidth}{!}{\input{Main/Table_Balance_Community.tex}}"		_n ///
-	"\end{table}" 																_n ///
-	"\pagebreak"																_n ///
-	"\section{Main Table}"														_n ///
-	"\begin{table}[H]\centering\caption{Main results}" 							_n ///
-	"\resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}"					_n ///
-	"\end{table}" 																_n ///
-	"\pagebreak"																_n
-	
-	file close tex_histo
-	
-	forvalue i = 1/11{
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\section{`caption_`i''}"							_n
-		file close tex_histo	
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\begin{table}[H]\centering"						_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\input{Tables/Summary/Table_`i'.tex}"				_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\end{table}"										_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\begin{figure}[H]\centering"						_n
-		file close tex_histo
-			
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\includegraphics[scale=0.75]{Graph/Combined/Figure_`i'.pdf}" _n
-		file close tex_histo
-			
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\caption{`caption_`i''} \label{fig:Fig_`i'}"		_n
-		file close tex_histo
-			
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\end{figure}"										_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\begin{table}[H]\centering\caption{Model without Imada fixed effect}"						_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\input{Tables/Regression/Table_`i'.tex}"			_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\end{table}"										_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\begin{table}[H]\centering\caption{Model with Imada fixed effect}"						_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\input{Tables/Regression/Table_`i'_b.tex}"			_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\end{table}"										_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\begin{table}[H]\centering\caption{Subsample of woman respondent}"						_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\input{Tables/Regression/Table_`i'_w.tex}"			_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\end{table}"										_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\begin{table}[H]\centering\caption{Subsample of male respondent}"						_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\input{Tables/Regression/Table_`i'_m.tex}"			_n
-		file close tex_histo
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\end{table}"										_n
-		file close tex_histo
-		
-		
-		file open tex_histo using "Tunisia Result.tex", text write append
-		file write tex_histo "\pagebreak" 										_n
-		file close tex_histo
-		
-		}
-		
-	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\end{document}"										_n
-	file close tex_histo	
 		
 
 

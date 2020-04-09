@@ -33,7 +33,7 @@ We estimate the following equation:
 \item Spillovers: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}X_{iv} + \epsilon_{iv} \end{equation}
 \item Full: \begin{equation} Y_{iv} = \beta_{0} + \beta_{1}CWLP_{v} + \beta_{2}WORKERS_{v} + \beta_{3}X_{v} + \epsilon_{v} \end{equation}
 \end{itemize}
-Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was recipient of a CWLP infrastructure project, $ WORKERS_{iv} $ is a dummy indicating whether individual \textit{i} in village \textit{v} was offered an employment in a CWLP infrastructure project. Last specification compare eligible beneficiary not offered employment in treated communities to eligible beneficiaries in control communities.
+Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was recipient of a CWLP infrastructure project, $ WORKERS_{iv} $ is a dummy indicating whether individual \textit{i} in village \textit{v} was offered an employment in a CWLP infrastructure project. Last specification compare eligible Workers not offered employment in treated communities to eligible beneficiaries in control communities.
 \pagebreak
 \section{Balance Test}
 \begin{table}[H]\centering\caption{Individual balance test}
@@ -47,6 +47,16 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Main results}
 \resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}
 \end{table}
+\begin{table}[H]\centering\caption{Main results}
+\scalebox{0.80}{\input{Main/Table_Index_Full.tex}}
+\end{table}
+\pagebreak
+\begin{table}[H]\centering\caption{Extended main results}
+\resizebox{\textwidth}{!}{\input{Main/Table_Index_Extended.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Extended main results}
+\scalebox{0.50}{\input{Main/Table_Index_Full_Extended.tex}}
+\end{table}
 \pagebreak
 \section{Labor market}
 \begin{table}[H]\centering
@@ -54,7 +64,7 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_1.pdf}
-\caption{Labor market} \label{fig:Fig_1}
+\caption{} \label{fig:Fig_1}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_1.tex}
@@ -68,6 +78,13 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_1_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Labor market }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_lab_market_main.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Labor market (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_lab_market_main_Full.tex}}
+\end{table}
 \pagebreak
 \section{Consumption expenditures}
 \begin{table}[H]\centering
@@ -75,7 +92,7 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_2.pdf}
-\caption{Consumption expenditures} \label{fig:Fig_2}
+\caption{} \label{fig:Fig_2}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_2.tex}
@@ -89,14 +106,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_2_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Consumption expenditures }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_eco_welfare.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Consumption expenditures (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_eco_welfare_Full.tex}}
+\end{table}
 \pagebreak
-\section{Assets owning}
+\section{Food consumtion}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_3.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_3.pdf}
-\caption{Assets owning} \label{fig:Fig_3}
+\caption{} \label{fig:Fig_3}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_3.tex}
@@ -110,14 +134,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_3_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Food consumtion }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_consumption_food.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Food consumtion (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_consumption_food_Full.tex}}
+\end{table}
 \pagebreak
-\section{Financial inclusion}
+\section{Other consumption}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_4.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_4.pdf}
-\caption{Financial inclusion} \label{fig:Fig_4}
+\caption{} \label{fig:Fig_4}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_4.tex}
@@ -131,14 +162,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_4_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Other consumption }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_consumption_other.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Other consumption (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_consumption_other_Full.tex}}
+\end{table}
 \pagebreak
-\section{Positive coping mechanisms}
+\section{Assets owning}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_5.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_5.pdf}
-\caption{Positive coping mechanisms} \label{fig:Fig_5}
+\caption{} \label{fig:Fig_5}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_5.tex}
@@ -152,14 +190,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_5_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Assets owning }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_assets.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Assets owning (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_assets_Full.tex}}
+\end{table}
 \pagebreak
-\section{Negative coping mechanisms}
+\section{Home assets}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_6.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_6.pdf}
-\caption{Negative coping mechanisms} \label{fig:Fig_6}
+\caption{} \label{fig:Fig_6}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_6.tex}
@@ -173,14 +218,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_6_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Home assets }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_home_assets.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Home assets (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_home_assets_Full.tex}}
+\end{table}
 \pagebreak
-\section{Economic shock}
+\section{Communication assets}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_7.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_7.pdf}
-\caption{Economic shock} \label{fig:Fig_7}
+\caption{} \label{fig:Fig_7}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_7.tex}
@@ -194,14 +246,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_7_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Communication assets }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_comms_assets.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Communication assets (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_comms_assets_Full.tex}}
+\end{table}
 \pagebreak
-\section{Social participation}
+\section{Productive assets}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_8.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_8.pdf}
-\caption{Social participation} \label{fig:Fig_8}
+\caption{} \label{fig:Fig_8}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_8.tex}
@@ -215,14 +274,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_8_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Productive assets }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_productive_assets.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Productive assets (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_productive_assets_Full.tex}}
+\end{table}
 \pagebreak
-\section{Civic engagement}
+\section{Financial inclusion}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_9.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_9.pdf}
-\caption{Civic engagement} \label{fig:Fig_9}
+\caption{} \label{fig:Fig_9}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_9.tex}
@@ -236,14 +302,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_9_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Financial inclusion }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_credit_access.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Financial inclusion (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_credit_access_Full.tex}}
+\end{table}
 \pagebreak
-\section{Psychological well being}
+\section{Positive coping mechanisms}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_10.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_10.pdf}
-\caption{Psychological well being} \label{fig:Fig_10}
+\caption{} \label{fig:Fig_10}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_10.tex}
@@ -257,14 +330,21 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_10_m.tex}
 \end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Positive coping mechanisms }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_pos_coping_mechanisms.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Positive coping mechanisms (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_pos_coping_mechanisms_Full.tex}}
+\end{table}
 \pagebreak
-\section{Women's empowerment}
+\section{Negative coping mechanisms}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_11.tex}
 \end{table}
 \begin{figure}[H]\centering
 \includegraphics[scale=0.75]{Graph/Combined/Figure_11.pdf}
-\caption{Women's empowerment} \label{fig:Fig_11}
+\caption{} \label{fig:Fig_11}
 \end{figure}
 \begin{table}[H]\centering\caption{Model without Imada fixed effect}
 \input{Tables/Regression/Table_11.tex}
@@ -277,6 +357,209 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \end{table}
 \begin{table}[H]\centering\caption{Subsample of male respondent}
 \input{Tables/Regression/Table_11_m.tex}
+\end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Negative coping mechanisms }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_neg_coping_mechanisms.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Negative coping mechanisms (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_neg_coping_mechanisms_Full.tex}}
+\end{table}
+\pagebreak
+\section{Economic shock}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_12.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_12.pdf}
+\caption{} \label{fig:Fig_12}
+\end{figure}
+\begin{table}[H]\centering\caption{Model without Imada fixed effect}
+\input{Tables/Regression/Table_12.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Model with Imada fixed effect}
+\input{Tables/Regression/Table_12_b.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of woman respondent}
+\input{Tables/Regression/Table_12_w.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of male respondent}
+\input{Tables/Regression/Table_12_m.tex}
+\end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Economic shock }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_shocks.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Economic shock (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_shocks_Full.tex}}
+\end{table}
+\pagebreak
+\section{Social participation}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_13.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_13.pdf}
+\caption{} \label{fig:Fig_13}
+\end{figure}
+\begin{table}[H]\centering\caption{Model without Imada fixed effect}
+\input{Tables/Regression/Table_13.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Model with Imada fixed effect}
+\input{Tables/Regression/Table_13_b.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of woman respondent}
+\input{Tables/Regression/Table_13_w.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of male respondent}
+\input{Tables/Regression/Table_13_m.tex}
+\end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Social participation }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_social.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Social participation (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_social_Full.tex}}
+\end{table}
+\pagebreak
+\section{Civic engagement}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_14.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_14.pdf}
+\caption{} \label{fig:Fig_14}
+\end{figure}
+\begin{table}[H]\centering\caption{Model without Imada fixed effect}
+\input{Tables/Regression/Table_14.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Model with Imada fixed effect}
+\input{Tables/Regression/Table_14_b.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of woman respondent}
+\input{Tables/Regression/Table_14_w.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of male respondent}
+\input{Tables/Regression/Table_14_m.tex}
+\end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Civic engagement }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_civic.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Civic engagement (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_civic_Full.tex}}
+\end{table}
+\pagebreak
+\section{Psychological well being}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_15.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_15.pdf}
+\caption{} \label{fig:Fig_15}
+\end{figure}
+\begin{table}[H]\centering\caption{Model without Imada fixed effect}
+\input{Tables/Regression/Table_15.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Model with Imada fixed effect}
+\input{Tables/Regression/Table_15_b.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of woman respondent}
+\input{Tables/Regression/Table_15_w.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of male respondent}
+\input{Tables/Regression/Table_15_m.tex}
+\end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Psychological well being }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_well_being.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Psychological well being (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_well_being_Full.tex}}
+\end{table}
+\pagebreak
+\section{Women's empowerment and agency}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_16.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_16.pdf}
+\caption{} \label{fig:Fig_16}
+\end{figure}
+\begin{table}[H]\centering\caption{Model without Imada fixed effect}
+\input{Tables/Regression/Table_16.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Model with Imada fixed effect}
+\input{Tables/Regression/Table_16_b.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of woman respondent}
+\input{Tables/Regression/Table_16_w.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of male respondent}
+\input{Tables/Regression/Table_16_m.tex}
+\end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Women's empowerment and agency }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_bargain.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Women's empowerment and agency (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_bargain_Full.tex}}
+\end{table}
+\pagebreak
+\section{Intimate partner violence}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_17.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_17.pdf}
+\caption{} \label{fig:Fig_17}
+\end{figure}
+\begin{table}[H]\centering\caption{Model without Imada fixed effect}
+\input{Tables/Regression/Table_17.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Model with Imada fixed effect}
+\input{Tables/Regression/Table_17_b.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of woman respondent}
+\input{Tables/Regression/Table_17_w.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of male respondent}
+\input{Tables/Regression/Table_17_m.tex}
+\end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Intimate partner violence }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_violence.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Intimate partner violence (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_violence_Full.tex}}
+\end{table}
+\pagebreak
+\section{Women's empowerment}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_18.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_18.pdf}
+\caption{} \label{fig:Fig_18}
+\end{figure}
+\begin{table}[H]\centering\caption{Model without Imada fixed effect}
+\input{Tables/Regression/Table_18.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Model with Imada fixed effect}
+\input{Tables/Regression/Table_18_b.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of woman respondent}
+\input{Tables/Regression/Table_18_w.tex}
+\end{table}
+\begin{table}[H]\centering\caption{Subsample of male respondent}
+\input{Tables/Regression/Table_18_m.tex}
+\end{table}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Women's empowerment }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_empowerment.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Women's empowerment (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_empowerment_Full.tex}}
 \end{table}
 \pagebreak
 \end{document}

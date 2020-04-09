@@ -13,25 +13,31 @@ cd "$git_tunisia/outputs/Main/"
 cap file close Table
 pause on 
 
-local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-					shocks social civic well_being woman_empowerment
+local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare assets   										///
+					credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+					shocks social civic well_being woman_empowerment 					
 
 	
 	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					h_18_65 missing_h_18_65  f_18_65 missing_f_18_65  trauma_abus missing_trauma_abus 				///
-					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c  missing_q2_3_c	///
-					q2_4_c  missing_q2_4_c
+					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
+					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 				  
 	local ctrl_Ba 
 	
 	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					h_18_65 missing_h_18_65  f_18_65 missing_f_18_65  trauma_abus missing_trauma_abus 				///
-					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c  missing_q2_3_c	///
-					q2_4_c  missing_q2_4_c
+					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
+					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 					
 
 ********************************************************************************
+********************************************************************************
+* 1) Main table with three different specification
+********************************************************************************
 ********************************************************************************	
+
+
 use "$stata/enquete_All3", clear 
 
 				
@@ -99,6 +105,10 @@ foreach outcome in `Index_ALL' {
 	local count_outcomes = 1
 	
 	forvalue i = 1/11{
+		
+		local s_1_`i' ""
+		local s_2_`i' ""
+		local s_3_`i' ""
 		
 		* Between specification
 		
@@ -181,10 +191,241 @@ file write Table  _n ///
 file close Table		
 
 
+********************************************************************************
+********************************************************************************
+* 2) Main table with full specification
+********************************************************************************
+********************************************************************************	
 
-/*
-" `l_12'		& 	`c_1_12'`s_1_12' 	& `pval_1_12' & `n_1_12' 	& 	`c_2_12'`s_2_12' & `pval_2_12' & `n_2_12'		& `c_3_12'`s_3_12' & `pval_3_12' & `n_3_12' 	  \\ " 	_n ///
-" 				&	 (`se_1_12') & &								&   	(`se_2_12') & &								&	(`se_3_12') & &	\\ " 	_n ///
-" `l_13'		& 	`c_1_13'`s_1_13' 	& `pval_1_13' & `n_1_13' 	& 	`c_2_13'`s_2_13' & `pval_2_13' & `n_2_13'		& `c_3_13'`s_3_13' & `pval_3_13' & `n_3_13' 	 \\ " 	_n ///
-" 				&	 (`se_1_13') & &								&   	(`se_2_13') & &								&	(`se_3_13') & &	\\ " 	_n ///
-*/
+use "$stata/enquete_All3", clear 
+
+				
+local count_out 	= 1 
+local count_out2 	= 2 
+local count_out3	= 1
+
+local  count_pvalue = 1
+
+mat def pvalue = J(11,3,.)
+
+foreach outcome in `Index_ALL' {
+
+		if "`outcome'" == "woman_violence" | "`outcome'" == "woman_bargain"{
+			keep if repondant_sex == 0
+		}
+		
+		local l_`count_pvalue' : variable label IAaS`outcome'
+		
+		* Full 
+			
+			regress ICfS`outcome' beneficiaire programs `ctrl_Cb' if full == 1, vce (cluster imada)
+				
+				local c_1_`count_out' 	: di%12.3f _b[beneficiaire]
+				local se_1_`count_out' 	: di%12.3f _se[beneficiaire]
+				
+				local c_1_`count_out2' 	: di%12.3f _b[programs]
+				local se_1_`count_out2' : di%12.3f _se[programs]
+				
+				local n_1_`count_out'  = e(N)
+				local r2_1_`count_out' = e(R2)
+				
+				mat def pvalue[`count_pvalue',1] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2	
+				
+				mat def pvalue[`count_pvalue',2] = ttail(e(df_r),abs(_b[programs]/_se[programs]))*2	
+				
+				count 
+				local full_sample = `r(N)'
+				
+				count if beneficiaire 	== 1
+				local communities 		= `r(N)'
+				
+				count if programs 	== 1
+				local workers 		= `r(N)'
+				
+				local share_communities = `communities'/`full_sample'
+				local share_worker 		= `workers'/`full_sample'
+				
+			local t_1_`count_out3' 	=  _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker'
+			local t_1_`count_out3'	: di%12.3f `t_1_`count_out3'' 
+			
+			local set_1_`count_out3' = _se[beneficiaire]*`share_communities' + _se[programs]*`share_worker'
+			local set_1_`count_out3'	: di%12.3f `set_1_`count_out3'' 
+			
+			test _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker' = 0 
+			mat def pvalue[`count_pvalue',3] = `r(p)'
+			
+			*mat def pvalue[`count_pvalue',3] = ttail(e(df_r),abs(`t_1_`count_out3''/`set_1_`count_out3''))*2	
+				
+		
+		local count_out 	= `count_out' 	 + 2
+		local count_out2 	= `count_out2' 	 + 2
+		local count_out3	= `count_out3'	 + 1
+		
+		local count_pvalue  = `count_pvalue' + 1
+		
+}
+		
+	* Store P-value vector name in global 
+	global pvalue "pvalue"
+	
+	* Compute p-value
+	
+	FDR_CWLP_1
+	FDR_CWLP_2
+	FDR_CWLP_3
+	
+	* Store significance level based on p-value adjustment
+	
+	local count_outcomes = 1
+	
+	local star_count 	= 1
+	local star_count2 	= 2
+	local star_count3 	= 1
+		
+	forvalue i = 1/11{
+		
+		local ss_1_`star_count' 	""
+		local ss_1_`star_count2' 	""
+		local st_1_`star_count3'	""
+		
+		* First coeff
+		
+			local qval1 = Qval1[`i',1]
+			
+			local pval_1_`star_count' : di%12.3f `qval1'						// Store q-value value
+			
+			if `pval_1_`star_count'' < 0.1{
+				local ss_1_`star_count' "*"
+			}
+			if `pval_1_`star_count'' < 0.05{
+				local ss_1_`star_count' "**"
+			}
+			if `pval_1_`star_count'' < 0.01{
+				local ss_1_`star_count' "***"
+			}
+			
+		* Second coeff
+		
+			local qval2 = Qval2[`i',1]
+			
+			local pval_1_`star_count2' : di%12.3f `qval2'						// Store q-value value
+			
+			if `pval_1_`star_count2'' < 0.1{
+				local ss_1_`star_count2' "*"
+			}
+			if `pval_1_`star_count2'' < 0.05{
+				local ss_1_`star_count2' "**"
+			}
+			if `pval_1_`star_count2'' < 0.01{
+				local ss_1_`star_count2' "***"
+			}
+		
+		di in red "`s_1_`star_count''"
+		di in red "`s_1_`star_count2''"
+		
+		* Full coeff
+		
+		local qval3 = Qval3[`i',1]
+		
+		local t_pval_1_`star_count3' : di%12.3f `qval3'							// Store q-value value
+		
+		if `t_pval_1_`star_count3'' < 0.1{
+			local st_1_`star_count3' "*"
+		}
+		if `t_pval_1_`star_count3'' < 0.05{
+			local st_1_`star_count3' "**"
+		}
+		if `t_pval_1_`star_count3'' < 0.01{
+			local st_1_`star_count3' "***"
+		}
+
+	local star_count 	= `star_count'  + 2
+	local star_count2 	= `star_count2' + 2
+	local star_count3 	= `star_count3' + 1
+
+	}
+
+			
+file open Table using "Table_Index_Full.tex", text write replace
+	
+file write Table  _n ///
+"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{4}{c}{Full specification} \\ \cmidrule(r){2-5} & {} & {T-C} & {P-value} & {N}  \\ \midrule"  _n ///
+" `l_1'			&	PWP	& 	`c_1_1'`ss_1_1' 		& `pval_1_1' 	& `n_1_1'				\\  " 	_n ///
+" 				&	 			&	(`se_1_1') 				& &										\\ " 	_n ///
+" 				& 	Workers 	&	`c_1_2'`ss_1_2' 		& `pval_1_2' 	& 		 				\\ " 	_n ///
+" 				&	 			&	(`se_1_2') 				& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_1'`st_1_1'			&`pvalt_1_1'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_2'			&	PWP	& 	`c_1_3'`ss_1_3' 		& `pval_1_3' 	& `n_1_3' 				\\ " 	_n ///
+" 				&	 			&	(`se_1_3') 				& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_4'`ss_1_4' 		& `pval_1_4' 	& 						\\ " 	_n ///
+" 				&	 			&	(`se_1_4') 				& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_2'`st_1_2'			& `pvalt_1_2'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_3'			&	PWP	&	`c_1_5'`ss_1_5' 		& `pval_1_5' 	& `n_1_5' 				\\ " 	_n ///
+" 				&	 			&	(`se_1_5') 				& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_6'`ss_1_6' 		& `pval_1_6' 	& 						\\ " 	_n ///
+" 				&	 			&	(`se_1_6') 				& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_3'`st_1_3'			& `pvalt_1_3'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_4'			&	PWP	& 	`c_1_7'`ss_1_7' 		& `pval_1_7' 	& `n_1_7' 				\\ " 	_n ///
+" 				&	 			&	(`se_1_7') 				& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_8'`ss_1_8' 		& `pval_1_8' 	& 						\\ " 	_n ///
+" 				&	 			&	(`se_1_8') 				& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_4'`st_1_4'			& `pvalt_1_4'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_5'			&	PWP	& 	`c_1_9'`ss_1_9' 		& `pval_1_9' 	& `n_1_9' 				\\ " 	_n ///
+" 				&	 			&	(`se_1_9') 				& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_10'`ss_1_10' 		& `pval_1_10' 	& 						\\ " 	_n ///
+" 				&	 			&	(`se_1_10') 			& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_5'`st_1_5'			&`pvalt_1_5'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_6'			&	PWP	& 	`c_1_11'`ss_1_11' 		&`pval_1_11' 	& `n_1_11' 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_11') 			& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_12'`ss_1_12' 		& `pval_1_12' 	&  	 					\\ " 	_n ///
+" 				&	 			&	(`se_1_12') 			& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_6'`st_1_6'			&`pvalt_1_6'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_7'			&	PWP	& 	`c_1_13'`ss_1_13' 		& `pval_1_13' 	& `n_1_13' 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_13') 			& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_14'`ss_1_14' 		& `pval_1_14' 	& 		 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_14') 			& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_7'`st_1_7'			& `pvalt_1_7'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_8'			& 	PWP	&	`c_1_15'`ss_1_15' 		& `pval_1_15' 	& `n_1_15' 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_15') 			& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_16'`ss_1_16' 		& `pval_1_16' 	& 		 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_16') 			& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_8'`st_1_8'			&`pvalt_1_8'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_9'			&	PWP	& 	`c_1_17'`ss_1_17' 		& `pval_1_17' 	& `n_1_17' 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_17') 			& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_18'`ss_1_18' 		& `pval_1_18' 	& 		 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_18') 			& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_9'`st_1_9'			&`pvalt_1_9'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_10'		&	PWP	&	`c_1_19'`ss_1_19' 		&`pval_1_19' 	& `n_1_19' 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_19') 			& &										\\ " 	_n ///
+" 				& 	Workers 	& 	`c_1_20'`ss_1_20' 		& `pval_1_20' 	& 		 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_20') 			& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_10'`st_1_10'		& `pvalt_1_10'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+" `l_11'		& 	PWP	&	`c_1_21'`ss_1_21' 		& `pval_1_21' 	& `n_1_21' 	 			\\ " 	_n ///
+" 				&	 			&	(`se_1_21') 			& &										\\ " 	_n ///
+" 				&  	Workers 	&	`c_1_22'`ss_1_22' 		& `pval_1_22' 	& 			 			\\ " 	_n ///
+" 				&	 			&	(`se_1_22') 			& &										\\ " 	_n ///
+"\cmidrule{2-3}" _n ///
+"				&	Total		& 	`t_1_11'`st_1_11'		& `pvalt_1_11'	& 						\\ "	_n ///
+"\cmidrule{2-3}" _n ///
+"\hline \end{tabular}														   "	
+file close Table

@@ -77,14 +77,15 @@
 
 
 global import_individual		= 0
-global construct_individual		= 1
+global construct_individual		= 0
 global import_community			= 0 
 global construct_community		= 0
-global construct_analysis		= 1
-global codebook_				= 1
-global sum_stat					= 1
-global desc_index				= 0
-global main_table				= 0
+global construct_analysis		= 0
+global codebook_				= 0
+global sum_stat					= 0
+global desc_index				= 1
+global main_table				= 1
+global indiv_reg				= 1
 
 ********************************************************************************
 ********************************************************************************
@@ -155,8 +156,16 @@ if $desc_index == 1{
 	do "$git_tunisia/dofiles/Histogram and Summary.do"
 }
 
-
 * Produce main tables of index 
 if $main_table == 1{
 	do "$git_tunisia/dofiles/Main Analysis Samih "
+	do "$git_tunisia/dofiles/Main Analysis Samih (Extended)"
 }
+
+* Produce Individual outcomes regression tables 
+if $indiv_reg ==1{
+	do "$git_tunisia/dofiles/Individual Regression.do"
+}
+
+* Prepare Tex Results File 
+do "$git_tunisia/dofiles/Prepare Tex Results File"

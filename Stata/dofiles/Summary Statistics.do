@@ -11,24 +11,42 @@ clear
 * 0) DEFINE LOCAL USED TO BUILD INDEX 
 ********************************************************************************
 ********************************************************************************
+local lab_market_main 	 		emploi_main days_work_main_win hours_work_main_win inc_work_main_win									///
+								profit_work_main_win business_q0_main business_q3_main_win business_q5_main_win
+
+														
+local eco_welfare 				c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 					///
+								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win c4_win c5_win c6_win 								///
+								c7_win c8_win c9_win c11_win c12_win c13_win c14_win c16_win c18_win 
+
+local consumption_food 			c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 						///
+								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win 
 
 
-local lab_market_main 	 		emploi_main days_work_main hours_work_main inc_work_main profit_work_main								///
-								business_q0_main business_q3_main business_q5_main
-								
-/*local lab_market_sec 	 		emploi_sec days_work_sec hours_work_sec inc_work_sec 													///
-								profit_work_sec business_q0_sec business_q3_sec business_q5_sec*/
+local consumption_other 		c4_win c5_win c6_win c7_win c8_win c9_win c11_win c12_win c13_win c14_win 					///
+								c16_win c18_win 
+
 							
-local eco_welfare 				c3_a_1_win5 c3_a_2_win5 c3_a_3_win5 c3_a_4_win5 c3_a_5_win5 c3_a_6_win5 c3_a_7_win5 					///
-								c3_a_8_win5 c3_a_9_win5 c3_a_10_win5 c3_a_11_win5 c4_win5 c5_win5 c6_win5 								///
-								c7_win5 c8_win5 c9_win5 c11_win5 c12_win5 c13_win5 c14_win5 c16_win5 c18_win5 
+local assets					q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_7_win q2_1_8_win 					///
+								q2_1_9_win q2_1_10_win q2_1_11_win q2_1_12_win q2_1_13_win q2_1_14_win 							///
+								q2_1_15_win q2_1_16_win q2_1_17_win q2_1_18_win q2_1_19_win 										///
+								q2_1_20_win q2_1_21_win q2_1_22_win 
 
-local assets					q2_1_2_win5 q2_1_3_win5 q2_1_4_win5 q2_1_5_win5 q2_1_6_win5 q2_1_7_win5 q2_1_8_win5 					///
-								q2_1_9_win5 q2_1_10_win5 q2_1_11_win5 q2_1_12_win5 q2_1_13_win5 q2_1_14_win5 							///
-								q2_1_15_win5 q2_1_16_win5 q2_1_17_win5 q2_1_18_win q2_1_19_win5 										///
-								q2_1_20_win5 q2_1_21_win5 q2_1_22_win5 
+local large_assets				q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_9_win q2_1_10_win					///
+								q2_1_12_win q2_1_13_win q2_1_17_win q2_1_20_win q2_1_21_win q2_1_22q2_1_22_winbis 
+						  
+local small_assets				q2_1_7_win q2_1_8_win q2_1_11_win q2_1_14_win q2_1_15_win q2_1_16_win q2_1_18_win 				///
+								q2_1_19_win  
 
-local credit_access				epargne_dette epargne_dette_cb_win5 epargne epargne_cb epargne_pret											
+local home_assets				q2_1_2_win q2_1_3_win q2_1_4_win q2_1_15_win q2_1_6_win q2_1_7_win q2_1_8_win  	
+	
+local comms_assets				q2_1_12_win q2_1_13_win q2_1_14_win q2_1_15_win q2_1_16_win  
+
+local productive_assets			q2_1_9_win q2_1_10_win q2_1_11_win q2_1_17_win q2_1_18_win q2_1_19_win 							///
+								q2_1_20_win q2_1_21_win 						
+								
+								
+local credit_access				epargne_dette epargne_dette_cb_win epargne epargne_cb_win epargne_pret											
 
 
 local pos_coping_mechanisms		g2_3 g2_4 g2_5 g2_6  g2_8 g2_9 g2_10 g2_11 g2_12 
@@ -38,8 +56,6 @@ local neg_coping_mechanisms		g2_1 g2_2 g2_7 g2_13 g2_14 g2_15
 
 local shocks					g1_1 g1_2 g1_3 g1_4 g1_5 g1_6 g1_7 g1_8 g1_9
 
-
-* comite_c comite_c_menage comite_cbis comite_c_menagebis association_dummy  migration_cm_q1 migration_q1
 
 local social				association_1 association_2 initiatives_9 association_9											///
 							association_3 association_4 association_6 /*association_7 association_8*/  
@@ -56,15 +72,26 @@ local well_being 			psy_anxiete psy_exploit psy_depress5 /*psy_accepte_dum1*/ ps
 							psycho_depress4 psycho_depress3 psycho_depress2 psycho_depress1
 
 
-local woman_empowerment		violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
+local woman_violence		violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
 							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
-							violence_1_16 violence_1_17 violence_1_18 intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw association_2
+							violence_1_16 violence_1_17 violence_1_18  	
+							
+
+local woman_bargain 		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw /*association_2*/
 
 
-local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
-	
-	
+local woman_empowerment		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw 												///
+							violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
+							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
+							violence_1_16 violence_1_17 violence_1_18  	
+
+
+local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other					///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					
+
+
 							
 ********************************************************************************
 ********************************************************************************

@@ -9,33 +9,42 @@
 ********************************************************************************
 ********************************************************************************
 
-/*
-local lab_market_main			futur_services emp_futur_cb_win5 emploi tspent_main earned_main_win5 employedhh 						///
-								earnedhh_win5 paidjobhh 
+
+local lab_market_main 	 		emploi_main days_work_main_win hours_work_main_win inc_work_main_win									///
+								profit_work_main_win business_q0_main business_q3_main_win business_q5_main_win
+
+														
+local eco_welfare 				c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 					///
+								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win c4_win c5_win c6_win 								///
+								c7_win c8_win c9_win c11_win c12_win c13_win c14_win c16_win c18_win 
+
+local consumption_food 			c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 						///
+								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win 
+
+local consumption_other 		c4_win c5_win c6_win c7_win c8_win c9_win c11_win c12_win c13_win c14_win 					///
+								c15_win c16_win c18_win 
+
 							
-							
-local lab_market_sec			earnedoth_win5 paidjoboth sec_empl tspent_sec_win5 earned_sec_win5
-*/	
-						
-local lab_market_main 	 		emploi_main days_work_main hours_work_main inc_work_main profit_work_main								///
-								business_q0_main business_q3_main business_q5_main
+local assets					q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_7_win q2_1_8_win 					///
+								q2_1_9_win q2_1_10_win q2_1_11_win q2_1_12_win q2_1_13_win q2_1_14_win 							///
+								q2_1_15_win q2_1_16_win q2_1_17_win q2_1_18_win q2_1_19_win 										///
+								q2_1_20_win q2_1_21_win q2_1_22_win 
+
+local large_assets				q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_9_win q2_1_10_win					///
+								q2_1_12_win q2_1_13_win q2_1_17_win q2_1_20_win q2_1_21_win q2_1_22q2_1_22_winbis 
+						  
+local small_assets				q2_1_7_win q2_1_8_win q2_1_11_win q2_1_14_win q2_1_15_win q2_1_16_win q2_1_18_win 				///
+								q2_1_19_win  
+
+local home_assets				q2_1_2_win q2_1_3_win q2_1_4_win q2_1_15_win q2_1_6_win q2_1_7_win q2_1_8_win  	
+	
+local comms_assets				q2_1_12_win q2_1_13_win q2_1_14_win q2_1_15_win q2_1_16_win  
+
+local productive_assets			q2_1_9_win q2_1_10_win q2_1_11_win q2_1_17_win q2_1_18_win q2_1_19_win 							///
+								q2_1_20_win q2_1_21_win 						
 								
-/*local lab_market_sec 	 		emploi_sec days_work_sec hours_work_sec inc_work_sec 													///
-								profit_work_sec business_q0_sec business_q3_sec business_q5_sec*/
-
 								
-
-						
-local eco_welfare 				c3_a_1_win5 c3_a_2_win5 c3_a_3_win5 c3_a_4_win5 c3_a_5_win5 c3_a_6_win5 c3_a_7_win5 					///
-								c3_a_8_win5 c3_a_9_win5 c3_a_10_win5 c3_a_11_win5 c4_win5 c5_win5 c6_win5 								///
-								c7_win5 c8_win5 c9_win5 c11_win5 c12_win5 c13_win5 c14_win5 c16_win5 c18_win5 
-
-local assets					q2_1_2_win5 q2_1_3_win5 q2_1_4_win5 q2_1_5_win5 q2_1_6_win5 q2_1_7_win5 q2_1_8_win5 					///
-								q2_1_9_win5 q2_1_10_win5 q2_1_11_win5 q2_1_12_win5 q2_1_13_win5 q2_1_14_win5 							///
-								q2_1_15_win5 q2_1_16_win5 q2_1_17_win5 q2_1_18_win q2_1_19_win5 										///
-								q2_1_20_win5 q2_1_21_win5 q2_1_22_win5 
-
-local credit_access				epargne_dette epargne_dette_cb_win5 epargne epargne_cb epargne_pret											
+local credit_access				epargne_dette epargne_dette_cb_win epargne epargne_cb_win epargne_pret											
 
 
 local pos_coping_mechanisms		g2_3 g2_4 g2_5 g2_6  g2_8 g2_9 g2_10 g2_11 g2_12 
@@ -45,8 +54,6 @@ local neg_coping_mechanisms		g2_1 g2_2 g2_7 g2_13 g2_14 g2_15
 
 local shocks					g1_1 g1_2 g1_3 g1_4 g1_5 g1_6 g1_7 g1_8 g1_9
 
-
-* comite_c comite_c_menage comite_cbis comite_c_menagebis association_dummy  migration_cm_q1 migration_q1
 
 local social				association_1 association_2 initiatives_9 association_9											///
 							association_3 association_4 association_6 /*association_7 association_8*/  
@@ -63,14 +70,25 @@ local well_being 			psy_anxiete psy_exploit psy_depress5 /*psy_accepte_dum1*/ ps
 							psycho_depress4 psycho_depress3 psycho_depress2 psycho_depress1
 
 
-local woman_empowerment		violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
+local woman_violence		violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
 							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
-							violence_1_16 violence_1_17 violence_1_18 														///
-							intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw association_2
+							violence_1_16 violence_1_17 violence_1_18  	
+							
+
+local woman_bargain 		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw /*association_2*/
 
 
-local Index_ALL 			lab_market_main lab_market_sec eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+local woman_empowerment		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw 												///
+							violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
+							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
+							violence_1_16 violence_1_17 violence_1_18  	
+
+
+local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					
+							 
 
 							
 ********************************************************************************
@@ -96,20 +114,19 @@ capture confirm numeric variable `var'
 }
 
 
-foreach var of varlist 		c3_a_1_win5 c3_a_2_win5 c3_a_3_win5 c3_a_4_win5 c3_a_5_win5 c3_a_6_win5 c3_a_7_win5  		///
-							c3_a_8_win5 c3_a_9_win5 c3_a_10_win5 c3_a_11_win5 exp_food_win5 c4_win c5_win5 c6_win5 		/// 
-							c7_win5 c8_win5 c9_win5 c11_win5 c12_win5 c13_win5 c14_win5 c15_win5 c16_win5 c18_win5 {
+foreach var of varlist 		c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win  		///
+							c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win  c4_win c5_win c6_win 		/// 
+							c7_win c8_win c9_win c11_win c12_win c13_win c14_win c15_win c16_win c18_win {
 	gen l`var' = log(`var'+1)
-	rename `var'   n`var'
-	rename  l`var' `var'
+
 }
 
 
 *Account for repetition of variables in different categories; will delete at end of code
 
-foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win5 c3_a_5_win5 c3_a_6_win5 c3_a_7_win5 	///
-						c3_a_8_win5 c3_a_9_win c3_a_10_win c3_a_11_win5 exp_food_win5 c4_win c5_win5 c6_win5 ///
-						c7_win5 c8_win5 c9_win c11_win c12_win c13_win c14_win c15_win c16_win c18_win 		///
+foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 	///
+						c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win  c4_win c5_win c6_win ///
+						c7_win c8_win c9_win c11_win c12_win c13_win c14_win c15_win c16_win c18_win 		///
 						g2_1 g2_2 g2_3 g2_4 g2_5 g2_6 g2_7 g2_8 g2_9 g2_10 g2_11 g2_12 g2_13 g2_14 g2_15	///	
 						q2_1_2_win q2_1_3 q2_1_4 q2_1_5 q2_1_6 q2_1_7 q2_1_8 q2_1_9 q2_1_10 q2_1_11 		///
 						q2_1_12 q2_1_13_win q2_1_14 q2_1_15 q2_1_16_win q2_1_17 q2_1_18_win q2_1_19_win 	///
@@ -202,32 +219,40 @@ foreach specification in between within spillovers full 			///
 	local prg_condition = "between ==1"
 	local trt_indicator = "beneficiaire"
 	local spec_prefix 	= "IAaS"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 	}
 	
 	if "`specification'" == "within"{
 	local prg_condition = "within ==1"
 	local trt_indicator = "program"
 	local spec_prefix 	= "IBaS"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 	}
 	
 	if "`specification'" == "spillovers"{
 	local prg_condition = "spillovers ==1"
 	local trt_indicator = "beneficiaire"
 	local spec_prefix 	= "ICbS"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 	}
 	
 	if "`specification'" == "full"{
 	local prg_condition = "full ==1"
 	local trt_indicator = "trt_full"
 	local spec_prefix 	= "ICfS"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 	}
 	
 	**********************************
@@ -237,32 +262,40 @@ foreach specification in between within spillovers full 			///
 	local prg_condition = "between ==1 & repondant_sex == 0"
 	local trt_indicator = "beneficiaire"
 	local spec_prefix 	= "IAaSw"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 	}
 	
 	if "`specification'" == "within_w"{
 	local prg_condition = "within ==1 & repondant_sex == 0"
 	local trt_indicator = "program"
 	local spec_prefix 	= "IBaSw"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 	}
 	
 	if "`specification'" == "spillovers_w"{
 	local prg_condition = "spillovers ==1 & repondant_sex == 0"
 	local trt_indicator = "beneficiaire"
 	local spec_prefix 	= "ICbSw"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 	}
 	
 	if "`specification'" == "full_w"{
 	local prg_condition = "full ==1 & repondant_sex == 0"
 	local trt_indicator = "trt_full"
 	local spec_prefix 	= "ICfSw"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
 	}
 	
 	**********************************
@@ -272,7 +305,9 @@ foreach specification in between within spillovers full 			///
 	local prg_condition = "between ==1 & repondant_sex == 1"
 	local trt_indicator = "beneficiaire"
 	local spec_prefix 	= "IAaSm"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
 							shocks social civic well_being 
 	}
 	
@@ -280,24 +315,30 @@ foreach specification in between within spillovers full 			///
 	local prg_condition = "within ==1 & repondant_sex == 1"
 	local trt_indicator = "program"
 	local spec_prefix 	= "IBaSm"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being 
 	}
 	
 	if "`specification'" == "spillovers_m"{
 	local prg_condition = "spillovers  ==1 & repondant_sex == 1"
 	local trt_indicator = "beneficiaire"
 	local spec_prefix 	= "ICbSm"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being 
 	}
 	
 	if "`specification'" == "full_m"{
 	local prg_condition = "full  ==1 & repondant_sex == 1"
 	local trt_indicator = "trt_full"
 	local spec_prefix 	= "ICfSm"
-	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being 
 	}
 	
 	**********************************
@@ -342,7 +383,7 @@ foreach specification in between within spillovers full 			///
 			* Create control mean of individual outcomes
 			
 			sum `indiv_outcomes' 					if `trt_indicator' == 0 & `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
-			pause
+			
 			
 			gen mean_`indiv_outcomes' = `r(mean)'	if `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
 			
@@ -389,7 +430,12 @@ foreach specification in between within spillovers full 			///
 	}
 	
 	* Label index 
-	
+
+	cap label variable `spec_prefix'home_assets				"Home assets"
+	cap label variable `spec_prefix'comms_assets			"Communication assets"
+	cap label variable `spec_prefix'productive_assets		"Productive assets"
+	cap label variable `spec_prefix'consumption_food		"Food consumtion"
+	cap label variable `spec_prefix'consumption_other		"Other consumption"
 	cap label variable `spec_prefix'lab_market_main			"Labor market"
 	*cap label variable `spec_prefix'lab_market_sec			"Labor market (other HH members)"
 	cap label variable `spec_prefix'eco_welfare				"Consumption expenditures"
@@ -401,8 +447,8 @@ foreach specification in between within spillovers full 			///
 	cap label variable `spec_prefix'civic					"Civic engagement"
 	cap label variable `spec_prefix'well_being				"Psychological well being"
 	cap label variable `spec_prefix'woman_empowerment		"Women's empowerment"
-	*label variable `spec_prefix'woman_bargain			"Women's empowerment and agency"
-	*label variable `spec_prefix'woman_violence			"Intimate partner violence"
+	cap label variable `spec_prefix'woman_bargain			"Women's empowerment and agency"
+	cap label variable `spec_prefix'woman_violence			"Intimate partner violence"
 	cap label variable `spec_prefix'shocks					"Economic shock"
 
 }
@@ -414,9 +460,9 @@ foreach specification in between within spillovers full 			///
 ********************************************************************************
 
 *delete temporary variables
-foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win5 c3_a_5_win5 c3_a_6_win5 c3_a_7_win5 	///
-						c3_a_8_win5 c3_a_9_win c3_a_10_win c3_a_11_win5 exp_food_win5 c4_win c5_win5 c6_win5 ///
-						c7_win5 c8_win5 c9_win c11_win c12_win c13_win c14_win c15_win c16_win c18_win 		///
+foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 	///
+						c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win  c4_win c5_win c6_win ///
+						c7_win c8_win c9_win c11_win c12_win c13_win c14_win c15_win c16_win c18_win 		///
 						g2_1 g2_2 g2_3 g2_4 g2_5 g2_6 g2_7 g2_8 g2_9 g2_10 g2_11 g2_12 g2_13 g2_14 g2_15	///	
 						q2_1_2_win q2_1_3 q2_1_4 q2_1_5 q2_1_6 q2_1_7 q2_1_8 q2_1_9 q2_1_10 q2_1_11 			///
 						q2_1_12 q2_1_13_win q2_1_14 q2_1_15 q2_1_16_win q2_1_17 q2_1_18_win q2_1_19_win 	///
@@ -467,64 +513,64 @@ foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win5 c3_a_5_win
 
 	
 label variable futur_services		"Aspire to work in service"
-label variable emp_futur_cb_win5	"Income aspiration"
+label variable emp_futur_cb_win	"Income aspiration"
 label variable emploi				"Had an IGA during the last 4 weeks"
 label variable tspent_main			"Days spent in main IGA"
-label variable earned_main_win5		"Wage from main activity last month"
+label variable earned_main_win		"Wage from main activity last month"
 label variable employedhh			"HH head main IGA"
-label variable earnedhh_win5		"HH head main income last month"
+label variable earnedhh_win		"HH head main income last month"
 label variable paidjobhh			"HH head second IGA"
-label variable earnedoth_win5		"Other HH member income last month"
+label variable earnedoth_win		"Other HH member income last month"
 label variable paidjoboth			"HH members IGA"
 label variable sec_empl				"Other IGA"
-label variable tspent_sec_win5		"Days spent in other IGA"
-label variable earned_sec_win5		"Wage from other IGA activity last month"
-label variable c3_a_1_win5 	"Bread, flour..."
-label variable c3_a_2_win5 	"Pasta, rice..."
-label variable c3_a_3_win5 	"Fish"
-label variable c3_a_4_win5 	"Meat"
-label variable c3_a_5_win5 	"Eggs and diary"
-label variable c3_a_6_win5 	"Vegetables"
-label variable c3_a_7_win5 	"Fruits"
-label variable c3_a_8_win5 	"Oil"
-label variable c3_a_9_win5 	"Water and soda"
-label variable c3_a_10_win5 "Seasonning"
-label variable c3_a_11_win5 "Tobacco, coffee and tea"
-label variable c4_win5 		"Rent"
-label variable c5_win5 		"Electricity, gaz, petrol..."
-label variable c6_win5 		"Phone"
-label variable c7_win5 		"Soap"
-label variable c8_win5 		"Transport"
-label variable c9_win5 		"Hairdresser"
-label variable c11_win5 	"household small repairs"
-label variable c12_win5 	"Medical expenses"
-label variable c13_win5 	"Education expenses"
-label variable c14_win5 	"Clothes"
-label variable c15_win5 	"Assets"
-label variable c16_win5 	"Taxes"
-label variable c18_win5 	"Festivity"
-label variable q2_1_2_win5 			"Stove"
-label variable q2_1_3_win5 			"Fridge"
-label variable q2_1_4_win5 			"Heating"
-label variable q2_1_5_win5 			"Air conditionner"
-label variable q2_1_6_win5 			"Washing machine"
-label variable q2_1_7_win5 			"Bed"
-label variable q2_1_8_win5 			"Shelf"
-label variable q2_1_9_win5 			"Automobile"
-label variable q2_1_10_win5 		"Moto"
-label variable q2_1_11_win5 		"Bike"
-label variable q2_1_12_win5 		"Television"
-label variable q2_1_13_win5 		"Satellite"
-label variable q2_1_14_win5 		"Camera"
-label variable q2_1_15_win5			"Radio"
-label variable q2_1_16_win5 		"Phone"
-label variable q2_1_17_win5 		"Computer"
-label variable q2_1_18_win5 		"Sheep"
-label variable q2_1_19_win5 		"Poultry"
-label variable q2_1_20_win5 		"Hives"
-label variable q2_1_21_win5 		"Cattle"
-label variable q2_1_22_win5 		"Horses"
-label variable q2_1_23_win5 		"Dog or cat"
+label variable tspent_sec_win		"Days spent in other IGA"
+label variable earned_sec_win		"Wage from other IGA activity last month"
+label variable c3_a_1_win 	"Bread, flour..."
+label variable c3_a_2_win 	"Pasta, rice..."
+label variable c3_a_3_win 	"Fish"
+label variable c3_a_4_win 	"Meat"
+label variable c3_a_5_win 	"Eggs and diary"
+label variable c3_a_6_win 	"Vegetables"
+label variable c3_a_7_win 	"Fruits"
+label variable c3_a_8_win 	"Oil"
+label variable c3_a_9_win 	"Water and soda"
+label variable c3_a_10_win "Seasonning"
+label variable c3_a_11_win "Tobacco, coffee and tea"
+label variable c4_win 		"Rent"
+label variable c5_win 		"Electricity, gaz, petrol..."
+label variable c6_win 		"Phone"
+label variable c7_win 		"Soap"
+label variable c8_win 		"Transport"
+label variable c9_win 		"Hairdresser"
+label variable c11_win 	"household small repairs"
+label variable c12_win 	"Medical expenses"
+label variable c13_win 	"Education expenses"
+label variable c14_win 	"Clothes"
+label variable c15_win 	"Assets"
+label variable c16_win 	"Taxes"
+label variable c18_win 	"Festivity"
+label variable q2_1_2_win 			"Stove"
+label variable q2_1_3_win 			"Fridge"
+label variable q2_1_4_win 			"Heating"
+label variable q2_1_5_win 			"Air conditionner"
+label variable q2_1_6_win 			"Washing machine"
+label variable q2_1_7_win 			"Bed"
+label variable q2_1_8_win 			"Shelf"
+label variable q2_1_9_win 			"Automobile"
+label variable q2_1_10_win 		"Moto"
+label variable q2_1_11_win 		"Bike"
+label variable q2_1_12_win 		"Television"
+label variable q2_1_13_win 		"Satellite"
+label variable q2_1_14_win 		"Camera"
+label variable q2_1_15_win			"Radio"
+label variable q2_1_16_win 		"Phone"
+label variable q2_1_17_win 		"Computer"
+label variable q2_1_18_win 		"Sheep"
+label variable q2_1_19_win 		"Poultry"
+label variable q2_1_20_win 		"Hives"
+label variable q2_1_21_win 		"Cattle"
+label variable q2_1_22_win 		"Horses"
+label variable q2_1_23_win 		"Dog or cat"
 label variable mur_dummy 			"Cement or brick wall"
 label variable toit_dummy 			"Cement or tiles roof"
 label variable proprietaire_dum1 	"Proprietary: house"
@@ -609,13 +655,17 @@ label variable intrahh_7	"Husband doesn't decide by itself how its income is use
 label variable intrahh_11	"Income not being confiscated"
 label variable emploiw		"Women IGA"
 label variable epargne_dette 			"Contract debt last 12 month"
-label variable epargne_dette_cb_win5 	"Actual amount of debt"
+label variable epargne_dette_cb_win 	"Actual amount of debt"
 label variable epargne  				"Did you save money during the last 12 months"
-label variable epargne_cb 				"Amount saved during the last 12 months"
+label variable epargne_cb_win 			"Amount saved during the last 12 months"
 label variable epargne_pret				"Did you lend money during the last 12 months"								
 
 
-local Control_ALL   hhsize drepondant_mat h_18_65 f_18_65 trauma_abus q0_1_c q0_3_c q2_2_c q2_3_c q2_4_c
+local Control_ALL   hhsize drepondant_mat h_18_65 f_18_65 trauma_abus q0_1_c q0_3_c q2_2_c q2_3_c q2_4_c 	///
+					negevent_1 negevent_2 negevent_3 negevent_4 											///
+					negevent_5 negevent_6 negevent_7      													///
+					negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      							///
+					posevent_4 posevent_5 posevent_6 posevent_7 posevent_8
 
 	* Imput missing control variable by 0 and add indicator for missing 
 	
@@ -634,6 +684,7 @@ local Control_ALL   hhsize drepondant_mat h_18_65 f_18_65 trauma_abus q0_1_c q0_
 									`variables' ==.d 
 	}
 
+	
 	
 save "$stata/enquete_All3", replace
 

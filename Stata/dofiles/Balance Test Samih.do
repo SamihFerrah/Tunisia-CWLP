@@ -21,7 +21,12 @@ local balance_indiv 	repondant_age repondant_sex repondant_mat repondant_educ		/
 						formation origine_naissance origine_naissance_bis trauma_abus	///
 						
 local balance_coll		q0_1_c q0_2_c q0_3_c q2_1_c q2_2_c q2_3_c q2_4_c q2_5_c			///
-						q2_6_c // q2_15_c q2_13_c
+						q2_6_c  negevent_1 negevent_2 negevent_3 negevent_4 			///
+						negevent_5 negevent_6 negevent_7      							///
+						negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      	///
+						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 
+
+
 
 ********************************************************************************
 ********************************************************************************						
@@ -224,12 +229,29 @@ desc `balance_coll'
 	label var q2_4_c "Main activity: Industry"
 	label var q2_5_c "Main activity: Trade"
 	label var q2_6_c "Main activity: Other services"
+	label var negevent_1 "Drought"	
+	label var negevent_2 "Flood"
+	label var negevent_3 "Fast increase in commodity prices"
+	label var negevent_4 "Large loss of work"	
+	label var negevent_5 "Crop parasites"
+	label var negevent_6 "Livestock illness"
+	label var negevent_7 "Human epidemic" 
+	label var negevent_8 "Electricity cut off"
+	label var negevent_9 "Other bad events"
+	label var posevent_1 "Development project"
+	label var posevent_2 "Electrification of the IMADA"
+	label var posevent_3 "New school" 
+	label var posevent_4 "New road"
+	label var posevent_5 "New health centre"
+	label var posevent_6 "New employment opportunities"
+	label var posevent_7 "Improved transport services"
+	label var posevent_8 "Other good events"
 	
 	* Balance test at the individual level 
 	
 	local count_out = 0 
 	
-	mat def pvalue = J(9,1,.)
+	mat def pvalue = J(26,1,.)
 	
 	foreach covariates in `balance_coll'{
 	
@@ -252,7 +274,7 @@ desc `balance_coll'
 	
 	* Store significance level based on p-value
 	
-	forvalue i = 1/9{
+	forvalue i = 1/26{
 		
 		* Between specification
 		
@@ -294,6 +316,40 @@ desc `balance_coll'
 	" `l_8'			& 	`c_1_7'`s_1_8' 		& `pval_1_8' & `n_1_8' 		\\ " 		_n ///			 		
 	" 				&	 (`se_1_8') 		& 			 &				\\ "		_n ///								
 	" `l_9'			& 	`c_1_9'`s_1_9' 		& `pval_1_9' & `n_1_9' 		\\ " 		_n ///			 		
-	" 				&	 (`se_1_9') 		& 			 &				\\ "		_n ///															
+	" 				&	 (`se_1_9') 		& 			 &				\\ "		_n ///
+	" `l_10'		& 	`c_1_10'`s_1_10' 	& `pval_1_10' 	& `n_1_10' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_10') 		& 			  	&				\\ "		_n ///
+	" `l_11'		& 	`c_1_11'`s_1_11' 	& `pval_1_11' 	& `n_1_11' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_11') 		& 			  	&				\\ "		_n ///	
+	" `l_12'		& 	`c_1_12'`s_1_12' 	& `pval_1_12' 	& `n_1_12' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_12') 		& 			  	&				\\ "		_n ///	
+	" `l_13'		& 	`c_1_13'`s_1_13' 	& `pval_1_13' 	& `n_1_13' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_13') 		& 			  	&				\\ "		_n ///	
+	" `l_14'		& 	`c_1_14'`s_1_14' 	& `pval_1_14' 	& `n_1_14' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_14') 		& 			  	&				\\ "		_n ///	
+	" `l_15'		& 	`c_1_15'`s_1_15' 	& `pval_1_15' 	& `n_1_15' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_15') 		& 			  	&				\\ "		_n ///	
+	" `l_16'		& 	`c_1_16'`s_1_16' 	& `pval_1_16' 	& `n_1_16' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_16') 		& 			  	&				\\ "		_n ///	
+	" `l_17'		& 	`c_1_17'`s_1_17' 	& `pval_1_17' 	& `n_1_17' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_17') 		& 			  	&				\\ "		_n ///	
+	" `l_18'		& 	`c_1_18'`s_1_18' 	& `pval_1_18' 	& `n_1_18' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_18') 		& 			  	&				\\ "		_n ///	
+	" `l_19'		& 	`c_1_19'`s_1_19' 	& `pval_1_19' 	& `n_1_19' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_19') 		& 			  	&				\\ "		_n ///	
+	" `l_20'		& 	`c_1_20'`s_1_20' 	& `pval_1_20' 	& `n_1_20' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_20') 		& 			  	&				\\ "		_n ///
+	" `l_21'		& 	`c_1_21'`s_1_21' 	& `pval_1_21' 	& `n_1_21' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_21') 		& 			  	&				\\ "		_n ///
+	" `l_22'		& 	`c_1_22'`s_1_22' 	& `pval_1_22' 	& `n_1_22' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_22') 		& 			  	&				\\ "		_n ///
+	" `l_23'		& 	`c_1_23'`s_1_23' 	& `pval_1_23' 	& `n_1_23' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_23') 		& 			  	&				\\ "		_n ///
+	" `l_24'		& 	`c_1_24'`s_1_24' 	& `pval_1_24' 	& `n_1_24' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_24') 		& 			  	&				\\ "		_n ///
+	" `l_25'		& 	`c_1_25'`s_1_25' 	& `pval_1_25' 	& `n_1_25' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_25') 		& 			  	&				\\ "		_n ///
+	" `l_26'		& 	`c_1_26'`s_1_26' 	& `pval_1_26' 	& `n_1_26' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_26') 		& 			  	&				\\ "		_n ///
 	"\hline \end{tabular}												   "		_n 
 	file close Table		
