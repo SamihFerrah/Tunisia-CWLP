@@ -134,7 +134,7 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 	"\resizebox{\textwidth}{!}{\input{Main/Table_Balance_Individual.tex}}"		_n ///
 	"\end{table}" 																_n ///
 	"\begin{table}[H]\centering\caption{Community balance test}" 				_n ///
-	"\resizebox{\textwidth}{!}{\input{Main/Table_Balance_Community.tex}}"		_n ///
+	"\scalebox{0.80}{\input{Main/Table_Balance_Community.tex}}"		_n ///
 	"\end{table}" 																_n ///
 	"\pagebreak"																_n ///
 	"\section{Main Table}"														_n ///
@@ -142,14 +142,14 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 	"\resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}"					_n ///
 	"\end{table}" 																_n ///
 	"\begin{table}[H]\centering\caption{Main results}" 							_n ///
-	"\resizebox{\textwidth}{!}{\input{Main/Table_Index_Full.tex}}"				_n ///
+	"\scalebox{0.80}{\input{Main/Table_Index_Full.tex}}"				_n ///
 	"\end{table}" 																_n ///
 	"\pagebreak"																_n ///
 	"\begin{table}[H]\centering\caption{Extended main results}" 				_n ///
 	"\resizebox{\textwidth}{!}{\input{Main/Table_Index_Extended.tex}}"			_n ///
 	"\end{table}" 																_n ///
 	"\begin{table}[H]\centering\caption{Extended main results}" 				_n ///
-	"\resizebox{\textwidth}{!}{\input{Main/Table_Index_Full_Extended.tex}}"		_n ///
+	"\scalebox{0.60}{\input{Main/Table_Index_Full_Extended.tex}}"		_n ///
 	"\end{table}" 																_n ///
 	"\pagebreak"																_n
 	

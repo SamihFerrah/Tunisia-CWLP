@@ -493,6 +493,7 @@ foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win c3_a_5_win 
 						drop `var'bis 
 		}
 
+/*		
 	local sign 		emploi_comp_inut conflit_dispute_in conflit_dispute_out migration_cm_q1 migration_q1 	///
 					security_dummy securite_1 securite_2 securite_3 securite_4 securite_5  	///
 					securite_6 	  	///
@@ -510,7 +511,7 @@ foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win c3_a_5_win 
 	rename 	`signvar'	  	`signvar'_convert 
 	rename	`signvar'I 		`signvar'
 	}
-
+*/
 	
 label variable futur_services		"Aspire to work in service"
 label variable emp_futur_cb_win	"Income aspiration"
@@ -636,19 +637,19 @@ label variable psycho_depress4		"No loss of appetite"
 label variable psycho_depress3		"Not feeling irritable"
 label variable psycho_depress2		"No loss of interest for activity"
 label variable psycho_depress1		"Feeling joy"
-label variable violence_1_2 		"Humiliated"
-label variable violence_1_3 		"Intimidated"
-label variable violence_1_4 		"Threatened"
-label variable violence_1_5 		"Threatened relatives"
-label variable violence_1_6 		"Slapped"
-label variable violence_1_7 		"Pushed"
-label variable violence_1_8 		"Punched (hand)"
-label variable violence_1_9 		"Punched (feet)"
-label variable violence_1_10 		"Burned or strangled"
-label variable violence_1_11 		"Threatened with a knife"
-label variable violence_1_16 		"Prevented from going to work"
-label variable violence_1_17 		"Stole your money"
-label variable violence_1_18 		"Laid off"
+label variable violence_1_2 		"Have not been Humiliated"
+label variable violence_1_3 		"Have not been Intimidated"
+label variable violence_1_4 		"Have not been Threatened"
+label variable violence_1_5 		"Have not been Threatened relatives"
+label variable violence_1_6 		"Have not been Slapped"
+label variable violence_1_7 		"Have not been Pushed"
+label variable violence_1_8 		"Have not been Punched (hand)"
+label variable violence_1_9 		"Have not been Punched (feet)"
+label variable violence_1_10 		"Have not been Burned or strangled"
+label variable violence_1_11 		"Have not been Threatened with a knife"
+label variable violence_1_16 		"Have not been Prevented from going to work"
+label variable violence_1_17 		"Have not been Stole your money"
+label variable violence_1_18 		"Have not been Laid off"
 label variable intrahh_1	"Earn income"
 label variable intrahh_2	"Decide by self how own's income is used"
 label variable intrahh_7	"Husband doesn't decide by itself how its income is used"
@@ -659,13 +660,26 @@ label variable epargne_dette_cb_win 	"Actual amount of debt"
 label variable epargne  				"Did you save money during the last 12 months"
 label variable epargne_cb_win 			"Amount saved during the last 12 months"
 label variable epargne_pret				"Did you lend money during the last 12 months"								
-
+pause
 
 local Control_ALL   hhsize drepondant_mat h_18_65 f_18_65 trauma_abus q0_1_c q0_3_c q2_2_c q2_3_c q2_4_c 	///
 					negevent_1 negevent_2 negevent_3 negevent_4 											///
-					negevent_5 negevent_6 negevent_7      													///
+					negevent_5 negevent_6 negevent_7  q0_2_c   												///
 					negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      							///
 					posevent_4 posevent_5 posevent_6 posevent_7 posevent_8
+
+
+/*					
+foreach variables of local Control_ALL{
+di in red "`variables'"
+
+tab imada if 	`variables' ==.  | ///
+										`variables' ==.a | ///
+										`variables' ==.n | ///
+										`variables' ==.d 
+pause
+}
+*/
 
 	* Imput missing control variable by 0 and add indicator for missing 
 	

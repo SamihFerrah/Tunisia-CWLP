@@ -18,10 +18,10 @@ clear
 
 local balance_indiv 	repondant_age repondant_sex repondant_mat repondant_educ		///
 						hhsize h_18_65 f_18_65 jeunes_lireecrire emploi_2013_a			///
-						formation origine_naissance origine_naissance_bis trauma_abus	///
+						formation origine_naissance origine_naissance_bis 	
 						
-local balance_coll		q0_1_c q0_2_c q0_3_c q2_1_c q2_2_c q2_3_c q2_4_c q2_5_c			///
-						q2_6_c  negevent_1 negevent_2 negevent_3 negevent_4 			///
+local balance_coll		q0_1_c q0_2_c q0_3_c 											///
+						negevent_1 negevent_2 negevent_3 negevent_4 					///
 						negevent_5 negevent_6 negevent_7      							///
 						negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      	///
 						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 
@@ -66,7 +66,7 @@ desc `balance_coll'
 	
 	local count_out = 0 
 	
-	mat def pvalue = J(15,3,.)
+	mat def pvalue = J(12,3,.)
 	
 	foreach covariates in `balance_indiv' {
 		
@@ -113,7 +113,7 @@ desc `balance_coll'
 	
 	local count_outcomes = 1
 	
-	forvalue i = 1/15{
+	forvalue i = 1/12{
 		
 		* Between specification
 		
@@ -199,10 +199,13 @@ desc `balance_coll'
 	" 				&	 (`se_1_11') & &									&   	(`se_2_11') & &								&	(`se_3_11') & &						\\ " 	_n ///
 	" `l_12'			& 	`c_1_12'`s_1_12' 		& `pval_1_12' & `n_1_12' 		& 	`c_2_12'`s_2_12' & `pval_2_12' & `n_2_12'			& `c_3_12'`s_3_12' & `pval_3_12' & `n_3_12' 				\\ " 	_n ///
 	" 				&	 (`se_1_12') & &									&   	(`se_2_12') & &								&	(`se_3_12') & &						\\ " 	_n ///
+	"\hline \end{tabular}														 					   "	
+	file close Table	
+	
+/*
 	" `l_13'			& 	`c_1_6'`s_1_13' 		& `pval_1_13' & `n_1_13' 		& 	`c_2_13'`s_2_13' & `pval_2_13' & `n_2_13'			& `c_3_6'`s_3_6' & `pval_3_13' & `n_3_13' 				\\ " 	_n ///
 	" 				&	 (`se_1_13') & &									&   	(`se_2_13') & &								&	(`se_3_13') & &						\\ " 	_n ///
-	"\hline \end{tabular}														 					   "	
-	file close Table		
+*/
 }
 
 ********************************************************************************
@@ -251,7 +254,7 @@ desc `balance_coll'
 	
 	local count_out = 0 
 	
-	mat def pvalue = J(26,1,.)
+	mat def pvalue = J(20,1,.)
 	
 	foreach covariates in `balance_coll'{
 	
@@ -261,7 +264,7 @@ desc `balance_coll'
 		
 		* Between Specification 
 		
-		reg `covariates' beneficiaire 	if between == 1, vce(cluster imada)
+		reg `covariates' beneficiaire missing_`covariates' 	if between == 1, vce(cluster imada)
 		
 			local c_1_`count_out' 	: di%12.3f _b[beneficiaire]
 			local se_1_`count_out' 	: di%12.3f _se[beneficiaire]
@@ -274,7 +277,7 @@ desc `balance_coll'
 	
 	* Store significance level based on p-value
 	
-	forvalue i = 1/26{
+	forvalue i = 1/20{
 		
 		* Between specification
 		
@@ -339,6 +342,11 @@ desc `balance_coll'
 	" 				&	 (`se_1_19') 		& 			  	&				\\ "		_n ///	
 	" `l_20'		& 	`c_1_20'`s_1_20' 	& `pval_1_20' 	& `n_1_20' 		\\ " 		_n ///			 		
 	" 				&	 (`se_1_20') 		& 			  	&				\\ "		_n ///
+	"\hline \end{tabular}												   "		_n 
+	file close Table		
+
+	/*
+	
 	" `l_21'		& 	`c_1_21'`s_1_21' 	& `pval_1_21' 	& `n_1_21' 		\\ " 		_n ///			 		
 	" 				&	 (`se_1_21') 		& 			  	&				\\ "		_n ///
 	" `l_22'		& 	`c_1_22'`s_1_22' 	& `pval_1_22' 	& `n_1_22' 		\\ " 		_n ///			 		
@@ -351,5 +359,5 @@ desc `balance_coll'
 	" 				&	 (`se_1_25') 		& 			  	&				\\ "		_n ///
 	" `l_26'		& 	`c_1_26'`s_1_26' 	& `pval_1_26' 	& `n_1_26' 		\\ " 		_n ///			 		
 	" 				&	 (`se_1_26') 		& 			  	&				\\ "		_n ///
-	"\hline \end{tabular}												   "		_n 
-	file close Table		
+	
+	*/

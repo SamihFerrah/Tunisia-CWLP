@@ -26,22 +26,22 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 * Controls : ADJUSTED TO REFLECT THE ONES THAT ARE NOT BALANCED.
 
 	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 				  
 	local ctrl_Ba 
 	
 	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 					
 global summary_stat = 0
-global main 		= 0
+global main 		= 1
 global imada_fe		= 1
-global hete_woman	= 0
-global hete_men		= 0
+global hete_woman	= 1
+global hete_men		= 1
 
 ********************************************************************************
 ********************************************************************************
@@ -556,7 +556,7 @@ if $imada_fe == 1 {
 	esttab between within spill1 full , se keep (beneficiaire programs NbHabitants) ///
 								           order(beneficiaire programs NbHabitants)
 	
-	pause 
+
 	
 	restore 
 }
@@ -722,14 +722,14 @@ use "$stata/enquete_All3", clear
 * Controls : ADJUSTED TO REFLECT THE ONES THAT ARE NOT BALANCED.
 
 	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 				  
 	local ctrl_Ba 
 	
 	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 					
@@ -1020,14 +1020,14 @@ if $hete_men == 1{
 * Controls : ADJUSTED TO REFLECT THE ONES THAT ARE NOT BALANCED.
 
 	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 				  
 	local ctrl_Ba 
 	
 	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 					

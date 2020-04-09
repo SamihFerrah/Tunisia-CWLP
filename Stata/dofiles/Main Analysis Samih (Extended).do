@@ -20,14 +20,14 @@ local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare consumption_food
 
 	
 	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 				  
 	local ctrl_Ba 
 	
 	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 					

@@ -95,19 +95,18 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 							
 * Control variables
 
-local ctrl_Aa 				hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+local ctrl_Aa 		hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
-				  
 local ctrl_Ba 
 	
-local ctrl_Cb 				hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					trauma_abus missing_trauma_abus negevent_4 missing_negevent_4									///	
+local ctrl_Cb 		hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+					negevent_4 missing_negevent_4									///	
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 	
-global bet_with_spill = 0
+global bet_with_spill = 1
 
 ********************************************************************************
 ********************************************************************************
@@ -200,9 +199,6 @@ use "$stata/enquete_All3", clear
 		FDR_CWLP_2																// Adjust p-value for within specification
 		FDR_CWLP_3																// Adjust p-value for spillovers specification
 		
-		if "`index'" == "eco_welfare"{
-		pause
-		}
 		
 		* Compute stars 
 		
@@ -260,9 +256,7 @@ use "$stata/enquete_All3", clear
 			di in red "`s_3_`i''"
 		}
 		
-		if "`index'" == "eco_welfare"{
-		pause
-		}
+
 
 	* Export tables
 	forvalue i = 1/`cov_num'{
@@ -362,18 +356,11 @@ use "$stata/enquete_All3", clear
 		global pvalue "pvalue"
 	
 		* Adjust P-value
-		if "`index'" == "eco_welfare"{
-		mat list pvalue
-		pause
-		}
 		
 		FDR_CWLP_1																// Adjust p-value for between specification
 		FDR_CWLP_2																// Adjust p-value for within specification
 		FDR_CWLP_3																// Adjust p-value for spillovers specification
-		
-		if "`index'" == "eco_welfare"{
-		pause
-		}
+
 		* Compute stars 
 		
 		
@@ -400,7 +387,6 @@ use "$stata/enquete_All3", clear
 			}
 			
 			di in red "`pval_1_`i'' `s_1_`i''"
-			pause
 		
 			* Within Specification 
 		
@@ -437,9 +423,7 @@ use "$stata/enquete_All3", clear
 			}
 		}	
 	
-	if "`index'" == "eco_welfare"{
-	pause
-	}
+
 	* Export Table 
 
 	forvalue i = 1/`cov_num'{
