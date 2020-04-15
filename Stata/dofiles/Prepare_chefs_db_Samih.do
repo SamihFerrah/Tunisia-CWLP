@@ -7,7 +7,14 @@ do "$do/import_chef"
 
 sort imada
 ren imada lieu_entrevue
-merge m:1 lieu_entrevue using "$stata/benef_imada"
+preserve 
+	import excel using "$raw/benef_imada.xlsx", first clear
+	rename imada lieu_entrevue
+	tempfile 	benef 
+	sa		   `benef'
+restore 
+
+merge m:1 lieu_entrevue using `benef'
 ren benef beneficiaire
 
 /*tempo*/
@@ -26,5 +33,16 @@ foreach var of varlist deviceid-repondant_name key submissiondate {
 ren `var' vil_`var'
 }
 
+preserve 
+	import excel using "$raw/Previous_PWP.xlsx", first clear
+	keep imada prev_PWP
+	tempfile imada_code
+	sa		`imada_code'
+restore 
+
+merge m:1 imada using `imada_code'
+drop _merge 
+
+label var prev_PWP "Previous PWP"
 
 save "$stata/tunisia_chefs_benef", replace

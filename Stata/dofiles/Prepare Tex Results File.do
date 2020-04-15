@@ -110,7 +110,7 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 	file close tex_histo
 	
 	file open tex_histo using "Tunisia Result.tex", text write append
-	file write tex_histo "\listoffigures"										_n
+	file write tex_histo "\tableofcontents"										_n
 	file close tex_histo
 	
 	file open tex_histo using "Tunisia Result.tex", text write append

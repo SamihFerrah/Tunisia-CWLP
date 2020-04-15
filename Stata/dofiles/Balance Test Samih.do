@@ -17,14 +17,14 @@ clear
 
 
 local balance_indiv 	repondant_age repondant_sex repondant_mat repondant_educ		///
-						hhsize h_18_65 f_18_65 jeunes_lireecrire emploi_2013_a			///
+						hhsize adult_num jeunes_lireecrire emploi_2013_a				///
 						formation origine_naissance origine_naissance_bis 	
 						
 local balance_coll		q0_1_c q0_2_c q0_3_c 											///
 						negevent_1 negevent_2 negevent_3 negevent_4 					///
 						negevent_5 negevent_6 negevent_7      							///
 						negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      	///
-						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 
+						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 prev_PWP
 
 
 
@@ -40,12 +40,14 @@ desc `balance_coll'
 
 	* Some re-labelling 
 	
+	/*
 	* Drop label
 	foreach covariates in `balance_indiv'{
 		
 		label var `covariates' drop
 		
 	}
+	*/
 	
 	label var repondant_age			"Age"
 	label var repondant_sex			"Male"
@@ -66,7 +68,7 @@ desc `balance_coll'
 	
 	local count_out = 0 
 	
-	mat def pvalue = J(12,3,.)
+	mat def pvalue = J(11,3,.)
 	
 	foreach covariates in `balance_indiv' {
 		
@@ -113,13 +115,17 @@ desc `balance_coll'
 	
 	local count_outcomes = 1
 	
-	forvalue i = 1/12{
+	forvalue i = 1/11{
 		
 		* Between specification
 		
 		local pval1 = pvalue[`i',1]
 		
 		local pval_1_`i' : di%12.3f `pval1'												// Store q-value value
+		
+		local s_1_`i' ""
+		local s_2_`i' ""
+		local s_3_`i' ""
 		
 		if `pval_1_`i'' < 0.1{
 			local s_1_`i' "*"
@@ -197,12 +203,14 @@ desc `balance_coll'
 	" 				&	 (`se_1_10') & &									&   	(`se_2_10') & &								&	(`se_3_10') & &						\\ " 	_n ///
 	" `l_11'			& 	`c_1_11'`s_1_11' 		& `pval_1_11' & `n_1_11'		& 	`c_2_11'`s_2_11' & `pval_2_11' & `n_2_11'			& `c_3_11'`s_3_11' & `pval_3_11' & `n_3_11' 				\\ " 	_n ///
 	" 				&	 (`se_1_11') & &									&   	(`se_2_11') & &								&	(`se_3_11') & &						\\ " 	_n ///
-	" `l_12'			& 	`c_1_12'`s_1_12' 		& `pval_1_12' & `n_1_12' 		& 	`c_2_12'`s_2_12' & `pval_2_12' & `n_2_12'			& `c_3_12'`s_3_12' & `pval_3_12' & `n_3_12' 				\\ " 	_n ///
-	" 				&	 (`se_1_12') & &									&   	(`se_2_12') & &								&	(`se_3_12') & &						\\ " 	_n ///
 	"\hline \end{tabular}														 					   "	
 	file close Table	
 	
 /*
+	" `l_12'			& 	`c_1_12'`s_1_12' 		& `pval_1_12' & `n_1_12' 		& 	`c_2_12'`s_2_12' & `pval_2_12' & `n_2_12'			& `c_3_12'`s_3_12' & `pval_3_12' & `n_3_12' 				\\ " 	_n ///
+	" 				&	 (`se_1_12') & &									&   	(`se_2_12') & &								&	(`se_3_12') & &						\\ " 	_n ///
+		" `l_13'			& 	`c_1_13'`s_1_13' 		& `pval_1_13' & `n_1_13' 		& 	`c_2_13'`s_2_13' & `pval_2_13' & `n_2_13'			& `c_3_13'`s_3_13' & `pval_3_13' & `n_3_13' 				\\ " 	_n ///
+	" 				&	 (`se_1_13') & &									&   	(`se_2_13') & &								&	(`se_3_13') & &						\\ " 	_n ///
 	" `l_13'			& 	`c_1_6'`s_1_13' 		& `pval_1_13' & `n_1_13' 		& 	`c_2_13'`s_2_13' & `pval_2_13' & `n_2_13'			& `c_3_6'`s_3_6' & `pval_3_13' & `n_3_13' 				\\ " 	_n ///
 	" 				&	 (`se_1_13') & &									&   	(`se_2_13') & &								&	(`se_3_13') & &						\\ " 	_n ///
 */
@@ -215,14 +223,15 @@ desc `balance_coll'
 ********************************************************************************						
 	
 	* Some re-labelling 
-	
+	/*
 	* Drop label
 	foreach covariates in `balance_coll'{
 		
 		label  var `covariates' drop
 		
 	}
-						
+	*/
+	
 	label var q0_1_c "River or lake"
 	label var q0_2_c "Forest"
 	label var q0_3_c "Mountain"
@@ -254,7 +263,7 @@ desc `balance_coll'
 	
 	local count_out = 0 
 	
-	mat def pvalue = J(20,1,.)
+	mat def pvalue = J(21,1,.)
 	
 	foreach covariates in `balance_coll'{
 	
@@ -277,7 +286,7 @@ desc `balance_coll'
 	
 	* Store significance level based on p-value
 	
-	forvalue i = 1/20{
+	forvalue i = 1/21{
 		
 		* Between specification
 		
@@ -285,6 +294,8 @@ desc `balance_coll'
 		
 		local pval_1_`i' : di%12.3f `pval1'												// Store q-value value
 		
+		local s_1_`i' ""
+
 		if `pval_1_`i'' < 0.1{
 			local s_1_`i' "*"
 		}
@@ -342,6 +353,8 @@ desc `balance_coll'
 	" 				&	 (`se_1_19') 		& 			  	&				\\ "		_n ///	
 	" `l_20'		& 	`c_1_20'`s_1_20' 	& `pval_1_20' 	& `n_1_20' 		\\ " 		_n ///			 		
 	" 				&	 (`se_1_20') 		& 			  	&				\\ "		_n ///
+	" `l_21'		& 	`c_1_21'`s_1_21' 	& `pval_1_21' 	& `n_1_21' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_21') 		& 			  	&				\\ "		_n ///
 	"\hline \end{tabular}												   "		_n 
 	file close Table		
 

@@ -80,12 +80,14 @@ global import_individual		= 0
 global construct_individual		= 0
 global import_community			= 0 
 global construct_community		= 0
-global construct_analysis		= 1
+global construct_analysis		= 0
 global codebook_				= 0
 global sum_stat					= 0
+global balance 					= 0
 global desc_index				= 1
 global main_table				= 1
 global indiv_reg				= 1
+global heterogeneity			= 1
 
 ********************************************************************************
 ********************************************************************************
@@ -146,6 +148,11 @@ if $codebook_ == 1{
 	do "$git_tunisia/dofiles/Codebook.do"
 }
 
+* Produce balance test 
+if $balance == 1{
+	do "$git_tunisia/dofiles/Balance Test Samih.do"
+}
+ 
 * Produce summary statistics of outcomes
 if $sum_stat == 1{
 	do "$git_tunisia/dofiles/Summary Statistics.do"
@@ -165,6 +172,11 @@ if $main_table == 1{
 * Produce Individual outcomes regression tables 
 if $indiv_reg ==1{
 	do "$git_tunisia/dofiles/Individual Regression.do"
+}
+
+* Produce individual outcomes regression tables 
+if $heterogeneity == 1{
+	do "$git_tunisia/dofiles/Heterogeneity Samih.do"
 }
 
 * Prepare Tex Results File 

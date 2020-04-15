@@ -15,16 +15,14 @@ local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare assets credit_ac
 * Controls : ADJUSTED TO REFLECT THE ONES THAT ARE NOT BALANCED.
 
 	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					h_18_65 missing_h_18_65  f_18_65 missing_f_18_65  trauma_abus missing_trauma_abus 				///
-					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c  missing_q2_3_c	///
-					q2_4_c  missing_q2_4_c
+					adult_num missing_adult_num 																	///
+					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
 				  
 	local ctrl_Ba 
 	
 	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
-					h_18_65 missing_h_18_65  f_18_65 missing_f_18_65  trauma_abus missing_trauma_abus 				///
-					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c  missing_q2_3_c	///
-					q2_4_c  missing_q2_4_c
+					adult_num missing_adult_num 																	///
+					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
 					
 
 ********************************************************************************
@@ -55,6 +53,8 @@ use "$stata/enquete_All3", clear
 
 	foreach outcome in `Index_ALL' {
 
+	preserve
+	
 		if "`outcome'" == "woman_violence" | "`outcome'" == "woman_bargain"{
 			keep if repondant_sex == 0
 		}
@@ -133,8 +133,9 @@ use "$stata/enquete_All3", clear
 		*/	
 	esttab between within spill1 full , se keep (beneficiaire programs maleXbeneficiaire maleXprograms repondant_sex) ///
 								           order(beneficiaire programs maleXbeneficiaire maleXprograms repondant_sex)
-										   
-	pause
+										 
+	
+	restore
 }
 
 	* Store P-value vector name in global 

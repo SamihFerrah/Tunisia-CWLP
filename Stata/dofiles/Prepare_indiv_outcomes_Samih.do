@@ -2154,9 +2154,14 @@ foreach var in business_q3_sec business_q5_sec{
 	replace `var' = 0 if business_q0_sec == 0
 }
 
+* Compute number of adult in HH 
+
+egen 	adult_num = rowtotal(h_18_65 f_18_65), mis 
+replace adult_num = 1 if adult_num == 0 & repondant_age > 17 & repondant_age < 66
 
 * Label variables
 
+label variable adult_num			"Adult 18-65 years old"
 label variable futur_services		"Aspire to work in service"
 label variable emp_futur_cb_win	"Income aspiration"
 label variable emploi				"Had an IGA during the last 4 weeks"

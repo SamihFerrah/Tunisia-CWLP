@@ -513,6 +513,7 @@ foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win c3_a_5_win 
 	}
 */
 	
+label variable adult_num			"Adult 18-65 years old"
 label variable futur_services		"Aspire to work in service"
 label variable emp_futur_cb_win	"Income aspiration"
 label variable emploi				"Had an IGA during the last 4 weeks"
@@ -660,13 +661,13 @@ label variable epargne_dette_cb_win 	"Actual amount of debt"
 label variable epargne  				"Did you save money during the last 12 months"
 label variable epargne_cb_win 			"Amount saved during the last 12 months"
 label variable epargne_pret				"Did you lend money during the last 12 months"								
-pause
+label var prev_PWP "Previous PWP"
 
 local Control_ALL   hhsize drepondant_mat h_18_65 f_18_65 trauma_abus q0_1_c q0_3_c q2_2_c q2_3_c q2_4_c 	///
 					negevent_1 negevent_2 negevent_3 negevent_4 											///
 					negevent_5 negevent_6 negevent_7  q0_2_c   												///
 					negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      							///
-					posevent_4 posevent_5 posevent_6 posevent_7 posevent_8
+					posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 prev_PWP adult_num
 
 
 /*					
