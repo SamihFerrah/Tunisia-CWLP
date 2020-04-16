@@ -7,8 +7,10 @@
 
 
 
-local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-					shocks social civic well_being /*woman_empowerment*/
+local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other					///
+					assets home_assets comms_assets productive_assets 												///
+					credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+					shocks social civic well_being woman_bargain woman_violence woman_empowerment 
 
 							
 					
@@ -47,7 +49,7 @@ use "$stata/enquete_All3", clear
 
 	local counter_reg = 1
 	
-	mat def pvalue = J(11,5,.)
+	mat def pvalue = J(18,5,.)
 	
 	local count_out = 0 
 
@@ -154,7 +156,7 @@ use "$stata/enquete_All3", clear
 	
 	local count_outcomes = 1
 	
-	forvalue i = 1/11{
+	forvalue i = 1/18{
 	
 		local qval1 = Qval1[`i',1]
 		
@@ -240,9 +242,9 @@ use "$stata/enquete_All3", clear
 	
 	* Export table 
 	
-	forvalue i = 1/11{
+	forvalue i = 1/18{
 	
-	file open Table_`i' using "Tables/Regression/Table_`i'.tex", text write replace
+	file open Table_`i' using "Tables/Regression/Table_`i'_hete.tex", text write replace
 	
 	file write Table_`i'  _n ///
 	"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{Between}&\multicolumn{1}{c}{Within}&\multicolumn{1}{c}{Spillovers}&\multicolumn{1}{c}{Full}\\ \hline" 	_n ///

@@ -165,45 +165,51 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 		
 		local i = `i' + 1
 		
-		file write tex_histo "\section{`l_`index''}"							_n
+		file write tex_histo "\section{`l_`index''}"												_n
 	
-		file write tex_histo "\begin{table}[H]\centering"						_n
+		file write tex_histo "\begin{table}[H]\centering"											_n
 		
-		file write tex_histo "\input{Tables/Summary/Table_`i'.tex}"				_n
+		file write tex_histo "\input{Tables/Summary/Table_`i'.tex}"									_n
 		
-		file write tex_histo "\end{table}"										_n
+		file write tex_histo "\end{table}"															_n
 		
-		file write tex_histo "\begin{figure}[H]\centering"						_n
+		file write tex_histo "\begin{figure}[H]\centering"											_n
 			
-		file write tex_histo "\includegraphics[scale=0.75]{Graph/Combined/Figure_`i'.pdf}" _n
+		file write tex_histo "\includegraphics[scale=0.75]{Graph/Combined/Figure_`i'.pdf}" 			_n
 			
-		file write tex_histo "\caption{`caption_`i''} \label{fig:Fig_`i'}"		_n
-			
-		file write tex_histo "\end{figure}"										_n
+		file write tex_histo "\caption{`caption_`i''} \label{fig:Fig_`i'}"							_n
+					
+		file write tex_histo "\end{figure}"															_n
 		
-		file write tex_histo "\begin{table}[H]\centering\caption{Model without Imada fixed effect}"						_n
+		file write tex_histo "\begin{table}[H]\centering\caption{Model without Imada fixed effect}"	_n
 		
-		file write tex_histo "\input{Tables/Regression/Table_`i'.tex}"			_n
+		file write tex_histo "\input{Tables/Regression/Table_`i'.tex}"								_n
 		
-		file write tex_histo "\end{table}"										_n
+		file write tex_histo "\end{table}"															_n
 		
-		file write tex_histo "\begin{table}[H]\centering\caption{Model with Imada fixed effect}"						_n
+		file write tex_histo "\begin{table}[H]\centering\caption{Model with Imada fixed effect}"	_n
 		
-		file write tex_histo "\input{Tables/Regression/Table_`i'_b.tex}"		_n
+		file write tex_histo "\input{Tables/Regression/Table_`i'_b.tex}"							_n
 		
-		file write tex_histo "\end{table}"										_n
+		file write tex_histo "\end{table}"															_n
 		
-		file write tex_histo "\begin{table}[H]\centering\caption{Subsample of woman respondent}"						_n
+		file write tex_histo "\begin{table}[H]\centering\caption{Subsample of woman respondent}"	_n
 		
-		file write tex_histo "\input{Tables/Regression/Table_`i'_w.tex}"		_n
+		file write tex_histo "\input{Tables/Regression/Table_`i'_w.tex}"							_n
 		
-		file write tex_histo "\end{table}"										_n
+		file write tex_histo "\end{table}"															_n
 		
-		file write tex_histo "\begin{table}[H]\centering\caption{Subsample of male respondent}"						_n
+		file write tex_histo "\begin{table}[H]\centering\caption{Subsample of male respondent}"		_n
 		
-		file write tex_histo "\input{Tables/Regression/Table_`i'_m.tex}"		_n
+		file write tex_histo "\input{Tables/Regression/Table_`i'_m.tex}"							_n
 		
-		file write tex_histo "\end{table}"										_n
+		file write tex_histo "\end{table}"															_n
+		
+		file write tex_histo "\begin{table}[H]\centering\caption{Heterogeneity Test}"				_n
+		
+		file write tex_histo "\input{Tables/Regression/Table_`i'_hete.tex}"							_n
+		
+		file write tex_histo "\end{table}"	
 		
 		file write tex_histo																_n ///
 	"\begin{table}[H]\centering\caption{Individual outcomes used in group: `l_`index'' }"	_n ///

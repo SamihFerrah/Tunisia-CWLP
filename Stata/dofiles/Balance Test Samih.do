@@ -78,7 +78,7 @@ desc `balance_coll'
 		
 		* Between Specification 
 		
-		reg `covariates' beneficiaire 	if between == 1, vce(cluster imada)
+		reg `covariates' beneficiaire missing_`covariates'	if between == 1, vce(cluster imada)
 		
 			local c_1_`count_out' 	: di%12.3f _b[beneficiaire]
 			local se_1_`count_out' 	: di%12.3f _se[beneficiaire]
@@ -89,7 +89,7 @@ desc `balance_coll'
 				
 		* Within Specification 
 		
-		reg `covariates' program 		if within == 1, robust
+		reg `covariates' program missing_`covariates'		if within == 1, robust
 		
 			local c_2_`count_out' 	: di%12.3f _b[program]
 			local se_2_`count_out' 	: di%12.3f _se[program]
@@ -100,7 +100,7 @@ desc `balance_coll'
 				
 		* Spillovers Specification 
 		
-		reg `covariates' beneficiaire 	if spillover == 1	, vce(cluster imada)
+		reg `covariates' beneficiaire missing_`covariates'	if spillover == 1	, vce(cluster imada)
 		
 			local c_3_`count_out' 	: di%12.3f _b[beneficiaire]
 			local se_3_`count_out' 	: di%12.3f _se[beneficiaire]
