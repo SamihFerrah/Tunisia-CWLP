@@ -84,10 +84,10 @@ global construct_analysis		= 0
 global codebook_				= 0
 global sum_stat					= 0
 global balance 					= 0
-global desc_index				= 1
+global desc_index				= 0
 global main_table				= 1
-global indiv_reg				= 1
-global heterogeneity			= 1
+global indiv_reg				= 0
+global heterogeneity			= 0
 
 ********************************************************************************
 ********************************************************************************

@@ -18,13 +18,13 @@ local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare assets   							
 					shocks social civic well_being woman_empowerment 					
 
 	
-	local ctrl_Aa 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+	local ctrl_Aa 	hhsize missing_hhsize repondant_mat missing_repondant_mat 									///
 					adult_num missing_adult_num 																	///
 					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
 				  
 	local ctrl_Ba 
 	
-	local ctrl_Cb 	hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+	local ctrl_Cb 	hhsize missing_hhsize repondant_mat missing_repondant_mat 									///
 					adult_num missing_adult_num 																	///
 					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
 					
@@ -350,83 +350,21 @@ foreach outcome in `Index_ALL' {
 file open Table using "Table_Index_Full.tex", text write replace
 	
 file write Table  _n ///
-"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{4}{c}{Full specification} \\ \cmidrule(r){2-5} & {} & {T-C} & {P-value} & {N}  \\ \midrule"  _n ///
-" `l_1'			&	PWP	& 	`c_1_1'`ss_1_1' 		& `pval_1_1' 	& `n_1_1'				\\  " 	_n ///
-" 				&	 			&	(`se_1_1') 				& &										\\ " 	_n ///
-" 				& 	Workers 	&	`c_1_2'`ss_1_2' 		& `pval_1_2' 	& 		 				\\ " 	_n ///
-" 				&	 			&	(`se_1_2') 				& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_1'`st_1_1'			&`pvalt_1_1'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_2'			&	PWP	& 	`c_1_3'`ss_1_3' 		& `pval_1_3' 	& `n_1_3' 				\\ " 	_n ///
-" 				&	 			&	(`se_1_3') 				& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_4'`ss_1_4' 		& `pval_1_4' 	& 						\\ " 	_n ///
-" 				&	 			&	(`se_1_4') 				& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_2'`st_1_2'			& `pvalt_1_2'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_3'			&	PWP	&	`c_1_5'`ss_1_5' 		& `pval_1_5' 	& `n_1_5' 				\\ " 	_n ///
-" 				&	 			&	(`se_1_5') 				& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_6'`ss_1_6' 		& `pval_1_6' 	& 						\\ " 	_n ///
-" 				&	 			&	(`se_1_6') 				& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_3'`st_1_3'			& `pvalt_1_3'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_4'			&	PWP	& 	`c_1_7'`ss_1_7' 		& `pval_1_7' 	& `n_1_7' 				\\ " 	_n ///
-" 				&	 			&	(`se_1_7') 				& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_8'`ss_1_8' 		& `pval_1_8' 	& 						\\ " 	_n ///
-" 				&	 			&	(`se_1_8') 				& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_4'`st_1_4'			& `pvalt_1_4'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_5'			&	PWP	& 	`c_1_9'`ss_1_9' 		& `pval_1_9' 	& `n_1_9' 				\\ " 	_n ///
-" 				&	 			&	(`se_1_9') 				& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_10'`ss_1_10' 		& `pval_1_10' 	& 						\\ " 	_n ///
-" 				&	 			&	(`se_1_10') 			& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_5'`st_1_5'			&`pvalt_1_5'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_6'			&	PWP	& 	`c_1_11'`ss_1_11' 		&`pval_1_11' 	& `n_1_11' 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_11') 			& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_12'`ss_1_12' 		& `pval_1_12' 	&  	 					\\ " 	_n ///
-" 				&	 			&	(`se_1_12') 			& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_6'`st_1_6'			&`pvalt_1_6'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_7'			&	PWP	& 	`c_1_13'`ss_1_13' 		& `pval_1_13' 	& `n_1_13' 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_13') 			& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_14'`ss_1_14' 		& `pval_1_14' 	& 		 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_14') 			& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_7'`st_1_7'			& `pvalt_1_7'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_8'			& 	PWP	&	`c_1_15'`ss_1_15' 		& `pval_1_15' 	& `n_1_15' 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_15') 			& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_16'`ss_1_16' 		& `pval_1_16' 	& 		 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_16') 			& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_8'`st_1_8'			&`pvalt_1_8'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_9'			&	PWP	& 	`c_1_17'`ss_1_17' 		& `pval_1_17' 	& `n_1_17' 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_17') 			& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_18'`ss_1_18' 		& `pval_1_18' 	& 		 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_18') 			& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_9'`st_1_9'			&`pvalt_1_9'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_10'		&	PWP	&	`c_1_19'`ss_1_19' 		&`pval_1_19' 	& `n_1_19' 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_19') 			& &										\\ " 	_n ///
-" 				& 	Workers 	& 	`c_1_20'`ss_1_20' 		& `pval_1_20' 	& 		 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_20') 			& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_10'`st_1_10'		& `pvalt_1_10'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-" `l_11'		& 	PWP	&	`c_1_21'`ss_1_21' 		& `pval_1_21' 	& `n_1_21' 	 			\\ " 	_n ///
-" 				&	 			&	(`se_1_21') 			& &										\\ " 	_n ///
-" 				&  	Workers 	&	`c_1_22'`ss_1_22' 		& `pval_1_22' 	& 			 			\\ " 	_n ///
-" 				&	 			&	(`se_1_22') 			& &										\\ " 	_n ///
-"\cmidrule{2-3}" _n ///
-"				&	Total		& 	`t_1_11'`st_1_11'		& `pvalt_1_11'	& 						\\ "	_n ///
-"\cmidrule{2-3}" _n ///
-"\hline \end{tabular}														   "	
+"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{PWP}&\multicolumn{1}{c}{Workers}&\multicolumn{1}{c}{Full}&\multicolumn{1}{c}{N} \\ \hline"  _n 
+
+local pwp  = 1
+local work = 2
+ 
+forvalue i = 1/11{
+	
+	file write Table  _n ///
+	" `l_`i''			&	`c_1_`pwp''`ss_1_`pwp''	&  `c_1_`work''`ss_1_`work''	 	&	`t_1_`i''`st_1_`i''	& `n_1_`i''				\\  " 	_n ///
+	" 					&	   (`se_1_`pwp'') 		&	 (`se_1_`work'')				& 						&						\\ 	" 	_n 
+	
+	local pwp  = `pwp'  + 2
+	local work = `work' + 2
+}
+
+file write Table  																 _n ///
+"\hline \end{tabular}														   " _n	
 file close Table
