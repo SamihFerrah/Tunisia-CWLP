@@ -1,0 +1,45 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{stata}
+\usepackage{float}
+\usepackage{caption} 
+\usepackage{setspace}
+\usepackage{pdflscape}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black,
+}
+\usepackage{longtable}
+\usepackage{booktabs}
+
+\begin{document}
+	
+	\title{Summary Result Tunisia CWLP}\maketitle
+	
+	\pagebreak
+	
+	\tableofcontents
+	
+	\pagebreak
+	
+\section{Main Table}
+
+Table 1 summarize program effect on different outcomes index. We report the results of three specification. In the first column we report the \textit{Between Village Effect} specification measuring the effect of program assignment (at the community level). Second column report the effect of the \textit{Within Village Effect} specification measuring the effect of being enrolled in CWLP program and randomized into treatment group. Finally, third column report the spillovers effect which can be interpreted as the effect of having beneficiary assigned to CWLP on the overall communities. \\
+
+
+
+
+\begin{table}[H]\centering\caption{Main Results} 
+	\resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}\caption*{\footnotesize{* p$<$0.1, ** p$<$0.05, *** p$<$0.01. We report the average value of the index for the sample used for each specifications.}}
+\end{table}
+
+\end{document}
+
