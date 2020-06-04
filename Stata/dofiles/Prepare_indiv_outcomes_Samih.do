@@ -1762,14 +1762,14 @@ codebook utopie_accord_a
 tab utopie_accord_a, gen(utopie_a_dum)
 sum utopie_a_dum*
 tab utopie_a_dum1
-label variable utopie_a_dum1 "droit participer prise décision: D'accord"
-label variable utopie_a_dum2 "droit participer prise décision: Ni l'un, ni l'autre"
-label variable utopie_a_dum3 "droit participer prise décision: Pas d'accord"
+label variable utopie_a_dum1 "droit participer prise decision: D'accord"
+label variable utopie_a_dum2 "droit participer prise decision: Ni l'un, ni l'autre"
+label variable utopie_a_dum3 "droit participer prise decision: Pas d'accord"
  
 codebook utopie_accord_b
 tab utopie_accord_b, gen(utopie_b_dum)
 sum utopie_b_dum*
-label variable utopie_b_dum1 "vérifier et questionner: D'accord"
+label variable utopie_b_dum1 "Verifier et questionner: D'accord"
 label variable utopie_b_dum2 "vérifier et questionner: Ni l'un, ni l'autre"
 label variable utopie_b_dum3 "vérifier et questionner: Pas d'accord"
 
@@ -1845,12 +1845,12 @@ label variable source_info2_7 "Amis/famille"
 label variable source_info2_8 "Rumeurs"
 label variable source_info2_9 "Autre"
 
-gen 			source_info_internal	= 0
-replace 		source_info_internal 	= 1 if source_info_7 == 1  | source_info_8 == 1
-gen 			source_info2_internal	= 0
-replace 		source_info2_internal 	= 1 if source_info2_7 == 1 | source_info2_8 == 1
-label variable 	source_info_internal  "First Info Source Informal"
-label variable 	source_info2_internal "Second Info Source Informal"
+gen 			source_info_internal	= 1
+replace 		source_info_internal 	= 0 if source_info_7 == 1  | source_info_8 == 1
+gen 			source_info2_internal	= 1
+replace 		source_info2_internal 	= 0 if source_info2_7 == 1 | source_info2_8 == 1
+label variable 	source_info_internal  "First Info Source Formal"
+label variable 	source_info2_internal "Second Info Source Formal"
 
 tab isolement, m
 gen isolement_1=isolement=="1"
@@ -2305,54 +2305,48 @@ label variable intrahh_11	"Income not being confiscated"
 label variable emploiw		"Women IGA"
 
 
-local lab_market_main 	 		emploi_main days_work_main_win hours_work_main_win inc_work_main_win									///
-								profit_work_main_win business_q0_main business_q3_main_win business_q5_main_win
-								
-/*local lab_market_sec 	 		emploi_sec days_work_sec hours_work_sec inc_work_sec 													///
-								profit_work_sec business_q0_sec business_q3_sec business_q5_sec*/
-														
-local eco_welfare 				c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 					///
-								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win c4_win c5_win c6_win 								///
-								c7_win c8_win c9_win c11_win c12_win c13_win c14_win c16_win c18_win 
-
-local assets					q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_7_win q2_1_8_win 					///
-								q2_1_9_win q2_1_10_win q2_1_11_win q2_1_12_win q2_1_13_win q2_1_14_win 							///
-								q2_1_15_win q2_1_16_win q2_1_17_win q2_1_18_win q2_1_19_win 										///
-								q2_1_20_win q2_1_21_win q2_1_22_win 
-
-local credit_access				epargne_dette epargne_dette_cb_win epargne epargne_cb_win epargne_pret											
-
-
-local pos_coping_mechanisms		g2_3 g2_4 g2_5 g2_6  g2_8 g2_9 g2_10 g2_11 g2_12 
-
-local neg_coping_mechanisms		g2_1 g2_2 g2_7 g2_13 g2_14 g2_15	
-
-
-local shocks					g1_1 g1_2 g1_3 g1_4 g1_5 g1_6 g1_7 g1_8 g1_9
-
-
-local social				association_1 association_2 initiatives_9 association_9											///
-							association_3 association_4 association_6 /*association_7 association_8*/  
+local all_individual 	emploi_main days_work_main_win hours_work_main_win inc_work_main_win							///
+						profit_work_main_win business_q0_main business_q3_main_win business_q5_main_win					///
+						emploi_sec days_work_sec hours_work_sec inc_work_sec 											///
+						profit_work_sec business_q0_sec business_q3_sec business_q5_sec									///
+						c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 					///
+						c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win c4_win c5_win c6_win 								///
+						c7_win c8_win c9_win c11_win c12_win c13_win c14_win c15_win c16_win c18_win 					///
+						q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_7_win q2_1_8_win 					///
+						q2_1_9_win q2_1_10_win q2_1_11_win q2_1_12_win q2_1_13_win q2_1_14_win 							///
+						q2_1_15_win q2_1_16_win q2_1_17_win q2_1_18_win q2_1_19_win 									///
+						q2_1_20_win q2_1_21_win q2_1_22_win 															///
+						epargne_dette epargne_dette_cb_win epargne epargne_cb_win epargne_pret							///				
+						g2_3 g2_4 g2_5 g2_6  g2_8 g2_9 g2_10 g2_11 g2_12 													///
+						g2_1 g2_2 g2_7 g2_13 g2_14 g2_15																///
+						g1_1 g1_2 g1_3 g1_4 g1_5 g1_6 g1_7 g1_8 g1_9													///
+						association_1 association_2 association_9														///
+						association_3 association_4 association_6 /*association_7 association_8*/  						///
+						initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 			///
+						initiatives_7 initiatives_8  initiatives_9 initiatives_10 initiatives_11 										///
+						initiatives_12 initiatives_13 initiatives_14 initiatives_15 initiative_dummy					///		
+						psy_anxiete psy_exploit psy_depress5 /*psy_accepte_dum1*/ psy_accepte_dum3 						///
+						psy_menage_dum3 /*psy_a_menage_dum1*/ psy_a_menage_dum3	 										///
+						psycho_depress4 psycho_depress3 psycho_depress2 psycho_depress1									///
+						intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw 												///
+						violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
+						violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
+						violence_1_16 violence_1_17 violence_1_18  														///
+						source_info_internal source_info2_internal  													///
+						utopie_a_dum1  utopie_a_dum3 utopie_b_dum1  utopie_b_dum3										///
+						isolement_1 isolement_2 isolement_3 isolement_4 isolation_dummy									///
+						association_dummy comite_c comite_c_menage conflit_dispute_in conflit_dispute_out 				///
+						migration_cm_q1 migration_q1 security_dummy														///
+						association_7 association_8 securite_1 securite_2 securite_3 securite_4							///
+						securite_5 securite_6
 							
-							
-local civic					initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 			///
-							initiatives_7 initiatives_8  initiatives_10 initiatives_11 										///
-							initiatives_12 initiatives_13 initiatives_14 initiatives_15									
 
-							
-
-local well_being 			psy_anxiete psy_exploit psy_depress5 /*psy_accepte_dum1*/ psy_accepte_dum3 						///
-							psy_menage_dum3 /*psy_a_menage_dum1*/ psy_a_menage_dum3	 										///
-							psycho_depress4 psycho_depress3 psycho_depress2 psycho_depress1
-
-
-local woman_empowerment		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw 												///
-							violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
-							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
-							violence_1_16 violence_1_17 violence_1_18  
-
-local Index_ALL 			lab_market_main lab_market_sec eco_welfare assets credit_access pos_coping_mechanisms neg_coping_mechanisms	///
-							shocks social civic well_being woman_empowerment
+local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives civic_engag social_cohesion2 comm_groups
 							
 gen programs=(parti==1 | desist==1)
 
@@ -2368,46 +2362,162 @@ replace within = 1 if (parti==1 | desist==1 | control==1)
 g 		spillovers = .
 replace spillovers = 1 if (control==1 | enquete==3) 
 
-g 		Infrastructure = .
-replace Infrastructure = 1 if enquete==1
-
 g 		full = . 
 replace full = 1 if parti==1 | desist==1 | enquete==3 | control==1
+
+g 		infrastructure =.
+replace infrastructure = 1 if enquete ==1 
 
 g 		trt_full = 1 if full == 1
 replace trt_full = 0 if beneficiaire == 0 & programs == 0  & full == 1
 
 
-foreach spec in between within spillovers full{
 
-	if "`spec'" == "between"{
-	local prg_condition = "between"
-	local var_prefix 	= "b"
-	}
-	
-	if "`spec'" == "within"{
-	local prg_condition = "within"
-	local var_prefix 	= "w"
-	}
-	
-	if "`spec'" == "spillovers"{
-	local prg_condition = "spillovers"
-	local var_prefix 	= "s"
-	}
-	
-	if "`spec'" == "full"{
-	local prg_condition = "full"
-	local var_prefix 	= "f"
-	}
-	
-	foreach index of local Index_ALL{
+foreach specification in between   within   spillovers    full 	  infrastructure	///
+						 between_w within_w spillovers_w  full_w  infrastructure_w 	///
+						 between_m within_m spillovers_m  full_m  infrastructure_m	{
 
-		foreach indiv of local `index'{
-		
-		g `indiv'_`var_prefix' = `indiv' if `prg_condition' == 1
-		
-		}
+	if "`specification'" == "between"{
+	local cond 			= "between == 1"
+	local var_suffix	= "b"	
 	}
+	
+	if "`specification'" == "within"{
+	local cond 			= "within == 1"
+	local var_suffix	= "w"	
+	}
+	
+	if "`specification'" == "spillovers"{
+	local cond 			= "spillovers == 1"
+	local var_suffix	= "s"	
+	}
+	
+	if "`specification'" == "full"{
+	local cond 			= "full == 1"
+	local var_suffix	= "f"	
+	}
+	
+	if "`specification'" == "infrastructure"{
+	local cond 			= "infrastructure == 1"
+	local var_suffix	= "i"	
+	}
+	
+	
+	
+	**********************************
+	**********************************
+	
+	if "`specification'" == "between_w"{
+	local cond 			= "between == 1 & repondant_sex == 0"
+	local var_suffix	= "b_w"	
+	}
+	
+	if "`specification'" == "within_w"{
+	local cond 			= "within == 1 & repondant_sex == 0"
+	local var_suffix	= "w_w"	
+	}
+	
+	if "`specification'" == "spillovers_w"{
+	local cond 			= "spillovers == 1 & repondant_sex == 0"
+	local var_suffix	= "s_w"
+	}
+	
+	if "`specification'" == "full_w"{
+	local cond 			= "full == 1 & repondant_sex == 0"
+	local var_suffix	= "f_w"	
+	}
+	
+	if "`specification'" == "infrastructure_w"{
+	local cond 			= "infrastructure == 1 & repondant_sex == 0"
+	local var_suffix	= "i_w"	
+	}
+	
+	**********************************
+	**********************************
+	
+	if "`specification'" == "between_m"{
+	local cond 			= "between == 1 & repondant_sex == 1"
+	local var_suffix	= "b_m"
+	}
+	
+	if "`specification'" == "within_m"{
+	local cond 			= "within == 1 & repondant_sex == 1"
+	local var_suffix	= "w_m"
+	}
+	
+	if "`specification'" == "spillovers_m"{
+	local cond 			= "spillovers == 1 & repondant_sex == 1"
+	local var_suffix	= "s_m"
+	}
+	
+	if "`specification'" == "full_m"{
+	local cond 			= "full == 1 & repondant_sex == 1"
+	local var_suffix	= "f_m"
+	}
+	
+	if "`specification'" == "infrastructure_m"{
+	local cond 			= "infrastructure == 1 & repondant_sex == 1"
+	local var_suffix	= "i_m"	
+	}
+	
+	foreach indiv of local all_individual{
+		
+		g `indiv'_`var_suffix' = `indiv' if `cond' 
+		
+		local l_indiv : variable label `indiv'
+		
+	}
+	
 }
+
+tempfile full 
+sa		`full'
+ 
+
+foreach subsample in full female male{
+
+preserve 
+
+	if "`subsample'" == "full"{
+	keep if spillovers == 1
+	local var_suffix "f"
+	}
+	
+	if "`subsample'" == "female"{
+	keep if repondant_sex == 0 & spillovers == 1
+	local var_suffix "w"
+	}
+
+	if "`subsample'" == "male"{
+	keep if repondant_sex == 1 & spillovers == 1
+	local var_suffix "m"
+	}
+	
+	collapse (mean) `all_individual', by (imada)
+	
+	foreach indiv in `all_individual'{
+		
+		label var `indiv' "`l_indiv'"
+		
+		rename `indiv' `indiv'_s2_`var_suffix'
+		
+	}
+	
+	tempfile spillovers2_`subsample' 
+	sa      `spillovers2_`subsample''
+
+restore 
+
+}
+
+u `spillovers2_female', clear 
+merge 1:1 imada using  `spillovers2_male'
+drop _merge
+merge 1:1 imada using  `spillovers2_full'
+drop _merge
+
+merge 1:m imada using `full'
+
+	
 
 save "$stata/enquete_indiv5", replace

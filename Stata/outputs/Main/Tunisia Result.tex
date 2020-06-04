@@ -22,7 +22,7 @@ urlcolor=black
 \begin{document}
 \author{Ferrah Samih}\title{Tunisia CWLP: Histogram}\maketitle
 \pagebreak
-\listoffigures
+\tableofcontents
 \pagebreak
 
 \section{Empirical Methodology}
@@ -44,18 +44,24 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \end{table}
 \pagebreak
 \section{Main Table}
-\begin{table}[H]\centering\caption{Main results}
-\resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}
+\begin{table}[H]\centering\caption{Main results (without imada fixed effect)}
+\resizebox{\textwidth}{!}{\input{Main/Table_Index_nofe.tex}}
 \end{table}
-\begin{table}[H]\centering\caption{Main results}
-\scalebox{0.80}{\input{Main/Table_Index_Full.tex}}
+\begin{table}[H]\centering\caption{Main results (with imada fixed effect)}
+\resizebox{\textwidth}{!}{\input{Main/Table_Index_fe.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Main results (without imada fixed effect)}
+\scalebox{0.80}{\input{Main/Table_Index_Full_nofe.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Main results (with imada fixed effect)}
+\scalebox{0.80}{\input{Main/Table_Index_Full_fe.tex}}
 \end{table}
 \pagebreak
-\begin{table}[H]\centering\caption{Extended main results}
-\resizebox{\textwidth}{!}{\input{Main/Table_Index_Extended.tex}}
+\begin{table}[H]\centering\caption{Extended main results (without imada fixed effect)}
+\resizebox{\textwidth}{!}{\input{Main/Table_Index_Extended_nofe.tex}}
 \end{table}
-\begin{table}[H]\centering\caption{Extended main results}
-\scalebox{0.60}{\input{Main/Table_Index_Full_Extended.tex}}
+\begin{table}[H]\centering\caption{Extended main results (with imada fixed effect)}
+\scalebox{0.60}{\input{Main/Table_Index_Full_Extended_fe.tex}}
 \end{table}
 \pagebreak
 \section{Labor market}
@@ -66,18 +72,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_1.pdf}
 \caption{} \label{fig:Fig_1}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_1.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_1_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_1_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_1_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Labor market }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_lab_market_main.tex}}
@@ -94,18 +88,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_2.pdf}
 \caption{} \label{fig:Fig_2}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_2.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_2_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_2_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_2_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Consumption expenditures }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_eco_welfare.tex}}
@@ -122,18 +104,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_3.pdf}
 \caption{} \label{fig:Fig_3}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_3.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_3_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_3_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_3_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Food consumtion }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_consumption_food.tex}}
@@ -150,18 +120,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_4.pdf}
 \caption{} \label{fig:Fig_4}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_4.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_4_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_4_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_4_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Other consumption }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_consumption_other.tex}}
@@ -178,18 +136,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_5.pdf}
 \caption{} \label{fig:Fig_5}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_5.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_5_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_5_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_5_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Assets owning }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_assets.tex}}
@@ -206,18 +152,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_6.pdf}
 \caption{} \label{fig:Fig_6}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_6.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_6_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_6_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_6_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Home assets }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_home_assets.tex}}
@@ -234,18 +168,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_7.pdf}
 \caption{} \label{fig:Fig_7}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_7.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_7_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_7_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_7_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Communication assets }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_comms_assets.tex}}
@@ -262,18 +184,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_8.pdf}
 \caption{} \label{fig:Fig_8}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_8.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_8_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_8_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_8_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Productive assets }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_productive_assets.tex}}
@@ -290,18 +200,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_9.pdf}
 \caption{} \label{fig:Fig_9}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_9.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_9_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_9_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_9_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Financial inclusion }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_credit_access.tex}}
@@ -318,18 +216,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_10.pdf}
 \caption{} \label{fig:Fig_10}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_10.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_10_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_10_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_10_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Positive coping mechanisms }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_pos_coping_mechanisms.tex}}
@@ -346,18 +232,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_11.pdf}
 \caption{} \label{fig:Fig_11}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_11.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_11_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_11_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_11_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Negative coping mechanisms }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_neg_coping_mechanisms.tex}}
@@ -374,18 +248,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_12.pdf}
 \caption{} \label{fig:Fig_12}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_12.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_12_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_12_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_12_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Economic shock }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_shocks.tex}}
@@ -402,18 +264,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_13.pdf}
 \caption{} \label{fig:Fig_13}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_13.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_13_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_13_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_13_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Social participation }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_social.tex}}
@@ -430,18 +280,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_14.pdf}
 \caption{} \label{fig:Fig_14}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_14.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_14_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_14_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_14_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Civic engagement }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_civic.tex}}
@@ -458,18 +296,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_15.pdf}
 \caption{} \label{fig:Fig_15}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_15.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_15_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_15_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_15_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Psychological well being }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_well_being.tex}}
@@ -486,18 +312,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_16.pdf}
 \caption{} \label{fig:Fig_16}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_16.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_16_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_16_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_16_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Women's empowerment and agency }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_bargain.tex}}
@@ -514,18 +328,6 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_17.pdf}
 \caption{} \label{fig:Fig_17}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_17.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_17_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_17_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_17_m.tex}
-\end{table}
 
 \begin{table}[H]\centering\caption{Individual outcomes used in group: Intimate partner violence }
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_violence.tex}}
@@ -534,7 +336,7 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_violence_Full.tex}}
 \end{table}
 \pagebreak
-\section{Women's empowerment}
+\section{Isolation}
 \begin{table}[H]\centering
 \input{Tables/Summary/Table_18.tex}
 \end{table}
@@ -542,24 +344,108 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \includegraphics[scale=0.75]{Graph/Combined/Figure_18.pdf}
 \caption{} \label{fig:Fig_18}
 \end{figure}
-\begin{table}[H]\centering\caption{Model without Imada fixed effect}
-\input{Tables/Regression/Table_18.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Model with Imada fixed effect}
-\input{Tables/Regression/Table_18_b.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of woman respondent}
-\input{Tables/Regression/Table_18_w.tex}
-\end{table}
-\begin{table}[H]\centering\caption{Subsample of male respondent}
-\input{Tables/Regression/Table_18_m.tex}
-\end{table}
 
-\begin{table}[H]\centering\caption{Individual outcomes used in group: Women's empowerment }
-\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_empowerment.tex}}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Isolation }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_isolation.tex}}
 \end{table}
-\begin{table}[H]\centering\caption{Individual outcomes used in group: Women's empowerment (full specification)}
-\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_woman_empowerment_Full.tex}}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Isolation (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_isolation_Full.tex}}
+\end{table}
+\pagebreak
+\section{Liberal Norms}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_19.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_19.pdf}
+\caption{} \label{fig:Fig_19}
+\end{figure}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Liberal Norms }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_utopia.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Liberal Norms (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_utopia_Full.tex}}
+\end{table}
+\pagebreak
+\section{Information Sources}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_20.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_20.pdf}
+\caption{} \label{fig:Fig_20}
+\end{figure}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Information Sources }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_information_sources.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Information Sources (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_information_sources_Full.tex}}
+\end{table}
+\pagebreak
+\section{Local Acting}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_21.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_21.pdf}
+\caption{} \label{fig:Fig_21}
+\end{figure}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Local Acting }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_initiatives_acting.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Local Acting (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_initiatives_acting_Full.tex}}
+\end{table}
+\pagebreak
+\section{Local Meeting}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_22.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_22.pdf}
+\caption{} \label{fig:Fig_22}
+\end{figure}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Local Meeting }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_initiatives_meeting.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Local Meeting (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_initiatives_meeting_Full.tex}}
+\end{table}
+\pagebreak
+\section{Local Participation}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_23.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_23.pdf}
+\caption{} \label{fig:Fig_23}
+\end{figure}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Local Participation }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_initiatives.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Local Participation (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_initiatives_Full.tex}}
+\end{table}
+\pagebreak
+\section{Community Groups}
+\begin{table}[H]\centering
+\input{Tables/Summary/Table_24.tex}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[scale=0.75]{Graph/Combined/Figure_24.pdf}
+\caption{} \label{fig:Fig_24}
+\end{figure}
+
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Community Groups }
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_comm_groups.tex}}
+\end{table}
+\begin{table}[H]\centering\caption{Individual outcomes used in group: Community Groups (full specification)}
+\resizebox{\textwidth}{!}{\input{Tables/Individual/Table_comm_groups_Full.tex}}
 \end{table}
 \pagebreak
 \end{document}
