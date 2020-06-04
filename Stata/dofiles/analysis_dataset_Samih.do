@@ -1,5 +1,5 @@
 use "$stata/enquete_indiv5_imputed", clear 
-
+cap drop _merge 
 
 preserve 
 	u "$stata/chefs_extracts_mean", clear 

@@ -6,10 +6,12 @@ cap file close tex_histo
 
 use "$stata/enquete_All3", clear 
 
-local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
-							assets home_assets comms_assets productive_assets 												///
-							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+					assets home_assets comms_assets productive_assets 												///
+					credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+					shocks social civic well_being woman_bargain woman_violence  									///
+					isolation utopia information_sources initiatives_acting initiatives_meeting						///
+					initiatives comm_groups		
 							
 * Prepare Tex File 
 
@@ -134,22 +136,28 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 	"\resizebox{\textwidth}{!}{\input{Main/Table_Balance_Individual.tex}}"		_n ///
 	"\end{table}" 																_n ///
 	"\begin{table}[H]\centering\caption{Community balance test}" 				_n ///
-	"\scalebox{0.80}{\input{Main/Table_Balance_Community.tex}}"		_n ///
+	"\scalebox{0.80}{\input{Main/Table_Balance_Community.tex}}"					_n ///
 	"\end{table}" 																_n ///
 	"\pagebreak"																_n ///
 	"\section{Main Table}"														_n ///
-	"\begin{table}[H]\centering\caption{Main results}" 							_n ///
-	"\resizebox{\textwidth}{!}{\input{Main/Table_Index.tex}}"					_n ///
+	"\begin{table}[H]\centering\caption{Main results (without imada fixed effect)}" 		_n ///
+	"\resizebox{\textwidth}{!}{\input{Main/Table_Index_nofe.tex}}"				_n ///
 	"\end{table}" 																_n ///
-	"\begin{table}[H]\centering\caption{Main results}" 							_n ///
-	"\scalebox{0.80}{\input{Main/Table_Index_Full.tex}}"				_n ///
+	"\begin{table}[H]\centering\caption{Main results (with imada fixed effect)}" 			_n ///
+	"\resizebox{\textwidth}{!}{\input{Main/Table_Index_fe.tex}}"				_n ///
+	"\end{table}" 																_n ///
+	"\begin{table}[H]\centering\caption{Main results (without imada fixed effect)}" 		_n ///
+	"\scalebox{0.80}{\input{Main/Table_Index_Full_nofe.tex}}"					_n ///
+	"\end{table}" 																_n ///
+	"\begin{table}[H]\centering\caption{Main results (with imada fixed effect)}" 			_n ///
+	"\scalebox{0.80}{\input{Main/Table_Index_Full_fe.tex}}"						_n ///
 	"\end{table}" 																_n ///
 	"\pagebreak"																_n ///
-	"\begin{table}[H]\centering\caption{Extended main results}" 				_n ///
-	"\resizebox{\textwidth}{!}{\input{Main/Table_Index_Extended.tex}}"			_n ///
+	"\begin{table}[H]\centering\caption{Extended main results (without imada fixed effect)}" _n ///
+	"\resizebox{\textwidth}{!}{\input{Main/Table_Index_Extended_nofe.tex}}"		_n ///
 	"\end{table}" 																_n ///
-	"\begin{table}[H]\centering\caption{Extended main results}" 				_n ///
-	"\scalebox{0.60}{\input{Main/Table_Index_Full_Extended.tex}}"		_n ///
+	"\begin{table}[H]\centering\caption{Extended main results (with imada fixed effect)}" 	_n ///
+	"\scalebox{0.60}{\input{Main/Table_Index_Full_Extended_fe.tex}}"						_n ///
 	"\end{table}" 																_n ///
 	"\pagebreak"																_n
 	
@@ -161,7 +169,7 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 	
 	foreach index of local Index_ALL{
 			
-	local l_`index' : variable label IAaS`index'
+	local l_`index' : variable label B_f_`index'
 		
 		local i = `i' + 1
 		
@@ -180,36 +188,6 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 		file write tex_histo "\caption{`caption_`i''} \label{fig:Fig_`i'}"							_n
 					
 		file write tex_histo "\end{figure}"															_n
-		
-		file write tex_histo "\begin{table}[H]\centering\caption{Model without Imada fixed effect}"	_n
-		
-		file write tex_histo "\input{Tables/Regression/Table_`i'.tex}"								_n
-		
-		file write tex_histo "\end{table}"															_n
-		
-		file write tex_histo "\begin{table}[H]\centering\caption{Model with Imada fixed effect}"	_n
-		
-		file write tex_histo "\input{Tables/Regression/Table_`i'_b.tex}"							_n
-		
-		file write tex_histo "\end{table}"															_n
-		
-		file write tex_histo "\begin{table}[H]\centering\caption{Subsample of woman respondent}"	_n
-		
-		file write tex_histo "\input{Tables/Regression/Table_`i'_w.tex}"							_n
-		
-		file write tex_histo "\end{table}"															_n
-		
-		file write tex_histo "\begin{table}[H]\centering\caption{Subsample of male respondent}"		_n
-		
-		file write tex_histo "\input{Tables/Regression/Table_`i'_m.tex}"							_n
-		
-		file write tex_histo "\end{table}"															_n
-		
-		file write tex_histo "\begin{table}[H]\centering\caption{Heterogeneity Test}"				_n
-		
-		file write tex_histo "\input{Tables/Regression/Table_`i'_hete.tex}"							_n
-		
-		file write tex_histo "\end{table}"	
 		
 		file write tex_histo																_n ///
 	"\begin{table}[H]\centering\caption{Individual outcomes used in group: `l_`index'' }"	_n ///

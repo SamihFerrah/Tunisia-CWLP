@@ -13,10 +13,10 @@ clear
 ********************************************************************************
 ********************************************************************************
 
-local lab_market_main 	 		emploi_main days_work_main_win hours_work_main_win inc_work_main_win									///
+local lab_market_main 	 		emploi_main days_work_main_win hours_work_main_win inc_work_main_win							///
 								profit_work_main_win business_q0_main business_q3_main_win business_q5_main_win
 
-											
+														
 local eco_welfare 				c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 					///
 								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win c4_win c5_win c6_win 								///
 								c7_win c8_win c9_win c11_win c12_win c13_win c14_win c16_win c18_win 
@@ -24,15 +24,14 @@ local eco_welfare 				c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_
 local consumption_food 			c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 					///
 								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win 
 
-
-local consumption_other 		c4_win c5_win c6_win c7_win c8_win c9_win c11_win c12_win c13_win c14_win 					///
-								c16_win c18_win 
+local consumption_other 		c4_win c5_win c6_win c7_win c8_win c9_win c11_win c12_win c13_win c14_win 						///
+								c15_win c16_win c18_win 
 
 							
 local assets					q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_7_win q2_1_8_win 					///
-								q2_1_9_win q2_1_10_win q2_1_11_win q2_1_12_win q2_1_13_win  							///
-								q2_1_15_win q2_1_16_win q2_1_17_win q2_1_18_win q2_1_19_win 										///
-								 q2_1_21_win q2_1_22_win 
+								q2_1_9_win q2_1_10_win q2_1_11_win q2_1_12_win q2_1_13_win q2_1_14_win 							///
+								q2_1_15_win q2_1_16_win q2_1_17_win q2_1_18_win q2_1_19_win 									///
+								q2_1_20_win q2_1_21_win q2_1_22_win 
 
 local large_assets				q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_9_win q2_1_10_win					///
 								q2_1_12_win q2_1_13_win q2_1_17_win q2_1_20_win q2_1_21_win q2_1_22q2_1_22_winbis 
@@ -59,48 +58,84 @@ local neg_coping_mechanisms		g2_1 g2_2 g2_7 g2_13 g2_14 g2_15
 local shocks					g1_1 g1_2 g1_3 g1_4 g1_5 g1_6 g1_7 g1_8 g1_9
 
 
-local social				association_1 association_2 initiatives_9 association_9														///
-							association_3 association_4 association_6 /*association_7 association_8*/  
+local social				association_dummy comite_c comite_c_menage conflit_dispute_in 									///
+							conflit_dispute_out   																			///
+							security_dummy securite_1 securite_2 securite_3 securite_4										///
+							securite_5 securite_6 association_2 association_3 association_4	
 							
 							
-local civic					initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 						///
-							initiatives_7 initiatives_8  initiatives_10 initiatives_11 													///
-							initiatives_12 initiatives_13 initiatives_14 initiatives_15									
+local civic					initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 			///
+							initiatives_7 initiatives_8  initiatives_10 initiatives_11 										///
+							initiatives_12 initiatives_13 initiatives_14 initiatives_15										///
+							isolement_1 isolement_2 isolement_3 isolement_4													///
+							source_info2_internal source_info_internal utopie_a_dum1 utopie_b_dum1							
 
 							
-
-local well_being 			psy_anxiete psy_exploit psy_depress5 /*psy_accepte_dum1*/ psy_accepte_dum3 									///
-							psy_menage_dum3 /*psy_a_menage_dum1*/ psy_a_menage_dum3	 													///
+local well_being 			psy_anxiete psy_exploit psy_depress5 /*psy_accepte_dum1*/ psy_accepte_dum3 						///
+							psy_menage_dum3 /*psy_a_menage_dum1*/ psy_a_menage_dum3	 										///
 							psycho_depress4 psycho_depress3 psycho_depress2 psycho_depress1
 
 
-local woman_violence		violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 											///
-							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 											///
+local woman_violence		violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
+							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
 							violence_1_16 violence_1_17 violence_1_18  	
 							
 
-local woman_bargain 		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw /*association_2*/
+local woman_bargain 		intrahh_7 intrahh_11 emploiw /*association_2*/
 
 
-local woman_empowerment		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw 															///
-							violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 											///
-							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 											///
+local woman_empowerment		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw 												///
+							violence_1_2 violence_1_3 violence_1_4 violence_1_5 violence_1_6 								///
+							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
 							violence_1_16 violence_1_17 violence_1_18  	
 
+/*
+local civic_engag 			initiative_dummy utopie_a_dum1 utopie_b_dum1 source_info_internal source_info2_internal ///
+							isolation_dummy
+*/							
+						
+local initiatives			initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 ///
+							initiatives_7 initiatives_8 initiatives_9 initiatives_10 initiatives_11 			///
+							initiatives_12 initiatives_13 initiatives_14 initiatives_15
+							
+local initiatives_meeting	initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 ///
+							initiatives_7 initiatives_8 initiatives_9 
+							
+local initiatives_acting	initiatives_10 initiatives_11 initiatives_12 initiatives_13 initiatives_14 /*initiatives_15bis*/
 
-local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other							///
-							assets home_assets comms_assets productive_assets 															///
-							credit_access pos_coping_mechanisms neg_coping_mechanisms													///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 			
+local information_sources	source_info_internal source_info2_internal 
+
+local utopia				utopie_a_dum1 utopie_b_dum1 
+
+local isolation				isolement_1 isolement_2 isolement_3 isolement_4
+
+
+* Social participation / cohesion index 
+
+/*
+local social_cohesion2		association_dummy comite_c comite_c_menage conflit_dispute_in conflit_dispute_out ///
+							/*migration_cm_q1 migration_q1*/ security_dummy							
+*/
+
+local comm_groups			association_1 association_2 association_3 association_4 association_6 association_7 ///
+							association_8 association_9 comite_c comite_c_menage
+							
+
+local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups	
 							
 * Control variables
 
-local ctrl_Aa 		hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+local ctrl_Aa 		hhsize missing_hhsize repondant_mat missing_repondant_mat 									///
 					adult_num missing_adult_num 																	///
 					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
 local ctrl_Ba 
 	
-local ctrl_Cb 		hhsize missing_hhsize drepondant_mat missing_drepondant_mat 									///
+local ctrl_Cb 		hhsize missing_hhsize repondant_mat missing_repondant_mat 									///
 					adult_num missing_adult_num 																	///
 					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
 	
@@ -126,7 +161,7 @@ use "$stata/enquete_All3", clear
 	local cov_num : word count ``index''											// Count number of element in local `index'
 
 	
-	mat def pvalue = J(`cov_num',3,.)											// Define matrix to store p-value in order to adjust for mht
+	mat def pvalue = J(`cov_num',4,.)											// Define matrix to store p-value in order to adjust for mht
 	
 	cap file close Table_`index'												
 	
@@ -186,6 +221,19 @@ use "$stata/enquete_All3", clear
 					
 				mat def pvalue[`count_out',3] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
 				
+				
+			* Infrastucture
+			
+			eststo spill2: regres `individual_outcomes'_i beneficiaire `ctrl_Cb'  if infrastructure == 1, robust
+			
+				local c_4_`outcome' : di%12.3f _b[beneficiaire]
+				local se_4_`outcome' : di%12.3f _se[beneficiaire]
+				local n_4_`outcome' = e(N)
+				local r2_4_`outcome' = e(R2)
+								
+				mat def pvalue[`count_out',4] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
+			
+				
 		}
 		
 		* Store P-value vector name in global 
@@ -196,7 +244,7 @@ use "$stata/enquete_All3", clear
 		FDR_CWLP_1																// Adjust p-value for between specification
 		FDR_CWLP_2																// Adjust p-value for within specification
 		FDR_CWLP_3																// Adjust p-value for spillovers specification
-		
+		FDR_CWLP_4																// Adjust p-value for infrastructure specification
 		
 		* Compute stars 
 		
@@ -205,6 +253,7 @@ use "$stata/enquete_All3", clear
 			local s_1_`i' ""
 			local s_2_`i' ""
 			local s_3_`i' ""
+			local s_4_`i' ""
 			
 			local qval1 = Qval1[`i',1]
 		
@@ -252,6 +301,22 @@ use "$stata/enquete_All3", clear
 				local s_3_`i' "***"
 			}
 			di in red "`s_3_`i''"
+			
+			* Infrastructure Specification 
+		
+			local qval4 = Qval4[`i',1]
+			
+			if `qval4' < 0.1{
+				local s_4_`i' "*"
+			}
+			if `qval4' < 0.05{
+				local s_4_`i' "**"
+			}
+			if `qval4' < 0.01{
+				local s_4_`i' "***"
+			}
+			di in red "`s_4_`i''"
+			
 		}
 		
 
@@ -260,8 +325,8 @@ use "$stata/enquete_All3", clear
 	forvalue i = 1/`cov_num'{
 	
 		file write Table_`index'																													_n ///
-		"`l_`i''	&	`c_1_`i''`s_1_`i''	&	`n_1_`i''	&	`c_2_`i''`s_2_`i''	&	`n_2_`i''	&	`c_3_`i''`s_3_`i''	&	`n_3_`i''	\\"		_n ///
-		"			&	(`se_1_`i'')		&				&	(`se_2_`i'')		&				&	(`se_3_`i'')		&				\\"
+		"`l_`i''	&	`c_1_`i''`s_1_`i''	&	`n_1_`i''	&	`c_2_`i''`s_2_`i''	&	`n_2_`i''	&	`c_3_`i''`s_3_`i''	&	`n_3_`i''  & `c_4_`i''`s_4_`i''	&	`n_4_`i''	\\"		_n ///
+		"			&	(`se_1_`i'')		&				&	(`se_2_`i'')		&				&	(`se_3_`i'')		&	(`se_4_`i'') &			\\"
 
 	}
 

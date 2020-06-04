@@ -15,13 +15,17 @@ cap file close tex_histo
 pause on 
 clear 
 eststo clear 
+set scheme plotplainblind
 cd "$git_tunisia/outputs/"
 do  "$git_tunisia/dofiles/Ado/mmat2tex.do"
 
-local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other					///
-							assets home_assets comms_assets productive_assets 												///
-							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+					assets home_assets comms_assets productive_assets 												///
+					credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+					shocks social civic well_being woman_bargain woman_violence  									///
+					isolation utopia information_sources initiatives_acting initiatives_meeting						///
+					initiatives comm_groups												
+ 	
 					
 * Controls : ADJUSTED TO REFLECT THE ONES THAT ARE NOT BALANCED.
 
@@ -37,11 +41,11 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 					q0_1_c missing_q0_1_c q0_3_c missing_q0_3_c  q2_2_c missing_q2_2_c  q2_3_c 						///
 					missing_q2_3_c	q2_4_c  missing_q2_4_c  posevent_8	missing_posevent_8
 					
-global summary_stat = 0
-global main 		= 1
-global imada_fe		= 1
-global hete_woman	= 1
-global hete_men		= 1
+global summary_stat = 1
+global main 		= 0
+global imada_fe		= 0
+global hete_woman	= 0
+global hete_men		= 0
 
 ********************************************************************************
 ********************************************************************************
@@ -69,23 +73,23 @@ if $summary_stat == 1{
 
 * Create matrix to store results while looping over index
 foreach index in `Index_ALL'{
-	mat def `index' 			= J(3,5,.)
+	mat def `index' 			= J(4,5,.)
 }
 
 * Loop over every specification 
-foreach specification in Between Within Spillovers{
+foreach specification in Between Within Spillovers Infrastructure{
 
 	local counter_graph = 0 
 	
 	if "`specification'" == "Between"{
-	local cond_index 	"IAaS"
+	local cond_index 	"B_f_"
 	local cond_trt		"beneficiaire"
 	local cond_sample 	"between"
 	local row_summary = 1
 	}
 	
 	if "`specification'" == "Within"{
-	local cond_index	"IBaS"
+	local cond_index	"W_f_"
 	local cond_trt		"programs"
 	local cond_sample 	"within"
 	local row_summary = 2
@@ -93,10 +97,17 @@ foreach specification in Between Within Spillovers{
 	}
 	
 	if "`specification'" == "Spillovers"{
-	local cond_index 	"ICbS"
+	local cond_index 	"S_f_"
 	local cond_trt 		"beneficiaire"
 	local cond_sample 	"spillovers"
 	local row_summary = 3
+	}
+	
+	if "`specification'" == "Infrastructure"{
+	local cond_index 	"I_f_"
+	local cond_trt 		"beneficiaire"
+	local cond_sample 	"infrastructure"
+	local row_summary = 4
 	}
 	
 	* Loop over every index 
@@ -133,12 +144,14 @@ foreach specification in Between Within Spillovers{
 	}
 }
 
+
 * Combine graph produce above 
-forvalue i = 1/18{
+forvalue i = 1/24{
 	
-	grc1leg "Graph/Between/Figure_`i'.gph" ///
-			"Graph/Within/Figure_`i'.gph" ///
-			"Graph/Spillovers/Figure_`i'.gph", title("`caption_`i''")
+	grc1leg "Graph/Between/Figure_`i'.gph" 		///
+			"Graph/Within/Figure_`i'.gph" 		///
+			"Graph/Spillovers/Figure_`i'.gph"	///
+			"Graph/Infrastructure/Figure_`i'.gph", title("`caption_`i''")
 			
 	graph export "Graph/Combined/Figure_`i'.pdf", replace 
 
@@ -146,11 +159,12 @@ forvalue i = 1/18{
 
 * Clean graph folder 
 
-forvalue i = 1/18{
+forvalue i = 1/24{
 
 	rm "Graph/Between/Figure_`i'.gph"
 	rm "Graph/Within/Figure_`i'.gph"
 	rm "Graph/Spillovers/Figure_`i'.gph"
+	rm "Graph/Infrastructure/Figure_`i'.gph"
 }
 
 
@@ -164,13 +178,11 @@ foreach index in `Index_ALL'{
 	preheader("\begin{tabular}{l*{5}{c}}\hline&\multicolumn{1}{c}{N}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\\ \hline") ///
 						bottom("\hline \end{tabular}") ///
 						rownames(row1 row2 row3)   ///
-						substitute(row1 "Between Village" row2 "Within Village" row3 "Spillovers") ///
+						substitute(row1 "Between Village" row2 "Within Village" row3 "Spillovers" row4 "Infrastructure") ///
 						fmt(%12.0g %12.3f %12.3f %12.2f %12.2f)
 						
 local counter_table = `counter_table' + 1
 }
-*/
-
 }
 
 
@@ -431,9 +443,9 @@ if $main == 1 {
 	
 	file write Table_`i'  _n ///
 	"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{Between}&\multicolumn{1}{c}{Within}&\multicolumn{1}{c}{Spillovers}&\multicolumn{1}{c}{Full}\\ \hline" 	_n ///
-	" PWP		& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
+	" PWP			& 	`c_1_`i''`s_1_`i'' 	& 					 	& `c_3_`i''`s_3_`i'' & 	`c1_4_`i''`s1_4_`i''				\\ " 	_n ///
 	" 				&	 (`se_1_`i'')		&   					&	(`se_3_`i'')	 &	(`se1_4_`i'')						\\ " 	_n ///
-	" Workers 	& 					 	& `c_2_`i''`s_2_`i'' 	&    				 & 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
+	" Workers 		& 					 	& `c_2_`i''`s_2_`i'' 	&    			& 	`c2_4_`i''`s2_4_`i''				\\ " 	_n ///
 	" 				&	  					& (`se_2_`i'')  		&					 &	(`se2_4_`i'')						\\ " 	_n ///
 	"\hline															   			   					   							   " 	_n ///
 	" Full			&						&						&					 & 	`t_1_`i''`st_1_`i''					\\ "	_n ///

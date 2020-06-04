@@ -8,9 +8,9 @@
 * 0) DEFINE LOCAL USED TO BUILD INDEX 
 ********************************************************************************
 ********************************************************************************
+pause on 
 
-
-local lab_market_main 	 		emploi_main days_work_main_win hours_work_main_win inc_work_main_win									///
+local lab_market_main 	 		emploi_main days_work_main_win hours_work_main_win inc_work_main_win							///
 								profit_work_main_win business_q0_main business_q3_main_win business_q5_main_win
 
 														
@@ -18,16 +18,16 @@ local eco_welfare 				c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_
 								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win c4_win c5_win c6_win 								///
 								c7_win c8_win c9_win c11_win c12_win c13_win c14_win c16_win c18_win 
 
-local consumption_food 			c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 						///
+local consumption_food 			c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_a_6_win c3_a_7_win 					///
 								c3_a_8_win c3_a_9_win c3_a_10_win c3_a_11_win 
 
-local consumption_other 		c4_win c5_win c6_win c7_win c8_win c9_win c11_win c12_win c13_win c14_win 					///
+local consumption_other 		c4_win c5_win c6_win c7_win c8_win c9_win c11_win c12_win c13_win c14_win 						///
 								c15_win c16_win c18_win 
 
 							
 local assets					q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_7_win q2_1_8_win 					///
 								q2_1_9_win q2_1_10_win q2_1_11_win q2_1_12_win q2_1_13_win q2_1_14_win 							///
-								q2_1_15_win q2_1_16_win q2_1_17_win q2_1_18_win q2_1_19_win 										///
+								q2_1_15_win q2_1_16_win q2_1_17_win q2_1_18_win q2_1_19_win 									///
 								q2_1_20_win q2_1_21_win q2_1_22_win 
 
 local large_assets				q2_1_2_win q2_1_3_win q2_1_4_win q2_1_5_win q2_1_6_win q2_1_9_win q2_1_10_win					///
@@ -55,16 +55,19 @@ local neg_coping_mechanisms		g2_1 g2_2 g2_7 g2_13 g2_14 g2_15
 local shocks					g1_1 g1_2 g1_3 g1_4 g1_5 g1_6 g1_7 g1_8 g1_9
 
 
-local social				association_1 association_2 initiatives_9 association_9											///
-							association_3 association_4 association_6 /*association_7 association_8*/  
+local social				association_dummy comite_c comite_c_menage conflit_dispute_in 									///
+							conflit_dispute_out   																			///
+							security_dummy securite_1 securite_2 securite_3 securite_4										///
+							securite_5 securite_6 association_2 association_3 association_4	
 							
 							
 local civic					initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 			///
 							initiatives_7 initiatives_8  initiatives_10 initiatives_11 										///
-							initiatives_12 initiatives_13 initiatives_14 initiatives_15									
+							initiatives_12 initiatives_13 initiatives_14 initiatives_15										///
+							isolement_1 isolement_2 isolement_3 isolement_4													///
+							source_info2_internal source_info_internal utopie_a_dum1 utopie_b_dum1							
 
 							
-
 local well_being 			psy_anxiete psy_exploit psy_depress5 /*psy_accepte_dum1*/ psy_accepte_dum3 						///
 							psy_menage_dum3 /*psy_a_menage_dum1*/ psy_a_menage_dum3	 										///
 							psycho_depress4 psycho_depress3 psycho_depress2 psycho_depress1
@@ -75,7 +78,7 @@ local woman_violence		violence_1_2 violence_1_3 violence_1_4 violence_1_5 violen
 							violence_1_16 violence_1_17 violence_1_18  	
 							
 
-local woman_bargain 		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw /*association_2*/
+local woman_bargain 		intrahh_7 intrahh_11 emploiw /*association_2*/
 
 
 local woman_empowerment		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw 												///
@@ -83,13 +86,44 @@ local woman_empowerment		intrahh_1 intrahh_2 intrahh_7 intrahh_11 emploiw 						
 							violence_1_7 violence_1_8 violence_1_9 violence_1_10 violence_1_11 								///
 							violence_1_16 violence_1_17 violence_1_18  	
 
+/*
+local civic_engag 			initiative_dummy utopie_a_dum1 utopie_b_dum1 source_info_internal source_info2_internal ///
+							isolation_dummy
+*/							
+						
+local initiatives			initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 ///
+							initiatives_7 initiatives_8 initiatives_9 initiatives_10 initiatives_11 			///
+							initiatives_12 initiatives_13 initiatives_14 initiatives_15
+							
+local initiatives_meeting	initiatives_1 initiatives_2 initiatives_3 initiatives_4 initiatives_5 initiatives_6 ///
+							initiatives_7 initiatives_8 initiatives_9 
+							
+local initiatives_acting	initiatives_10 initiatives_11 initiatives_12 initiatives_13 initiatives_14 /*initiatives_15bis*/
+
+local information_sources	source_info_internal source_info2_internal 
+
+local utopia				utopie_a_dum1 utopie_b_dum1 
+
+local isolation				isolement_1 isolement_2 isolement_3 isolement_4
+
+
+* Social participation / cohesion index 
+
+/*
+local social_cohesion2		association_dummy comite_c comite_c_menage conflit_dispute_in conflit_dispute_out ///
+							/*migration_cm_q1 migration_q1*/ security_dummy							
+*/
+
+local comm_groups			association_1 association_2 association_3 association_4 association_6 association_7 ///
+							association_8 association_9 comite_c comite_c_menage
+							
 
 local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					
-							 
-
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups
 							
 ********************************************************************************
 ********************************************************************************
@@ -178,7 +212,7 @@ rename 					source_info2_intern source_info2_internal
 
 local sign 			emploi_comp_inut conflit_dispute_in conflit_dispute_out migration_cm_q1 migration_q1 	///
 					security_dummy securite_1 securite_2 securite_3 securite_3bis securite_4 securite_5  	///
-					securite_5bis securite_6 securite_6bis	violence_physicalbis violence_emotionalbis  	///
+					securite_6 violence_physicalbis violence_emotionalbis  	///
 					utopie_a_dum3 utopie_b_dum3 isolation_dummy psy_anxiete psy_exploit 					///
 					psy_depress5 psycho_depress4 psycho_depress3 psycho_depress2 psycho_depress1			///
 					psy_accepte_dum1 psy_a_menage_dum1 source_info_internal source_info2_internal			///
@@ -187,18 +221,21 @@ local sign 			emploi_comp_inut conflit_dispute_in conflit_dispute_out migration_
 					violence_1_5 violence_1_6 violence_1_7 violence_1_8 violence_1_9 violence_1_10 			///
 					violence_1_11 violence_1_16 violence_1_17 violence_1_18	violence_physical 				///
 					violence_emotional  migration_cm_q1bis migration_q1bis pearlin_7 pearlin_7bis 			///
-					psy_anxietebis psy_exploitbis psy_depress5bis distance_marche  distance_transpublic		///
+					psy_depress5bis distance_marche  distance_transpublic									///
 					psy_accepte_dum1bis psy_a_menage_dum1bis epargne_dette epargne_dette_cb_win			 	///
 					epargne_dettebis epargne_dette_cb_winbis g2_1 g2_2  distance_ecoleprim					///
 					g2_13 g2_14 g2_15 intrahh_7bis2 intrahh_11bis2 distance_ecolesec distance_eau			///
-					source_info_internalbis2 source_info2_internbis2 distance_dispensaire   				///
-					
-
+					source_info_internalbis2 source_info2_internbis2 distance_dispensaire   				
+				
+							
 foreach signvar of local sign  {
-gen 	`signvar'I = -	`signvar'
-rename 	`signvar'I  	`signvar'_t
-rename	`signvar' 		`signvar'I
-rename	`signvar'_t	 	`signvar'
+	
+	local l_var : variable label `signvar'
+
+	rename   `signvar' ori_`signvar'
+	gen 	`signvar' = -	ori_`signvar'
+	
+
 }
 
 ********************************************************************************
@@ -208,9 +245,9 @@ rename	`signvar'_t	 	`signvar'
 ********************************************************************************
 
 
-foreach specification in between within spillovers full 			///
-						 between_w within_w spillovers_w full_w 	///
-						 between_m within_m spillovers_m full_m {						// Loop over every specification (control group differ between those)
+foreach specification in between  within   spillovers   spillovers2    full 	infrastructure		///
+						 between_w within_w spillovers_w spillovers2_w full_w 	infrastructure_w	///
+						 between_m within_m spillovers_m spillovers2_m full_m 	infrastructure_m	{					
 
 	
 	* Define local specific to specification
@@ -218,41 +255,79 @@ foreach specification in between within spillovers full 			///
 	if "`specification'" == "between"{
 	local prg_condition = "between ==1"
 	local trt_indicator = "beneficiaire"
-	local spec_prefix 	= "IAaS"
-	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+	local spec_prefix 	= "B_f_"
+	local var_suffix	= "b"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
 	}
 	
 	if "`specification'" == "within"{
 	local prg_condition = "within ==1"
 	local trt_indicator = "program"
-	local spec_prefix 	= "IBaS"
-	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+	local spec_prefix 	= "W_f_"
+	local var_suffix	= "w"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
 	}
 	
 	if "`specification'" == "spillovers"{
 	local prg_condition = "spillovers ==1"
 	local trt_indicator = "beneficiaire"
-	local spec_prefix 	= "ICbS"
-	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+	local spec_prefix 	= "S_f_"
+	local var_suffix	= "s"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
+	}
+	
+	if "`specification'" == "spillovers2"{
+	local prg_condition = "spillovers ==1"
+	local trt_indicator = "beneficiaire"
+	local spec_prefix 	= "S2_f_"
+	local var_suffix	= "s2_f"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
+	}
+	
+	if "`specification'" == "infrastructure"{
+	local prg_condition = "infrastructure ==1"
+	local trt_indicator = "beneficiaire"
+	local spec_prefix 	= "I_f_"
+	local var_suffix	= "i"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
 	}
 	
 	if "`specification'" == "full"{
 	local prg_condition = "full ==1"
 	local trt_indicator = "trt_full"
-	local spec_prefix 	= "ICfS"
-	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+	local spec_prefix 	= "F_f_"
+	local var_suffix	= "f"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups	
 	}
 	
 	**********************************
@@ -261,41 +336,79 @@ foreach specification in between within spillovers full 			///
 	if "`specification'" == "between_w"{
 	local prg_condition = "between ==1 & repondant_sex == 0"
 	local trt_indicator = "beneficiaire"
-	local spec_prefix 	= "IAaSw"
-	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+	local spec_prefix 	= "B_w_"
+	local var_suffix	= "b_w"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
 	}
 	
 	if "`specification'" == "within_w"{
 	local prg_condition = "within ==1 & repondant_sex == 0"
 	local trt_indicator = "program"
-	local spec_prefix 	= "IBaSw"
-	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+	local spec_prefix 	= "W_w_"
+	local var_suffix	= "w_w"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups	
 	}
 	
 	if "`specification'" == "spillovers_w"{
 	local prg_condition = "spillovers ==1 & repondant_sex == 0"
 	local trt_indicator = "beneficiaire"
-	local spec_prefix 	= "ICbSw"
-	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+	local spec_prefix 	= "S_w_"
+	local var_suffix	= "s_w"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
+	}
+	
+	if "`specification'" == "infrastructure_w"{
+	local prg_condition = "infrastructure ==1 & repondant_sex == 0"
+	local trt_indicator = "beneficiaire"
+	local spec_prefix 	= "I_w_"
+	local var_suffix	= "i_w"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
+	}
+	
+	if "`specification'" == "spillovers2_w"{
+	local prg_condition = "spillovers ==1 & repondant_sex == 0"
+	local trt_indicator = "beneficiaire"
+	local spec_prefix 	= "S2_w_"
+	local var_suffix	= "s2_w"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups
 	}
 	
 	if "`specification'" == "full_w"{
 	local prg_condition = "full ==1 & repondant_sex == 0"
 	local trt_indicator = "trt_full"
-	local spec_prefix 	= "ICfSw"
-	local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+	local spec_prefix 	= "F_w"
+	local var_suffix	= "f_w"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being woman_bargain woman_violence woman_empowerment 	
+							shocks social civic well_being woman_bargain woman_violence woman_empowerment 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups	
 	}
 	
 	**********************************
@@ -304,41 +417,80 @@ foreach specification in between within spillovers full 			///
 	if "`specification'" == "between_m"{
 	local prg_condition = "between ==1 & repondant_sex == 1"
 	local trt_indicator = "beneficiaire"
-	local spec_prefix 	= "IAaSm"
+	local spec_prefix 	= "B_m_"
+	local var_suffix	= "b_m"
 	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being 
+							shocks social civic well_being    																///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups
 	}
 	
 	if "`specification'" == "within_m"{
 	local prg_condition = "within ==1 & repondant_sex == 1"
 	local trt_indicator = "program"
-	local spec_prefix 	= "IBaSm"
+	local spec_prefix 	= "W_m_"
+	local var_suffix	= "w_m"
 	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being 
+							shocks social civic well_being    																///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups
 	}
 	
 	if "`specification'" == "spillovers_m"{
 	local prg_condition = "spillovers  ==1 & repondant_sex == 1"
 	local trt_indicator = "beneficiaire"
-	local spec_prefix 	= "ICbSm"
+	local spec_prefix 	= "S_m_"
+	local var_suffix	= "s_m"
 	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being 
+							shocks social civic well_being    																///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups
 	}
+	
+	if "`specification'" == "spillovers2_m"{
+	local prg_condition = "spillovers  ==1 & repondant_sex == 1"
+	local trt_indicator = "beneficiaire"
+	local spec_prefix 	= "S2_m_"
+	local var_suffix	= "s2_m"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being    																///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups
+	}
+	
+	if "`specification'" == "infrastructure_m"{
+	local prg_condition = "infrastructure ==1 & repondant_sex == 1"
+	local trt_indicator = "beneficiaire"
+	local spec_prefix 	= "I_m_"
+	local var_suffix	= "i_m"
+	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
+							assets home_assets comms_assets productive_assets 												///
+							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
+							shocks social civic well_being 												 					///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 	
+	}
+	
 	
 	if "`specification'" == "full_m"{
 	local prg_condition = "full  ==1 & repondant_sex == 1"
 	local trt_indicator = "trt_full"
-	local spec_prefix 	= "ICfSm"
+	local spec_prefix 	= "F_m_"
+	local var_suffix	= "f_m"
 	local Index_ALL 		lab_market_main /*lab_market_sec*/ eco_welfare consumption_food consumption_other				///
 							assets home_assets comms_assets productive_assets 												///
 							credit_access pos_coping_mechanisms neg_coping_mechanisms										///
-							shocks social civic well_being 
+							shocks social civic well_being    																///
+							isolation utopia information_sources initiatives_acting initiatives_meeting						///
+							initiatives comm_groups 
 	}
 	
 	**********************************
@@ -347,7 +499,6 @@ foreach specification in between within spillovers full 			///
 	* Loop over every outcomes group
 	
 	foreach group_outcomes of local Index_ALL{
-		
 		
 		local lab_main_cond	""
 		local lab_sec_cond	""
@@ -366,12 +517,15 @@ foreach specification in between within spillovers full 			///
 		if "`group_outcomes'" == "woman_empowerment" & ("`specification'" == "between" 		| ///
 														"`specification'" == "within"		| ///
 														"`specification'" == "spillovers"	| ///
+														"`specification'" == "spillovers2"	| ///
 														"`specification'" == "full") {
 		
 		local woman_cond "& repondant_sex == 0"												
 		}
+
 				
 		* Create local used to store variable name to sum later 
+		di in red "`group_outcomes'"
 		
 		local sum_`group_outcomes' 		 ""
 		local var_num_`group_outcomes' = 0
@@ -382,20 +536,20 @@ foreach specification in between within spillovers full 			///
 		
 			* Create control mean of individual outcomes
 			
-			sum `indiv_outcomes' 					if `trt_indicator' == 0 & `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
+			sum `indiv_outcomes'_`var_suffix' 					if `trt_indicator' == 0 & `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
 			
 			
-			gen mean_`indiv_outcomes' = `r(mean)'	if `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
+			gen mean_`indiv_outcomes' = `r(mean)'				if `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
 			
 			* Create control standard deviaiton 
 			
-			sum `indiv_outcomes' 					if `trt_indicator' == 0 & `prg_condition' `woman_cond'
+			sum `indiv_outcomes'_`var_suffix' 					if `trt_indicator' == 0 & `prg_condition' `woman_cond'
 			
-			gen sd_`indiv_outcomes' = `r(sd)' 		if `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
+			gen sd_`indiv_outcomes' = `r(sd)' 					if `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
 		
 			* Normalize individual outcome 
 			
-			gen norm_`indiv_outcomes' = (`indiv_outcomes' - mean_`indiv_outcomes') / sd_`indiv_outcomes' if `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
+			gen norm_`indiv_outcomes' = (`indiv_outcomes'_`var_suffix' - mean_`indiv_outcomes') / sd_`indiv_outcomes' if `prg_condition' `woman_cond' `lab_main_cond' `lab_sec_cond'
 			
 			* Fill local with variable name used later to sum all standardize outcomes
 			
@@ -450,6 +604,15 @@ foreach specification in between within spillovers full 			///
 	cap label variable `spec_prefix'woman_bargain			"Women's empowerment and agency"
 	cap label variable `spec_prefix'woman_violence			"Intimate partner violence"
 	cap label variable `spec_prefix'shocks					"Economic shock"
+	cap label variable `spec_prefix'social_cohesion2 		"Social Cohesion"
+	cap label variable `spec_prefix'comm_groups 			"Community Groups"
+	cap label variable `spec_prefix'civic_engag 			"Civic Engagement"
+	cap label variable `spec_prefix'initiatives 			"Local Participation"
+	cap label variable `spec_prefix'initiatives_meeting 	"Local Meeting"
+	cap label variable `spec_prefix'initiatives_acting		"Local Acting"
+	cap label variable `spec_prefix'information_sources 	"Information Sources"
+	cap label variable `spec_prefix'utopia 					"Liberal Norms"
+	cap label variable `spec_prefix'isolation 				"Isolation"	
 
 }
 
@@ -512,7 +675,8 @@ foreach var of varlist	c3_a_1_win6 c3_a_2_win6 c3_a_3_win c3_a_4_win c3_a_5_win 
 	rename	`signvar'I 		`signvar'
 	}
 */
-	
+
+{	
 label variable adult_num			"Adult 18-65 years old"
 label variable futur_services		"Aspire to work in service"
 label variable emp_futur_cb_win	"Income aspiration"
@@ -662,6 +826,7 @@ label variable epargne  				"Did you save money during the last 12 months"
 label variable epargne_cb_win 			"Amount saved during the last 12 months"
 label variable epargne_pret				"Did you lend money during the last 12 months"								
 label var prev_PWP "Previous PWP"
+}
 
 local Control_ALL   	repondant_age repondant_sex repondant_mat repondant_educ		///
 						hhsize adult_num jeunes_lireecrire emploi_2013_a				///

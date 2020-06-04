@@ -77,10 +77,10 @@
 
 
 global import_individual		= 0
-global construct_individual		= 0
+global construct_individual		= 1
 global import_community			= 0 
 global construct_community		= 0
-global construct_analysis		= 0
+global construct_analysis		= 1
 global codebook_				= 0
 global sum_stat					= 0
 global balance 					= 0
