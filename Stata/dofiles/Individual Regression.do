@@ -130,14 +130,13 @@ local Index_ALL 			lab_market_main /*lab_market_sec*/ eco_welfare consumption_fo
 							
 * Control variables
 
-local ctrl_Aa 		hhsize missing_hhsize repondant_mat missing_repondant_mat 									///
-					adult_num missing_adult_num 																	///
-					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
-local ctrl_Ba 
+	local ctrl_Aa 	hhsize missing_hhsize adult_num missing_adult_num 			///
+					posevent_1 missing_posevent_1 posevent_8 missing_posevent_8
+				  
+	local ctrl_Ba 
 	
-local ctrl_Cb 		hhsize missing_hhsize repondant_mat missing_repondant_mat 									///
-					adult_num missing_adult_num 																	///
-					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
+	local ctrl_Cb 	hhsize missing_hhsize adult_num missing_adult_num 			///
+					posevent_1 missing_posevent_1 posevent_8 missing_posevent_8
 	
 global bet_with_spill = 1
 
@@ -148,27 +147,27 @@ global bet_with_spill = 1
 ********************************************************************************
 
 if $bet_with_spill == 1{
+
 * Use data 
 use "$stata/enquete_All3", clear 
 
 * Loop over every outcomes group 
-
 	foreach index of local Index_ALL{
 	
 	local count_index 
 	local count_out = 0 														// Use to name local with regression info stored
 							
-	local cov_num : word count ``index''											// Count number of element in local `index'
+	local cov_num : word count ``index''										// Count number of element in local `index'
 
 	
 	mat def pvalue = J(`cov_num',4,.)											// Define matrix to store p-value in order to adjust for mht
 	
-	cap file close Table_`index'												
+	cap file close Table_`index'												 
 	
 	file open Table_`index' using "Tables/Individual/Table_`index'.tex", text write replace
 	
 	file write  Table_`index'													_n ///
-	"\begin{tabular}{l*{6}{c}}\hline&\multicolumn{2}{c}{Between}&\multicolumn{2}{c}{Within}&\multicolumn{2}{c}{Spillovers} \\ \cmidrule(r){2-3}\cmidrule(l){4-5}\cmidrule(l){6-7} & {T-C} & {N} & {T-C} & {N}  & {T-C}  & {N}  \\ \midrule"  
+	"\begin{tabular}{l*{8}{c}}\hline&\multicolumn{2}{c}{Between}&\multicolumn{2}{c}{Within}&\multicolumn{2}{c}{Spillovers}&\multicolumn{2}{c}{Infrastructure}\\ \cmidrule(r){2-3}\cmidrule(l){4-5}\cmidrule(l){6-7}\cmidrule(l){8-9} & {T-C} & {N} & {T-C} & {N}  & {T-C}  & {N} & {T-C}  & {N} \\ \midrule"  
 	
 	
 		* Loop over every individual variables within outcomes group 
@@ -186,7 +185,7 @@ use "$stata/enquete_All3", clear
 			* Between 
 			
 			
-			eststo between: regress `individual_outcomes'_b beneficiaire `ctrl_Aa' if between == 1, vce (cluster imada)
+			eststo between: regress `individual_outcomes'_b beneficiaire `ctrl_Aa' i.strata if between == 1, vce (cluster imada)
 				
 				local c_1_`count_out' 	: di%12.3f _b[beneficiaire]
 				local se_1_`count_out' 	: di%12.3f _se[beneficiaire]
@@ -199,7 +198,7 @@ use "$stata/enquete_All3", clear
 			* Within 
 			
 			
-			eststo within: regres `individual_outcomes'_w programs `ctrl_Ba' if within == 1, robust
+			eststo within: regres `individual_outcomes'_w programs `ctrl_Ba' i.strata if within == 1, robust
 			
 				local c_2_`count_out' 	: di%12.3f  _b[programs]
 				local se_2_`count_out' 	: di%12.3f _se[programs]
@@ -212,7 +211,7 @@ use "$stata/enquete_All3", clear
 			* Spillovers 
 			
 		
-			eststo spill1: regres `individual_outcomes'_s beneficiaire `ctrl_Cb'  if spillovers == 1, vce (cluster imada)
+			eststo spill1: regres `individual_outcomes'_s beneficiaire `ctrl_Cb'  i.strata if spillovers == 1, vce (cluster imada)
 			
 				local c_3_`count_out' 	: di%12.3f _b[beneficiaire]
 				local se_3_`count_out' 	: di%12.3f _se[beneficiaire]
@@ -224,12 +223,12 @@ use "$stata/enquete_All3", clear
 				
 			* Infrastucture
 			
-			eststo spill2: regres `individual_outcomes'_i beneficiaire `ctrl_Cb'  if infrastructure == 1, robust
+			eststo spill2: regres `individual_outcomes'_i beneficiaire `ctrl_Cb' i.strata if infrastructure == 1, robust
 			
-				local c_4_`outcome' : di%12.3f _b[beneficiaire]
-				local se_4_`outcome' : di%12.3f _se[beneficiaire]
-				local n_4_`outcome' = e(N)
-				local r2_4_`outcome' = e(R2)
+				local c_4_`count_out' 	: di%12.3f  _b[beneficiaire]
+				local se_4_`count_out' 	: di%12.3f _se[beneficiaire]
+				local n_4_`count_out' 	= e(N)
+				local r2_4_`count_out' 	= e(R2)
 								
 				mat def pvalue[`count_out',4] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2
 			
@@ -376,7 +375,7 @@ use "$stata/enquete_All3", clear
 			
 			* Run regressions on individual outcomes 
 			
-			regres `individual_outcomes'_f beneficiaire programs `ctrl_Cb'  if full == 1, vce (cluster imada)
+			regres `individual_outcomes'_f beneficiaire programs `ctrl_Cb' i.strata if full == 1, vce (cluster imada)
 		
 				local c1_`count_out'  : di%12.3f _b[beneficiaire]
 				local se1_`count_out' : di%12.3f _se[beneficiaire]

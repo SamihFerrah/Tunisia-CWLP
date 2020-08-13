@@ -77,7 +77,7 @@
 
 
 global import_individual		= 0
-global construct_individual		= 1
+global construct_individual		= 0
 global import_community			= 0 
 global construct_community		= 0
 global construct_analysis		= 1
@@ -86,7 +86,7 @@ global sum_stat					= 0
 global balance 					= 0
 global desc_index				= 0
 global main_table				= 1
-global indiv_reg				= 0
+global indiv_reg				= 1
 global heterogeneity			= 0
 
 ********************************************************************************

@@ -20,7 +20,7 @@ urlcolor=black
 \usepackage{longtable}
 \usepackage{booktabs}
 \begin{document}
-\author{Ferrah Samih}\title{Tunisia CWLP}\maketitle
+\author{Ferrah Samih}\title{Tunisia CWLP: Histogram}\maketitle
 \pagebreak
 \tableofcontents
 \pagebreak
@@ -44,25 +44,40 @@ Where $ CWLP_{v} $ is a dummy indicating whether a community (\textit{v}) was re
 \end{table}
 \pagebreak
 \section{Main Table}
-\begin{table}[H]\centering\caption{Main results (without imada fixed effect)}
+
+\begin{table}[H]\centering\caption{Main results (without delegation fixed effect)}
 \resizebox{\textwidth}{!}{\input{Main/Table_Index_nofe.tex}}
 \end{table}
-\begin{table}[H]\centering\caption{Main results (with imada fixed effect)}
+\begin{table}[H]\centering\caption{Main results (with delegation fixed effect)}
 \resizebox{\textwidth}{!}{\input{Main/Table_Index_fe.tex}}
 \end{table}
-\begin{table}[H]\centering\caption{Main results (without imada fixed effect)}
+
+\begin{table}[H]\centering\caption{Main results (controlling for number of project per delegation)}
+\resizebox{\textwidth}{!}{\input{Main/Table_Index_num_project.tex}}
+\end{table}
+
+\begin{table}[H]\centering\caption{Main results (without delegation fixed effect)}
 \scalebox{0.80}{\input{Main/Table_Index_Full_nofe.tex}}
 \end{table}
-\begin{table}[H]\centering\caption{Main results (with imada fixed effect)}
+
+\begin{table}[H]\centering\caption{Main results (with delegation fixed effect)}
 \scalebox{0.80}{\input{Main/Table_Index_Full_fe.tex}}
 \end{table}
+
+\begin{table}[H]\centering\caption{Main results, controlling for number of project per delegation}
+	\scalebox{0.80}{\input{Main/Table_Index_Full_num_project.tex}}
+\end{table}
+
 \pagebreak
-\begin{table}[H]\centering\caption{Extended main results (without imada fixed effect)}
+
+\begin{table}[H]\centering\caption{Extended main results (without delegation fixed effect)}
 \resizebox{\textwidth}{!}{\input{Main/Table_Index_Extended_nofe.tex}}
 \end{table}
-\begin{table}[H]\centering\caption{Extended main results (with imada fixed effect)}
+
+\begin{table}[H]\centering\caption{Extended main results (with delegation fixed effect)}
 \scalebox{0.60}{\input{Main/Table_Index_Full_Extended_fe.tex}}
 \end{table}
+
 \pagebreak
 \section{Labor market}
 \begin{table}[H]\centering

@@ -834,7 +834,9 @@ local Control_ALL   	repondant_age repondant_sex repondant_mat repondant_educ		/
 						q0_1_c q0_2_c q0_3_c negevent_1 negevent_2 negevent_3  			///
 						negevent_5 negevent_6 negevent_7 negevent_4     				///
 						negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      	///
-						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 prev_PWP
+						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 prev_PWP ///
+						pop_2004_admin pop_2014_admin pop_change_admin
+						
 
 
 /*					
@@ -852,6 +854,8 @@ pause
 	* Imput missing control variable by 0 and add indicator for missing 
 	
 	foreach variables of local Control_ALL{
+	
+	g ori_`variables' = `variables'
 	
 	g missing_`variables' = 0 
 							

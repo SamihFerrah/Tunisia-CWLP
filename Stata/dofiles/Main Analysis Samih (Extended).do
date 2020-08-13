@@ -21,15 +21,13 @@ local Index_ALL 	lab_market_main /*lab_market_sec*/ eco_welfare consumption_food
 					initiatives comm_groups						
 
 	
-	local ctrl_Aa 	hhsize missing_hhsize repondant_mat missing_repondant_mat 									///
-					adult_num missing_adult_num 																	///
-					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
+	local ctrl_Aa 	hhsize missing_hhsize adult_num missing_adult_num 									///
+					posevent_1 missing_posevent_1 posevent_8 missing_posevent_8
 				  
 	local ctrl_Ba 
 	
-	local ctrl_Cb 	hhsize missing_hhsize repondant_mat missing_repondant_mat 									///
-					adult_num missing_adult_num 																	///
-					q0_1_c missing_q0_1_c posevent_8 missing_posevent_8
+	local ctrl_Cb 	hhsize missing_hhsize adult_num missing_adult_num 									///
+					posevent_1 missing_posevent_1 posevent_8 missing_posevent_8
 					
 
 ********************************************************************************
@@ -63,7 +61,7 @@ use "$stata/enquete_All3", clear
 		
 		* Between 
 			
-			eststo between: regress B_f_`outcome' beneficiaire `ctrl_Aa' if between == 1, vce (cluster imada)
+			eststo between: regress B_f_`outcome' beneficiaire `ctrl_Aa' i.strata if between == 1, vce (cluster imada)
 				
 				local c_1_`outcome' : di%12.3f _b[beneficiaire]
 				local se_1_`outcome' : di%12.3f _se[beneficiaire]
@@ -75,7 +73,7 @@ use "$stata/enquete_All3", clear
 
 		* Within 
 		
-			eststo within: regres W_f_`outcome' programs `ctrl_Ba' if within == 1, robust
+			eststo within: regres W_f_`outcome' programs `ctrl_Ba' i.strata if within == 1, robust
 			
 				local c_2_`outcome' : di%12.3f  _b[programs]
 				local se_2_`outcome' : di%12.3f _se[programs]
@@ -87,7 +85,7 @@ use "$stata/enquete_All3", clear
 				
 		* Spillovers indiviual level 
 		
-			eststo spill1: regres S_f_`outcome' beneficiaire `ctrl_Cb'  if spillovers == 1, vce (cluster imada)
+			eststo spill1: regres S_f_`outcome' beneficiaire `ctrl_Cb' i.strata  if spillovers == 1, vce (cluster imada)
 			
 				local c_3_`outcome' : di%12.3f _b[beneficiaire]
 				local se_3_`outcome' : di%12.3f _se[beneficiaire]
@@ -100,7 +98,7 @@ use "$stata/enquete_All3", clear
 				
 		* Spillovers imada level  
 		
-			eststo spill1: regres I_f_`outcome' beneficiaire `ctrl_Cb'  if infrastructure == 1, robust
+			eststo spill1: regres I_f_`outcome' beneficiaire `ctrl_Cb' i.strata  if infrastructure == 1, vce (cluster imada)
 			
 				local c_4_`outcome' : di%12.3f _b[beneficiaire]
 				local se_4_`outcome' : di%12.3f _se[beneficiaire]
@@ -244,7 +242,7 @@ use "$stata/enquete_All3", clear
 		
 		* Between 
 			
-			eststo between: regress B_f_`outcome' beneficiaire `ctrl_Aa' i.imada if between == 1, vce (cluster imada)
+			eststo between: regress B_f_`outcome' beneficiaire `ctrl_Aa' i.strata i.delegation_admin if between == 1, vce (cluster imada)
 				
 				local c_1_`outcome' : di%12.3f _b[beneficiaire]
 				local se_1_`outcome' : di%12.3f _se[beneficiaire]
@@ -256,7 +254,7 @@ use "$stata/enquete_All3", clear
 
 		* Within 
 		
-			eststo within: regres W_f_`outcome' programs `ctrl_Ba' i.imada if within == 1, robust
+			eststo within: regres W_f_`outcome' programs `ctrl_Ba' i.strata i.delegation_admin if within == 1, robust
 			
 				local c_2_`outcome' : di%12.3f  _b[programs]
 				local se_2_`outcome' : di%12.3f _se[programs]
@@ -268,7 +266,7 @@ use "$stata/enquete_All3", clear
 				
 		* Spillovers indiviual level 
 		
-			eststo spill1: regres S_f_`outcome' beneficiaire `ctrl_Cb' i.imada if spillovers == 1, vce (cluster imada)
+			eststo spill1: regres S_f_`outcome' beneficiaire `ctrl_Cb' i.strata i.delegation_admin if spillovers == 1, vce (cluster imada)
 			
 				local c_3_`outcome' : di%12.3f _b[beneficiaire]
 				local se_3_`outcome' : di%12.3f _se[beneficiaire]
@@ -281,8 +279,8 @@ use "$stata/enquete_All3", clear
 				
 		* Spillovers imada level  
 		
-			eststo spill1: regres I_f_`outcome' beneficiaire `ctrl_Cb' i.imada if infrastructure == 1, robust
-			
+			eststo spill1: regres I_f_`outcome' beneficiaire `ctrl_Cb' i.strata i.delegation_admin if infrastructure == 1, vce (cluster imada)
+		
 				local c_4_`outcome' : di%12.3f _b[beneficiaire]
 				local se_4_`outcome' : di%12.3f _se[beneficiaire]
 				local n_4_`outcome' = e(N)
@@ -561,7 +559,7 @@ file close Table
 
 ********************************************************************************
 ********************************************************************************
-* 3) Main table with full specification (without fixed effect)
+* 3) Main table with full specification (with fixed effect)
 ********************************************************************************
 ********************************************************************************	
 local  count_pvalue = 1
@@ -580,7 +578,7 @@ use "$stata/enquete_All3", clear
 		
 		* Full 
 			
-			regress F_f_`outcome' beneficiaire programs `ctrl_Cb' i.imada if full == 1, vce (cluster imada)
+			regress F_f_`outcome' beneficiaire programs `ctrl_Cb' i.strata i.delegation_admin if full == 1, vce (cluster imada)
 				
 				local c_1_`outcome' 	: di%12.3f _b[beneficiaire]
 				local se_1_`outcome' 	: di%12.3f _se[beneficiaire]

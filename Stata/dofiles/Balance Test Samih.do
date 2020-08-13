@@ -24,7 +24,8 @@ local balance_coll		q0_1_c q0_2_c q0_3_c 											///
 						negevent_1 negevent_2 negevent_3 negevent_4 					///
 						negevent_5 negevent_6 negevent_7      							///
 						negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      	///
-						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 prev_PWP
+						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 prev_PWP ///
+						pop_2004_admin pop_2014_admin pop_change_admin
 
 
 
@@ -36,8 +37,7 @@ local balance_coll		q0_1_c q0_2_c q0_3_c 											///
 	
 
 use "$stata/enquete_All3", clear 
-desc `balance_coll'
-
+/*
 	* Some re-labelling 
 	
 	/*
@@ -78,7 +78,7 @@ desc `balance_coll'
 		
 		* Between Specification 
 		
-		reg `covariates' beneficiaire missing_`covariates'	if between == 1, vce(cluster imada)
+		reg `covariates' beneficiaire missing_`covariates' i. strata if between == 1, vce(cluster imada)
 		
 			local c_1_`count_out' 	: di%12.3f _b[beneficiaire]
 			local se_1_`count_out' 	: di%12.3f _se[beneficiaire]
@@ -89,7 +89,7 @@ desc `balance_coll'
 				
 		* Within Specification 
 		
-		reg `covariates' program missing_`covariates'		if within == 1, robust
+		reg `covariates' program missing_`covariates'	i. strata	if within == 1, robust
 		
 			local c_2_`count_out' 	: di%12.3f _b[program]
 			local se_2_`count_out' 	: di%12.3f _se[program]
@@ -100,7 +100,7 @@ desc `balance_coll'
 				
 		* Spillovers Specification 
 		
-		reg `covariates' beneficiaire missing_`covariates'	if spillover == 1	, vce(cluster imada)
+		reg `covariates' beneficiaire missing_`covariates' i. strata	if spillover == 1	, vce(cluster imada)
 		
 			local c_3_`count_out' 	: di%12.3f _b[beneficiaire]
 			local se_3_`count_out' 	: di%12.3f _se[beneficiaire]
@@ -215,7 +215,7 @@ desc `balance_coll'
 	" 				&	 (`se_1_13') & &									&   	(`se_2_13') & &								&	(`se_3_13') & &						\\ " 	_n ///
 */
 }
-
+*/
 ********************************************************************************
 ********************************************************************************						
 * 2) Balance test at community level 
@@ -232,38 +232,55 @@ desc `balance_coll'
 	}
 	*/
 	
-	label var q0_1_c "River or lake"
-	label var q0_2_c "Forest"
-	label var q0_3_c "Mountain"
-	label var q2_1_c "Main activity: Agriculture "
-	label var q2_2_c "Main activity: Fishing"
-	label var q2_3_c "Main activity: Farming"
-	label var q2_4_c "Main activity: Industry"
-	label var q2_5_c "Main activity: Trade"
-	label var q2_6_c "Main activity: Other services"
-	label var negevent_1 "Drought"	
-	label var negevent_2 "Flood"
-	label var negevent_3 "Fast increase in commodity prices"
-	label var negevent_4 "Large loss of work"	
-	label var negevent_5 "Crop parasites"
-	label var negevent_6 "Livestock illness"
-	label var negevent_7 "Human epidemic" 
-	label var negevent_8 "Electricity cut off"
-	label var negevent_9 "Other bad events"
-	label var posevent_1 "Development project"
-	label var posevent_2 "Electrification of the IMADA"
-	label var posevent_3 "New school" 
-	label var posevent_4 "New road"
-	label var posevent_5 "New health centre"
-	label var posevent_6 "New employment opportunities"
-	label var posevent_7 "Improved transport services"
-	label var posevent_8 "Other good events"
+	
+preserve 
+	
+	keep 	imada `balance_coll' beneficiaire between strata								///
+			missing_q0_1_c missing_q0_2_c missing_q0_3_c 									///
+			missing_negevent_1 missing_negevent_2 missing_negevent_3 missing_negevent_4 	///
+			missing_negevent_5 missing_negevent_6 missing_negevent_7      					///
+			missing_negevent_8 missing_negevent_9 missing_posevent_1 missing_posevent_2 	///
+			missing_posevent_3 missing_posevent_4 missing_posevent_5 missing_posevent_6 	///
+			missing_posevent_7 missing_posevent_8 missing_prev_PWP missing_pop_2004_admin 	///
+			missing_pop_2014_admin missing_pop_change_admin
+	
+	duplicates drop imada, force 
+	
+	label var q0_1_c 			"River or lake"
+	label var q0_2_c 			"Forest"
+	label var q0_3_c 			"Mountain"
+	cap label var q2_1_c 		"Main activity: Agriculture "
+	cap label var q2_2_c 		"Main activity: Fishing"
+	cap label var q2_3_c 		"Main activity: Farming"
+	cap label var q2_4_c 		"Main activity: Industry"
+	cap label var q2_5_c 		"Main activity: Trade"
+	cap label var q2_6_c 		"Main activity: Other services"
+	label var negevent_1 		"Drought"	
+	label var negevent_2 		"Flood"
+	label var negevent_3 		"Fast increase in commodity prices"
+	label var negevent_4 		"Large loss of work"	
+	label var negevent_5 		"Crop parasites"
+	label var negevent_6 		"Livestock illness"
+	label var negevent_7 		"Human epidemic" 
+	label var negevent_8 		"Electricity cut off"
+	label var negevent_9 		"Other bad events"
+	label var posevent_1 		"Development project"
+	label var posevent_2 		"Electrification of the IMADA"
+	label var posevent_3 		"New school" 
+	label var posevent_4 		"New road"
+	label var posevent_5 		"New health centre"
+	label var posevent_6 		"New employment opportunities"
+	label var posevent_7 		"Improved transport services"
+	label var posevent_8 		"Other good events"
+	label var pop_2004_admin 	"Population 2004"
+	label var pop_2014_admin 	"Population 2014"
+	label var pop_change_admin 	"Population growth"
 	
 	* Balance test at the individual level 
 	
 	local count_out = 0 
 	
-	mat def pvalue = J(21,1,.)
+	mat def pvalue = J(24,1,.)
 	
 	foreach covariates in `balance_coll'{
 	
@@ -273,7 +290,7 @@ desc `balance_coll'
 		
 		* Between Specification 
 		
-		reg `covariates' beneficiaire missing_`covariates' 	if between == 1, vce(cluster imada)
+		reg `covariates' beneficiaire missing_`covariates' i. strata, robust
 		
 			local c_1_`count_out' 	: di%12.3f _b[beneficiaire]
 			local se_1_`count_out' 	: di%12.3f _se[beneficiaire]
@@ -284,9 +301,11 @@ desc `balance_coll'
 	
 	}
 	
+	pause
+	
 	* Store significance level based on p-value
 	
-	forvalue i = 1/21{
+	forvalue i = 1/24{
 		
 		* Between specification
 		
@@ -355,6 +374,12 @@ desc `balance_coll'
 	" 				&	 (`se_1_20') 		& 			  	&				\\ "		_n ///
 	" `l_21'		& 	`c_1_21'`s_1_21' 	& `pval_1_21' 	& `n_1_21' 		\\ " 		_n ///			 		
 	" 				&	 (`se_1_21') 		& 			  	&				\\ "		_n ///
+	" `l_22'		& 	`c_1_22'`s_1_22' 	& `pval_1_22' 	& `n_1_22' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_22') 		& 			  	&				\\ "		_n ///
+	" `l_23'		& 	`c_1_23'`s_1_23' 	& `pval_1_23' 	& `n_1_23' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_23') 		& 			  	&				\\ "		_n ///
+	" `l_24'		& 	`c_1_24'`s_1_24' 	& `pval_1_24' 	& `n_1_24' 		\\ " 		_n ///			 		
+	" 				&	 (`se_1_24') 		& 			  	&				\\ "		_n ///
 	"\hline \end{tabular}												   "		_n 
 	file close Table		
 
