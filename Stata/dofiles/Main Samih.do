@@ -22,7 +22,7 @@
 	* Samih 			7
 	
 	
-	global user_number  7
+	global user_number  8
 
 	* Dropbox/Box globals
 	* ---------------------
@@ -55,6 +55,9 @@
 	if $user_number == 7 {
 		global dropbox	"/Users/Samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
 	}
+	if $user_number == 8 {
+		global dropbox	"C:/Users/samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
+	}
 	
 		*location of the temporary data, temp;
 		global rando "$dropbox/randomization"
@@ -74,20 +77,24 @@
 		if $user_number == 7{
 			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"
 		}
+		if $user_number == 8{
+			global git_tunisia "C:/Users/samih/Documents/Github/Tunisia-CWLP/Stata"
+		}
+
 
 
 global import_individual		= 0
 global construct_individual		= 0
 global import_community			= 0 
 global construct_community		= 0
-global construct_analysis		= 1
+global construct_analysis		= 0
 global codebook_				= 0
 global sum_stat					= 0
 global balance 					= 0
-global desc_index				= 0
+global desc_index				= 1
 global main_table				= 1
 global indiv_reg				= 1
-global heterogeneity			= 0
+global heterogeneity			= 1
 
 ********************************************************************************
 ********************************************************************************

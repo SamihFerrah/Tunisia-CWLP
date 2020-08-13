@@ -242,7 +242,7 @@ use "$stata/enquete_All3", clear
 		
 		* Between 
 			
-			eststo between: regress B_f_`outcome' beneficiaire `ctrl_Aa' i.strata i.delegation_admin if between == 1, vce (cluster imada)
+			eststo between: regress B_f_`outcome' beneficiaire `ctrl_Aa' i.imada if between == 1, vce (cluster imada)
 				
 				local c_1_`outcome' : di%12.3f _b[beneficiaire]
 				local se_1_`outcome' : di%12.3f _se[beneficiaire]
@@ -254,7 +254,7 @@ use "$stata/enquete_All3", clear
 
 		* Within 
 		
-			eststo within: regres W_f_`outcome' programs `ctrl_Ba' i.strata i.delegation_admin if within == 1, robust
+			eststo within: regres W_f_`outcome' programs `ctrl_Ba'  i.imada if within == 1, robust
 			
 				local c_2_`outcome' : di%12.3f  _b[programs]
 				local se_2_`outcome' : di%12.3f _se[programs]
@@ -266,7 +266,7 @@ use "$stata/enquete_All3", clear
 				
 		* Spillovers indiviual level 
 		
-			eststo spill1: regres S_f_`outcome' beneficiaire `ctrl_Cb' i.strata i.delegation_admin if spillovers == 1, vce (cluster imada)
+			eststo spill1: regres S_f_`outcome' beneficiaire `ctrl_Cb' i.imada if spillovers == 1, vce (cluster imada)
 			
 				local c_3_`outcome' : di%12.3f _b[beneficiaire]
 				local se_3_`outcome' : di%12.3f _se[beneficiaire]
@@ -279,7 +279,7 @@ use "$stata/enquete_All3", clear
 				
 		* Spillovers imada level  
 		
-			eststo spill1: regres I_f_`outcome' beneficiaire `ctrl_Cb' i.strata i.delegation_admin if infrastructure == 1, vce (cluster imada)
+			eststo spill1: regres I_f_`outcome' beneficiaire `ctrl_Cb' i.imada if infrastructure == 1, vce (cluster imada)
 		
 				local c_4_`outcome' : di%12.3f _b[beneficiaire]
 				local se_4_`outcome' : di%12.3f _se[beneficiaire]
@@ -578,7 +578,7 @@ use "$stata/enquete_All3", clear
 		
 		* Full 
 			
-			regress F_f_`outcome' beneficiaire programs `ctrl_Cb' i.strata i.delegation_admin if full == 1, vce (cluster imada)
+			regress F_f_`outcome' beneficiaire programs `ctrl_Cb' i.imada if full == 1, vce (cluster imada)
 				
 				local c_1_`outcome' 	: di%12.3f _b[beneficiaire]
 				local se_1_`outcome' 	: di%12.3f _se[beneficiaire]
@@ -698,6 +698,160 @@ use "$stata/enquete_All3", clear
 
 			
 file open Table using "Table_Index_Full_Extended_fe.tex", text write replace
+	
+file write Table  _n ///
+"\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{PWP}&\multicolumn{1}{c}{Workers}&\multicolumn{1}{c}{Full}&\multicolumn{1}{c}{N} \\ \hline"  _n 
+
+ 
+foreach outcome of local Index_ALL{
+	
+	file write Table  _n ///
+	" `l_`outcome'' &	`c_1_`outcome''`ss_1_`outcome'' &  `c_2_`outcome''`ss_2_`outcome'' &	`c_3_`outcome''`ss_3_`outcome'' & `n_1_`outcome''			\\  " 	_n ///
+	" 		  &	   (`se_1_`outcome'') 			&	 (`se_2_`outcome'')			   & 							         &							\\ 	" 	_n 
+	
+}
+
+file write Table  																 _n ///
+"\hline \end{tabular}														   " _n	
+file close Table
+
+********************************************************************************
+********************************************************************************
+* 4) Main table with full specification (controlling for number of project per delegation)
+********************************************************************************
+********************************************************************************	
+local  count_pvalue = 1
+
+mat def pvalue = J(25,3,.)
+
+foreach outcome in `Index_ALL' {
+
+use "$stata/enquete_All3", clear 
+
+		if "`outcome'" == "woman_violence" | "`outcome'" == "woman_bargain"{
+			keep if repondant_sex == 0
+		}
+		
+		local l_`count_pvalue' : variable label B_f_`outcome'
+		
+		* Full 
+			
+			regress F_f_`outcome' beneficiaire programs `ctrl_Cb' num_projects i.strata if full == 1, vce (cluster imada)
+				
+				local c_1_`outcome' 	: di%12.3f _b[beneficiaire]
+				local se_1_`outcome' 	: di%12.3f _se[beneficiaire]
+				
+				local c_2_`outcome' 	: di%12.3f _b[programs]
+				local se_2_`outcome' : di%12.3f _se[programs]
+				
+				local n_1_`outcome'  = e(N)
+				local r2_1_`outcome' = e(R2)
+				
+				local p_1_`outcome' : di%12.3f ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2	
+				local p_2_`outcome' : di%12.3f ttail(e(df_r),abs(_b[programs]/_se[programs]))*2	
+				
+				mat def pvalue[`count_pvalue',1] = ttail(e(df_r),abs(_b[beneficiaire]/_se[beneficiaire]))*2	
+				mat def pvalue[`count_pvalue',2] = ttail(e(df_r),abs(_b[programs]/_se[programs]))*2	
+				
+				count 
+				local full_sample = `r(N)'
+				
+				count if beneficiaire 	== 1
+				local communities 		= `r(N)'
+				
+				count if programs 	== 1
+				local workers 		= `r(N)'
+				
+				local share_communities = `communities'/`full_sample'
+				local share_worker 		= `workers'/`full_sample'
+				
+			local c_3_`outcome' 	=  _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker'
+			local c_3_`outcome'	: di%12.3f `c_3_`outcome'' 
+			
+			local se_3_`outcome' = _se[beneficiaire]*`share_communities' + _se[programs]*`share_worker'
+			local se_3_`outcome'	: di%12.3f `set_1_`count_out3'' 
+			
+			test _b[beneficiaire]*`share_communities' +  _b[programs]*`share_worker' = 0 
+			
+			local p_3_`outcome' : di%12.3f `r(p)'
+			
+			mat def pvalue[`count_pvalue',3] = `r(p)'
+			
+		local count_pvalue  = `count_pvalue' + 1
+		
+}
+		
+	* Store P-value vector name in global 
+	global pvalue "pvalue"
+	
+	* Compute p-value
+	
+	FDR_CWLP_1
+	FDR_CWLP_2
+	FDR_CWLP_3
+	
+	local count_outcomes = 1
+	
+	foreach outcome of local primary{
+	
+		local qval1 = Qval1[`count_outcomes',1]
+		local p_1_`outcome' : di%12.3f `qval1'
+			
+		local qval2 = Qval2[`count_outcomes',1]
+		local p_2_`outcome' : di%12.3f `qval2'
+			
+		local qval3 = Qval3[`count_outcomes',1]
+		local p_3_`outcome' : di%12.3f `qval3'
+			
+		local count_outcomes = `count_outcomes' + 1
+		
+	}
+	
+	* Store significance level based on p-value adjustment
+	
+		
+	foreach outcome of local Index_ALL{
+
+		* First coeff
+			
+			if `p_1_`outcome'' < 0.1{
+				local ss_1_`outcome' "*"
+			}
+			if `p_1_`outcome'' < 0.05{
+				local ss_1_`outcome' "**"
+			}
+			if `p_1_`outcome'' < 0.01{
+				local ss_1_`outcome' "***"
+			}
+			
+		* Second coeff
+			
+			if `p_2_`outcome'' < 0.1{
+				local ss_2_`outcome' "*"
+			}
+			if `p_2_`outcome'' < 0.05{
+				local ss_2_`outcome' "**"
+			}
+			if `p_2_`outcome'' < 0.01{
+				local ss_2_`outcome' "***"
+			}
+		
+		* Full coeff
+		
+			if `p_3_`outcome'' < 0.1{
+				local ss_3_`outcome' "*"
+			}
+			if `p_3_`outcome'' < 0.05{
+				local ss_3_`outcome' "**"
+			}
+			if `p_3_`outcome'' < 0.01{
+				local ss_3_`outcome' "***"
+			}
+
+	}
+
+			
+file open Table using "Table_Index_Full_Extended_num_project.tex", text write replace
 	
 file write Table  _n ///
 "\begin{tabular}{l*{4}{c}}\hline&\multicolumn{1}{c}{PWP}&\multicolumn{1}{c}{Workers}&\multicolumn{1}{c}{Full}&\multicolumn{1}{c}{N} \\ \hline"  _n 

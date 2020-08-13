@@ -240,7 +240,7 @@ use "$stata/enquete_All3", clear
 		
 		* Between 
 			
-			eststo between: regress B_f_`outcome' beneficiaire `ctrl_Aa' i.strata i.delegation_admin if between == 1, vce (cluster imada)
+			eststo between: regress B_f_`outcome' beneficiaire `ctrl_Aa' i.imada if between == 1, vce (cluster imada)
 				
 				local c_1_`outcome' : di%12.3f _b[beneficiaire]
 				local se_1_`outcome' : di%12.3f _se[beneficiaire]
@@ -252,7 +252,7 @@ use "$stata/enquete_All3", clear
 
 		* Within 
 		
-			eststo within: regres W_f_`outcome' programs `ctrl_Ba' i.strata i.delegation_admin if within == 1, robust
+			eststo within: regres W_f_`outcome' programs `ctrl_Ba' i.imada if within == 1, robust
 			
 				local c_2_`outcome' : di%12.3f  _b[programs]
 				local se_2_`outcome' : di%12.3f _se[programs]
@@ -264,7 +264,7 @@ use "$stata/enquete_All3", clear
 				
 		* Spillovers indiviual level 
 		
-			eststo spill1: regres S_f_`outcome' beneficiaire `ctrl_Cb' i.strata  i.delegation_admin if spillovers == 1, vce (cluster imada)
+			eststo spill1: regres S_f_`outcome' beneficiaire `ctrl_Cb'  i.imada if spillovers == 1, vce (cluster imada)
 			
 				local c_3_`outcome' : di%12.3f _b[beneficiaire]
 				local se_3_`outcome' : di%12.3f _se[beneficiaire]
@@ -277,7 +277,7 @@ use "$stata/enquete_All3", clear
 				
 		* Spillovers imada level  
 		
-			eststo spill1: regres I_f_`outcome' beneficiaire `ctrl_Cb' i.strata  i.delegation_admin if infrastructure == 1, vce (cluster imada)
+			eststo spill1: regres I_f_`outcome' beneficiaire `ctrl_Cb'  i.imada if infrastructure == 1, vce (cluster imada)
 			
 				local c_4_`outcome' : di%12.3f _b[beneficiaire]
 				local se_4_`outcome' : di%12.3f _se[beneficiaire]
@@ -765,7 +765,7 @@ use "$stata/enquete_All3", clear
 		
 		* Full 
 			
-			regress F_f_`outcome' beneficiaire programs `ctrl_Cb' i.strata i.delegation_admin if full == 1, vce (cluster imada)
+			regress F_f_`outcome' beneficiaire programs `ctrl_Cb' i.imada if full == 1, vce (cluster imada)
 				
 				local c_1_`outcome' 	: di%12.3f _b[beneficiaire]
 				local se_1_`outcome' 	: di%12.3f _se[beneficiaire]
