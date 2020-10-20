@@ -36,10 +36,10 @@
 		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
 		
 		*location of the temporary data, temp;
-		global raw   "$dropbox/raw"
+		global raw   "$home/Data/Second round/raw"
 
 		*location of the Raw data, raw;
-		global stata "$dropbox/stata"
+		global root "$home/Data/"
 			
 
 		if $user_number == 7{
@@ -56,18 +56,46 @@
 ********************************************************************************
 ********************************************************************************
 
+global import_individual 	= 0 
 
-*Prepare dataset
+global HFC					= 0
+
+global construct 			= 0 
+
+global preliminary_report	= 0 
+
+
+*Clean and prepare dataset
+
 if $import_individual == 1	{
-	do "$git_tunisia/dofiles/"
+	do "$git_tunisia/dofiles/clean_daily_tunisia_entrepreneurship.do"			// Import and do basic check before saving data
 }
 
-*Prepare outcomes
-if $construct_individual == 1	{
+*High Frequency cleaning 
+
+global hfc_panel_start ""														// Enter date of last HFC 
+
+if $HFC == 1	{
+	do "$git_tunisia/dofiles/clean_weekly_tunisia_entrepreneurship.do"			// High Frequency cleaning 
+}
+
+
+* Construct data 
+
+if $construct ==1 {
+
 	do "$git_tunisia/dofiles/"													// Prepare outcomes and other relevant variables
 	do "$git_tunisia/dofiles/"													// Imput missing outcomes variables 
+	
 }
 
+* Preliminary report 
+
+if $preliminary_report == 1 {
+
+	do "$git_tunisia/dofiles/preliminary_report.do"
+	
+}
 
 
 ********************************************************************************

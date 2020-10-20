@@ -6,6 +6,8 @@
 local date = c(current_date)
 
 
+u "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/temp_import_CashXFollow.dta", clear 
+
 ********************************************************************************
 ********************************************************************************
 * 1) CHECK THAT WE HAVE ALL THE DATA OF THE DAY 
@@ -62,26 +64,9 @@ label variable today "Date of interview"
 							and code enter by the enumerator
 */
 
-preserve
-
-	* Import list of code
-
-	import excel using "$data_root/Original Assignment/XXXXXXX.xlsx", clear first
-	
-	* Keep relevant variables
-	
-	keep HHID name 
-	
-	* Create tempfile
-	
-	tempfile 	original 
-	sa		   `original'
-	
-restore
-
 * Merge and check that code correspond to the original assignment
 
-merge 1:1 HHID using `original'
+merge 1:1 HHID using "$home/Survey material/Assignment/Full Sample.dta"
 
 g 		error_code = 0 
 replace error_code = 1 if _merge ==1											// If code only in master then error in code
@@ -98,7 +83,7 @@ preserve
 	rename 	(today a1_enumid a1_cityn a1_respondentcoordinates a1_respondentname a1_respondentnam a1_respondentnames)	///
 			(Date Enqueteur Ville Coordonnees Nom Postnom Prenom)
 			
-	export excel using "$project_root/Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Error Code", modify) modify
+	export excel using "$home/Data/Second round/outputs/Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Error Code", modify) modify
 	
 restore
 		
@@ -181,7 +166,7 @@ sa			`full'
 	
 	keep if diff_detected == 1 
 	
-	export excel using "$project_root/Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", modify) modify
+	export excel using "$home/Data/Second round/outputs/Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", modify) modify
 	
 u `full', clear
 
@@ -208,6 +193,10 @@ foreach var of varlist _all { 													//loop over all variables
 		}
 }
 
+
+do "$root/dofiles/label_variables.do"
+
+
 ********************************************************************************
 ********************************************************************************
 * 6) DROP USELESS VARIABLES (Duration notes calculates)
@@ -219,12 +208,7 @@ foreach var of varlist _all { 													//loop over all variables
 
 * Add to local below useless variable 
 
-local var_to_drop	calc_* time0 state_lab gender_lab a3 nb_5 note_014 randomdraw 		///
-					lista survey_hh_date ra1 repeat_v1_count ra1_b randomdraw_b	 		///
-					survey_hh_date_b randomdraw1 randomdraw_bc bc_selected 				///
-					survey_date uniqueid deviceid subscriberid simid  					///
-					caseid treatmentnew test_dup cal_b cal_b11 cal_b11_b cal_b_scores 	///
-					e2_repeat_count
+local var_to_drop	
 					
 foreach var of local var_to_drop{
 
@@ -278,10 +262,11 @@ foreach PII in name gps adress location sources phone{
 	completed.
 */
 
+
 ********************************************************************************
 ********************************************************************************
 * 10) SAVE DATA
 ********************************************************************************
 ********************************************************************************
 
-
+sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_import_CashXFollow.dta", replace
