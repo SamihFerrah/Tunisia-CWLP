@@ -1,8 +1,10 @@
 ********************************************************************************
 *			PREPARE SAMPLE LIST OF CASH GRANT INTERVENTION
 ********************************************************************************
+set seed 12345
 
-local var_export 	HHID Gender Nom Age Imada Adresse CIN Father Status Partenaire Telephone1 Telephone2	///
+
+local var_export 	HHID Gender Nom Age Imada Adresse CIN Father Status Intervention Partenaire Telephone1 Telephone2	///
 	 TCLP PSU
 
 * Import list of respondent prepared by Julie 
@@ -48,13 +50,13 @@ merge 1:1 hhid using `baseline'
 * Keep relevant variable
 
 keep 	hhid imada tclprando tclprando_partner repondant_name locality adresse 	///
-		telephone1 telephone2 psu gpslatitude gpslongitude 			///
+		telephone1 telephone2 psu gpslatitude gpslongitude 						///
 		Partenaire_Nom repondant_age
 
 * Rename variable
 
 rename 	(hhid imada tclprando tclprando_partner repondant_name locality adresse	///
-		telephone1 telephone2 psu repondant_age) 						///
+		telephone1 telephone2 psu repondant_age) 								///
 		(HHID Imada Status Partenaire Nom Localite Adresse Telephone1 			///
 		Telephone2 PSU Age)
 		
@@ -172,8 +174,8 @@ sort Imada Nom
 		
 	replace Adresse = Adresse1 if Adresse == "" 
 
-	g 		sample_ = "Cash Grants" if _merge ==3 | _merge == 4 | _merge == 5
-	replace sample_ = "Follow up" 	if _merge == 2
+	g 		sample_ = "Cash Grants" 		if _merge ==3 | _merge == 4 | _merge == 5
+	replace sample_ = "Follow up - TCLP" 	if _merge == 2
 	
 	* Export list of fixed ID with PII to be able to merge it with other datasets
 	
@@ -188,31 +190,102 @@ sort Imada Nom
 		
 	restore 
 
-* Export respondent list for cash grant intervention 
+* Change format wide to long to duplicate respondents and their partners 
+
+preserve 
+	
+	keep if sample_ == "Cash Grants" & Status == "Treatment"
+	
+	keep HHID Partenaire_Nom Telephone1 Telephone2 Adresse Imada CIN Gender sample_
+	
+	replace Gender = "Male"
+	
+	replace Partenaire_Nom = "A completer" if Partenaire_Nom == ""
+	
+	g ID_HH = _n 
+	
+	g Nom = Partenaire_Nom 
+	
+	replace Partenaire_Nom = ""
+	
+	replace sample_ = "Cash Grants - Partenaire"
+		
+	tempfile 	partenaire 
+	sa		   `partenaire'
+
+restore 
+
+append using `partenaire'
+
+* Assign HH code common to woman and male fo same HH 
+
+g HH = HHID 
+
+*Reassign code to cash grant partners 
+
+sum HHID
+
+local max_id = `r(max)'
+
+replace HHID = `max_id' + _n if sample_ == "Cash Grants - Partenaire"
+
+* Export respondent list of Treatment cash grant intervention 
 
 preserve 
 
-	keep if sample_ == "Cash Grants"
+	keep if sample_ == "Cash Grants" | sample_ == "Cash Grants - Partenaire"
 	
 	drop if Status == "Replacement"
 	
 	destring between within infrastructure spillovers programs, replace	
 	
-	sort Imada Nom 
+	sort Imada HH Nom  
 	
-	order 	HHID Gender Nom Age Imada Adresse CIN Father Status Partenaire Partenaire_Nom Telephone1 	///
-			Telephone2 TCLP PSU 	
+	rename sample_ Intervention
+	
+	replace Intervention = "Cash Grants - Women" if Intervention == "Cash Grants"
+	
+	sa 	"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.dta", replace 
+	
+	keep if Intervention == "Cash Grants - Partenaire" | ///
+			Intervention == "Cash Grants - Women" & Status == "Treatment"
+	order 	HHID Gender Nom Age Imada Adresse CIN Father Status Intervention Partenaire Partenaire_Nom Telephone1 	///
+			Telephone2 TCLP PSU Intervention
 	
 
-	export excel `var_export' Partenaire_Nom using 	"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.xlsx", firstrow(var) replace
-	sa 				   								"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.dta", replace 
-	
+	export excel `var_export' Partenaire_Nom using 	"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.xlsx", sheet("Treatment & Partner") firstrow(var) replace
+
 restore 
 	
 	
+* Export respondent list of Treatment cash grant intervention 
+
+preserve 
+
+	keep if sample_ == "Cash Grants" | sample_ == "Cash Grants - Partenaire"
+	
+	drop if Status == "Replacement"
+	
+	destring between within infrastructure spillovers programs, replace	
+	
+	sort Imada HH Nom  
+	
+	rename sample_ Intervention
+	
+	replace Intervention = "Cash Grants - Women" if Intervention == "Cash Grants"
+	
+	keep if Intervention == "Cash Grants - Women" & Status == "Control"
+	
+	order 	HHID Gender Nom Age Imada Adresse CIN Father Status Intervention Partenaire Partenaire_Nom Telephone1 	///
+			Telephone2 TCLP PSU Intervention
+	
+	export excel `var_export' Partenaire_Nom using 	"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.xlsx", sheet("Control", replace) firstrow(var) 
+	
+restore 
+	
 	* Draw random sample of CWLP participant for follow up 
 	
-	keep if sample_ == "Follow up"
+	keep if sample_ == "Follow up - TCLP"
 	
 	cap drop select3_groups select2_elig
 	
@@ -266,22 +339,61 @@ restore
 	replace Status = "Follow Up" if trt_followup == 1 
 	
 	append using `synthetic'
-		
+	
 * Export list of follow up respondent 
 
 preserve 
 
 	keep if trt_followup == 1
+
+	randtreat, 	generate(replacement) replace strata(imada eligible) 			///
+				misfits(wglobal) mult(2) unequal(1000/1200 200/1200)				///
+				setseed(12345)
+				
+	lab 	def replacement 0 "Non Replacement" 1 "Replacement", modify
+	lab 	val replacement replacement
+	lab 	var replacement "Replacement"
 	
-	sort Imada Nom
+	rename sample_ Intervention 
 	
-	order 	HHID Gender Nom Age Imada Adresse CIN Father Status Partenaire Telephone1 Telephone2	///
-			 PSU 	
+	sa 		"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow up Sample.dta", replace
+		
+	keep if replacement == 0
 	
-	export excel `var_export' using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow Up Sample.xlsx", firstrow(var) replace
-	sa 				   				"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow up Sample.dta", replace 
+	sort Imada HHID Nom
+	
+	order 	HHID Gender Nom Age Imada Adresse CIN Father Intervention Partenaire Telephone1 Telephone2	///
+			PSU 	
+	
+	export excel `var_export' using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow Up Sample.xlsx", firstrow(var) replace 
 	
 restore 
+
+* Export ordered list of replacement
+
+preserve 
+	
+	u "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow up Sample.dta", clear
+	
+	keep if replacement == 1 
+	
+	sort Imada
+	
+	bys Imada: g order_ = runiform(0,1)
+	
+	sort order_ 
+	
+	bys grouped: g Ordre = _n
+	
+	sort Imada
+
+	order Imada Ordre HHID Gender Nom Age Imada Adresse CIN Father Intervention Partenaire Telephone1 Telephone2	///
+			PSU 
+	
+	export excel Imada Ordre HHID Gender Nom Age Imada Adresse CIN Father Intervention Partenaire Telephone1 Telephone2	///
+			PSU using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Replacement.xlsx", firstrow(var) replace 
+			
+restore
 
 * Export main list 
 
@@ -292,10 +404,10 @@ append using  	"$home/14. Female Entrepreneurship Add on/Survey material/Assignm
 
 bys Strata : tab Status 
 
-sort Imada Nom 
+sort Imada HH Nom 
 
-order 	HHID Gender Nom Age Imada Adresse CIN Father Status  Partenaire Partenaire_Nom Telephone1 Telephone2	///
-	 TCLP PSU 	
+order 	HHID Gender Nom Age Imada Adresse CIN Father Intervention Partenaire Partenaire_Nom Telephone1 Telephone2	///
+		TCLP PSU 	
 
 export excel `var_export' Partenaire_Nom using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.xlsx", firstrow(var) replace
 
@@ -310,5 +422,34 @@ preserve
 		export delimited "$home/14. Female Entrepreneurship Add on/Survey material/Maps/Full_Sample_GPS.csv", replace 
 		
 restore
+
+* Export preload for questionnaire 
+
+g 		treatment2 = .
+replace treatment2 = 0 if Intervention == "Cash Grants - Partenaire"
+replace treatment2 = 1 if Intervention == "Cash Grants - Women"
+replace treatment2 = 2 if Intervention == "Follow up - TCLP" 
+
+replace Nom = "" if Nom == "A completer"
+
+g complete_name 	= 1 if Nom == ""
+g complete_age 		= 1 if Age == .
+g complete_phone 	= 1 if Telephone1 ==. | Telephone2 ==.
+g complete_CIN 		= 1 if CIN ==""
+
+g complete_info 	= 1 if 	complete_name 	== 1 | ///
+							complete_age 	== 1 | ///
+							complete_phone 	== 1 
+
+g 		trt_cash = .
+replace trt_cash = 0 if Status == "Control"
+replace trt_cash = 1 if Status == "Treatment"
+
+rename HHID HHID_key
+
+destring CIN, replace 
+
+outsheet HHID_key Age Gender Nom CIN PSU treatment2 complete_* trt_cash using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/preload_tunisia_cashgrants.csv", comma replace 
+
 
 

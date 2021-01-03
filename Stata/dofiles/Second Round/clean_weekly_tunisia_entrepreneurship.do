@@ -6,8 +6,6 @@
 /* 
 Add enumerators check for productivity 
 
-
-
 */
 
 u "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_import_CashXFollow.dta", clear
@@ -15,12 +13,172 @@ u "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_imp
 
 ********************************************************************************
 ********************************************************************************
-* 1) PREPARE OUTCOMES AND RECODE SO THAT A HIGHER VALUE INDICATE A "POSITIVE" OUTCOMES
+* 1) TARGET NUMBERS 
 ********************************************************************************
 ********************************************************************************
-/* 	We want all outcomes to be coded in the same direction to avoid having 
-	interpretation issue when analysis phases start
+
+/*	Test for target number: since surveys are submitted in daily waves, keep track of the 
+	numbers of surveys submitted and the target number of surveys needed for an area to be
+	completed.
 */
+
+use "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.dta"
+
+keep hhid Intervention Status
+
+* Count number of respondent per sample 
+
+	* Cash Grant Control 
+	
+	count if Intervention == "Cash Grants - Women" & Status == "Control"
+	
+	local control_women = `r(N)'
+	
+	* Cash Grant Treatment 
+	
+	count if Intervention == "Cash Grants - Women" & Status == "Treatment"
+	
+	local treatment_women = `r(N)'
+	
+	* Cash Grant Partenaire 
+	
+	count if Intervention == "Cash Grants - Partenaire"
+	
+	local partenaire = `r(N)'
+	
+	* Follow up
+	
+	count if Intervention == "Follow up - TCLP" & replacement == "Non Replacement"
+	
+	local follow_up = `r(N)'
+	
+	u "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_CashXFollow_noPII.dta", clear
+
+	* Cash Grant Control
+
+	count if Intervention == "Cash Grants - Women" & Status == "Control"
+
+	local control_women_did = `r(N)'
+
+	* Cash Grant Treatment
+
+	count if Intervention == "Cash Grants - Women" & Status == "Treatment"
+
+	local treatment_women_did = `r(N)'
+
+	* Cash Grant Partners
+
+	count if Intervention == "Cash Grants - Partenaire"
+
+	local partenaire_did = `r(N)'
+
+	* Follow Up 
+
+	count if Intervention == "Follow up - TCLP" & replacement == "Non Replacement"
+
+	local follow_up_did = `r(N)'
+
+	
+	* Write completion results in Excel
+	
+	putexcel set "$shared/HFC/Tunisia_IE_HFC_Report.xlsx", sheet("Progress", modify)
+
+	putexcel A2 = "Sample"
+	
+	putexcel A3 = "Cash Grant - Control"
+	putexcel A4 = "Cash Grant - Treatment"
+	putexcel A5 = "Cash Grant - Partenaire"
+	putexcel A6 = "Follow Up"
+	
+	putexcel B2 = "Cible"
+	
+	putexcel B3 = "`control_women''"
+	putexcel B4 = "`treatment_women'"
+	putexcel B5 = "`partenaire'"
+	putexcel B6 = "`follow_up'"
+	
+	putexcel C2 = "Done"
+	
+	putexcel C3 = "`control_women_did''"
+	putexcel C4 = "`treatment_women_did'"
+	putexcel C5 = "`partenaire_did'"
+	putexcel C6 = "`follow_up_did'"
+	
+	
+********************************************************************************
+********************************************************************************
+* 2) Enumerator productivity
+********************************************************************************
+********************************************************************************
+
+u "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_CashXFollow_noPII.dta", clear
+
+* Create indicator to count number of survey per enumerators 
+
+	g count_survey = 1 
+	
+	g count_survey_cash = 1  if Intervention == "Cash Grants - Women"
+	g count_survey_part = 1  if Intervention == "Cash Grants - Partenaire"
+	g count_survey_tclp = 1  if Intervention == "Follow up - TCLP"
+	
+* Compute duration of survey per enumerator 
+
+	g duration =
+	
+	egen pc90 = pctile(duration), p(90) 
+	
+	g 		flag_p90 = 0 
+	replace flag_p90 = 1 if duration > pc90 & duration !=.
+	
+	label var flag_p90 "Survey too long"
+	
+* Create stat per enumerators and per day 
+
+collapse (sum) count_survey* flag_p90 (mean) duration by(enumerator date)
+
+sort enumerator date 
+
+rename count_survey 		#Survey
+rename count_survey_cash 	#Survey_Cash
+rename count_survey_part 	#Survey_Partenaire
+rename count_survey_tclp 	#Survey_TCLP
+
+export excel "$shared/HFC/Tunisia_IE_HFC_Report.xlsx", sheet("Enqueteur", modify)
+
+
+********************************************************************************
+********************************************************************************
+* 3) Survey Duration
+********************************************************************************
+********************************************************************************
+
+u "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_CashXFollow_noPII.dta", clear
+
+local main_module 
+
+
+foreach module of local main_module{
+	
+	* Compute duration of survey per enumerator 
+
+		g duration_`module' =
+		
+		label var duration_`module' "Duration `module'"
+	
+}
+		
+* Create stat per enumerators and per day 
+
+collapse (mean) duration_*
+
+
+export excel "$shared/HFC/Tunisia_IE_HFC_Report.xlsx", sheet("Duration", modify)
+
+********************************************************************************
+********************************************************************************
+* 4) Missingness, DK, RFS etc...
+********************************************************************************
+********************************************************************************
 
 
 ********************************************************************************
@@ -37,7 +195,7 @@ u "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_imp
 
 ********************************************************************************
 ********************************************************************************
-* 3) IDENTIFY AND DOCUMENT OUTLIERS
+* 5) IDENTIFY AND DOCUMENT OUTLIERS
 ********************************************************************************
 ********************************************************************************
 /*	An outliers is an observations far away from the mean of the sample. For example,

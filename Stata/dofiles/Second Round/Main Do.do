@@ -30,16 +30,23 @@
 	if $user_number == 8 {
 		global home		"C:/Users/Samih/Dropbox/WB-Tunisia-CWLP-IE"
 		global dropbox	"C:/Users/samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
+		
+		* Location of shared folder with BJKA
+		global shared	"C:/Users/samih/Dropbox/World Bank/Tunisia IE - Shared folder"
 	}
 	
 		*location of the temporary data, temp;
 		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
 		
-		*location of the temporary data, temp;
-		global raw   "$home/Data/Second round/raw"
+		*location of stata data 
+		global stata   "$home/14. Female Entrepreneurship Add on/Data/Second round"
 
 		*location of the Raw data, raw;
-		global root "$home/Data/"
+		global vera   "A:"
+		
+		
+		
+			
 			
 
 		if $user_number == 7{
@@ -56,7 +63,7 @@
 ********************************************************************************
 ********************************************************************************
 
-global import_individual 	= 0 
+global import_individual 	= 1
 
 global HFC					= 0
 
@@ -68,7 +75,8 @@ global preliminary_report	= 0
 *Clean and prepare dataset
 
 if $import_individual == 1	{
-	do "$git_tunisia/dofiles/clean_daily_tunisia_entrepreneurship.do"			// Import and do basic check before saving data
+	do "$git_tunisia/dofiles/Second Round/import_DIME_Tunisia_Entrepreneurship_Encrypt.do"			// Import and do basic check before saving data
+	do "$git_tunisia/dofiles/Second Round/clean_daily_tunisia_entrepreneurship.do"			// Import and do basic check before saving data
 }
 
 *High Frequency cleaning 

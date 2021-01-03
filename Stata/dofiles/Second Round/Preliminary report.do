@@ -55,7 +55,7 @@ file write tex_histo 		"\documentclass[10pt,a4paper]{article}"				_n	///
 ********************************************************************************
 
 	// 1) Import form definition 
-	import excel using "$home/14. Female Entrepreneurship Add on/Survey Instrument/DIME_Tunisia_entrepreneurship_10122020.xlsx", clear first
+	import excel using "$home/14. Female Entrepreneurship Add on/Survey Instrument/DIME_Tunisia_entrepreneurship_11142020.xlsx", clear first
 	
 	// 2) Keep interesting type of question
 	
@@ -84,9 +84,18 @@ file write tex_histo 		"\documentclass[10pt,a4paper]{article}"				_n	///
 			group_name == "socioecono_demograph"		||	///
 			group_name == ""
 		
-	replace type1 = "1" if type1 == "integer"
+	replace type1 = "1" if type1 == "integer" | type1 == "decimal"
 	replace type1 = "2" if type1 == "select_one"
 	replace type1 = "3" if type1 == "select_multiple"
+	
+	keep type name labelenglish constraint relevance 
+	
+	g 		type2 = type 
+	replace type2 ="." 	 if type != "begin group"
+	
+	g 		module = labelenglish 		  if type == "begin group"
+	replace module = module[_n-1] 		  if type2 == "."
+	
 	
 	// 4) Store in local variable names and modules for analysis 
 	

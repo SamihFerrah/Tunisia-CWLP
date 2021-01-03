@@ -874,3 +874,6 @@ pause
 	
 save "$stata/enquete_All3", replace
 
+cap drop repondant_name LAST_NAME FIRST_NAME FIRST_NAME_FATHER gps* q8altitude q8latitude q8longitude q8accuracy adresse telephone cell
+
+save "$stata/enquete_All3_deidentified", replace

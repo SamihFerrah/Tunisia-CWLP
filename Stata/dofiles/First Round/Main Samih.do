@@ -87,14 +87,14 @@ global import_individual		= 0
 global construct_individual		= 0
 global import_community			= 0 
 global construct_community		= 0
-global construct_analysis		= 0
+global construct_analysis		= 1
 global codebook_				= 0
 global sum_stat					= 0
 global balance 					= 0
-global desc_index				= 1
-global main_table				= 1
-global indiv_reg				= 1
-global heterogeneity			= 1
+global desc_index				= 0
+global main_table				= 0
+global indiv_reg				= 0
+global heterogeneity			= 0
 
 ********************************************************************************
 ********************************************************************************
@@ -105,13 +105,13 @@ global heterogeneity			= 1
 
 *Prepare dataset
 if $import_individual == 1	{
-	do "$git_tunisia/dofiles/Prepare_indiv_db_Samih"
+	do "$git_tunisia/dofiles/First Round/Prepare_indiv_db_Samih"
 }
 
 *Prepare outcomes
 if $construct_individual == 1	{
-	do "$git_tunisia/dofiles/Prepare_indiv_outcomes_Samih"						// Prepare outcomes and other relevant variables
-	do "$git_tunisia/dofiles/Missing Imputation.do"								// Imput missing outcomes variables 
+	do "$git_tunisia/dofiles/First Round/Prepare_indiv_outcomes_Samih"						// Prepare outcomes and other relevant variables
+	do "$git_tunisia/dofiles/First Round/Missing Imputation.do"								// Imput missing outcomes variables 
 }
 
 ********************************************************************************
@@ -123,19 +123,19 @@ if $construct_individual == 1	{
 
 * Prepare dataset
 if $import_community == 1{
-	do "$git_tunisia/dofiles/Prepare_chefs_db_Samih"
+	do "$git_tunisia/dofiles/First Round/Prepare_chefs_db_Samih"
 }
 
 * Prepare community level outcomes 
 if $construct_community == 1{
-	do "$git_tunisia/dofiles/Prepare_chefs_outcomes_Samih"
+	do "$git_tunisia/dofiles/First Round/Prepare_chefs_outcomes_Samih"
 }
 
 
 * Construct analysis dataset 
 if $construct_analysis == 1{
-	do "$git_tunisia/dofiles/analysis_dataset_Samih"
-	do "$git_tunisia/dofiles/Index_Samih"
+	do "$git_tunisia/dofiles/First Round/analysis_dataset_Samih"
+	do "$git_tunisia/dofiles/First Round/Index_Samih"
 }
 
 
@@ -152,39 +152,39 @@ do "$git_tunisia/dofiles/Ado/FDR_CWLP"
 
 * Produce codebook of outcomes 
 if $codebook_ == 1{
-	do "$git_tunisia/dofiles/Codebook.do"
+	do "$git_tunisia/dofiles/First Round/Codebook.do"
 }
 
 * Produce balance test 
 if $balance == 1{
-	do "$git_tunisia/dofiles/Balance Test Samih.do"
+	do "$git_tunisia/dofiles/First Round/Balance Test Samih.do"
 }
  
 * Produce summary statistics of outcomes
 if $sum_stat == 1{
-	do "$git_tunisia/dofiles/Summary Statistics.do"
+	do "$git_tunisia/dofiles/First Round/Summary Statistics.do"
 }
 
 *Produce Histogram and Summary and Tex results document
 if $desc_index == 1{
-	do "$git_tunisia/dofiles/Histogram and Summary.do"
+	do "$git_tunisia/dofiles/First Round/Histogram and Summary.do"
 }
 
 * Produce main tables of index 
 if $main_table == 1{
-	do "$git_tunisia/dofiles/Main Analysis Samih "
-	do "$git_tunisia/dofiles/Main Analysis Samih (Extended)"
+	do "$git_tunisia/dofiles/First Round/Main Analysis Samih "
+	do "$git_tunisia/dofiles/First Round/Main Analysis Samih (Extended)"
 }
 
 * Produce Individual outcomes regression tables 
 if $indiv_reg ==1{
-	do "$git_tunisia/dofiles/Individual Regression.do"
+	do "$git_tunisia/dofiles/First Round/Individual Regression.do"
 }
 
 * Produce individual outcomes regression tables 
 if $heterogeneity == 1{
-	do "$git_tunisia/dofiles/Heterogeneity Samih.do"
+	do "$git_tunisia/dofiles/First Round/Heterogeneity Samih.do"
 }
 
 * Prepare Tex Results File 
-do "$git_tunisia/dofiles/Prepare Tex Results File"
+do "$git_tunisia/dofiles/First Round/Prepare Tex Results File"

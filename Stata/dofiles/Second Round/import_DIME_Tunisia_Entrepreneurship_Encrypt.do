@@ -1,11 +1,11 @@
-* import_DIME_Tunisia_Entrepreneurship.do
+* import_DIME_Tunisia_Entrepreneurship_Encrypt.do
 *
-* 	Imports and aggregates "DIME_Tunisia_Entrepreneurship" (ID: DIME_Tunisia_Entrepreneurship) data.
+* 	Imports and aggregates "DIME_Tunisia_Entrepreneurship" (ID: DIME_Tunisia_Entrepreneurship_Encrypt) data.
 *
 *	Inputs:  "DIME_Tunisia_Entrepreneurship_WIDE.csv"
 *	Outputs: "DIME_Tunisia_Entrepreneurship.dta"
 *
-*	Output by SurveyCTO November 16, 2020 10:03 AM.
+*	Output by SurveyCTO December 26, 2020 5:44 PM.
 
 * initialize Stata
 clear all
@@ -21,24 +21,52 @@ set mem 100m
 local overwrite_old_data 0
 
 * initialize form-specific parameters
-local csvfile "$stata/raw/DIME_Tunisia_Entrepreneurship_WIDE.csv"
-local dtafile "$stata/tempdata/temp_import_CashXFollow.dta"
+local csvfile "$vera/raw/DIME_Tunisia_Entrepreneurship_WIDE.csv"
+local dtafile "$vera/temp/temp_import_CashXFollow.dta"
 local corrfile "DIME_Tunisia_Entrepreneurship_corrections.csv"
 local note_fields1 ""
-local text_fields1 "deviceid1 subscriberid1 simid devicephonenum username calc_name calc_age calc_sex calc_cin calc_treatment calc_treatment2 complete_info complete_name complete_age complete_cin complete_phone"
-local text_fields2 "a1_respondentname a1_respondentname_corr a1_other_notrespondant remain remain2 b2_hhhouse_other b2_hhhouse_others b3_service_other b3_foodorigin_other1 b3_foodorigin_other2 b3_foodtype"
-local text_fields3 "food_repeat_count food_repeat2_* food_id_* food_name_* b4_sufferevent b4_sufferevent_other b4_facesufferevent b4_facesufferevent_other b4_programother_other c1_activsearchworkn_other"
-local text_fields4 "c1_employstatus_other c1_corebusiness_othe c1_corebusiness_other c1_descprimjocal c1_headjobiga_other c1_othermemworkind c1_othermeother c1_servicesorg c1_servicesorgother c1_cropsowna_other totala"
-local text_fields5 "totalacal c2_saved12wher c2_spendsaved c2_spendsaved_other c2_borrowwho c2_borrowwho_other c2_borrow12on c2_borrow12on_other c2_company c2_access_who c2_borrowmore12on c2_borrowmore12oter c2_loan_who"
-local text_fields6 "c3_trainkind c3_trainkind_other c3_skills c3_skills_other c3_dreamjobdif c3_dreamjobdif_other c3_obssmallbusdif c3_obssmallbusdifother c4_hhmigreason c4_hhmigreasonother c4_hhmbernewreas"
-local text_fields7 "c4_hhmbernewreasother c4_travelreason c4_travelreasonother c4_respfututrareason c4_respfututrareasonother c4_hhfututrareason c4_hhfututrareasonother c5_childnoschoolwhy c5_childnoschoolwhy_other"
-local text_fields8 "c5_igakids_tasks d3_usuallyshareother d3_spendmosttimeother d3_spendaloneother e1_moddrinkwaterother e1_modfoodmarketother e1_modprimaryschoolother e1_modsecdryschoolother e1_moddispsaryclnicother"
-local text_fields9 "e1_modbusstopother e1_modfirestationother e1_modpolicestationother e1_modadmincenterother e2_hh_conditios e2_hh_conditiosother e2_visitedservices e2_hh_medicalcareother e2_othterot"
-local text_fields10 "e2_childdeathreasonother grant_oth_who grant_use covid_worst g1_othergroup g1_othercommitee g1_inithealthprjt g1_initroadprjt g1_initwaterprojet g1_initsecurityprjt g1_initreligiousprjt"
-local text_fields11 "g1_initmarketprjt g1_otherproject g1_initotherprjt g1_mangmtleadother g2_decisioninfluencebodies g2_bodiesother g3_safetyproblemother g3_conflictdisputesother g3_healthother g3_healthother1"
-local text_fields12 "g3_educationother g3_educationother1 g3_developmentother g3_developmentother_1 g3_electionnotvote_other1 g3_electionnotvote_other2 g3_hhcandidatsspecify g3_sourcescominform g3_sourcescominformother"
-local text_fields13 "g3_sourcesconinform g3_sourcesconinformother g3_sourcesprogramother x9_moneyspend x9_clothing x9_ornaments x9_chores x5_perpemoviol1 x5_perpemoviol2 x5_perpphyviol1 x5_perpphyviol2 x5_perpecoviol1"
-local text_fields14 "x5_perpecoviol2 x5_perpecoviol3 x5_perpsexoviol hh_social_1 h4_otherconflictother trauma_fin j_interstopped resultat_autre instanceid"
+local text_fields1 "deviceid1 subscriberid1 simid devicephonenum username duration calc_name calc_age calc_sex calc_cin calc_treatment calc_treatment2 complete_info complete_name complete_age complete_cin complete_phone"
+local text_fields2 "a1_respondentname a1_respondentname_corr a1_other_notrespondant remain remain2 d_b1_respondent_start d_b1_respondent_end d_b1_headhousehold_start d_b1_headhousehold_end d_b2_hhasset_start"
+local text_fields3 "d_b2_hhasset_end b2_hhhouse_other b2_hhhouse_others d_b2_housefix_start d_b2_housefix_end d_b3_hhconsuption_spending_start d_b3_pershase_expense_start b3_service_other d_b3_pershase_expense_end"
+local text_fields4 "d_food_repeat_start b3_foodorigin_other1 b3_foodorigin_other2 b3_foodtype food_repeat_count food_repeat2_* food_id_* food_name_* d_food_repeat_end d_cons_houla_start d_cons_houla_end"
+local text_fields5 "d_b3_hhconsuption_spending_end d_b4_ecodidinarsopmech_start b4_sufferevent b4_sufferevent_other b4_facesufferevent b4_facesufferevent_other d_b4_ecodidinarsopmech_end d_b4_assist_program_start"
+local text_fields6 "b4_programother_other d_b4_assist_program_end d_c_econowelfare_start c1_activsearchworkn_other d_hasiga_start c1_employstatus_other c1_corebusiness_othe c1_corebusiness_other c1_descprimjocal"
+local text_fields7 "d_business_owner1_start d_business_owner1_end d_business_owner2_start d_business_owner2_end d_hasiga_end c1_headjobiga_other c1_othermemworkind c1_othermeother d_agriculture_start"
+local text_fields8 "d_landcultiveted_start c1_servicesorg c1_servicesorgother c1_cropsowna_other totala totalacal d_landcultiveted_end d_agriculture_end d_c1_employmentiga_end d_c2_debtsaving_start c2_saved12wher"
+local text_fields9 "c2_spendsaved c2_spendsaved_other c2_borrowwho c2_borrowwho_other c2_borrow12on c2_borrow12on_other c2_company c2_access_who c2_borrowmore12on c2_borrowmore12oter d_c2_debtsaving_end c2_loan_who"
+local text_fields10 "d_c3_workpersp_start c3_trainkind c3_trainkind_other c3_skills c3_skills_other c3_dreamjobdif c3_dreamjobdif_other c3_obssmallbusdif c3_obssmallbusdifother d_c3_workpersp_end d_c4_migration_start"
+local text_fields11 "c4_hhmigreason c4_hhmigreasonother d_migration_hh_member_start d_migration_hh_member_end c4_hhmbernewreas c4_hhmbernewreasother c4_travelreason c4_travelreasonother c4_respfututrareason"
+local text_fields12 "c4_respfututrareasonother c4_hhfututrareason c4_hhfututrareasonother d_c4_migration_end d_c5_childschoolwork_start c5_childnoschoolwhy c5_childnoschoolwhy_other c5_igakids_tasks"
+local text_fields13 "d_c5_childschoolwork_end d_c_econowelfare_end d_socioecono_demograph_end d_d_motivations_start d_d1_cantriladmsures_start d_d1_cantriladmsures_end d_d1_ladderhappy_start d_d1_ladderhappy_end"
+local text_fields14 "d_d2_patienceindex_start d_d2_characteristics_start d_d2_characteristics_end d_d2_patienceindex_end d_d3_selfesteempsycho_start d_d3_selfesteemfeeling_start d_d3_selfesteemfeeling_end"
+local text_fields15 "d_d3_depresfrustration_start d_d3_depresfrustration_end d_d3_familysocialrelship_start d3_usuallyshareother d3_spendmosttimeother d3_spendaloneother d_d3_familysocialrelship_end"
+local text_fields16 "d_d3_selfesteempsycho_end d_d_motivations_end d_e_socialinfraservices_start d_e1_modcomtyinfrastrure_start e1_modwater_f e1_modwater_e e1_modwater_a e1_moddrinkwaterother e1_modmarket_f e1_modmarket_e"
+local text_fields17 "e1_modmarket_a e1_modfoodmarketother e1_modprimaryschoolother e1_modprimary_f e1_modprimary_e e1_modprimary_a e1_modsecdryschoolother e1_modsecondary_f e1_modsecondary_e e1_modsecondary_a"
+local text_fields18 "e1_moddispensary_f e1_moddispensary_e e1_moddispensary_a e1_moddispsaryclinicother e1_modbusstopother e1_modbus_f e1_modbus_e e1_modbus_a e1_modfirestationother e1_modfire_f e1_modfire_e e1_modfire_a"
+local text_fields19 "e1_modpolicestationother e1_modpolice_f e1_modpolice_e e1_modpolice_a e1_modadmincenterother e1_modadmin_f e1_modadmin_e e1_modadmin_a d_e1_modcomtyinfrastrure_end d_e2_healthcaraccess_start"
+local text_fields20 "e2_hh_conditios e2_hh_conditiosother e2_visitedservices e2_hh_medicalcareother d_childsunder7_start e2_othterot d_childsunder7_end e2_childdeathreasonother d_e2_healthcenters_start"
+local text_fields21 "d_e2_healthcenters_end d_e2_healthcaraccess_end d_e3_educationcenters_start d_e3_educationcontion_start d_e3_educationcontion_end d_e3_educationcenters_end d_e_socialinfraservices_end d_uct_start"
+local text_fields22 "grant_oth_who d_grant_yes_start grant_use d_covid_bus_follow_start d_business_owner3_start d_business_owner3_end d_covid_bus_follow_end d_grant_yes_end d_grant_no_start d_grant_no_end d_uct_end"
+local text_fields23 "d_fin_train_start d_participated_start d_participated_end d_fin_train_end d_covid_module_start d_imada_measure_start d_imada_measure1_start d_imada_measure1_end d_imada_measure_end d_cov_bus_start"
+local text_fields24 "covid_worst d_cov_action_start d_cov_action_end d_cov_bus_end d_covid_module_end d_j_com_and_civic_start d_g1_comandcivicg1_start d_g1_groupasctypes_start g1_othergroup d_g1_groupasctypes_end"
+local text_fields25 "d_g1_voluntarilyprojects_start g1_inithealthprjt g1_initroadprjt g1_initwaterprojet g1_initsecurityprjt g1_initreligiousprjt g1_initmarketprjt g1_otherproject g1_initotherprjt"
+local text_fields26 "d_g1_voluntarilyprojects_end g1_mangmtleadother d_g1_comandcivicg1_end d_g2_relationshipinvillages_star g2_decisioninfluencebodies g2_bodiesother d_g2_relationshipinvillages_end"
+local text_fields27 "d_g3_comnitycivicengagment_start d_g3_citizensoftenengagement_sta d_g3_citizensoftenengagement_end d_g3_comnityconcerns_start g3_safetyproblemother g3_conflictdisputesother g3_healthother"
+local text_fields28 "g3_healthother1 g3_educationother g3_educationother1 g3_developmentother g3_developmentother_1 d_g3_comnityconcerns_end d_g3_electionpreslegislative_sta g3_electionnotvote_other1"
+local text_fields29 "g3_electionnotvote_other2 g3_hhcandidatsspecify d_g3_electionpreslegislative_end d_g3_interestsinpolitics_start d_g3_interestsinpolitics_end d_g3_disagreementsviolences_star"
+local text_fields30 "d_g3_disagreementsviolences_end d_g3_expdisagreemenviolences_sta d_g3_expdisagreemenviolences_end g3_sourcescominform g3_sourcescominformother g3_sourcesconinform g3_sourcesconinformother"
+local text_fields31 "g3_sourcesprogramother d_g3_comnitycivicengagment_end d_g4_communityattitudes_start d_g4_communityattitudes1_start d_g4_communityattitudes1_end d_g4_communityattitudes2_start"
+local text_fields32 "d_g4_communityattitudes2_end d_g4_communityattitudes3_start d_g4_communityattitudes3_end d_g4_communityattitudes4_start d_g4_communityattitudes4_end d_g4_communityattitudes5_start"
+local text_fields33 "d_g4_communityattitudes5_end d_g4_communityattitudes6_start d_g4_communityattitudes6_end d_g4_communityattitudes7_start d_g4_communityattitudes7_end d_g4_communityattitudes8_start"
+local text_fields34 "d_g4_communityattitudes8_end d_g4_communityattitudes9_start d_g4_communityattitudes9_end d_g4_communityattitudes10_start d_g4_communityattitudes10_end d_g4_communityattitudes_end d_j_com_and_civic_end"
+local text_fields35 "d_h1_antiprosocialbehavior_start d_h1_personallyengageds_start d_h1_personallyengageds_end d_h1_antiprosocialbehavior_end d_x1_mengender_yesno_start d_x1_mengender_yesno_end d_x1_mengender_agree_start"
+local text_fields36 "d_x1_mengender_agree_end d_x1_mengender1_start d_x1_mengender1_end d_x1_mengender2_start d_x1_mengender2_end d_x1_mengender_start d_x2_husbanwives_start d_x2_husbanwives_end d_x6_sexuality_start"
+local text_fields37 "d_x6_sexuality_end d_x7_masculinity_start d_x7_masculinity_end d_x8_reprodhe_start d_x8_reprodhe_end d_x9_autonomy_start d_x9_autonomy_end d_x9_autonomy2_start x9_moneyspend x9_clothing x9_ornaments"
+local text_fields38 "x9_chores d_x9_autonomy2_end d_x9_autonomy3_start d_x9_autonomy3_end d_x3_gbviolences_start d_x3_gbviolences_end d_x4_gbviolenceshh_start d_x4_gbviolenceshh_end d_x5_gbviolencesperp_start"
+local text_fields39 "x5_perpemoviol1 x5_perpemoviol2 x5_perpphyviol1 x5_perpphyviol2 x5_perpecoviol1 x5_perpecoviol2 x5_perpecoviol3 x5_perpsexoviol d_x5_gbviolencesperp_end d_h3_victimizations_start"
+local text_fields40 "d_h3_victimizations_end d_h4_conflictsincommunity_start d_hh_socialintegration_start hh_social_1 d_hh_socialintegration_end d_h4_conflictsincom_start d_h4_conflictsincom_end h4_otherconflictother"
+local text_fields41 "d_h4_conflictledviol_start d_h4_conflictledviol_end d_h4_conflictafhh_start d_h4_conflictafhh_end d_h4_conflictrectact_start d_h4_conflictrectact_end d_h4_conflictresolution_start"
+local text_fields42 "d_h4_conflictresolution_end d_h4_conflictsincommunity_end d_d_trauma_start trauma_fin d_d_trauma_end d_i2_taxes_start d_i2_taxes_end j_interstopped resultat_autre instanceid"
 local date_fields1 "a1_date c2_depositacns"
 local datetime_fields1 "submissiondate starttime"
 
@@ -61,7 +89,7 @@ if _N>0 {
 			drop `note_fields`i''
 		}
 	}
-	
+	/*
 	* format date and date/time fields
 	forvalues i = 1/100 {
 		if "`datetime_fields`i''" ~= "" {
@@ -97,7 +125,7 @@ if _N>0 {
 			}
 		}
 	}
-
+	*/
 	* ensure that text fields are always imported as strings (with "" for missing values)
 	* (note that we treat "calculate" fields as text; you can destring later if you wish)
 	tempvar ismissingvar
@@ -134,17 +162,17 @@ if _N>0 {
 	cap label variable review_corrections "Corrections made during review"
 
 
-	label variable imada "Sélectionnez le nom de l'imada"
-	note imada: "Sélectionnez le nom de l'imada"
+	label variable imada "Select imada's name"
+	note imada: "Select imada's name"
 	label define imada 1 "Abd jabar" 2 "Ain Draham Banlieus" 3 "Ain Krima" 4 "Ain Lbaya" 5 "Ain Salem" 6 "Ain Snoussi" 7 "Ain sobh" 8 "Ain Soltan" 9 "Al-itha" 10 "Assila" 11 "Atatfa" 12 "Azima" 13 "Balta" 14 "Bellarigia" 15 "Ben bachir / Ezzouhour" 16 "Bni Mhimid" 17 "Bni mtir" 18 "Bouawen" 19 "Bouhertma" 20 "Boulaaba" 21 "Chemtou" 22 "Chwewla" 23 "Dkhaylia" 24 "Edir" 25 "Edoura" 26 "El Brahmi" 27 "El Hamem" 28 "El koudia" 29 "El Malgua" 30 "El Mrassen" 31 "Elaadher" 32 "Elbir Lakhdher" 33 "Elkhadhra" 34 "Ennadhour" 35 "Erwaii" 36 "Esraya" 37 "Faj Hssine" 38 "Fargsan" 39 "Ferdaws" 40 "Fernana" 41 "Galaa" 42 "Ghardima Nord" 43 "Ghzala" 44 "Gloub Thiren Nord" 45 "Gloub Thiren Sud" 46 "Gwaidia" 47 "Hamdia" 48 "Hdhil" 49 "Hkim Sud" 50 "Hlima" 51 "Homran" 52 "Jwewda" 53 "khmayria" 54 "Laawawdha" 55 "Lbaldia" 56 "Maloula" 57 "Manguouch" 58 "Marja" 59 "Oued ezzen" 60 "Oued kasseb" 61 "Oued Mliz Ouest" 62 "Ouled sedra" 63 "Rakha" 64 "Rbiaa" 65 "Rihan" 66 "Satfoura" 67 "Sidi Abid" 68 "Sidi Amar" 69 "Sloul" 70 "Somran" 71 "Souk Jemaa" 72 "Souk Sebt" 73 "Swani" 74 "Tabarka" 75 "Tbaynia" 76 "Tegma" 77 "Wechtata" 78 "Wed Elmaaden" 79 "Wed Ghrib" 80 "Wled Mfada"
 	label values imada imada
 
-	label variable psu "Entrez le code PSU comme figurant sur la liste d'assignement."
-	note psu: "Entrez le code PSU comme figurant sur la liste d'assignement."
+	label variable psu "Enter PSU code as displayed on the assignment list"
+	note psu: "Enter PSU code as displayed on the assignment list"
 
 	label variable a1_enumerator "Enumerator select your name"
 	note a1_enumerator: "Enumerator select your name"
-	label define a1_enumerator 1 "HADDAD SOFIENE" 2 "Tissaoui Khira" 3 "Tissaoui Takwa" 4 "Bouslimi Ameni" 5 "Ouji Imen" 6 "Ouji Mariem" 7 "Ghribi Marwen" 8 "Ebdelli Raouf" 9 "Rim Bchini" 10 "Maroua Mezni" 11 "Afef HERMI" 12 "Sana Jemai" 13 "Nawres Rhimi" 14 "Salsabil Kouki" 15 "Tarek Belaidi" 16 "Zied guesmi" 17 "Soumaya Abidi" 18 "Amina Abidi" 19 "Hend Azizi" 20 "Marwen Bechini" 21 "Amal Jemai" 22 "Zaieneb Bechini" 23 "Farah Rezgui" 24 "Khemissi Emna" 25 "Abidi Aida" 26 "Imen Balti" 27 "Nawres Saidi" 28 "Mohamed Ilyes Amiri"
+	label define a1_enumerator 1 "Abidi Aida" 2 "Afef HERMI" 3 "Amal Jemai" 4 "Amina Abidi" 5 "Bouslimi Ameni" 6 "Ebdelli Raouf" 7 "Farah Rezgui" 8 "Ghribi Marwen" 9 "Haddad Sofiene" 10 "Hend Azizi" 11 "Imen Balti" 12 "Khemissi Emna" 13 "Maroua Mezni" 14 "Marwen Bechini" 15 "Mohamed Ilyes Amiri" 16 "Nawres Rhimi" 17 "Nawres Saidi" 18 "Ouji Imen" 19 "Ouji Mariem" 20 "Rim Bchini" 21 "Salsabil Kouki" 22 "Sana Jemai" 23 "Soumaya Abidi" 24 "Tarek Belaidi" 25 "Tissaoui Khira" 26 "Tissaoui Takwa" 27 "Zaieneb Bechini" 28 "Zied guesmi"
 	label values a1_enumerator a1_enumerator
 
 	label variable a1_date "A.1.2 Date"
@@ -153,17 +181,17 @@ if _N>0 {
 	label variable a1_timeinterview "A.1.2 (B) Time of the interview"
 	note a1_timeinterview: "A.1.2 (B) Time of the interview"
 
-	label variable gpslatitude "Veuillez prendre les coordonnées GPS (latitude)"
-	note gpslatitude: "Veuillez prendre les coordonnées GPS (latitude)"
+	label variable gpslatitude "Please take GPS coordinates (latitude)"
+	note gpslatitude: "Please take GPS coordinates (latitude)"
 
-	label variable gpslongitude "Veuillez prendre les coordonnées GPS (longitude)"
-	note gpslongitude: "Veuillez prendre les coordonnées GPS (longitude)"
+	label variable gpslongitude "Please take GPS coordinates (longitude)"
+	note gpslongitude: "Please take GPS coordinates (longitude)"
 
-	label variable gpsaltitude "Veuillez prendre les coordonnées GPS (altitude)"
-	note gpsaltitude: "Veuillez prendre les coordonnées GPS (altitude)"
+	label variable gpsaltitude "Please take GPS coordinates (altitude)"
+	note gpsaltitude: "Please take GPS coordinates (altitude)"
 
-	label variable gpsaccuracy "Veuillez prendre les coordonnées GPS (accuracy)"
-	note gpsaccuracy: "Veuillez prendre les coordonnées GPS (accuracy)"
+	label variable gpsaccuracy "Please take GPS coordinates (accuracy)"
+	note gpsaccuracy: "Please take GPS coordinates (accuracy)"
 
 	label variable hhid "Enter the code of the candidate"
 	note hhid: "Enter the code of the candidate"
@@ -213,39 +241,34 @@ if _N>0 {
 
 	label variable a1_notrespondant "A.1.10. What was the main reason of unsuccessful visit?"
 	note a1_notrespondant: "A.1.10. What was the main reason of unsuccessful visit?"
-	label define a1_notrespondant 1 "1. Respondent was unavailable during interview period" 2 "2. Respondent moved out of avenue/cannot be located" 3 "3. Respondent was present, but unable to interview" 4 "4. Aucune information correcte concernant le répondant dans l'annuaire" 99 "99. Other" -97 "-7. Refused to answer" -98 "-8. Not applicable" -99 "-9. Do not know"
+	label define a1_notrespondant 1 "1. Respondent was unavailable during interview period" 2 "2. Respondent moved out of avenue/cannot be located" 3 "3. Respondent was present, but unable to interview" 4 "4. Aucune information correcte concernant le répondant dans l'annuaire" 99 "99. Other" -97 "Refuse to say" -98 "Non applicable" -99 "Don't know"
 	label values a1_notrespondant a1_notrespondant
 
 	label variable a1_other_notrespondant "A.1.10. What was the other reason of unsuccessful visit?"
 	note a1_other_notrespondant: "A.1.10. What was the other reason of unsuccessful visit?"
 
-	label variable conf_cash_control "SUR BASES DES INFORMATIONS FOURNIES, VOUS VOUS APPRETEZ A FAIRE LE SONDAGE AVEC "
-	note conf_cash_control: "SUR BASES DES INFORMATIONS FOURNIES, VOUS VOUS APPRETEZ A FAIRE LE SONDAGE AVEC UN REPONDANT SELECTIONNE POUR RECEVOIR LE SONDAGE PRINCIPAL POUR UNE DES FEMMES FAISANT PARTIE DU CONTROL GROUPE DU PROGRAMME DE SUBVENTION MONETAIRE. CONFIRMEZ VOUS CELA ?"
+	label variable conf_cash_control "BASED ON THE INFORMATION PROVIDED, YOU WILL BE PREPARED TO TAKE THE SURVEY WITH "
+	note conf_cash_control: "BASED ON THE INFORMATION PROVIDED, YOU WILL BE PREPARED TO TAKE THE SURVEY WITH A RESPONDENT SELECTED TO RECEIVE THE MAIN SURVEY FOR ONE OF THE WOMEN WHO ARE PART OF THE MONETARY GRANT PROGRAM CONTROL GROUP. DO YOU CONFIRM THAT?"
 	label define conf_cash_control 1 "Yes" 0 "No"
 	label values conf_cash_control conf_cash_control
 
-	label variable conf_cash_treatment "SUR BASES DES INFORMATIONS FOURNIES, VOUS VOUS APPRETEZ A FAIRE LE SONDAGE AVEC "
-	note conf_cash_treatment: "SUR BASES DES INFORMATIONS FOURNIES, VOUS VOUS APPRETEZ A FAIRE LE SONDAGE AVEC UN REPONDANT SELECTIONNE POUR RECEVOIR LE SONDAGE PRINCIPAL POUR UNE DES FEMMES FAISANT PARTIE DU GROUPE TRAITEMENT DU PROGRAMME DE SUBVENTION MONETAIRE. CONFIRMEZ VOUS CELA ?"
+	label variable conf_cash_treatment "BASED ON THE INFORMATION PROVIDED, YOU WILL BE ABLE TO TAKE THE SURVEY WITH A RE"
+	note conf_cash_treatment: "BASED ON THE INFORMATION PROVIDED, YOU WILL BE ABLE TO TAKE THE SURVEY WITH A RESPONDENT SELECTED TO RECEIVE THE MAIN SURVEY FOR ONE OF THE WOMEN WHO ARE PART OF THE TREATMENT GROUP OF THE MONETARY GRANT PROGRAM. DO YOU CONFIRM THAT?"
 	label define conf_cash_treatment 1 "Yes" 0 "No"
 	label values conf_cash_treatment conf_cash_treatment
 
-	label variable conf_cash_partner "SUR BASES DES INFORMATIONS FOURNIES, VOUS VOUS APPRETEZ A FAIRE LE SONDAGE AVEC "
-	note conf_cash_partner: "SUR BASES DES INFORMATIONS FOURNIES, VOUS VOUS APPRETEZ A FAIRE LE SONDAGE AVEC UN REPONDANT SELECTIONNE POUR RECEVOIR LE SONDAGE COURT CAR ETANT LE PARTENAIRE D'UNE DES FEMMES FAISANT PARTIE DU GROUPE TRAITEMENT OU CONTROL DU PROGRAMME DE SUBVENTION MONETAIRE. CONFIRMEZ VOUS CELA ?"
+	label variable conf_cash_partner "BASED ON THE INFORMATION PROVIDED, YOU WILL BE ABLE TO TAKE THE SURVEY WITH A RE"
+	note conf_cash_partner: "BASED ON THE INFORMATION PROVIDED, YOU WILL BE ABLE TO TAKE THE SURVEY WITH A RESPONDENT SELECTED TO RECEIVE THE SHORT SURVEY BECAUSE OF THE PARTNER OF ONE OF THE WOMEN WHO ARE PART OF THE TREATMENT OR CONTROL GROUP OF THE MONETARY GRANT PROGRAM. DO YOU CONFIRM THAT?"
 	label define conf_cash_partner 1 "Yes" 0 "No"
 	label values conf_cash_partner conf_cash_partner
 
-	label variable conf_followup "SUR BASES DES INFORMATIONS FOURNIES, VOUS VOUS APPRETEZ A FAIRE LE SONDAGE AVEC "
-	note conf_followup: "SUR BASES DES INFORMATIONS FOURNIES, VOUS VOUS APPRETEZ A FAIRE LE SONDAGE AVEC UN REPONDANT SELECTIONNE POUR SA PARTICIPATION AU PROGRAMME TCLP IMPLEMENTE EN 2016. CONFIRMEZ VOUS CELA ?"
+	label variable conf_followup "BASED ON THE INFORMATION PROVIDED, YOU ARE PREPARING TO TAKE THE SURVEY WITH A R"
+	note conf_followup: "BASED ON THE INFORMATION PROVIDED, YOU ARE PREPARING TO TAKE THE SURVEY WITH A RESPONDENT SELECTED FOR HIS PARTICIPATION IN THE TCLP IMPLEMENTED PROGRAM IN 2016. DO YOU CONFIRM THIS?"
 	label define conf_followup 1 "Yes" 0 "No"
 	label values conf_followup conf_followup
 
-	label variable a1_a2_consent_5 "Your study data will be handled as confidentially as possible. If results of thi"
-	note a1_a2_consent_5: "Your study data will be handled as confidentially as possible. If results of this study are published or presented, individual names, and other personally identifiable information will not be used and no identifying information will be shared with any third party. Your responses will be numbered, and the code linking your name with your responses will also be stored in encrypted files on password-protected computers. [If information will be released to any other party for any reason, state the person/agency to whom the information will be furnished, the nature of the information, and the purpose of the disclosure.] [If activities are to be audio- or videotaped, specific consent for this must be obtained.] We will record audio in some parts of the survey for ensuring data quality. Do you consent to having audio recorded during some sections of the survey ?"
-	label define a1_a2_consent_5 1 "Yes" 0 "No"
-	label values a1_a2_consent_5 a1_a2_consent_5
-
-	label variable a1_a2_consent_6 "If you have any questions about this research, you can ask us now or later at th"
-	note a1_a2_consent_6: "If you have any questions about this research, you can ask us now or later at the details below. [DETAILS OF CONTACT PERSON FROM SURVEY FIRM (INCLUDING NAME AND CONTACT NUMBER] If you have any questions about your rights or treatment as a research participant in this study, you may contact: [DETAILS OF CONTACT IRB PERSON FROM INSTITUTE (INCLUDING NAME, E-MAIL, AND CONTACT NUMBER] Do you agree to participate?"
+	label variable a1_a2_consent_6 "Your collected data will be managed as confidential as possible. If the results "
+	note a1_a2_consent_6: "Your collected data will be managed as confidential as possible. If the results of this study are published or presented, names and other identifying information will not be used or shared with third parties. Your answers will be coded and the code linking your identity to your answers will be encrypted and saved in files protected by passwords. If you have any questions about this research, you can ask us now or later at the details below. BJKA consulting au 71 712 907. If you have any questions about your rights or treatment as a research participant in this study, you may contact: DIME Laboratory at dimesupport@worldbank.org ( +1 (202) 473-2012 | ext : 32012); or SolutionIRB at participants@solutionsirb.com (#855-226-4472) Do you agree to participate?"
 	label define a1_a2_consent_6 1 "Yes" 0 "No"
 	label values a1_a2_consent_6 a1_a2_consent_6
 
@@ -349,17 +372,6 @@ if _N>0 {
 	label variable b2_assetnum19_room "How many have been bought since January 2019 ?"
 	note b2_assetnum19_room: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_bed "B.2.1.6. beds"
-	note b2_asset_bed: "B.2.1.6. beds"
-	label define b2_asset_bed 1 "Yes" 0 "No"
-	label values b2_asset_bed b2_asset_bed
-
-	label variable b2_assetnum_bed "How many beds?"
-	note b2_assetnum_bed: "How many beds?"
-
-	label variable b2_assetnum19_bed "How many have been bought since January 2019 ?"
-	note b2_assetnum19_bed: "How many have been bought since January 2019 ?"
-
 	label variable b2_asset_mattresses "B.2.1.7. foam mattresses"
 	note b2_asset_mattresses: "B.2.1.7. foam mattresses"
 	label define b2_asset_mattresses 1 "Yes" 0 "No"
@@ -371,8 +383,8 @@ if _N>0 {
 	label variable b2_assetnum19_mattresses "How many have been bought since January 2019 ?"
 	note b2_assetnum19_mattresses: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_radio "B.2.1.8. radio/ cassette radio"
-	note b2_asset_radio: "B.2.1.8. radio/ cassette radio"
+	label variable b2_asset_radio "B.2.1.8. radio player"
+	note b2_asset_radio: "B.2.1.8. radio player"
 	label define b2_asset_radio 1 "Yes" 0 "No"
 	label values b2_asset_radio b2_asset_radio
 
@@ -381,17 +393,6 @@ if _N>0 {
 
 	label variable b2_assetnum19_radio "How many have been bought since January 2019 ?"
 	note b2_assetnum19_radio: "How many have been bought since January 2019 ?"
-
-	label variable b2_asset_tele "B.2.1.9. Television set"
-	note b2_asset_tele: "B.2.1.9. Television set"
-	label define b2_asset_tele 1 "Yes" 0 "No"
-	label values b2_asset_tele b2_asset_tele
-
-	label variable b2_assetnum_tele "How many television set?"
-	note b2_assetnum_tele: "How many television set?"
-
-	label variable b2_assetnum19_tele "How many have been bought since January 2019 ?"
-	note b2_assetnum19_tele: "How many have been bought since January 2019 ?"
 
 	label variable b2_asset_cellphone "B.2.1.10. Regular cellphone"
 	note b2_asset_cellphone: "B.2.1.10. Regular cellphone"
@@ -414,17 +415,6 @@ if _N>0 {
 
 	label variable b2_assetnum19_smartphone "How many have been bought since January 2019 ?"
 	note b2_assetnum19_smartphone: "How many have been bought since January 2019 ?"
-
-	label variable b2_asset_stove "B.2.1.12. Stove/electric cooking plate"
-	note b2_asset_stove: "B.2.1.12. Stove/electric cooking plate"
-	label define b2_asset_stove 1 "Yes" 0 "No"
-	label values b2_asset_stove b2_asset_stove
-
-	label variable b2_assetnum_stove "How many stove electric, cooking plate?"
-	note b2_assetnum_stove: "How many stove electric, cooking plate?"
-
-	label variable b2_assetnum19_stove "How many have been bought since January 2019 ?"
-	note b2_assetnum19_stove: "How many have been bought since January 2019 ?"
 
 	label variable b2_asset_refrigerator "B.2.1.13. Refrigerator"
 	note b2_asset_refrigerator: "B.2.1.13. Refrigerator"
@@ -459,8 +449,8 @@ if _N>0 {
 	label variable b2_assetnum19_moto "How many have been bought since January 2019 ?"
 	note b2_assetnum19_moto: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_chaise "B.2.1.16.Chaise/ banc"
-	note b2_asset_chaise: "B.2.1.16.Chaise/ banc"
+	label variable b2_asset_chaise "B.2.1.16. Chair / Bench"
+	note b2_asset_chaise: "B.2.1.16. Chair / Bench"
 	label define b2_asset_chaise 1 "Yes" 0 "No"
 	label values b2_asset_chaise b2_asset_chaise
 
@@ -470,8 +460,8 @@ if _N>0 {
 	label variable b2_assetnum19_chaise "How many have been bought since January 2019 ?"
 	note b2_assetnum19_chaise: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_tablette "B.2.1.19.Tablette"
-	note b2_asset_tablette: "B.2.1.19.Tablette"
+	label variable b2_asset_tablette "B.2.1.19. Tablets"
+	note b2_asset_tablette: "B.2.1.19. Tablets"
 	label define b2_asset_tablette 1 "Yes" 0 "No"
 	label values b2_asset_tablette b2_asset_tablette
 
@@ -481,8 +471,8 @@ if _N>0 {
 	label variable b2_assetnum19_tablette "How many have been bought since January 2019 ?"
 	note b2_assetnum19_tablette: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_vent "B.2.1.20.Ventilateur"
-	note b2_asset_vent: "B.2.1.20.Ventilateur"
+	label variable b2_asset_vent "B.2.1.20. Fan"
+	note b2_asset_vent: "B.2.1.20. Fan"
 	label define b2_asset_vent 1 "Yes" 0 "No"
 	label values b2_asset_vent b2_asset_vent
 
@@ -492,8 +482,8 @@ if _N>0 {
 	label variable b2_assetnum19_vent "How many have been bought since January 2019 ?"
 	note b2_assetnum19_vent: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_clim "B.2.1.21.Climatiseur"
-	note b2_asset_clim: "B.2.1.21.Climatiseur"
+	label variable b2_asset_clim "B.2.1.21. AC unit"
+	note b2_asset_clim: "B.2.1.21. AC unit"
 	label define b2_asset_clim 1 "Yes" 0 "No"
 	label values b2_asset_clim b2_asset_clim
 
@@ -503,8 +493,8 @@ if _N>0 {
 	label variable b2_assetnum19_clim "How many have been bought since January 2019 ?"
 	note b2_assetnum19_clim: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_gr "B.2.1.22.Groupe électrogène/générateur"
-	note b2_asset_gr: "B.2.1.22.Groupe électrogène/générateur"
+	label variable b2_asset_gr "B.2.1.22. Generator"
+	note b2_asset_gr: "B.2.1.22. Generator"
 	label define b2_asset_gr 1 "Yes" 0 "No"
 	label values b2_asset_gr b2_asset_gr
 
@@ -514,8 +504,8 @@ if _N>0 {
 	label variable b2_assetnum19_gr "How many have been bought since January 2019 ?"
 	note b2_assetnum19_gr: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_nat "B.2.1.23.Natte"
-	note b2_asset_nat: "B.2.1.23.Natte"
+	label variable b2_asset_nat "B.2.1.23. Natte"
+	note b2_asset_nat: "B.2.1.23. Natte"
 	label define b2_asset_nat 1 "Yes" 0 "No"
 	label values b2_asset_nat b2_asset_nat
 
@@ -525,8 +515,8 @@ if _N>0 {
 	label variable b2_assetnum19_nat "How many have been bought since January 2019 ?"
 	note b2_assetnum19_nat: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_poch "B.2.1.24.Lampe de poche"
-	note b2_asset_poch: "B.2.1.24.Lampe de poche"
+	label variable b2_asset_poch "B.2.1.24. Pocket / head lamp"
+	note b2_asset_poch: "B.2.1.24. Pocket / head lamp"
 	label define b2_asset_poch 1 "Yes" 0 "No"
 	label values b2_asset_poch b2_asset_poch
 
@@ -536,8 +526,8 @@ if _N>0 {
 	label variable b2_assetnum19_poch "How many have been bought since January 2019 ?"
 	note b2_assetnum19_poch: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_table "B.2.1.25.Table"
-	note b2_asset_table: "B.2.1.25.Table"
+	label variable b2_asset_table "B.2.1.25. Table"
+	note b2_asset_table: "B.2.1.25. Table"
 	label define b2_asset_table 1 "Yes" 0 "No"
 	label values b2_asset_table b2_asset_table
 
@@ -547,8 +537,8 @@ if _N>0 {
 	label variable b2_assetnum19_table "How many have been bought since January 2019 ?"
 	note b2_assetnum19_table: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_salon "B.2.1.26.Salon complet (fauteuils et une table)"
-	note b2_asset_salon: "B.2.1.26.Salon complet (fauteuils et une table)"
+	label variable b2_asset_salon "B.2.1.26. Living room"
+	note b2_asset_salon: "B.2.1.26. Living room"
 	label define b2_asset_salon 1 "Yes" 0 "No"
 	label values b2_asset_salon b2_asset_salon
 
@@ -558,19 +548,19 @@ if _N>0 {
 	label variable b2_assetnum19_salon "How many have been bought since January 2019 ?"
 	note b2_assetnum19_salon: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_bibli "B.2.1.27.Bibliothèque"
-	note b2_asset_bibli: "B.2.1.27.Bibliothèque"
+	label variable b2_asset_bibli "B.2.1.27. Library"
+	note b2_asset_bibli: "B.2.1.27. Library"
 	label define b2_asset_bibli 1 "Yes" 0 "No"
 	label values b2_asset_bibli b2_asset_bibli
 
-	label variable b2_assetnum_bibli "How many bibliotheque ?"
-	note b2_assetnum_bibli: "How many bibliotheque ?"
+	label variable b2_assetnum_bibli "How many library ?"
+	note b2_assetnum_bibli: "How many library ?"
 
 	label variable b2_assetnum19_bibli "How many have been bought since January 2019 ?"
 	note b2_assetnum19_bibli: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_arm "B.2.1.29.Armoir"
-	note b2_asset_arm: "B.2.1.29.Armoir"
+	label variable b2_asset_arm "B.2.1.29. Dresser"
+	note b2_asset_arm: "B.2.1.29. Dresser"
 	label define b2_asset_arm 1 "Yes" 0 "No"
 	label values b2_asset_arm b2_asset_arm
 
@@ -580,8 +570,8 @@ if _N>0 {
 	label variable b2_assetnum19_arm "How many have been bought since January 2019 ?"
 	note b2_assetnum19_arm: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_ferer "B.2.1.31. Fer à repasser électrique"
-	note b2_asset_ferer: "B.2.1.31. Fer à repasser électrique"
+	label variable b2_asset_ferer "B.2.1.31. Electric iron"
+	note b2_asset_ferer: "B.2.1.31. Electric iron"
 	label define b2_asset_ferer 1 "Yes" 0 "No"
 	label values b2_asset_ferer b2_asset_ferer
 
@@ -591,30 +581,8 @@ if _N>0 {
 	label variable b2_assetnum19_ferer "How many have been bought since January 2019 ?"
 	note b2_assetnum19_ferer: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_plak "B.2.1.32. Plaque/panneau solaire"
-	note b2_asset_plak: "B.2.1.32. Plaque/panneau solaire"
-	label define b2_asset_plak 1 "Yes" 0 "No"
-	label values b2_asset_plak b2_asset_plak
-
-	label variable b2_assetnum_plak "How many solar panel?"
-	note b2_assetnum_plak: "How many solar panel?"
-
-	label variable b2_assetnum19_plak "How many have been bought since January 2019 ?"
-	note b2_assetnum19_plak: "How many have been bought since January 2019 ?"
-
-	label variable b2_asset_bat "B.2.1.33. Battérie pour plaque solaire"
-	note b2_asset_bat: "B.2.1.33. Battérie pour plaque solaire"
-	label define b2_asset_bat 1 "Yes" 0 "No"
-	label values b2_asset_bat b2_asset_bat
-
-	label variable b2_assetnum_bat "How many batterie for solar panel?"
-	note b2_assetnum_bat: "How many batterie for solar panel?"
-
-	label variable b2_assetnum19_bat "How many have been bought since January 2019 ?"
-	note b2_assetnum19_bat: "How many have been bought since January 2019 ?"
-
-	label variable b2_asset_mach "B.2.1.34. Machine à coudre"
-	note b2_asset_mach: "B.2.1.34. Machine à coudre"
+	label variable b2_asset_mach "B.2.1.34. Sewing machine"
+	note b2_asset_mach: "B.2.1.34. Sewing machine"
 	label define b2_asset_mach 1 "Yes" 0 "No"
 	label values b2_asset_mach b2_asset_mach
 
@@ -624,8 +592,8 @@ if _N>0 {
 	label variable b2_assetnum19_mach "How many have been bought since January 2019 ?"
 	note b2_assetnum19_mach: "How many have been bought since January 2019 ?"
 
-	label variable b2_asset_dec "B.2.1.35. Décodeur"
-	note b2_asset_dec: "B.2.1.35. Décodeur"
+	label variable b2_asset_dec "B.2.1.35. TV Box"
+	note b2_asset_dec: "B.2.1.35. TV Box"
 	label define b2_asset_dec 1 "Yes" 0 "No"
 	label values b2_asset_dec b2_asset_dec
 
@@ -635,21 +603,21 @@ if _N>0 {
 	label variable b2_assetnum19_dec "How many have been bought since January 2019 ?"
 	note b2_assetnum19_dec: "How many have been bought since January 2019 ?"
 
-	label variable b2_hhhouse "B.2.2.0 Quelles sont les conditions d'habitations de votre ménage avant Janvier "
-	note b2_hhhouse: "B.2.2.0 Quelles sont les conditions d'habitations de votre ménage avant Janvier 2019 ?"
+	label variable b2_hhhouse "B.2.2.0 What are the living condition of your household today ?"
+	note b2_hhhouse: "B.2.2.0 What are the living condition of your household today ?"
 	label define b2_hhhouse 1 "1. We own house / apartment" 2 "2. We rent a house / apartment" 3 "3. We live for free in a house / apartment that belongs to a family or friend" 99 "99. Other"
 	label values b2_hhhouse b2_hhhouse
 
-	label variable b2_hhhouse_other "B.2.2.1.0 spécifier d'autres"
-	note b2_hhhouse_other: "B.2.2.1.0 spécifier d'autres"
+	label variable b2_hhhouse_other "B.2.2.1.0 Specify other"
+	note b2_hhhouse_other: "B.2.2.1.0 Specify other"
 
-	label variable b2_hhhouses "B.2.2.0 Quelles sont les conditions d'habitations de votre ménage avant Janvier "
-	note b2_hhhouses: "B.2.2.0 Quelles sont les conditions d'habitations de votre ménage avant Janvier 2019 ?"
+	label variable b2_hhhouses "B.2.2.0 What were the living condition of your household before January 2019 ?"
+	note b2_hhhouses: "B.2.2.0 What were the living condition of your household before January 2019 ?"
 	label define b2_hhhouses 1 "1. We own house / apartment" 2 "2. We rent a house / apartment" 3 "3. We live for free in a house / apartment that belongs to a family or friend" 99 "99. Other"
 	label values b2_hhhouses b2_hhhouses
 
-	label variable b2_hhhouse_others "B.2.2.1.1. spécifier d'autres"
-	note b2_hhhouse_others: "B.2.2.1.1. spécifier d'autres"
+	label variable b2_hhhouse_others "B.2.2.1.1. Specify other"
+	note b2_hhhouse_others: "B.2.2.1.1. Specify other"
 
 	label variable b2_title_house "Does the household chief owns a land title for this house / apartment"
 	note b2_title_house: "Does the household chief owns a land title for this house / apartment"
@@ -680,16 +648,6 @@ if _N>0 {
 	note b2_minorrepairs: "made minor repairs to the house or apartment?"
 	label define b2_minorrepairs 1 "Yes" 0 "No"
 	label values b2_minorrepairs b2_minorrepairs
-
-	label variable b2_purshasedland "purchased any land or farm?"
-	note b2_purshasedland: "purchased any land or farm?"
-	label define b2_purshasedland 1 "Yes" 0 "No"
-	label values b2_purshasedland b2_purshasedland
-
-	label variable b2_renthouse "has a house/apartment it is renting to others?"
-	note b2_renthouse: "has a house/apartment it is renting to others?"
-	label define b2_renthouse 1 "Yes" 0 "No"
-	label values b2_renthouse b2_renthouse
 
 	label variable b2_otherinvest "made other investments to house or property?"
 	note b2_otherinvest: "made other investments to house or property?"
@@ -792,7 +750,7 @@ if _N>0 {
 
 	label variable b3_foodorigin1 "B.3.4. In general, where does MOST of the food your household consumes come from"
 	note b3_foodorigin1: "B.3.4. In general, where does MOST of the food your household consumes come from? Source1"
-	label define b3_foodorigin1 1 "1. Field of the househol" 2 "2. bought at the market" 3 "3. gifts for friends / other households" 4 "4. family" 5 "5. social assistance/ charity" 99 "99. other" -97 "Non applicable (pas d'autre sources)"
+	label define b3_foodorigin1 1 "1. Field of the househol" 2 "2. bought at the market" 3 "3. gifts for friends / other households" 4 "4. family" 5 "5. social assistance/ charity" 99 "99. other" 0 "Non applicable (pas d'autre sources)"
 	label values b3_foodorigin1 b3_foodorigin1
 
 	label variable b3_foodorigin_other1 "specify other"
@@ -800,7 +758,7 @@ if _N>0 {
 
 	label variable b3_foodorigin2 "B.3.4. In general, where does MOST of the food your household consumes come from"
 	note b3_foodorigin2: "B.3.4. In general, where does MOST of the food your household consumes come from? Source 2"
-	label define b3_foodorigin2 1 "1. Field of the househol" 2 "2. bought at the market" 3 "3. gifts for friends / other households" 4 "4. family" 5 "5. social assistance/ charity" 99 "99. other" -97 "Non applicable (pas d'autre sources)"
+	label define b3_foodorigin2 1 "1. Field of the househol" 2 "2. bought at the market" 3 "3. gifts for friends / other households" 4 "4. family" 5 "5. social assistance/ charity" 99 "99. other" 0 "Non applicable (pas d'autre sources)"
 	label values b3_foodorigin2 b3_foodorigin2
 
 	label variable b3_foodorigin_other2 "specify other"
@@ -841,7 +799,7 @@ if _N>0 {
 
 	label variable b3_receivemoneycity "B.3.5. Since January 2019, have members of this household received money in cash"
 	note b3_receivemoneycity: "B.3.5. Since January 2019, have members of this household received money in cash from friends or family members who live in this city?"
-	label define b3_receivemoneycity 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define b3_receivemoneycity 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values b3_receivemoneycity b3_receivemoneycity
 
 	label variable b3_receivemoneycity_num "B.3.5.1. What was the total value of the assistance that the household received "
@@ -849,7 +807,7 @@ if _N>0 {
 
 	label variable b3_receivemoneydrc "B.3.6. Since January 2019 have members of this household received money from fri"
 	note b3_receivemoneydrc: "B.3.6. Since January 2019 have members of this household received money from friends or family members who live outside this city, but in the Tunisia?"
-	label define b3_receivemoneydrc 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define b3_receivemoneydrc 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values b3_receivemoneydrc b3_receivemoneydrc
 
 	label variable b3_receivemoneydrc_num "B.3.6.1. What was the total value of the assistance that the household received "
@@ -857,15 +815,15 @@ if _N>0 {
 
 	label variable b3_receivemoneyabroad_19 "B.3.7. Since January 2019, have the members of this household received money fro"
 	note b3_receivemoneyabroad_19: "B.3.7. Since January 2019, have the members of this household received money from friends or family members who live abroad?"
-	label define b3_receivemoneyabroad_19 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define b3_receivemoneyabroad_19 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values b3_receivemoneyabroad_19 b3_receivemoneyabroad_19
 
 	label variable b3_receivemoneyabroad_num_19 "B.3.7.1. What was the total value of the assistance that the household received "
 	note b3_receivemoneyabroad_num_19: "B.3.7.1. What was the total value of the assistance that the household received since Janaury 2019?"
 
-	label variable b3_sendmoney_19 "B.3.8. Depuis Janvier 2019, have you or any other member of this household sent "
-	note b3_sendmoney_19: "B.3.8. Depuis Janvier 2019, have you or any other member of this household sent money to a friend or family member not living here?"
-	label define b3_sendmoney_19 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label variable b3_sendmoney_19 "B.3.8. Since January 2019 2019, have you or any other member of this household s"
+	note b3_sendmoney_19: "B.3.8. Since January 2019 2019, have you or any other member of this household sent money to a friend or family member not living here?"
+	label define b3_sendmoney_19 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values b3_sendmoney_19 b3_sendmoney_19
 
 	label variable b3_sendmoney_num_19 "B.3.8.1. What was the total value of the assistance that the household send sinc"
@@ -888,8 +846,8 @@ if _N>0 {
 	label define b4_ngohelp 1 "Yes" 0 "No"
 	label values b4_ngohelp b4_ngohelp
 
-	label variable b4_programfood "Food / food products"
-	note b4_programfood: "Food / food products"
+	label variable b4_programfood "Was it a program of: Food / food products"
+	note b4_programfood: "Was it a program of: Food / food products"
 	label define b4_programfood 1 "Yes" 0 "No"
 	label values b4_programfood b4_programfood
 
@@ -901,21 +859,8 @@ if _N>0 {
 	label variable b4_programfood_am "Food / food products amount ?"
 	note b4_programfood_am: "Food / food products amount ?"
 
-	label variable b4_programfoodwork "Food / food against work"
-	note b4_programfoodwork: "Food / food against work"
-	label define b4_programfoodwork 1 "Yes" 0 "No"
-	label values b4_programfoodwork b4_programfoodwork
-
-	label variable b4_programfoodwork_hm "Food / food against work for whom ?"
-	note b4_programfoodwork_hm: "Food / food against work for whom ?"
-	label define b4_programfoodwork_hm 0 "0. Specific members" 1 "1. All the household"
-	label values b4_programfoodwork_hm b4_programfoodwork_hm
-
-	label variable b4_programfoodwork_am "Food / food against work amount ?"
-	note b4_programfoodwork_am: "Food / food against work amount ?"
-
-	label variable b4_programsorder "Voucher (for cash or food)"
-	note b4_programsorder: "Voucher (for cash or food)"
+	label variable b4_programsorder "Was it a program of: Voucher (for cash or food)"
+	note b4_programsorder: "Was it a program of: Voucher (for cash or food)"
 	label define b4_programsorder 1 "Yes" 0 "No"
 	label values b4_programsorder b4_programsorder
 
@@ -927,8 +872,8 @@ if _N>0 {
 	label variable b4_programsorder_am "Voucher (for cash or food) amount ?"
 	note b4_programsorder_am: "Voucher (for cash or food) amount ?"
 
-	label variable b4_programschool "School feeding program"
-	note b4_programschool: "School feeding program"
+	label variable b4_programschool "Was it a program of: School feeding program"
+	note b4_programschool: "Was it a program of: School feeding program"
 	label define b4_programschool 1 "Yes" 0 "No"
 	label values b4_programschool b4_programschool
 
@@ -940,8 +885,8 @@ if _N>0 {
 	label variable b4_programschool_am "School feeding program amount ?"
 	note b4_programschool_am: "School feeding program amount ?"
 
-	label variable b4_programtransf "Transfer direct money"
-	note b4_programtransf: "Transfer direct money"
+	label variable b4_programtransf "Was it a program of: Transfer direct money"
+	note b4_programtransf: "Was it a program of: Transfer direct money"
 	label define b4_programtransf 1 "Yes" 0 "No"
 	label values b4_programtransf b4_programtransf
 
@@ -953,21 +898,8 @@ if _N>0 {
 	label variable b4_programtransf_am "Transfer direct money amount ?"
 	note b4_programtransf_am: "Transfer direct money amount ?"
 
-	label variable b4_programlivestock "Distribution de bétail / animaux"
-	note b4_programlivestock: "Distribution de bétail / animaux"
-	label define b4_programlivestock 1 "Yes" 0 "No"
-	label values b4_programlivestock b4_programlivestock
-
-	label variable b4_programlivestock_hm "Livestock/animal distribution for whom ?"
-	note b4_programlivestock_hm: "Livestock/animal distribution for whom ?"
-	label define b4_programlivestock_hm 0 "0. Specific members" 1 "1. All the household"
-	label values b4_programlivestock_hm b4_programlivestock_hm
-
-	label variable b4_programlivestock_am "Livestock/animal distribution amount ?"
-	note b4_programlivestock_am: "Livestock/animal distribution amount ?"
-
-	label variable b4_programother "Other"
-	note b4_programother: "Other"
+	label variable b4_programother "Was it another program ?"
+	note b4_programother: "Was it another program ?"
 	label define b4_programother 1 "Yes" 0 "No"
 	label values b4_programother b4_programother
 
@@ -984,7 +916,7 @@ if _N>0 {
 
 	label variable b4_hhecocomparehh "B 4.6. How are the economic conditions of your household compared to situation b"
 	note b4_hhecocomparehh: "B 4.6. How are the economic conditions of your household compared to situation before January 2019?"
-	label define b4_hhecocomparehh 1 "Pires" 2 "Egale" 3 "Meilleures" -97 "Refuse de repondre" -98 "Non applicable" -99 "Ne sait pas"
+	label define b4_hhecocomparehh 1 "Pires" 2 "Egale" 3 "Meilleures" -97 "Refuse to say" -98 "Non applicable" -99 "Don't know"
 	label values b4_hhecocomparehh b4_hhecocomparehh
 
 	label variable b4_scaleownhh "B.4.7. Please imagine a ladder with 5 stages, the poorest of the City/avenue is "
@@ -1016,20 +948,20 @@ if _N>0 {
 	label define c1_daysnoworkunit 1 "Jours" 2 "Mois" 3 "Années"
 	label values c1_daysnoworkunit c1_daysnoworkunit
 
-	label variable c1_activsearchwork_12m "Have you actively searched for paid work in the last 12 months?"
-	note c1_activsearchwork_12m: "Have you actively searched for paid work in the last 12 months?"
-	label define c1_activsearchwork_12m 1 "Yes" 0 "No"
-	label values c1_activsearchwork_12m c1_activsearchwork_12m
+	label variable c1_activsearchwork "C.1.3a. Have you actively searched for paid work in the last 30 days?"
+	note c1_activsearchwork: "C.1.3a. Have you actively searched for paid work in the last 30 days?"
+	label define c1_activsearchwork 1 "Yes" 0 "No"
+	label values c1_activsearchwork c1_activsearchwork
 
 	label variable c1_activsearchwork_6m "Have you actively searched for paid work in the last 6 months?"
 	note c1_activsearchwork_6m: "Have you actively searched for paid work in the last 6 months?"
 	label define c1_activsearchwork_6m 1 "Yes" 0 "No"
 	label values c1_activsearchwork_6m c1_activsearchwork_6m
 
-	label variable c1_activsearchwork "C.1.3a. Have you actively searched for paid work in the last 30 days?"
-	note c1_activsearchwork: "C.1.3a. Have you actively searched for paid work in the last 30 days?"
-	label define c1_activsearchwork 1 "Yes" 0 "No"
-	label values c1_activsearchwork c1_activsearchwork
+	label variable c1_activsearchwork_12m "Have you actively searched for paid work in the last 12 months?"
+	note c1_activsearchwork_12m: "Have you actively searched for paid work in the last 12 months?"
+	label define c1_activsearchwork_12m 1 "Yes" 0 "No"
+	label values c1_activsearchwork_12m c1_activsearchwork_12m
 
 	label variable c1_activsearchworkn "C.13b Why haven’t you looked for a job in the last 30 days?"
 	note c1_activsearchworkn: "C.13b Why haven’t you looked for a job in the last 30 days?"
@@ -1088,17 +1020,17 @@ if _N>0 {
 	label variable business_newemployee "C.1.27.How many new employees (if any) have you hired in the last 12 months?"
 	note business_newemployee: "C.1.27.How many new employees (if any) have you hired in the last 12 months?"
 
-	label variable business_employee "1. no of employees"
-	note business_employee: "1. no of employees"
+	label variable business_employee "How many employees work in your business ?"
+	note business_employee: "How many employees work in your business ?"
 
-	label variable business_supply "2. no of suppliers"
-	note business_supply: "2. no of suppliers"
+	label variable business_supply "How many suppliers do you have ?"
+	note business_supply: "How many suppliers do you have ?"
 
-	label variable business_profit "4. monthly profits"
-	note business_profit: "4. monthly profits"
+	label variable business_profit "What is your monthly profit ?"
+	note business_profit: "What is your monthly profit ?"
 
-	label variable business_hours "6. hours dedicated to the business per week"
-	note business_hours: "6. hours dedicated to the business per week"
+	label variable business_hours "How many hours per day do you usually spend at your business per week"
+	note business_hours: "How many hours per day do you usually spend at your business per week"
 
 	label variable business_partner "Do you have any business partner?"
 	note business_partner: "Do you have any business partner?"
@@ -1166,17 +1098,17 @@ if _N>0 {
 	label variable business_newemployee_2 "C.1.27.How many new employees (if any) have you hired in the last 12 months?"
 	note business_newemployee_2: "C.1.27.How many new employees (if any) have you hired in the last 12 months?"
 
-	label variable business_employee_2 "1. no of employees"
-	note business_employee_2: "1. no of employees"
+	label variable business_employee_2 "How many employees work in your business ?"
+	note business_employee_2: "How many employees work in your business ?"
 
-	label variable business_supply_2 "2. no of suppliers"
-	note business_supply_2: "2. no of suppliers"
+	label variable business_supply_2 "How many suppliers do you have ?"
+	note business_supply_2: "How many suppliers do you have ?"
 
-	label variable business_profit_2 "4. monthly profits"
-	note business_profit_2: "4. monthly profits"
+	label variable business_profit_2 "What is your monthly profit ?"
+	note business_profit_2: "What is your monthly profit ?"
 
-	label variable business_hours_2 "6. hours dedicated to the business per week"
-	note business_hours_2: "6. hours dedicated to the business per week"
+	label variable business_hours_2 "How many hours per day do you usually spend at your business per week"
+	note business_hours_2: "How many hours per day do you usually spend at your business per week"
 
 	label variable business_partner_2 "Do you have any business partner?"
 	note business_partner_2: "Do you have any business partner?"
@@ -1250,29 +1182,34 @@ if _N>0 {
 	label variable c1_addotherincomen "C1.35. With these income-generating activities, how much money did the other mem"
 	note c1_addotherincomen: "C1.35. With these income-generating activities, how much money did the other members of the household earn in the last 30 days?"
 
-	label variable c1_hengag "C.1.36. Vous ou d'autres membres de votre ménage pratiquez-Vous des activités ag"
-	note c1_hengag: "C.1.36. Vous ou d'autres membres de votre ménage pratiquez-Vous des activités agricoles ou d'elevage ?"
+	label variable c1_hengag "C.1.36. Does you or anyone in your household have an agricultural or livestock a"
+	note c1_hengag: "C.1.36. Does you or anyone in your household have an agricultural or livestock activity ?"
 	label define c1_hengag 1 "Yes" 0 "No"
 	label values c1_hengag c1_hengag
 
-	label variable c1_hengigan "C1.37. Quelle est la superficie des terres arables que votre ménage possède-t-il"
-	note c1_hengigan: "C1.37. Quelle est la superficie des terres arables que votre ménage possède-t-il ?"
+	label variable c1_hengag_agr "Is it an agricultural activity ?"
+	note c1_hengag_agr: "Is it an agricultural activity ?"
+	label define c1_hengag_agr 1 "Yes" 0 "No"
+	label values c1_hengag_agr c1_hengag_agr
 
-	label variable c1_hengigan_unit "C1.37.1. Indiquer l'unité"
-	note c1_hengigan_unit: "C1.37.1. Indiquer l'unité"
+	label variable c1_hengigan "C1.37. What is the total size of your land ?"
+	note c1_hengigan: "C1.37. What is the total size of your land ?"
+
+	label variable c1_hengigan_unit "C1.37.1. Enter unit"
+	note c1_hengigan_unit: "C1.37.1. Enter unit"
 	label define c1_hengigan_unit 1 "m2" 2 "Hectare"
 	label values c1_hengigan_unit c1_hengigan_unit
 
 	label variable c1_hhlandaran "C1.38. How much arable land does your household have?"
 	note c1_hhlandaran: "C1.38. How much arable land does your household have?"
 
-	label variable c1_hhlandaran_unit "C1.39.1. Indiquer l'unité"
-	note c1_hhlandaran_unit: "C1.39.1. Indiquer l'unité"
+	label variable c1_hhlandaran_unit "C1.39.1. Enter unit"
+	note c1_hhlandaran_unit: "C1.39.1. Enter unit"
 	label define c1_hhlandaran_unit 1 "m2" 2 "Hectare"
 	label values c1_hhlandaran_unit c1_hhlandaran_unit
 
-	label variable c1_rentlabor "C1.41. De Janvier 2019 à nos jours, avez-vous engagé de la main-d'œuvre pour tra"
-	note c1_rentlabor: "C1.41. De Janvier 2019 à nos jours, avez-vous engagé de la main-d'œuvre pour travailler dans vos champs ?"
+	label variable c1_rentlabor "C1.41. From January 2019 to the present day, have you hired labor to work in you"
+	note c1_rentlabor: "C1.41. From January 2019 to the present day, have you hired labor to work in your fields?"
 	label define c1_rentlabor 1 "Yes" 0 "No"
 	label values c1_rentlabor c1_rentlabor
 
@@ -1289,13 +1226,13 @@ if _N>0 {
 	label define c1_adviceag 1 "Yes" 0 "No"
 	label values c1_adviceag c1_adviceag
 
-	label variable c1_pesticides "C1.43. Avez-vous utilisé des pesticides ?"
-	note c1_pesticides: "C1.43. Avez-vous utilisé des pesticides ?"
+	label variable c1_pesticides "C1.43. Did you use pesticides?"
+	note c1_pesticides: "C1.43. Did you use pesticides?"
 	label define c1_pesticides 1 "Yes" 0 "No"
 	label values c1_pesticides c1_pesticides
 
-	label variable c1_pesticidloans "C1.43.1. L’achat des pesticides a-t-il nécessité un prêt ?"
-	note c1_pesticidloans: "C1.43.1. L’achat des pesticides a-t-il nécessité un prêt ?"
+	label variable c1_pesticidloans "C1.43.1. Did the purchase of pesticides require a loan?"
+	note c1_pesticidloans: "C1.43.1. Did the purchase of pesticides require a loan?"
 	label define c1_pesticidloans 1 "Yes" 0 "No"
 	label values c1_pesticidloans c1_pesticidloans
 
@@ -1304,8 +1241,8 @@ if _N>0 {
 	label define c1_monitorservices 1 "Yes" 0 "No"
 	label values c1_monitorservices c1_monitorservices
 
-	label variable c1_extservices "C1.45. Avez-vous reçu d'autres services de formation émanant d'entités gouvernem"
-	note c1_extservices: "C1.45. Avez-vous reçu d'autres services de formation émanant d'entités gouvernementales, d'entités privées ou d'ONG ?"
+	label variable c1_extservices "C1.45. Have you received other training services from government entities, priva"
+	note c1_extservices: "C1.45. Have you received other training services from government entities, private entities or NGOs?"
 	label define c1_extservices 1 "Yes" 0 "No"
 	label values c1_extservices c1_extservices
 
@@ -1396,7 +1333,7 @@ if _N>0 {
 
 	label variable c2_repaiddebt "C.2.2.4. Have you repaid your debt?"
 	note c2_repaiddebt: "C.2.2.4. Have you repaid your debt?"
-	label define c2_repaiddebt 1 "1. Not yet" 2 "2. Yes, some of it" 3 "3. Yes, all of it" -97 "Refuse de repondre" -99 "Ne sait pas"
+	label define c2_repaiddebt 1 "1. Not yet" 2 "2. Yes, some of it" 3 "3. Yes, all of it" -97 "Refuse to say" -99 "Don't know"
 	label values c2_repaiddebt c2_repaiddebt
 
 	label variable c2_depositac "C.2.4. Do you currently have a savings or deposit account?"
@@ -1404,8 +1341,8 @@ if _N>0 {
 	label define c2_depositac 1 "Yes" 0 "No"
 	label values c2_depositac c2_depositac
 
-	label variable c2_depositacns "C 2.4.0. Depuis quand avez-vous ouvert ce compte?"
-	note c2_depositacns: "C 2.4.0. Depuis quand avez-vous ouvert ce compte?"
+	label variable c2_depositacns "C 2.4.0. When did you open this account?"
+	note c2_depositacns: "C 2.4.0. When did you open this account?"
 
 	label variable c2_company "Who else apart from you knows about this account?"
 	note c2_company: "Who else apart from you knows about this account?"
@@ -1428,7 +1365,7 @@ if _N>0 {
 
 	label variable c2_borrowmore12 "C.2.5. Do you plan to borrow more money in the next 12 months?"
 	note c2_borrowmore12: "C.2.5. Do you plan to borrow more money in the next 12 months?"
-	label define c2_borrowmore12 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define c2_borrowmore12 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values c2_borrowmore12 c2_borrowmore12
 
 	label variable c2_borrowmore12on "C.2.5.1. What do you plan to spend this money on?"
@@ -1448,8 +1385,8 @@ if _N>0 {
 	label variable c2_loan_amount "How much did you loan in total ?"
 	note c2_loan_amount: "How much did you loan in total ?"
 
-	label variable c3_traintrade12 "C.3.1. Au cours des dernières années, depuis Janvier 2019, avez-vous reçu une fo"
-	note c3_traintrade12: "C.3.1. Au cours des dernières années, depuis Janvier 2019, avez-vous reçu une formation dans un métier?"
+	label variable c3_traintrade12 "C.3.1. Since January 2019, did you receive a particular work training ?"
+	note c3_traintrade12: "C.3.1. Since January 2019, did you receive a particular work training ?"
 	label define c3_traintrade12 1 "Yes" 0 "No"
 	label values c3_traintrade12 c3_traintrade12
 
@@ -1478,8 +1415,8 @@ if _N>0 {
 	label variable c3_skills_other "C.3.3.1. specify"
 	note c3_skills_other: "C.3.3.1. specify"
 
-	label variable c3_dreamjob "C.3.4. Do you face difficulties in finding your DREAM job?"
-	note c3_dreamjob: "C.3.4. Do you face difficulties in finding your DREAM job?"
+	label variable c3_dreamjob "C.3.4. Do people like you have difficulties finding their dream job ?"
+	note c3_dreamjob: "C.3.4. Do people like you have difficulties finding their dream job ?"
 	label define c3_dreamjob 1 "Yes" 0 "No"
 	label values c3_dreamjob c3_dreamjob
 
@@ -1489,8 +1426,8 @@ if _N>0 {
 	label variable c3_dreamjobdif_other "C.3.4.1. specify"
 	note c3_dreamjobdif_other: "C.3.4.1. specify"
 
-	label variable c3_obssmallbus "C.3.5. Do you face obstacles or challenges in starting a small business/microent"
-	note c3_obssmallbus: "C.3.5. Do you face obstacles or challenges in starting a small business/microenterprise?"
+	label variable c3_obssmallbus "C.3.5. Do people like you face obstacles or challenges in starting a small busin"
+	note c3_obssmallbus: "C.3.5. Do people like you face obstacles or challenges in starting a small business/microenterprise?"
 	label define c3_obssmallbus 1 "Yes" 0 "No"
 	label values c3_obssmallbus c3_obssmallbus
 
@@ -1500,8 +1437,8 @@ if _N>0 {
 	label variable c3_obssmallbusdifother "C.3.5.1. specify"
 	note c3_obssmallbusdifother: "C.3.5.1. specify"
 
-	label variable c4_hhmig "C.4.1. De Janvier 2019 à aujourd'hui, y a-t-il des membres de ce ménage qui ne v"
-	note c4_hhmig: "C.4.1. De Janvier 2019 à aujourd'hui, y a-t-il des membres de ce ménage qui ne vivent plus dans ce ménage?"
+	label variable c4_hhmig "C.4.1. Since January 2019, is there member of this household whom do not live an"
+	note c4_hhmig: "C.4.1. Since January 2019, is there member of this household whom do not live anymore ?"
 	label define c4_hhmig 1 "Yes" 0 "No"
 	label values c4_hhmig c4_hhmig
 
@@ -1525,7 +1462,7 @@ if _N>0 {
 
 	label variable c4_migration_q6 "What is the main disavantadge about this migration ?"
 	note c4_migration_q6: "What is the main disavantadge about this migration ?"
-	label define c4_migration_q6 1 "None" 2 "Less security" 3 "More house work" 4 "Psychological issue" 5 "Other" -98 "Refuse to say" -99 "Don't know"
+	label define c4_migration_q6 1 "None" 2 "Less security" 3 "More house work" 4 "Psychological issue" 5 "Other" -97 "Refuse to say" -99 "Don't know"
 	label values c4_migration_q6 c4_migration_q6
 
 	label variable c4_hhcomin "Today, is there new member in the household that did not live here before Januar"
@@ -1533,8 +1470,8 @@ if _N>0 {
 	label define c4_hhcomin 1 "Yes" 0 "No"
 	label values c4_hhcomin c4_hhcomin
 
-	label variable c4_hhmembernew "C.4.2.1. Combien de membres vivent dans ce ménage mais n'y habitaient pas il y a"
-	note c4_hhmembernew: "C.4.2.1. Combien de membres vivent dans ce ménage mais n'y habitaient pas il y avant Janvier 2019 ?"
+	label variable c4_hhmembernew "C.4.2.1. How many household member lvie inthis HH but did not live here before J"
+	note c4_hhmembernew: "C.4.2.1. How many household member lvie inthis HH but did not live here before January 2019 ?"
 
 	label variable c4_hhmbernewreas "Why are those new members living in the household today?"
 	note c4_hhmbernewreas: "Why are those new members living in the household today?"
@@ -1567,7 +1504,7 @@ if _N>0 {
 
 	label variable c4_travelannoy "What are the main disavantadge of this migration ?"
 	note c4_travelannoy: "What are the main disavantadge of this migration ?"
-	label define c4_travelannoy 1 "None" 2 "Less security" 3 "More house work" 4 "Psychological issue" 5 "Other" -98 "Refuse to say" -99 "Don't know"
+	label define c4_travelannoy 1 "None" 2 "Less security" 3 "More house work" 4 "Psychological issue" 5 "Other" -97 "Refuse to say" -99 "Don't know"
 	label values c4_travelannoy c4_travelannoy
 
 	label variable c4_parentfrids "C.4.4. Today, do you have friends / family working in another city / gouvernorat"
@@ -1651,27 +1588,27 @@ if _N>0 {
 
 	label variable d1_happyperson "A. During the past month, how much of the time were you a happy person?"
 	note d1_happyperson: "A. During the past month, how much of the time were you a happy person?"
-	label define d1_happyperson 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -98 "Don't know" -99 "Refuse to say"
+	label define d1_happyperson 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -99 "Don't know" -97 "Refuse to say"
 	label values d1_happyperson d1_happyperson
 
 	label variable d1_calmpeaceful "B. How much of the time, during the past month, have you felt calm and peaceful?"
 	note d1_calmpeaceful: "B. How much of the time, during the past month, have you felt calm and peaceful?"
-	label define d1_calmpeaceful 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -98 "Don't know" -99 "Refuse to say"
+	label define d1_calmpeaceful 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -99 "Don't know" -97 "Refuse to say"
 	label values d1_calmpeaceful d1_calmpeaceful
 
 	label variable d1_nervousperson "C. How much of the time during the past month, have you been a very nervous pers"
 	note d1_nervousperson: "C. How much of the time during the past month, have you been a very nervous person?"
-	label define d1_nervousperson 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -98 "Don't know" -99 "Refuse to say"
+	label define d1_nervousperson 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -99 "Don't know" -97 "Refuse to say"
 	label values d1_nervousperson d1_nervousperson
 
 	label variable d1_heartedblue "D. How much of the time during the past month, have you felt down-hearted and bl"
 	note d1_heartedblue: "D. How much of the time during the past month, have you felt down-hearted and blue?"
-	label define d1_heartedblue 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -98 "Don't know" -99 "Refuse to say"
+	label define d1_heartedblue 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -99 "Don't know" -97 "Refuse to say"
 	label values d1_heartedblue d1_heartedblue
 
 	label variable d1_cheerup "E. How much of the time, during the past month, did you feel so down that nothin"
 	note d1_cheerup: "E. How much of the time, during the past month, did you feel so down that nothing could cheer you up?"
-	label define d1_cheerup 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -98 "Don't know" -99 "Refuse to say"
+	label define d1_cheerup 1 "All of the time" 2 "Most of the time" 3 "A good bit of the time" 4 "Some of the time" 5 "A little of the time" 6 "None of the time" -99 "Don't know" -97 "Refuse to say"
 	label values d1_cheerup d1_cheerup
 
 	label variable d2_thinkwrong "A. You are sometimes not able to stop yourself from doing something you think is"
@@ -1801,162 +1738,162 @@ if _N>0 {
 
 	label variable d3_pointofview "Please for each of the following question below give me your view"
 	note d3_pointofview: "Please for each of the following question below give me your view"
-	label define d3_pointofview 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_pointofview 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_pointofview d3_pointofview
 
 	label variable d3_lifethreatening "D3.3.1. Have you experienced any life-threatening events?"
 	note d3_lifethreatening: "D3.3.1. Have you experienced any life-threatening events?"
-	label define d3_lifethreatening 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_lifethreatening 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_lifethreatening d3_lifethreatening
 
 	label variable d3_distressing "D3.3.2. Do you have distressing memories or dreams?"
 	note d3_distressing: "D3.3.2. Do you have distressing memories or dreams?"
-	label define d3_distressing 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_distressing 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_distressing d3_distressing
 
 	label variable d3_avoidthinking "D3.3.3. Do you avoid thinking or talking about certain things from the past?"
 	note d3_avoidthinking: "D3.3.3. Do you avoid thinking or talking about certain things from the past?"
-	label define d3_avoidthinking 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_avoidthinking 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_avoidthinking d3_avoidthinking
 
 	label variable d3_remembering "D3.3.4. Do you have trouble remembering important parts of past events?"
 	note d3_remembering: "D3.3.4. Do you have trouble remembering important parts of past events?"
-	label define d3_remembering 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_remembering 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_remembering d3_remembering
 
 	label variable d3_lostinterest "D3.3.5. Have you lost interest in activities that you used to enjoy?"
 	note d3_lostinterest: "D3.3.5. Have you lost interest in activities that you used to enjoy?"
-	label define d3_lostinterest 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_lostinterest 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_lostinterest d3_lostinterest
 
 	label variable d3_feeldetached "D3.3.6. Do you feel detached from other people?"
 	note d3_feeldetached: "D3.3.6. Do you feel detached from other people?"
-	label define d3_feeldetached 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_feeldetached 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_feeldetached d3_feeldetached
 
 	label variable d3_oftenirritable "D3.3.7. Do you feel like you are often irritable?"
 	note d3_oftenirritable: "D3.3.7. Do you feel like you are often irritable?"
-	label define d3_oftenirritable 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_oftenirritable 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_oftenirritable d3_oftenirritable
 
 	label variable d3_makedecisions "D3.3.8. Do you feel like it takes you longer to make decisions than it used to?"
 	note d3_makedecisions: "D3.3.8. Do you feel like it takes you longer to make decisions than it used to?"
-	label define d3_makedecisions 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_makedecisions 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_makedecisions d3_makedecisions
 
 	label variable d3_sleepeatinghabit "D3.3.9. Have you experienced major changes in sleeping or eating habits in recen"
 	note d3_sleepeatinghabit: "D3.3.9. Have you experienced major changes in sleeping or eating habits in recent years?"
-	label define d3_sleepeatinghabit 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_sleepeatinghabit 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_sleepeatinghabit d3_sleepeatinghabit
 
 	label variable d3_depressed "D3.3.10. Do you often feel sad or depressed?"
 	note d3_depressed: "D3.3.10. Do you often feel sad or depressed?"
-	label define d3_depressed 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_depressed 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_depressed d3_depressed
 
 	label variable d3_wrongmatter "D3.3.11. Do you feel like things will always go wrong no matter how hard you try"
 	note d3_wrongmatter: "D3.3.11. Do you feel like things will always go wrong no matter how hard you try?"
-	label define d3_wrongmatter 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_wrongmatter 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_wrongmatter d3_wrongmatter
 
 	label variable d3_alcoholdrugs "D3.3.12. In the last year, did you fail to fulfill responsibilities due to alcoh"
 	note d3_alcoholdrugs: "D3.3.12. In the last year, did you fail to fulfill responsibilities due to alcohol or drugs?"
-	label define d3_alcoholdrugs 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_alcoholdrugs 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_alcoholdrugs d3_alcoholdrugs
 
 	label variable d3_feltangry "D3.4.1. During the past week have you felt angry?"
 	note d3_feltangry: "D3.4.1. During the past week have you felt angry?"
-	label define d3_feltangry 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_feltangry 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_feltangry d3_feltangry
 
 	label variable d3_troubllistening "D3.4.2. Do you have trouble listening to people who disagree with you?"
 	note d3_troubllistening: "D3.4.2. Do you have trouble listening to people who disagree with you?"
-	label define d3_troubllistening 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_troubllistening 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_troubllistening d3_troubllistening
 
 	label variable d3_wrongblame "D3.4.3. When something goes wrong, is the most important thing to find out who i"
 	note d3_wrongblame: "D3.4.3. When something goes wrong, is the most important thing to find out who is to blame?"
-	label define d3_wrongblame 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_wrongblame 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_wrongblame d3_wrongblame
 
 	label variable d3_recognition "D3.4.4. Do other people get more recognition for less effort than you make?"
 	note d3_recognition: "D3.4.4. Do other people get more recognition for less effort than you make?"
-	label define d3_recognition 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_recognition 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_recognition d3_recognition
 
 	label variable d3_believethink "D3.4.5. Do you believe that what you think and feel doesn’t matter to others?"
 	note d3_believethink: "D3.4.5. Do you believe that what you think and feel doesn’t matter to others?"
-	label define d3_believethink 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_believethink 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_believethink d3_believethink
 
 	label variable d3_frustrated "D3.4.6. Do you become frustrated when people do not behave as they should?"
 	note d3_frustrated: "D3.4.6. Do you become frustrated when people do not behave as they should?"
-	label define d3_frustrated 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_frustrated 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_frustrated d3_frustrated
 
 	label variable d3_enoughsleep "D3.4.7. Do you never get enough sleep?"
 	note d3_enoughsleep: "D3.4.7. Do you never get enough sleep?"
-	label define d3_enoughsleep 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_enoughsleep 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_enoughsleep d3_enoughsleep
 
 	label variable d3_lotofthings "D3.4.8. Do you put up with a lot of things you don’t like?"
 	note d3_lotofthings: "D3.4.8. Do you put up with a lot of things you don’t like?"
-	label define d3_lotofthings 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_lotofthings 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_lotofthings d3_lotofthings
 
 	label variable d3_nightmares "D3.4.10. Do you have restless nights or nightmares at night?"
 	note d3_nightmares: "D3.4.10. Do you have restless nights or nightmares at night?"
-	label define d3_nightmares 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_nightmares 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_nightmares d3_nightmares
 
 	label variable d3_solveproblems "D.3.5.1 Do you feel that you can solve problems by yourself?"
 	note d3_solveproblems: "D.3.5.1 Do you feel that you can solve problems by yourself?"
-	label define d3_solveproblems 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_solveproblems 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_solveproblems d3_solveproblems
 
 	label variable d3_dependsmainly "D.3. 5.2 Do you feel that your future depends mainly on you?"
 	note d3_dependsmainly: "D.3. 5.2 Do you feel that your future depends mainly on you?"
-	label define d3_dependsmainly 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_dependsmainly 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_dependsmainly d3_dependsmainly
 
 	label variable d3_feel_helpless "D.3. 5.3 Do you feel helpless to deal with the problems in your life?"
 	note d3_feel_helpless: "D.3. 5.3 Do you feel helpless to deal with the problems in your life?"
-	label define d3_feel_helpless 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_feel_helpless 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_feel_helpless d3_feel_helpless
 
 	label variable d3_influence_many "D.3. 5.4 Do you feel that you can do little to influence many of the important e"
 	note d3_influence_many: "D.3. 5.4 Do you feel that you can do little to influence many of the important events in your life?"
-	label define d3_influence_many 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_influence_many 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_influence_many d3_influence_many
 
 	label variable d3_taking_control "D.3. 5.5 Do you sometimes feel like you're not taking control of your life?"
 	note d3_taking_control: "D.3. 5.5 Do you sometimes feel like you're not taking control of your life?"
-	label define d3_taking_control 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_taking_control 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_taking_control d3_taking_control
 
 	label variable d3_exploitedcheated "D.3. 5.6 Have you often felt that you have been exploited or cheated by other pe"
 	note d3_exploitedcheated: "D.3. 5.6 Have you often felt that you have been exploited or cheated by other people?"
-	label define d3_exploitedcheated 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_exploitedcheated 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_exploitedcheated d3_exploitedcheated
 
 	label variable d3_have_control "D.3. 5.7 Do you feel like you have control over what happens in your life?"
 	note d3_have_control: "D.3. 5.7 Do you feel like you have control over what happens in your life?"
-	label define d3_have_control 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_have_control 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_have_control d3_have_control
 
 	label variable d3_trust_worthy "D.3. 5.8 Do you feel people are generally trust-worthy?"
 	note d3_trust_worthy: "D.3. 5.8 Do you feel people are generally trust-worthy?"
-	label define d3_trust_worthy 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_trust_worthy 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_trust_worthy d3_trust_worthy
 
 	label variable d3_achieveanything "D.3. 5.9 Do you feel that you can achieve anything if you are dedicated?"
 	note d3_achieveanything: "D.3. 5.9 Do you feel that you can achieve anything if you are dedicated?"
-	label define d3_achieveanything 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_achieveanything 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_achieveanything d3_achieveanything
 
 	label variable d3_beingaccepted "D.3. 5.10 Today, do you have problems being accepted in your household?"
 	note d3_beingaccepted: "D.3. 5.10 Today, do you have problems being accepted in your household?"
-	label define d3_beingaccepted 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define d3_beingaccepted 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values d3_beingaccepted d3_beingaccepted
 
 	label variable d3_problemworries "D3.6. When you have problems or worries that torment you, do you often share wit"
@@ -2020,17 +1957,17 @@ if _N>0 {
 
 	label variable e1_moddrinkwater "A. Transport mode used to get to : Place where you get drinking water"
 	note e1_moddrinkwater: "A. Transport mode used to get to : Place where you get drinking water"
-	label define e1_moddrinkwater 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label define e1_moddrinkwater 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_moddrinkwater e1_moddrinkwater
 
-	label variable e1_moddrinkwaterother "Specifier autre"
-	note e1_moddrinkwaterother: "Specifier autre"
+	label variable e1_moddrinkwaterother "Specify other"
+	note e1_moddrinkwaterother: "Specify other"
 
-	label variable e1_timedrinkwater "E.1.3.2. Temps nécessaire pour atteindre le point de service utilisant ce mode d"
-	note e1_timedrinkwater: "E.1.3.2. Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_moddrinkwater}\${e1_moddrinkwaterother} depuis votre domicile (aller simple)?"
+	label variable e1_timedrinkwater "E.1.3.2. Necessary time to get to this services using \${e1_modwater_e}\${e1_mod"
+	note e1_timedrinkwater: "E.1.3.2. Necessary time to get to this services using \${e1_modwater_e}\${e1_moddrinkwaterother} from your home (simple way)"
 
-	label variable e1_hhdrinkwater "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au co"
-	note e1_hhdrinkwater: "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au cours des SIX DERNIERS MOIS (janvier à aujourd'hui)?"
+	label variable e1_hhdrinkwater "E.1.4 Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhdrinkwater: "E.1.4 Did a member of your HH used this services in the last 6 month ?"
 	label define e1_hhdrinkwater 1 "Yes" 0 "No"
 	label values e1_hhdrinkwater e1_hhdrinkwater
 
@@ -2039,19 +1976,19 @@ if _N>0 {
 	label define e1_foodmarket 1 "Yes" 0 "No"
 	label values e1_foodmarket e1_foodmarket
 
-	label variable e1_modfoodmarket "B. Transport mode used to get to : Marché de produits alimentaires / épiceries"
-	note e1_modfoodmarket: "B. Transport mode used to get to : Marché de produits alimentaires / épiceries"
-	label define e1_modfoodmarket 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label variable e1_modfoodmarket "B. Transport mode used to get to : Food market/grocery store"
+	note e1_modfoodmarket: "B. Transport mode used to get to : Food market/grocery store"
+	label define e1_modfoodmarket 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_modfoodmarket e1_modfoodmarket
 
-	label variable e1_modfoodmarketother "Specifier autre"
-	note e1_modfoodmarketother: "Specifier autre"
+	label variable e1_modfoodmarketother "Specify other"
+	note e1_modfoodmarketother: "Specify other"
 
-	label variable e1_timefoodmarket "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de t"
-	note e1_timefoodmarket: "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_modfoodmarket}\${e1_modfoodmarketother} depuis votre domicile (aller simple)?"
+	label variable e1_timefoodmarket "E.1.3 Necessary time to get to this services using \${e1_modmarket_e}\${e1_modfo"
+	note e1_timefoodmarket: "E.1.3 Necessary time to get to this services using \${e1_modmarket_e}\${e1_modfoodmarketother} from your home (simple way)"
 
-	label variable e1_hhfoodmarket "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au co"
-	note e1_hhfoodmarket: "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au cours des SIX DERNIERS MOIS (janvier à aujourd'hui)?"
+	label variable e1_hhfoodmarket "Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhfoodmarket: "Did a member of your HH used this services in the last 6 month ?"
 	label define e1_hhfoodmarket 1 "Yes" 0 "No"
 	label values e1_hhfoodmarket e1_hhfoodmarket
 
@@ -2060,19 +1997,19 @@ if _N>0 {
 	label define e1_primaryschool 1 "Yes" 0 "No"
 	label values e1_primaryschool e1_primaryschool
 
-	label variable e1_modprimaryschool "D. Transport mode used to get to : École primaire"
-	note e1_modprimaryschool: "D. Transport mode used to get to : École primaire"
-	label define e1_modprimaryschool 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label variable e1_modprimaryschool "D. Transport mode used to get to : Primary school"
+	note e1_modprimaryschool: "D. Transport mode used to get to : Primary school"
+	label define e1_modprimaryschool 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_modprimaryschool e1_modprimaryschool
 
-	label variable e1_modprimaryschoolother "Specifier autre"
-	note e1_modprimaryschoolother: "Specifier autre"
+	label variable e1_modprimaryschoolother "Specify other"
+	note e1_modprimaryschoolother: "Specify other"
 
-	label variable e1_timeprimaryschool "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de t"
-	note e1_timeprimaryschool: "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_modprimaryschool}\${e1_modprimaryschoolother} depuis votre domicile (aller simple)?"
+	label variable e1_timeprimaryschool "E.1.3 Necessary time to get to this services using \${e1_modprimary_e}\${e1_modp"
+	note e1_timeprimaryschool: "E.1.3 Necessary time to get to this services using \${e1_modprimary_e}\${e1_modprimaryschoolother} from your home (simple way)"
 
-	label variable e1_hhprimaryschool "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au co"
-	note e1_hhprimaryschool: "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au cours des SIX DERNIERS MOIS (janvier à aujourd'hui)?"
+	label variable e1_hhprimaryschool "Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhprimaryschool: "Did a member of your HH used this services in the last 6 month ?"
 	label define e1_hhprimaryschool 1 "Yes" 0 "No"
 	label values e1_hhprimaryschool e1_hhprimaryschool
 
@@ -2081,19 +2018,19 @@ if _N>0 {
 	label define e1_secondaryschool 1 "Yes" 0 "No"
 	label values e1_secondaryschool e1_secondaryschool
 
-	label variable e1_modsecondaryschool "E. Transport mode used to get to : École secondaire"
-	note e1_modsecondaryschool: "E. Transport mode used to get to : École secondaire"
-	label define e1_modsecondaryschool 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label variable e1_modsecondaryschool "E. Transport mode used to get to : Scondary school"
+	note e1_modsecondaryschool: "E. Transport mode used to get to : Scondary school"
+	label define e1_modsecondaryschool 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_modsecondaryschool e1_modsecondaryschool
 
-	label variable e1_modsecdryschoolother "Specifier autre"
-	note e1_modsecdryschoolother: "Specifier autre"
+	label variable e1_modsecdryschoolother "Specify other"
+	note e1_modsecdryschoolother: "Specify other"
 
-	label variable e1_timesecondaryschool "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de t"
-	note e1_timesecondaryschool: "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_secondaryschool}\${e1_modsecdryschoolother} depuis votre domicile (aller simple)?"
+	label variable e1_timesecondaryschool "E.1.3 Necessary time to get to this services using \${e1_modsecondary_e}\${e1_mo"
+	note e1_timesecondaryschool: "E.1.3 Necessary time to get to this services using \${e1_modsecondary_e}\${e1_modsecdryschoolother} from your home (simple way)"
 
-	label variable e1_hhsecondaryschool "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au co"
-	note e1_hhsecondaryschool: "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au cours des SIX DERNIERS MOIS (janvier à aujourd'hui)?"
+	label variable e1_hhsecondaryschool "Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhsecondaryschool: "Did a member of your HH used this services in the last 6 month ?"
 	label define e1_hhsecondaryschool 1 "Yes" 0 "No"
 	label values e1_hhsecondaryschool e1_hhsecondaryschool
 
@@ -2102,35 +2039,40 @@ if _N>0 {
 	label define e1_dispensaryclinic 1 "Yes" 0 "No"
 	label values e1_dispensaryclinic e1_dispensaryclinic
 
-	label variable e1_moddispensaryclinic "G. Transport mode used to get to : Dispensaire ou clinique"
-	note e1_moddispensaryclinic: "G. Transport mode used to get to : Dispensaire ou clinique"
-	label define e1_moddispensaryclinic 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label variable e1_moddispensaryclinic "G. Transport mode used to get to : Dispensary or clinic"
+	note e1_moddispensaryclinic: "G. Transport mode used to get to : Dispensary or clinic"
+	label define e1_moddispensaryclinic 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_moddispensaryclinic e1_moddispensaryclinic
 
-	label variable e1_moddispsaryclnicother "Specifier autre"
-	note e1_moddispsaryclnicother: "Specifier autre"
+	label variable e1_moddispsaryclinicother "Specify other"
+	note e1_moddispsaryclinicother: "Specify other"
 
-	label variable e1_timedispensaryclinic1 "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de t"
-	note e1_timedispensaryclinic1: "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_moddispensaryclinic}\${e1_moddispsaryclnicother} depuis votre domicile (aller simple)?"
+	label variable e1_timedispensaryclinic1 "E.1.3 Necessary time to get to this services using \${e1_moddispensary_e}\${e1_m"
+	note e1_timedispensaryclinic1: "E.1.3 Necessary time to get to this services using \${e1_moddispensary_e}\${e1_moddispsaryclinicother} from your home (simple way)"
+
+	label variable e1_hhdispensaryclinic "Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhdispensaryclinic: "Did a member of your HH used this services in the last 6 month ?"
+	label define e1_hhdispensaryclinic 1 "Yes" 0 "No"
+	label values e1_hhdispensaryclinic e1_hhdispensaryclinic
 
 	label variable e1_busstop "P. Is there a: Bus/Minibus stop"
 	note e1_busstop: "P. Is there a: Bus/Minibus stop"
 	label define e1_busstop 1 "Yes" 0 "No"
 	label values e1_busstop e1_busstop
 
-	label variable e1_modbusstop "P. Transport mode used to get to : Arrêt de bus / minibus"
-	note e1_modbusstop: "P. Transport mode used to get to : Arrêt de bus / minibus"
-	label define e1_modbusstop 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label variable e1_modbusstop "P. Transport mode used to get to : Bust stop"
+	note e1_modbusstop: "P. Transport mode used to get to : Bust stop"
+	label define e1_modbusstop 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_modbusstop e1_modbusstop
 
-	label variable e1_modbusstopother "Specifier autre"
-	note e1_modbusstopother: "Specifier autre"
+	label variable e1_modbusstopother "Specify other"
+	note e1_modbusstopother: "Specify other"
 
-	label variable e1_timebusstop "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de t"
-	note e1_timebusstop: "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_modbusstop}\${e1_modbusstopother} depuis votre domicile (aller simple)?"
+	label variable e1_timebusstop "E.1.3 Necessary time to get to this services using \${e1_modbus_e}\${e1_modbusst"
+	note e1_timebusstop: "E.1.3 Necessary time to get to this services using \${e1_modbus_e}\${e1_modbusstopother} from your home (simple way)"
 
-	label variable e1_hhbusstop "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au co"
-	note e1_hhbusstop: "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au cours des SIX DERNIERS MOIS (janvier à aujourd'hui)?"
+	label variable e1_hhbusstop "Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhbusstop: "Did a member of your HH used this services in the last 6 month ?"
 	label define e1_hhbusstop 1 "Yes" 0 "No"
 	label values e1_hhbusstop e1_hhbusstop
 
@@ -2141,17 +2083,17 @@ if _N>0 {
 
 	label variable e1_modfirestation "V. Transport mode used to get to : Fire station"
 	note e1_modfirestation: "V. Transport mode used to get to : Fire station"
-	label define e1_modfirestation 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label define e1_modfirestation 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_modfirestation e1_modfirestation
 
-	label variable e1_modfirestationother "Specifier autre"
-	note e1_modfirestationother: "Specifier autre"
+	label variable e1_modfirestationother "Specify other"
+	note e1_modfirestationother: "Specify other"
 
-	label variable e1_timefirestation "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de t"
-	note e1_timefirestation: "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_modfirestation}\${e1_modfirestationother} depuis votre domicile (aller simple)?"
+	label variable e1_timefirestation "E.1.3 Necessary time to get to this services using \${e1_modfire_e}\${e1_modfire"
+	note e1_timefirestation: "E.1.3 Necessary time to get to this services using \${e1_modfire_e}\${e1_modfirestationother} from your home (simple way)"
 
-	label variable e1_hhfirestation "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au co"
-	note e1_hhfirestation: "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au cours des SIX DERNIERS MOIS (janvier à aujourd'hui)?"
+	label variable e1_hhfirestation "Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhfirestation: "Did a member of your HH used this services in the last 6 month ?"
 	label define e1_hhfirestation 1 "Yes" 0 "No"
 	label values e1_hhfirestation e1_hhfirestation
 
@@ -2160,19 +2102,19 @@ if _N>0 {
 	label define e1_policestation 1 "Yes" 0 "No"
 	label values e1_policestation e1_policestation
 
-	label variable e1_modpolicestation "W. Transport mode used to get to : Poste de police"
-	note e1_modpolicestation: "W. Transport mode used to get to : Poste de police"
-	label define e1_modpolicestation 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label variable e1_modpolicestation "W. Transport mode used to get to : Police station"
+	note e1_modpolicestation: "W. Transport mode used to get to : Police station"
+	label define e1_modpolicestation 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_modpolicestation e1_modpolicestation
 
-	label variable e1_modpolicestationother "Specifier autre"
-	note e1_modpolicestationother: "Specifier autre"
+	label variable e1_modpolicestationother "Specify other"
+	note e1_modpolicestationother: "Specify other"
 
-	label variable e1_timepolicestation "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de t"
-	note e1_timepolicestation: "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_modpolicestation}\${e1_modpolicestationother} depuis votre domicile (aller simple)?"
+	label variable e1_timepolicestation "E.1.3 Necessary time to get to this services using \${e1_modpolice_e} \${e1_modp"
+	note e1_timepolicestation: "E.1.3 Necessary time to get to this services using \${e1_modpolice_e} \${e1_modpolicestationother from your home (simple way)"
 
-	label variable e1_hhpolicestation "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au co"
-	note e1_hhpolicestation: "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au cours des SIX DERNIERS MOIS (janvier à aujourd'hui)?"
+	label variable e1_hhpolicestation "Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhpolicestation: "Did a member of your HH used this services in the last 6 month ?"
 	label define e1_hhpolicestation 1 "Yes" 0 "No"
 	label values e1_hhpolicestation e1_hhpolicestation
 
@@ -2183,22 +2125,22 @@ if _N>0 {
 
 	label variable e1_modadmincenter "Transport mode used to get to : Administrative center of Imada"
 	note e1_modadmincenter: "Transport mode used to get to : Administrative center of Imada"
-	label define e1_modadmincenter 1 "1.Walking" 2 "2.Bicycle" 3 "4.Mule/ donkey" 4 "5.Car/motorcycle" 5 "6.Bus/ microbus" 6 "7.Boat/ canoe" 99 "8 –-Other [Specify]" -99 "Ne sait pas"
+	label define e1_modadmincenter 1 "Walking" 2 "Bicycle" 3 "Mule/ donkey" 4 "Car/motorcycle" 5 "Bus/ microbus" 6 "Boat/ canoe" 99 "Other" -99 "Don't know"
 	label values e1_modadmincenter e1_modadmincenter
 
-	label variable e1_modadmincenterother "Specifier autre"
-	note e1_modadmincenterother: "Specifier autre"
+	label variable e1_modadmincenterother "Specify other"
+	note e1_modadmincenterother: "Specify other"
 
-	label variable e1_timeadmincenter "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de t"
-	note e1_timeadmincenter: "E.1.3 Temps nécessaire pour atteindre le point de service utilisant ce mode de transport \${e1_modadmincenter}\${e1_modadmincenterother} depuis votre domicile (aller simple)?"
+	label variable e1_timeadmincenter "E.1.3 Necessary time to get to this services using \${e1_modadmin_e}\${e1_modadm"
+	note e1_timeadmincenter: "E.1.3 Necessary time to get to this services using \${e1_modadmin_e}\${e1_modadmincenterother} from your home (simple way)"
 
-	label variable e1_hhadmincenter "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au co"
-	note e1_hhadmincenter: "E.1.4 Un membre de votre famille ou vous-même avez-vous utilisé ce service au cours des SIX DERNIERS MOIS (janvier à aujourd'hui)?"
+	label variable e1_hhadmincenter "Did a member of your HH used this services in the last 6 month ?"
+	note e1_hhadmincenter: "Did a member of your HH used this services in the last 6 month ?"
 	label define e1_hhadmincenter 1 "Yes" 0 "No"
 	label values e1_hhadmincenter e1_hhadmincenter
 
-	label variable e2_hh_conditions "E 2.1. Au cours des dernieres années, depuis Janvier 2019, vous-même ou un membr"
-	note e2_hh_conditions: "E 2.1. Au cours des dernieres années, depuis Janvier 2019, vous-même ou un membre de votre ménage êtes-vous devenu malade AU POINT DE CHERCHER DES soins médicaux?"
+	label variable e2_hh_conditions "E 2.1.Since January 2019, did you or someone from your HH felt sick and looked f"
+	note e2_hh_conditions: "E 2.1.Since January 2019, did you or someone from your HH felt sick and looked for medical aid ?"
 	label define e2_hh_conditions 1 "Yes" 0 "No"
 	label values e2_hh_conditions e2_hh_conditions
 
@@ -2208,8 +2150,8 @@ if _N>0 {
 	label variable e2_hh_conditiosother "Specify other"
 	note e2_hh_conditiosother: "Specify other"
 
-	label variable e2_visitedservices "E.2.0.1. Quels services ont-ils visités ? (Ajouter une liste des services y comp"
-	note e2_visitedservices: "E.2.0.1. Quels services ont-ils visités ? (Ajouter une liste des services y compris centre de traitement ebola) ?"
+	label variable e2_visitedservices "E.2.0.1. What services did they visit?"
+	note e2_visitedservices: "E.2.0.1. What services did they visit?"
 
 	label variable e2_hh_medicalcare "E 2.2. Where does your household usually seek medical care in case of an illness"
 	note e2_hh_medicalcare: "E 2.2. Where does your household usually seek medical care in case of an illness?"
@@ -2219,17 +2161,17 @@ if _N>0 {
 	label variable e2_hh_medicalcareother "Specify other"
 	note e2_hh_medicalcareother: "Specify other"
 
-	label variable e2_hh_visitshservices "E 2.3.Au cours des dernieres années, depuis Janvier 2019, combien de membres de "
-	note e2_hh_visitshservices: "E 2.3.Au cours des dernieres années, depuis Janvier 2019, combien de membres de votre ménage ont visité une clinique ou un hôpital pour des soins médicaux?"
+	label variable e2_hh_visitshservices "E 2.3 In the past few years, since January 2019, how many members of your househ"
+	note e2_hh_visitshservices: "E 2.3 In the past few years, since January 2019, how many members of your household have visited a clinic or hospital for medical care?"
 
-	label variable e2_hh_healthcare_spend "E 2.4 Au cours des dernieres années, depuis Janvier 2019, combien d'argent votre"
-	note e2_hh_healthcare_spend: "E 2.4 Au cours des dernieres années, depuis Janvier 2019, combien d'argent votre ménage a-t-il dépensé pour ces soins de santé?"
+	label variable e2_hh_healthcare_spend "E 2.4 In the past years, since January 2019, how much money has your household s"
+	note e2_hh_healthcare_spend: "E 2.4 In the past years, since January 2019, how much money has your household spent on this health care?"
 
-	label variable e2_hhchildund7 "E 2.5 Combien d'enfants de 7 ans ou moins vivent dans ce ménage?"
-	note e2_hhchildund7: "E 2.5 Combien d'enfants de 7 ans ou moins vivent dans ce ménage?"
+	label variable e2_hhchildund7 "E 2.5 How many children aged 7 or under live in this household?"
+	note e2_hhchildund7: "E 2.5 How many children aged 7 or under live in this household?"
 
-	label variable e2_hhchilvac "E 2.6 Combien de ces enfants ont été vaccinés au cours depuis Janvier 2019?"
-	note e2_hhchilvac: "E 2.6 Combien de ces enfants ont été vaccinés au cours depuis Janvier 2019?"
+	label variable e2_hhchilvac "E 2.6 How many of these children have been vaccinated in the course since Januar"
+	note e2_hhchilvac: "E 2.6 How many of these children have been vaccinated in the course since January 2019?"
 
 	label variable e2_fever "E 2.7. During the last 6 months, did any children suffer from: High Fever"
 	note e2_fever: "E 2.7. During the last 6 months, did any children suffer from: High Fever"
@@ -2344,19 +2286,19 @@ if _N>0 {
 	label define e2_othter1 1 "Yes" 0 "No"
 	label values e2_othter1 e2_othter1
 
-	label variable e2_childdeath "E 2.18. Parfois, il arrive que des enfants meurent. Il peut être douloureux de p"
-	note e2_childdeath: "E 2.18. Parfois, il arrive que des enfants meurent. Il peut être douloureux de penser à de tels souvenirs et je suis désolé de vous en parler. Cependant, il est important d'obtenir les bonnes informations. Au total, combien de vos enfants de 7 ans ou moins sont décédés depuis Janvier 2019?"
+	label variable e2_childdeath "E 2.18. Sometime si thappens that children die. It can be hurtful to think about"
+	note e2_childdeath: "E 2.18. Sometime si thappens that children die. It can be hurtful to think about it, and I'm sorry talaving to talk about it. However it is important that we gather information on this. In total, how many children age 7 or less have died since January 2019?"
 
-	label variable e2_childdeathreason "E 2.19. Cela vous dérange-t-il de partager avec nous les causes de la mort? [NE "
-	note e2_childdeathreason: "E 2.19. Cela vous dérange-t-il de partager avec nous les causes de la mort? [NE DEMANDEZ PAS, MAIS INDIQUEZ TOUT CE QUI S'APPLIQUE.]"
-	label define e2_childdeathreason 1 "Complications avec une maladi" 2 "Manque de soins médicaux / médicaments" 3 "malnutrition" 4 "Crime violent" 5 "Conflit armé / guerre" 6 "accident de la route" 7 ".Autre accident (p. Ex., Une chute ou impacts/collision)" 8 "Causes inconnues" 9 "Birth complication" -98 "Doesn't want to say" -99 "Don't know" 99 "Autre"
+	label variable e2_childdeathreason "E 2.19. Do you mind telling me the the cause of death ? [SELECT ALL THAT APPLY]"
+	note e2_childdeathreason: "E 2.19. Do you mind telling me the the cause of death ? [SELECT ALL THAT APPLY]"
+	label define e2_childdeathreason 1 "Complications avec une maladi" 2 "Manque de soins médicaux / médicaments" 3 "malnutrition" 4 "Crime violent" 5 "Conflit armé / guerre" 6 "accident de la route" 7 ".Autre accident (p. Ex., Une chute ou impacts/collision)" 8 "Causes inconnues" 9 "Birth complication" -97 "Refuse to say" -99 "Don't know" 99 "Autre"
 	label values e2_childdeathreason e2_childdeathreason
 
 	label variable e2_childdeathreasonother "Specify other"
 	note e2_childdeathreasonother: "Specify other"
 
-	label variable pregnantwomen "E 2.20. Depuis Janvier 2019, des femmes enceintes membres de ce ménage ont-elles"
-	note pregnantwomen: "E 2.20. Depuis Janvier 2019, des femmes enceintes membres de ce ménage ont-elles perdu l'enfant avant sa naissance?"
+	label variable pregnantwomen "E 2.20. Since January 2019, has any pregnant women lost the child they were carr"
+	note pregnantwomen: "E 2.20. Since January 2019, has any pregnant women lost the child they were carrying ?"
 	label define pregnantwomen 1 "Yes" 0 "No"
 	label values pregnantwomen pregnantwomen
 
@@ -2737,21 +2679,6 @@ if _N>0 {
 	label define g1_womengroupship 1 "Yes" 0 "No"
 	label values g1_womengroupship g1_womengroupship
 
-	label variable g1_youthgroup "E. Does the following group or asc exist: A youth group"
-	note g1_youthgroup: "E. Does the following group or asc exist: A youth group"
-	label define g1_youthgroup 1 "Yes" 0 "No"
-	label values g1_youthgroup g1_youthgroup
-
-	label variable g1_hhinyouthgroup "E. Are you or anyone else from your HH a member of : A youth group"
-	note g1_hhinyouthgroup: "E. Are you or anyone else from your HH a member of : A youth group"
-	label define g1_hhinyouthgroup 1 "Yes" 0 "No"
-	label values g1_hhinyouthgroup g1_hhinyouthgroup
-
-	label variable g1_youthgroupship "E. Does the group accept members who are not from this village/community: A yout"
-	note g1_youthgroupship: "E. Does the group accept members who are not from this village/community: A youth group"
-	label define g1_youthgroupship 1 "Yes" 0 "No"
-	label values g1_youthgroupship g1_youthgroupship
-
 	label variable g1_humancomnitygroup "H. Does the following group or asc exist: Human rights/ NGO/ community group"
 	note g1_humancomnitygroup: "H. Does the following group or asc exist: Human rights/ NGO/ community group"
 	label define g1_humancomnitygroup 1 "Yes" 0 "No"
@@ -2829,339 +2756,6 @@ if _N>0 {
 	note g1_othership: "L. Does the group accept members who are not from this village/community: \${g1_othergroup}"
 	label define g1_othership 1 "Yes" 0 "No"
 	label values g1_othership g1_othership
-
-	label variable g1_waterirrigation "A. Does the following committee exist: Water and irrigation"
-	note g1_waterirrigation: "A. Does the following committee exist: Water and irrigation"
-	label define g1_waterirrigation 1 "Yes" 0 "No"
-	label values g1_waterirrigation g1_waterirrigation
-
-	label variable g1_hhwaterirrigation "A. Did you or someone else from your HH took part to the following committee: Wa"
-	note g1_hhwaterirrigation: "A. Did you or someone else from your HH took part to the following committee: Water and irrigation"
-	label define g1_hhwaterirrigation 1 "Yes" 0 "No"
-	label values g1_hhwaterirrigation g1_hhwaterirrigation
-
-	label variable g1_wkwaterirrigation "A. Does the following committee work with other village: Water and irrigation"
-	note g1_wkwaterirrigation: "A. Does the following committee work with other village: Water and irrigation"
-	label define g1_wkwaterirrigation 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkwaterirrigation g1_wkwaterirrigation
-
-	label variable g1_repr_water "J.1.7. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_water: "J.1.7. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_water 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_water g1_repr_water
-
-	label variable g1_elec_water "J.1.8. Les dirigeants en sont-ils élus ?"
-	note g1_elec_water: "J.1.8. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_water 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_water g1_elec_water
-
-	label variable g1_dec_water "J.1.9. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_water: "J.1.9. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_water 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_water g1_dec_water
-
-	label variable g1_roadmaintnanc "B. Does the following committee exist: Road maintenance"
-	note g1_roadmaintnanc: "B. Does the following committee exist: Road maintenance"
-	label define g1_roadmaintnanc 1 "Yes" 0 "No"
-	label values g1_roadmaintnanc g1_roadmaintnanc
-
-	label variable g1_hhroadmaintnanc "B. Did you or someone else from your HH took part to the following committee: Ro"
-	note g1_hhroadmaintnanc: "B. Did you or someone else from your HH took part to the following committee: Road maintenance"
-	label define g1_hhroadmaintnanc 1 "Yes" 0 "No"
-	label values g1_hhroadmaintnanc g1_hhroadmaintnanc
-
-	label variable g1_wkroadmaintnanc "B. Does the following committee work with other village: Road maintenance"
-	note g1_wkroadmaintnanc: "B. Does the following committee work with other village: Road maintenance"
-	label define g1_wkroadmaintnanc 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkroadmaintnanc g1_wkroadmaintnanc
-
-	label variable g1_repr_road "J.1.11. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_road: "J.1.11. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_road 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_road g1_repr_road
-
-	label variable g1_elec_road "J.1.12. Les dirigeants en sont-ils élus ?"
-	note g1_elec_road: "J.1.12. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_road 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_road g1_elec_road
-
-	label variable g1_dec_road "J.1.13. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_road: "J.1.13. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_road 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_road g1_dec_road
-
-	label variable g1_healthsanitary "C. Does the following committee exist: Health/sanitary"
-	note g1_healthsanitary: "C. Does the following committee exist: Health/sanitary"
-	label define g1_healthsanitary 1 "Yes" 0 "No"
-	label values g1_healthsanitary g1_healthsanitary
-
-	label variable g1_hhhealthsanitary "C. Did you or someone else from your HH took part to the following committee: He"
-	note g1_hhhealthsanitary: "C. Did you or someone else from your HH took part to the following committee: Health/sanitary"
-	label define g1_hhhealthsanitary 1 "Yes" 0 "No"
-	label values g1_hhhealthsanitary g1_hhhealthsanitary
-
-	label variable g1_wkhealthsanitary "C. Does the following committee work with other village: Health/sanitary"
-	note g1_wkhealthsanitary: "C. Does the following committee work with other village: Health/sanitary"
-	label define g1_wkhealthsanitary 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkhealthsanitary g1_wkhealthsanitary
-
-	label variable g1_repr_health "J.1.15. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_health: "J.1.15. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_health 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_health g1_repr_health
-
-	label variable g1_elec_health "J.1.16. Les dirigeants en sont-ils élus ?"
-	note g1_elec_health: "J.1.16. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_health 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_health g1_elec_health
-
-	label variable g1_dec_health "J.1.17. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_health: "J.1.17. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_health 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_health g1_dec_health
-
-	label variable g1_farmingagri "D. Does the following committee exist: Farming/ Agriculture"
-	note g1_farmingagri: "D. Does the following committee exist: Farming/ Agriculture"
-	label define g1_farmingagri 1 "Yes" 0 "No"
-	label values g1_farmingagri g1_farmingagri
-
-	label variable g1_hhfarmingagri "D. Did you or someone else from your HH took part to the following committee: Fa"
-	note g1_hhfarmingagri: "D. Did you or someone else from your HH took part to the following committee: Farming/ Agriculture"
-	label define g1_hhfarmingagri 1 "Yes" 0 "No"
-	label values g1_hhfarmingagri g1_hhfarmingagri
-
-	label variable g1_wkfarmingagri "D. Does the following committee work with other village: Farming/ Agriculture"
-	note g1_wkfarmingagri: "D. Does the following committee work with other village: Farming/ Agriculture"
-	label define g1_wkfarmingagri 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkfarmingagri g1_wkfarmingagri
-
-	label variable g1_repr_farm "J.1.19.Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_farm: "J.1.19.Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_farm 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_farm g1_repr_farm
-
-	label variable g1_elec_farm "J.1.20. Les dirigeants en sont-ils élus ?"
-	note g1_elec_farm: "J.1.20. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_farm 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_farm g1_elec_farm
-
-	label variable g1_dec_farm "J.1.21. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_farm: "J.1.21. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_farm 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_farm g1_dec_farm
-
-	label variable g1_protectsecurity "E. Does the following committee exist: Protection/security"
-	note g1_protectsecurity: "E. Does the following committee exist: Protection/security"
-	label define g1_protectsecurity 1 "Yes" 0 "No"
-	label values g1_protectsecurity g1_protectsecurity
-
-	label variable g1_hhprotectsecurity "E. Did you or someone else from your HH took part to the following committee: Pr"
-	note g1_hhprotectsecurity: "E. Did you or someone else from your HH took part to the following committee: Protection/security"
-	label define g1_hhprotectsecurity 1 "Yes" 0 "No"
-	label values g1_hhprotectsecurity g1_hhprotectsecurity
-
-	label variable g1_wkprotectsecurity "E. Does the following committee work with other village: Protection/security"
-	note g1_wkprotectsecurity: "E. Does the following committee work with other village: Protection/security"
-	label define g1_wkprotectsecurity 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkprotectsecurity g1_wkprotectsecurity
-
-	label variable g1_repr_sec "J.1.23. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_sec: "J.1.23. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_sec 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_sec g1_repr_sec
-
-	label variable g1_elec_sec "J.1.24. Les dirigeants en sont-ils élus ?"
-	note g1_elec_sec: "J.1.24. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_sec 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_sec g1_elec_sec
-
-	label variable g1_dec_sec "J.1.25. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_sec: "J.1.25. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_sec 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_sec g1_dec_sec
-
-	label variable g1_parentsteachers "F. Does the following committee exist: Education (parents-teachers)"
-	note g1_parentsteachers: "F. Does the following committee exist: Education (parents-teachers)"
-	label define g1_parentsteachers 1 "Yes" 0 "No"
-	label values g1_parentsteachers g1_parentsteachers
-
-	label variable g1_hhparentsteachers "F. Did you or someone else from your HH took part to the following committee: Ed"
-	note g1_hhparentsteachers: "F. Did you or someone else from your HH took part to the following committee: Education (parents-teachers)"
-	label define g1_hhparentsteachers 1 "Yes" 0 "No"
-	label values g1_hhparentsteachers g1_hhparentsteachers
-
-	label variable g1_wkparentsteachers "F. Does the following committee work with other village: Education (parents-teac"
-	note g1_wkparentsteachers: "F. Does the following committee work with other village: Education (parents-teachers)"
-	label define g1_wkparentsteachers 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkparentsteachers g1_wkparentsteachers
-
-	label variable g1_repr_educ "J.1.27. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_educ: "J.1.27. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_educ 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_educ g1_repr_educ
-
-	label variable g1_elec_educ "J.1.28. Les dirigeants en sont-ils élus ?"
-	note g1_elec_educ: "J.1.28. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_educ 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_educ g1_elec_educ
-
-	label variable g1_dec_educ "J.1.29.Les décisions prises sont-elles exécutées ?"
-	note g1_dec_educ: "J.1.29.Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_educ 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_educ g1_dec_educ
-
-	label variable g1_conflictresltion "G. Does the following committee exist: Conflict Resolution"
-	note g1_conflictresltion: "G. Does the following committee exist: Conflict Resolution"
-	label define g1_conflictresltion 1 "Yes" 0 "No"
-	label values g1_conflictresltion g1_conflictresltion
-
-	label variable g1_hhconflictresltion "G Did you or someone else from your HH took part to the following committee: Con"
-	note g1_hhconflictresltion: "G Did you or someone else from your HH took part to the following committee: Conflict Resolution"
-	label define g1_hhconflictresltion 1 "Yes" 0 "No"
-	label values g1_hhconflictresltion g1_hhconflictresltion
-
-	label variable g1_wkconflictresltion "G. Does the following committee work with other village: Conflict Resolution"
-	note g1_wkconflictresltion: "G. Does the following committee work with other village: Conflict Resolution"
-	label define g1_wkconflictresltion 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkconflictresltion g1_wkconflictresltion
-
-	label variable g1_repr_conf "J.1.31. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_conf: "J.1.31. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_conf 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_conf g1_repr_conf
-
-	label variable g1_elec_conf "J.1.32. Les dirigeants en sont-ils élus ?"
-	note g1_elec_conf: "J.1.32. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_conf 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_conf g1_elec_conf
-
-	label variable g1_dec_conf "J.1.33. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_conf: "J.1.33. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_conf 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_conf g1_dec_conf
-
-	label variable g1_landcommittee "H. Does the following committee exist: Land committee"
-	note g1_landcommittee: "H. Does the following committee exist: Land committee"
-	label define g1_landcommittee 1 "Yes" 0 "No"
-	label values g1_landcommittee g1_landcommittee
-
-	label variable g1_hhlandcommittee "H. Did you or someone else from your HH took part to the following committee: La"
-	note g1_hhlandcommittee: "H. Did you or someone else from your HH took part to the following committee: Land committee"
-	label define g1_hhlandcommittee 1 "Yes" 0 "No"
-	label values g1_hhlandcommittee g1_hhlandcommittee
-
-	label variable g1_wklandcommittee "H. Does the following committee work with other village: Land committee"
-	note g1_wklandcommittee: "H. Does the following committee work with other village: Land committee"
-	label define g1_wklandcommittee 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wklandcommittee g1_wklandcommittee
-
-	label variable g1_repr_land "J.1.35. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_land: "J.1.35. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_land 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_land g1_repr_land
-
-	label variable g1_elec_land "J.1.36. Les dirigeants en sont-ils élus ?"
-	note g1_elec_land: "J.1.36. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_land 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_land g1_elec_land
-
-	label variable g1_dec_land "J.1.37. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_land: "J.1.37. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_land 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_land g1_dec_land
-
-	label variable g1_localcforpeaced "I. Does the following committee exist: Local Committee for Peace and Development"
-	note g1_localcforpeaced: "I. Does the following committee exist: Local Committee for Peace and Development"
-	label define g1_localcforpeaced 1 "Yes" 0 "No"
-	label values g1_localcforpeaced g1_localcforpeaced
-
-	label variable g1_hhlocalcforpeaced "I. Did you or someone else from your HH took part to the following committee: Lo"
-	note g1_hhlocalcforpeaced: "I. Did you or someone else from your HH took part to the following committee: Local Committee for Peace and Development"
-	label define g1_hhlocalcforpeaced 1 "Yes" 0 "No"
-	label values g1_hhlocalcforpeaced g1_hhlocalcforpeaced
-
-	label variable g1_wklocalcforpeaced "I. Does the following committee work with other village: Local Committee for Pea"
-	note g1_wklocalcforpeaced: "I. Does the following committee work with other village: Local Committee for Peace and Development"
-	label define g1_wklocalcforpeaced 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wklocalcforpeaced g1_wklocalcforpeaced
-
-	label variable g1_repr_peace "J.1.39. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_peace: "J.1.39. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_peace 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_peace g1_repr_peace
-
-	label variable g1_elec_peace "J.1.40. Les dirigeants en sont-ils élus ?"
-	note g1_elec_peace: "J.1.40. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_peace 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_peace g1_elec_peace
-
-	label variable g1_dec_peace "J.1.41. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_peace: "J.1.41. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_peace 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_peace g1_dec_peace
-
-	label variable g1_publicinfrasturemc "J. Does the following committee exist: Public infrastructure management committe"
-	note g1_publicinfrasturemc: "J. Does the following committee exist: Public infrastructure management committee"
-	label define g1_publicinfrasturemc 1 "Yes" 0 "No"
-	label values g1_publicinfrasturemc g1_publicinfrasturemc
-
-	label variable g1_hhpublicinfrasturemc "J. Did you or someone else from your HH took part to the following committee: Pu"
-	note g1_hhpublicinfrasturemc: "J. Did you or someone else from your HH took part to the following committee: Public infrastructure management committee"
-	label define g1_hhpublicinfrasturemc 1 "Yes" 0 "No"
-	label values g1_hhpublicinfrasturemc g1_hhpublicinfrasturemc
-
-	label variable g1_wkpublicinfrasturemc "J. Does the following committee work with other village: Public infrastructure m"
-	note g1_wkpublicinfrasturemc: "J. Does the following committee work with other village: Public infrastructure management committee"
-	label define g1_wkpublicinfrasturemc 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkpublicinfrasturemc g1_wkpublicinfrasturemc
-
-	label variable g1_repr_infra "J.1.43. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_infra: "J.1.43. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_infra 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_infra g1_repr_infra
-
-	label variable g1_elec_infra "J.1.44. Les dirigeants en sont-ils élus ?"
-	note g1_elec_infra: "J.1.44. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_infra 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_infra g1_elec_infra
-
-	label variable g1_dec_infra "J.1.45. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_infra: "J.1.45. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_infra 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_infra g1_dec_infra
-
-	label variable g1_commiteeother "K. Does the following committee exist: Other[SPECIFY]"
-	note g1_commiteeother: "K. Does the following committee exist: Other[SPECIFY]"
-	label define g1_commiteeother 1 "Yes" 0 "No"
-	label values g1_commiteeother g1_commiteeother
-
-	label variable g1_othercommitee "L. Other[SPECIFY]"
-	note g1_othercommitee: "L. Other[SPECIFY]"
-
-	label variable g1_hhcommiteeother "L. Did you or someone else from your HH took part to the following committee: \$"
-	note g1_hhcommiteeother: "L. Did you or someone else from your HH took part to the following committee: \${g1_othercommitee}"
-	label define g1_hhcommiteeother 1 "Yes" 0 "No"
-	label values g1_hhcommiteeother g1_hhcommiteeother
-
-	label variable g1_wkcommiteeother "L. Does the following committee work with other village: \${g1_othercommitee}"
-	note g1_wkcommiteeother: "L. Does the following committee work with other village: \${g1_othercommitee}"
-	label define g1_wkcommiteeother 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_wkcommiteeother g1_wkcommiteeother
-
-	label variable g1_repr_oth "J.1.47. Le comité représente-t-il toute la population concernée ?"
-	note g1_repr_oth: "J.1.47. Le comité représente-t-il toute la population concernée ?"
-	label define g1_repr_oth 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_repr_oth g1_repr_oth
-
-	label variable g1_elec_oth "J.1.48. Les dirigeants en sont-ils élus ?"
-	note g1_elec_oth: "J.1.48. Les dirigeants en sont-ils élus ?"
-	label define g1_elec_oth 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_elec_oth g1_elec_oth
-
-	label variable g1_dec_oth "J.1.49. Les décisions prises sont-elles exécutées ?"
-	note g1_dec_oth: "J.1.49. Les décisions prises sont-elles exécutées ?"
-	label define g1_dec_oth 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values g1_dec_oth g1_dec_oth
 
 	label variable g1_healthprjt "A. In the past 6 months, has the sub-district/imada undertaken the following vol"
 	note g1_healthprjt: "A. In the past 6 months, has the sub-district/imada undertaken the following voluntary project : Rebuild (restore) a school or a clinic / dispensary?"
@@ -3334,7 +2928,7 @@ if _N>0 {
 
 	label variable g1_managementlead "J.1.62. If the village received 1000 Dinars for its development, who should be g"
 	note g1_managementlead: "J.1.62. If the village received 1000 Dinars for its development, who should be given the responsibility to manage that amount to ensure that the money is used for the welfare of the village?"
-	label define g1_managementlead 1 "National Gov / Governorat" 2 "NGO" 3 "Omda" 4 "Village member" 5 "Private company" 6 "Other" -97 "Nobody" -98 "Refuse to say" -99 "Don’t know"
+	label define g1_managementlead 1 "National Gov / Governorat" 2 "NGO" 3 "Omda" 4 "Village member" 5 "Private company" 6 "Other" 0 "Nobody" -97 "Refuse to say" -99 "Don't know"
 	label values g1_managementlead g1_managementlead
 
 	label variable g1_mangmtleadother "J.1.62.1. Specify other"
@@ -3345,21 +2939,21 @@ if _N>0 {
 	label define g1_projecttradeoff 1 "1 project (A)" 2 "2 projects (B)"
 	label values g1_projecttradeoff g1_projecttradeoff
 
-	label variable g1_fundsdonat "J.1.64 Au cours des 6 derniers mois, avez-vous DONNÉ des fonds à des organisatio"
-	note g1_fundsdonat: "J.1.64 Au cours des 6 derniers mois, avez-vous DONNÉ des fonds à des organisations caritatives?"
+	label variable g1_fundsdonat "J.1.64 In the past 6 months, have you DONATED funds to charitable organizations?"
+	note g1_fundsdonat: "J.1.64 In the past 6 months, have you DONATED funds to charitable organizations?"
 	label define g1_fundsdonat 1 "Yes" 0 "No"
 	label values g1_fundsdonat g1_fundsdonat
 
-	label variable g1_fundsdonatamount "J.1.65 Combien d’argent (au total) avez-vous donné?"
-	note g1_fundsdonatamount: "J.1.65 Combien d’argent (au total) avez-vous donné?"
+	label variable g1_fundsdonatamount "J.1.65 How much money (in total) did you donate?"
+	note g1_fundsdonatamount: "J.1.65 How much money (in total) did you donate?"
 
-	label variable g1_volunteeract "J.1.66. Au cours des 6 derniers mois, avez-vous participé à des activités de vol"
-	note g1_volunteeract: "J.1.66. Au cours des 6 derniers mois, avez-vous participé à des activités de volontariat dans votre village / quartier?"
+	label variable g1_volunteeract "J.1.66. During the past 6 months, have you been involved in volunteering activit"
+	note g1_volunteeract: "J.1.66. During the past 6 months, have you been involved in volunteering activities in your village / neighborhood?"
 	label define g1_volunteeract 1 "Yes" 0 "No"
 	label values g1_volunteeract g1_volunteeract
 
-	label variable g1_volunteeracttime "J.1.66.1 Combien d’heures (au total) avez-vous consacrées à des activités de vol"
-	note g1_volunteeracttime: "J.1.66.1 Combien d’heures (au total) avez-vous consacrées à des activités de volontariat dans votre village / quartier?"
+	label variable g1_volunteeracttime "J.1.66.1 How many hours (in total) did you spend volunteering in your village / "
+	note g1_volunteeracttime: "J.1.66.1 How many hours (in total) did you spend volunteering in your village / neighborhood?"
 
 	label variable g2_familyties "J.2.1 Do you have family ties with the Omda?"
 	note g2_familyties: "J.2.1 Do you have family ties with the Omda?"
@@ -3368,7 +2962,7 @@ if _N>0 {
 
 	label variable g2_chiefrequirmoney "J.2.2 When you meet the omda for any problem, does he require money, gift or ser"
 	note g2_chiefrequirmoney: "J.2.2 When you meet the omda for any problem, does he require money, gift or services before he receives you?"
-	label define g2_chiefrequirmoney 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define g2_chiefrequirmoney 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values g2_chiefrequirmoney g2_chiefrequirmoney
 
 	label variable g2_chiefmoneyamount "J2.3 What was the amount you paid in your last visit?"
@@ -3376,12 +2970,12 @@ if _N>0 {
 
 	label variable g2_chiefstrive "J.2.4 When it comes to take important decisions, does the omda strive to inform "
 	note g2_chiefstrive: "J.2.4 When it comes to take important decisions, does the omda strive to inform the population on the reasons of his decisions?"
-	label define g2_chiefstrive 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define g2_chiefstrive 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values g2_chiefstrive g2_chiefstrive
 
 	label variable g2_decisioninfluence "J.2.5 When some members are not satisfied with the decisions of the omda, are th"
 	note g2_decisioninfluence: "J.2.5 When some members are not satisfied with the decisions of the omda, are there any other bodies that can influence these decisions?"
-	label define g2_decisioninfluence 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define g2_decisioninfluence 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values g2_decisioninfluence g2_decisioninfluence
 
 	label variable g2_decisioninfluencebodies "J.2.6 IF YES… Which bodies?"
@@ -3390,8 +2984,8 @@ if _N>0 {
 	label variable g2_bodiesother "J.2.6.1. Specify other"
 	note g2_bodiesother: "J.2.6.1. Specify other"
 
-	label variable g3_citizensoftenengage "J.3.1 Voici une liste d'actes que les citoyens commettent souvent. Pour chacun d"
-	note g3_citizensoftenengage: "J.3.1 Voici une liste d'actes que les citoyens commettent souvent. Pour chacun de ces actes, veuillez me dire si vous l'avez personnellement posée au cours des 6 derniers mois:"
+	label variable g3_citizensoftenengage "J.3.1 Here is a list of acts that citizens often commit. For each of these acts,"
+	note g3_citizensoftenengage: "J.3.1 Here is a list of acts that citizens often commit. For each of these acts, please tell me if you have personally performed it during the last 6 months:"
 	label define g3_citizensoftenengage 1 "Yes" 0 "No"
 	label values g3_citizensoftenengage g3_citizensoftenengage
 
@@ -3512,7 +3106,7 @@ if _N>0 {
 
 	label variable g3_safetyproblems "A. If you have security and safety problems that threaten you, which individual "
 	note g3_safetyproblems: "A. If you have security and safety problems that threaten you, which individual or body will you see first for your protection?"
-	label define g3_safetyproblems 1 "1. police" 2 "2. army" 3 "3. the community leader" 4 "4. powerful families" 5 "5. neighborhood gangs" 6 "6. neighborhood protection groups" 7 "7. other" 99 "8. other non-governmental organisations"
+	label define g3_safetyproblems 1 "1. police" 2 "2. army" 3 "3. the community leader" 4 "4. powerful families" 5 "5. neighborhood gangs" 6 "6. neighborhood protection groups" 7 "7. other" 9 "None" 99 "8. other non-governmental organisations"
 	label values g3_safetyproblems g3_safetyproblems
 
 	label variable g3_safetyproblemother "Specify other"
@@ -3528,7 +3122,7 @@ if _N>0 {
 
 	label variable g3_healthconcerns "C. If you have a health-related concerns you cannot solve yourself, which indivi"
 	note g3_healthconcerns: "C. If you have a health-related concerns you cannot solve yourself, which individual or body will you see to find the solution?"
-	label define g3_healthconcerns 1 "1. Unités médicales (Aire de santé et Zone de santé, Dispensaires, Cliniques) Ho" 2 "2. Services/Programmes du ministère de la santé" 3 "3. Postes sanitaires" 4 "4. Cliniques privées/ religieuses matunzo yaku ma kanisa" 5 "5. Guérisseurs, soins traditionnels matunzo ya mayani" 99 "6. autres organisations non gouvernementales" 999 "7. Autres à préciser nyengine"
+	label define g3_healthconcerns 1 "1. Unités médicales (Aire de santé et Zone de santé, Dispensaires, Cliniques) Ho" 2 "2. Services/Programmes du ministère de la santé" 3 "3. Postes sanitaires" 4 "4. Cliniques privées/ religieuses matunzo yaku ma kanisa" 5 "5. Guérisseurs, soins traditionnels matunzo ya mayani" 7 "No one" 99 "6. autres organisations non gouvernementales" 999 "7. Autres à préciser nyengine"
 	label values g3_healthconcerns g3_healthconcerns
 
 	label variable g3_healthother "Specify other"
@@ -3539,7 +3133,7 @@ if _N>0 {
 
 	label variable g3_educationconcerns "D. If you have concerns related to the education of your children that, which in"
 	note g3_educationconcerns: "D. If you have concerns related to the education of your children that, which individual or body will you see to find the solution?"
-	label define g3_educationconcerns 1 "1. state schools" 2 "2. education administration" 3 "3. other governmental" 4 "4. private schools" 5 "5. tutors" 99 "6. other non-governmental" 999 "7. Autres à préciser nyengine"
+	label define g3_educationconcerns 1 "1. state schools" 2 "2. education administration" 3 "3. other governmental" 4 "4. private schools" 5 "5. tutors" 6 "No one" 99 "6. other non-governmental" 999 "7. Autres à préciser nyengine"
 	label values g3_educationconcerns g3_educationconcerns
 
 	label variable g3_educationother "Specify other"
@@ -3550,7 +3144,7 @@ if _N>0 {
 
 	label variable g3_developmentconcerns "E. If you have concerns regarding general development issues in your community w"
 	note g3_developmentconcerns: "E. If you have concerns regarding general development issues in your community which individual or body will you see to find the solution?"
-	label define g3_developmentconcerns 1 "1. Gouverneur de la province" 2 "2. Maire de la ville" 3 "3. Bourgmestre" 4 "4. Chef du quartier" 5 "5. Administration des protections sociales" 6 "6. Administration de l'infrastructure" 99 "7. autres gouvernements" 8 "8. Private Entreprises" 9 "9. Organisations de la Société Civile (ONG, Confessions religieuse, …) vikundi v" 999 "10. autres organisations non gouvernementales" -97 "Refuse" -98 "Not applicable" -99 "Ne sait pas"
+	label define g3_developmentconcerns 1 "1. Gouverneur de la province" 2 "2. Maire de la ville" 3 "3. Bourgmestre" 4 "4. Chef du quartier" 5 "5. Administration des protections sociales" 6 "6. Administration de l'infrastructure" 99 "7. autres gouvernements" 8 "8. Private Entreprises" 9 "9. Organisations de la Société Civile (ONG, Confessions religieuse, …) vikundi v" 10 "No one" 999 "10. autres organisations non gouvernementales" -97 "Refuse to say" -98 "Non applicable" -99 "Don't know"
 	label values g3_developmentconcerns g3_developmentconcerns
 
 	label variable g3_developmentother "Specify other"
@@ -3561,12 +3155,12 @@ if _N>0 {
 
 	label variable g3_electionvoter_nat "J.3.3.1 Did you vote in the 2019 national elections?"
 	note g3_electionvoter_nat: "J.3.3.1 Did you vote in the 2019 national elections?"
-	label define g3_electionvoter_nat 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define g3_electionvoter_nat 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values g3_electionvoter_nat g3_electionvoter_nat
 
 	label variable g3_electionvoter_par "J.3.3.2 Did you vote in the 2019 parliamentary elections?"
 	note g3_electionvoter_par: "J.3.3.2 Did you vote in the 2019 parliamentary elections?"
-	label define g3_electionvoter_par 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define g3_electionvoter_par 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values g3_electionvoter_par g3_electionvoter_par
 
 	label variable g3_electionnotvote_nat "J.3.3.3 Why were you not able to vote to the national election?"
@@ -3778,58 +3372,58 @@ if _N>0 {
 	label variable g3_sourcesprogramother "Specify Other"
 	note g3_sourcesprogramother: "Specify Other"
 
-	label variable g4_chiefdecision "Which of these statements is closest to your view?"
-	note g4_chiefdecision: "Which of these statements is closest to your view?"
+	label variable g4_chiefdecision "Which of these statements is closest to your view? A: As habitants of a neighbor"
+	note g4_chiefdecision: "Which of these statements is closest to your view? A: As habitants of a neighborohood, we should regurlarly questionned the act of the community chiefs B: Because the chief of community takes care of important question, we should not discuss it's decision"
 	label define g4_chiefdecision 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_chiefdecision g4_chiefdecision
 
-	label variable g4_leadersdecision "Which of these statements is closest to your view?"
-	note g4_leadersdecision: "Which of these statements is closest to your view?"
+	label variable g4_leadersdecision "Which of these statements is closest to your view? A: As citizen, we have to dis"
+	note g4_leadersdecision: "Which of these statements is closest to your view? A: As citizen, we have to discuss and question the choice of our political leaders. B: Because our national political leader takes care of important questions we should not discuss their decision."
 	label define g4_leadersdecision 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_leadersdecision g4_leadersdecision
 
-	label variable g4_governmentright "Which of these statements is closest to your view?"
-	note g4_governmentright: "Which of these statements is closest to your view?"
+	label variable g4_governmentright "Which of these statements is closest to your view? A: Government has the right t"
+	note g4_governmentright: "Which of these statements is closest to your view? A: Government has the right to collect taxes of everyone and can put in jail people that refuse to pay. B: Government does not have the right to perceive taxes except if he assures peoples security."
 	label define g4_governmentright 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_governmentright g4_governmentright
 
-	label variable g4_forceuse "Which of these statements is closest to your view?"
-	note g4_forceuse: "Which of these statements is closest to your view?"
+	label variable g4_forceuse "Which of these statements is closest to your view? A: When it's complicated to o"
+	note g4_forceuse: "Which of these statements is closest to your view? A: When it's complicated to obtain rights, it is necessary to use force. B: Even if it's difficult to obtain right, nothing justify using force."
 	label define g4_forceuse 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_forceuse g4_forceuse
 
-	label variable g4_familyhelp "Which of these statements is closest to your view?"
-	note g4_familyhelp: "Which of these statements is closest to your view?"
+	label variable g4_familyhelp "Which of these statements is closest to your view? Some people think that: A. If"
+	note g4_familyhelp: "Which of these statements is closest to your view? Some people think that: A. If a member of my family held a government position, she should use her position to help family members Others believe that: B. Since members of government are at the service of everyone, a leader should not favor anyone, including family members."
 	label define g4_familyhelp 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_familyhelp g4_familyhelp
 
-	label variable g4_economicdecisions "Which of these statements is closest to your view?"
-	note g4_economicdecisions: "Which of these statements is closest to your view?"
+	label variable g4_economicdecisions "Which of these statements is closest to your view? Some people think that: A. Ev"
+	note g4_economicdecisions: "Which of these statements is closest to your view? Some people think that: A. Everyone should have the right to take part in economic decision-making, even if they do not understand all aspects of the problem Others think that: B. Only those who understand all aspects of the problem should participate in"
 	label define g4_economicdecisions 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_economicdecisions g4_economicdecisions
 
-	label variable g4_chiefperiod "Which of these statements is closest to your view?"
-	note g4_chiefperiod: "Which of these statements is closest to your view?"
+	label variable g4_chiefperiod "Which of these statements is closest to your view? Some people think that: A. Th"
+	note g4_chiefperiod: "Which of these statements is closest to your view? Some people think that: A. The authorities should be chosen for a fixed period in order to prevent them from becoming too powerful and to prevent democratic decision-making. Others believe that: B. Authorities should stay in office their entire lives because they embody traditional power. s"
 	label define g4_chiefperiod 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_chiefperiod g4_chiefperiod
 
-	label variable g4_womenright "Which of these statements is closest to your view?"
-	note g4_womenright: "Which of these statements is closest to your view?"
+	label variable g4_womenright "Which of these statements is closest to your view? Certaines personnes pensent q"
+	note g4_womenright: "Which of these statements is closest to your view? Certaines personnes pensent que: A. Dans notre pays, les femmes devraient avoir les mêmes droits et devoirs que les hommes D'autres pensent que: B. Selon nos coutumes et nos coutumes, les femmes devraient être soumises et devraient rester comme telles."
 	label define g4_womenright 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_womenright g4_womenright
 
-	label variable g4_womenmen "Which of these statements is closest to your view?"
-	note g4_womenmen: "Which of these statements is closest to your view?"
+	label variable g4_womenmen "Which of these statements is closest to your view? Some people think that: A. Wo"
+	note g4_womenmen: "Which of these statements is closest to your view? Some people think that: A. Women should have the same chances as men to occupy socio-administrative positions in this neighborhood Others think that: B. Men are better leaders and they should occupy the socio-administrative positions in this neighborhood"
 	label define g4_womenmen 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_womenmen g4_womenmen
 
-	label variable g4_menwomen "Which of these statements is closest to your view?"
-	note g4_menwomen: "Which of these statements is closest to your view?"
+	label variable g4_menwomen "Which of these statements is closest to your view? Some people think that: A. On"
+	note g4_menwomen: "Which of these statements is closest to your view? Some people think that: A. Only men should be chairmen of management committees Others think that: B. Women have contributions to make. Therefore, they should be eligible to chair management committees."
 	label define g4_menwomen 0 "Agree with neither" 1 "Agree with A" 2 "Agree with B"
 	label values g4_menwomen g4_menwomen
 
-	label variable h1_personally "K.1.2. Avez-vous personnellement participé à l'activité ou au comportement au co"
-	note h1_personally: "K.1.2. Avez-vous personnellement participé à l'activité ou au comportement au cours des 30 dernièrs jours?"
+	label variable h1_personally "K.1.2. Did you personnaly took part to any of the following activities / behavio"
+	note h1_personally: "K.1.2. Did you personnaly took part to any of the following activities / behavior during the last 30 days ?"
 	label define h1_personally 1 "Yes" 0 "No"
 	label values h1_personally h1_personally
 
@@ -3923,38 +3517,38 @@ if _N>0 {
 	label define h1_resolvdispweek 1 "Yes" 0 "No"
 	label values h1_resolvdispweek h1_resolvdispweek
 
-	label variable h1_help11 "S.Fourni une aide financière ou autre aide matérielle à une personne dans le bes"
-	note h1_help11: "S.Fourni une aide financière ou autre aide matérielle à une personne dans le besoin qui vous est liée ou qui vous connaît."
+	label variable h1_help11 "S. Provided financial or other material assistance to a person in need related t"
+	note h1_help11: "S. Provided financial or other material assistance to a person in need related to you or who knows you."
 	label define h1_help11 1 "Yes" 0 "No"
 	label values h1_help11 h1_help11
 
-	label variable h1_help21 "T.Fourni de l'aide financière ou autre aide matérielle à une personne dans le be"
-	note h1_help21: "T.Fourni de l'aide financière ou autre aide matérielle à une personne dans le besoin qui ne vous est pas liée ni qui vous connaît"
+	label variable h1_help21 "T. Provided financial or other material assistance to a person in need who is no"
+	note h1_help21: "T. Provided financial or other material assistance to a person in need who is not related to you or who knows you"
 	label define h1_help21 1 "Yes" 0 "No"
 	label values h1_help21 h1_help21
 
-	label variable h1_sharer11 "U.Vous avez partagé une ressource dont vous aviez besoin (par exemple, fournir d"
-	note h1_sharer11: "U.Vous avez partagé une ressource dont vous aviez besoin (par exemple, fournir de la nourriture à une personne ou la laisser rester chez vous) à une personne de votre entourage ou qui vous connaît bien."
+	label variable h1_sharer11 "U. You shared a resource you needed (for example, providing food for someone or "
+	note h1_sharer11: "U. You shared a resource you needed (for example, providing food for someone or letting them stay in your home) with someone you know or know you well."
 	label define h1_sharer11 1 "Yes" 0 "No"
 	label values h1_sharer11 h1_sharer11
 
-	label variable h1_sharer21 "V.Vous avez partagé une ressource dont vous aviez besoin (par exemple, fournir d"
-	note h1_sharer21: "V.Vous avez partagé une ressource dont vous aviez besoin (par exemple, fournir de la nourriture à quelqu'un ou la laisser rester chez vous) à une personne dans le besoin qui ne vous était pas apparentée"
+	label variable h1_sharer21 "V. You shared a resource you needed (for example, providing food for someone or "
+	note h1_sharer21: "V. You shared a resource you needed (for example, providing food for someone or letting it stay in your home) with a person in need who was not related to you"
 	label define h1_sharer21 1 "Yes" 0 "No"
 	label values h1_sharer21 h1_sharer21
 
-	label variable h1_reconfort11 "W.Fourni du réconfort à une personne blessée qui vous est liée ou qui vous conna"
-	note h1_reconfort11: "W.Fourni du réconfort à une personne blessée qui vous est liée ou qui vous connaît."
+	label variable h1_reconfort11 "W. Provided comfort to an injured person related to you or who knows you."
+	note h1_reconfort11: "W. Provided comfort to an injured person related to you or who knows you."
 	label define h1_reconfort11 1 "Yes" 0 "No"
 	label values h1_reconfort11 h1_reconfort11
 
-	label variable h1_reconfort21 "X.Fourni du réconfort à une personne blessée qui ne soit pas liée ni connue avec"
-	note h1_reconfort21: "X.Fourni du réconfort à une personne blessée qui ne soit pas liée ni connue avec vous."
+	label variable h1_reconfort21 "X. Provide comfort to an injured person who is not related or known to you."
+	note h1_reconfort21: "X. Provide comfort to an injured person who is not related or known to you."
 	label define h1_reconfort21 1 "Yes" 0 "No"
 	label values h1_reconfort21 h1_reconfort21
 
-	label variable h1_visite1 "Y.Visite d’une personne malade qui ne soit pas liée ni connue avec vous dans une"
-	note h1_visite1: "Y.Visite d’une personne malade qui ne soit pas liée ni connue avec vous dans une clinique, un hôpital ou un autre établissement de santé."
+	label variable h1_visite1 "Y. Visiting a sick person who is not related or known to you in a clinic, hospit"
+	note h1_visite1: "Y. Visiting a sick person who is not related or known to you in a clinic, hospital or other health facility."
 	label define h1_visite1 1 "Yes" 0 "No"
 	label values h1_visite1 h1_visite1
 
@@ -4058,64 +3652,64 @@ if _N>0 {
 	label define x1_coupledu 1 "Yes" 0 "No"
 	label values x1_coupledu x1_coupledu
 
-	label variable x1_agreerole "K.2.1.2.To what degree do you agree with the following statements?"
-	note x1_agreerole: "K.2.1.2.To what degree do you agree with the following statements?"
-	label define x1_agreerole 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_agreerole x1_agreerole
-
-	label variable x1_mgrights2 "A. When women get rights, they are taking rights away from men"
-	note x1_mgrights2: "A. When women get rights, they are taking rights away from men"
-	label define x1_mgrights2 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_mgrights2 x1_mgrights2
-
-	label variable x1_mgequality "B. Gender equality, meaning that men and women are equal, has come far enough al"
-	note x1_mgequality: "B. Gender equality, meaning that men and women are equal, has come far enough already"
-	label define x1_mgequality 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_mgequality x1_mgequality
-
-	label variable x1_mgfriends "C. A woman should be able to choose her friends, even if her husband dissaproves"
-	note x1_mgfriends: "C. A woman should be able to choose her friends, even if her husband dissaproves"
-	label define x1_mgfriends 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_mgfriends x1_mgfriends
-
-	label variable x1_mgfreetime_men "D. A man should decide how to spend his free time on his own"
-	note x1_mgfreetime_men: "D. A man should decide how to spend his free time on his own"
-	label define x1_mgfreetime_men 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_mgfreetime_men x1_mgfreetime_men
-
-	label variable x1_mg_freetime_women "E. A woman should decide how to spend his free time on his own"
-	note x1_mg_freetime_women: "E. A woman should decide how to spend his free time on his own"
-	label define x1_mg_freetime_women 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_mg_freetime_women x1_mg_freetime_women
-
-	label variable x1_mg_womenopi "F. Women's opinions are valuable and should always be considered while making ho"
-	note x1_mg_womenopi: "F. Women's opinions are valuable and should always be considered while making household decisions"
-	label define x1_mg_womenopi 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_mg_womenopi x1_mg_womenopi
-
-	label variable x1_mg_marry "G. Women should be able to marry whomever they want, regardless of their parent'"
-	note x1_mg_marry: "G. Women should be able to marry whomever they want, regardless of their parent's view"
-	label define x1_mg_marry 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_mg_marry x1_mg_marry
-
-	label variable x1_participation "K.2.1.3. Do you think women can generally change things in this village if they "
-	note x1_participation: "K.2.1.3. Do you think women can generally change things in this village if they want to"
-	label define x1_participation 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
-	label values x1_participation x1_participation
-
 	label variable x1_leader3 "K.2.1.4. Would you appreciate if a female member of your household wishes to par"
 	note x1_leader3: "K.2.1.4. Would you appreciate if a female member of your household wishes to participate in village committees as a member"
 	label define x1_leader3 1 "Yes" 0 "No"
 	label values x1_leader3 x1_leader3
 
+	label variable x1_agreerole "K.2.1.2.To what degree do you agree with the following statements?"
+	note x1_agreerole: "K.2.1.2.To what degree do you agree with the following statements?"
+	label define x1_agreerole 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_agreerole x1_agreerole
+
+	label variable x1_mgrights2 "A. When women get rights, they are taking rights away from men"
+	note x1_mgrights2: "A. When women get rights, they are taking rights away from men"
+	label define x1_mgrights2 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_mgrights2 x1_mgrights2
+
+	label variable x1_mgequality "B. Gender equality, meaning that men and women are equal, has come far enough al"
+	note x1_mgequality: "B. Gender equality, meaning that men and women are equal, has come far enough already"
+	label define x1_mgequality 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_mgequality x1_mgequality
+
+	label variable x1_mgfriends "C. A woman should be able to choose her friends, even if her husband dissaproves"
+	note x1_mgfriends: "C. A woman should be able to choose her friends, even if her husband dissaproves"
+	label define x1_mgfriends 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_mgfriends x1_mgfriends
+
+	label variable x1_mgfreetime_men "D. A man should decide how to spend his free time on his own"
+	note x1_mgfreetime_men: "D. A man should decide how to spend his free time on his own"
+	label define x1_mgfreetime_men 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_mgfreetime_men x1_mgfreetime_men
+
+	label variable x1_mg_freetime_women "E. A woman should decide how to spend his free time on his own"
+	note x1_mg_freetime_women: "E. A woman should decide how to spend his free time on his own"
+	label define x1_mg_freetime_women 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_mg_freetime_women x1_mg_freetime_women
+
+	label variable x1_mg_womenopi "F. Women's opinions are valuable and should always be considered while making ho"
+	note x1_mg_womenopi: "F. Women's opinions are valuable and should always be considered while making household decisions"
+	label define x1_mg_womenopi 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_mg_womenopi x1_mg_womenopi
+
+	label variable x1_mg_marry "G. Women should be able to marry whomever they want, regardless of their parent'"
+	note x1_mg_marry: "G. Women should be able to marry whomever they want, regardless of their parent's view"
+	label define x1_mg_marry 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_mg_marry x1_mg_marry
+
+	label variable x1_participation "K.2.1.3. Do you think women can generally change things in this village if they "
+	note x1_participation: "K.2.1.3. Do you think women can generally change things in this village if they want to"
+	label define x1_participation 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
+	label values x1_participation x1_participation
+
 	label variable x1_leader4 "K.2.1.5. It would be a good idea to elect a woman as the President of Tunisia"
 	note x1_leader4: "K.2.1.5. It would be a good idea to elect a woman as the President of Tunisia"
-	label define x1_leader4 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x1_leader4 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x1_leader4 x1_leader4
 
 	label variable x1_leader5 "K.2.1.6. It would be a good idea to elect a woman as the chief/omda of your vill"
 	note x1_leader5: "K.2.1.6. It would be a good idea to elect a woman as the chief/omda of your village"
-	label define x1_leader5 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x1_leader5 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x1_leader5 x1_leader5
 
 	label variable x1_leader6_1 "A. Run their own business"
@@ -4220,22 +3814,22 @@ if _N>0 {
 
 	label variable x1_leader9 "K.2.1.9. Do you agree: A woman in your community has little voice in public disc"
 	note x1_leader9: "K.2.1.9. Do you agree: A woman in your community has little voice in public discussions about development opportunities"
-	label define x1_leader9 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x1_leader9 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x1_leader9 x1_leader9
 
 	label variable x1_leader10 "K.2.1.10. Do you agree: Women are just as capable as men of contributing ot hous"
 	note x1_leader10: "K.2.1.10. Do you agree: Women are just as capable as men of contributing ot household income"
-	label define x1_leader10 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x1_leader10 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x1_leader10 x1_leader10
 
 	label variable x1_participation2 "K.2.1.11. Do you agree: Compared to a few years back, there are now more opportu"
 	note x1_participation2: "K.2.1.11. Do you agree: Compared to a few years back, there are now more opportunities for women to become influential actors in how your community is developed"
-	label define x1_participation2 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x1_participation2 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x1_participation2 x1_participation2
 
 	label variable x1_participation3 "K.2.1.12. If a woman wanted to voice her opinion in public meetings, community l"
 	note x1_participation3: "K.2.1.12. If a woman wanted to voice her opinion in public meetings, community leaders would encourage her to do so"
-	label define x1_participation3 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x1_participation3 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x1_participation3 x1_participation3
 
 	label variable x2_hwviolenceintro "K.2.2.2. Under which conditions would it be ok for a man to beat his wife?"
@@ -4243,8 +3837,8 @@ if _N>0 {
 	label define x2_hwviolenceintro 1 "Yes" 0 "No"
 	label values x2_hwviolenceintro x2_hwviolenceintro
 
-	label variable x2_hwtolerate "K.2.2.1. A woman should tolerate violence in order to keep her family together"
-	note x2_hwtolerate: "K.2.2.1. A woman should tolerate violence in order to keep her family together"
+	label variable x2_hwtolerate "K.2.2.1. To keep her family together"
+	note x2_hwtolerate: "K.2.2.1. To keep her family together"
 	label define x2_hwtolerate 1 "Yes" 0 "No"
 	label values x2_hwtolerate x2_hwtolerate
 
@@ -4305,152 +3899,152 @@ if _N>0 {
 
 	label variable x6_sxmore "A. Men need sex more than women do"
 	note x6_sxmore: "A. Men need sex more than women do"
-	label define x6_sxmore 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x6_sxmore 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x6_sxmore x6_sxmore
 
 	label variable x6_sxtalk "B. Men don't talk about sex, they just do"
 	note x6_sxtalk: "B. Men don't talk about sex, they just do"
-	label define x6_sxtalk 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x6_sxtalk 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x6_sxtalk x6_sxtalk
 
 	label variable x6_sxready "C. Men are always ready to have sex"
 	note x6_sxready: "C. Men are always ready to have sex"
-	label define x6_sxready 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x6_sxready 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x6_sxready x6_sxready
 
 	label variable x6_gay "D. I would never have a gay friend"
 	note x6_gay: "D. I would never have a gay friend"
-	label define x6_gay 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x6_gay 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x6_gay x6_gay
 
 	label variable x6_friend "E. Its important for men to have friends to talk to about their problems"
 	note x6_friend: "E. Its important for men to have friends to talk to about their problems"
-	label define x6_friend 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x6_friend 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x6_friend x6_friend
 
 	label variable x7_tough "A. To be a man, you need to be tough"
 	note x7_tough: "A. To be a man, you need to be tough"
-	label define x7_tough 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x7_tough 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x7_tough x7_tough
 
 	label variable x7_insult "B. If someone insults me, I will defend my reputation, with force if I have to"
 	note x7_insult: "B. If someone insults me, I will defend my reputation, with force if I have to"
-	label define x7_insult 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x7_insult 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x7_insult x7_insult
 
 	label variable x8_pregn "A. It is a women's responsibility to avoid getting pregnant"
 	note x8_pregn: "A. It is a women's responsibility to avoid getting pregnant"
-	label define x8_pregn 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x8_pregn 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x8_pregn x8_pregn
 
 	label variable x8_contra "B. I would be outraged if my wife asked me to use contraception"
 	note x8_contra: "B. I would be outraged if my wife asked me to use contraception"
-	label define x8_contra 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x8_contra 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x8_contra x8_contra
 
 	label variable x8_suggcontr "C. Either a man or a woman can suggest using contraception"
 	note x8_suggcontr: "C. Either a man or a woman can suggest using contraception"
-	label define x8_suggcontr 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x8_suggcontr 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x8_suggcontr x8_suggcontr
 
 	label variable x8_childresp "D. The child is the responsibility of both the man and the woman"
 	note x8_childresp: "D. The child is the responsibility of both the man and the woman"
-	label define x8_childresp 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x8_childresp 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x8_childresp x8_childresp
 
 	label variable x8_fatherchild "E. The participation of the father is important in raising children"
 	note x8_fatherchild: "E. The participation of the father is important in raising children"
-	label define x8_fatherchild 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x8_fatherchild 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x8_fatherchild x8_fatherchild
 
 	label variable x8_childdeci "F. Couple should decide together if they want to have children"
 	note x8_childdeci: "F. Couple should decide together if they want to have children"
-	label define x8_childdeci 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x8_childdeci 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x8_childdeci x8_childdeci
 
 	label variable x8_contratype "G. A man and woman should decide together what type of contraceptive to use"
 	note x8_contratype: "G. A man and woman should decide together what type of contraceptive to use"
-	label define x8_contratype 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -98 "Don't know" -99 "Refuse to say"
+	label define x8_contratype 1 "Totally agree" 2 "Agree" 3 "Disagree" 4 "Totally disagree" -99 "Don't know" -97 "Refuse to say"
 	label values x8_contratype x8_contratype
 
 	label variable x9_1 "A. How to spend the money earned from IGA"
 	note x9_1: "A. How to spend the money earned from IGA"
-	label define x9_1 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_1 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_1 x9_1
 
 	label variable x9_2 "B. What food to buy and consume"
 	note x9_2: "B. What food to buy and consume"
-	label define x9_2 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_2 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_2 x9_2
 
 	label variable x9_3 "C. Purchase of furniture of the house/other household improvements"
 	note x9_3: "C. Purchase of furniture of the house/other household improvements"
-	label define x9_3 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_3 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_3 x9_3
 
 	label variable x9_4 "D. Purchase and sale of cattle/other livestock"
 	note x9_4: "D. Purchase and sale of cattle/other livestock"
-	label define x9_4 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_4 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_4 x9_4
 
 	label variable x9_5 "E. Purchase of plots of land"
 	note x9_5: "E. Purchase of plots of land"
-	label define x9_5 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_5 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_5 x9_5
 
 	label variable x9_6 "F. Purchase of large pots/pans"
 	note x9_6: "F. Purchase of large pots/pans"
-	label define x9_6 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_6 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_6 x9_6
 
 	label variable x9_7 "G. What to gift relatives when they marry/have children"
 	note x9_7: "G. What to gift relatives when they marry/have children"
-	label define x9_7 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_7 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_7 x9_7
 
 	label variable x9_largepurchase "H. Making large household purchases"
 	note x9_largepurchase: "H. Making large household purchases"
-	label define x9_largepurchase 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_largepurchase 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_largepurchase x9_largepurchase
 
 	label variable x9_dailypurchase "I. Making daily household purchases"
 	note x9_dailypurchase: "I. Making daily household purchases"
-	label define x9_dailypurchase 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_dailypurchase 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_dailypurchase x9_dailypurchase
 
 	label variable x9_wifepersonal "J. Wife’s personal purchases"
 	note x9_wifepersonal: "J. Wife’s personal purchases"
-	label define x9_wifepersonal 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_wifepersonal 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_wifepersonal x9_wifepersonal
 
 	label variable x9_borrow "K. Borrowing money"
 	note x9_borrow: "K. Borrowing money"
-	label define x9_borrow 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_borrow 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_borrow x9_borrow
 
 	label variable x9_lend "L. Lending money"
 	note x9_lend: "L. Lending money"
-	label define x9_lend 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_lend 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_lend x9_lend
 
 	label variable x9_occupation "M. Wife’s choice of occupation"
 	note x9_occupation: "M. Wife’s choice of occupation"
-	label define x9_occupation 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_occupation 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_occupation x9_occupation
 
 	label variable x9_workplace "N. Wife’s place of work (home vs outside)"
 	note x9_workplace: "N. Wife’s place of work (home vs outside)"
-	label define x9_workplace 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_workplace 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_workplace x9_workplace
 
 	label variable x9_workhours "O. Wife’s working hours"
 	note x9_workhours: "O. Wife’s working hours"
-	label define x9_workhours 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_workhours 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_workhours x9_workhours
 
 	label variable x9_participation "P. Wife’s participation in groups"
 	note x9_participation: "P. Wife’s participation in groups"
-	label define x9_participation 1 "Husband" 2 "Wife" 3 "Both" -98 "Don't know" -99 "Refuse to say"
+	label define x9_participation 1 "Husband" 2 "Wife" 3 "Both" -99 "Don't know" -97 "Refuse to say"
 	label values x9_participation x9_participation
 
 	label variable budget_hh "Does your household have a budget?"
@@ -4530,8 +4124,8 @@ if _N>0 {
 	label define x9_109 1 "1. Never" 2 "2. rarely" 3 "3 sometimes" 4 "4. Often" 5 "5 Always"
 	label values x9_109 x9_109
 
-	label variable x3_gbviol "K.2.3.1. Est-ce que […] vous est personnellement arrivé OU à un autre membre de "
-	note x3_gbviol: "K.2.3.1. Est-ce que […] vous est personnellement arrivé OU à un autre membre de votre ménage au cours des 6 derniers mois?"
+	label variable x3_gbviol "K.2.3.1. Has […] happened to you personally OR to another member of your househo"
+	note x3_gbviol: "K.2.3.1. Has […] happened to you personally OR to another member of your household in the past 6 months?"
 	label define x3_gbviol 1 "Yes" 0 "No"
 	label values x3_gbviol x3_gbviol
 
@@ -4623,59 +4217,44 @@ if _N>0 {
 	label variable x5_perpsexoviol "I .Forced you to have sexual intercourse or to perform any other sexual acts whe"
 	note x5_perpsexoviol: "I .Forced you to have sexual intercourse or to perform any other sexual acts when you did not want to?"
 
-	label variable h3_victimizationsintro "Au cours des 6 derniers mois (Lire à haute voix)"
-	note h3_victimizationsintro: "Au cours des 6 derniers mois (Lire à haute voix)"
-	label define h3_victimizationsintro 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label variable h3_victimizationsintro "In the last 6 months (Read aloud)"
+	note h3_victimizationsintro: "In the last 6 months (Read aloud)"
+	label define h3_victimizationsintro 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values h3_victimizationsintro h3_victimizationsintro
 
 	label variable h3_landvictim "K.3.1. Have you or a member of your household been victim of land conflict?"
 	note h3_landvictim: "K.3.1. Have you or a member of your household been victim of land conflict?"
-	label define h3_landvictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define h3_landvictim 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values h3_landvictim h3_landvictim
 
 	label variable h3_physivictim "K.3.2. Have you or a member of your household been victim of physical aggression"
 	note h3_physivictim: "K.3.2. Have you or a member of your household been victim of physical aggression?"
-	label define h3_physivictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define h3_physivictim 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values h3_physivictim h3_physivictim
 
 	label variable h3_stolenvictim "K.3.3. Has you or a member of your household had valuables stolen from your hous"
 	note h3_stolenvictim: "K.3.3. Has you or a member of your household had valuables stolen from your house, farm or business?"
-	label define h3_stolenvictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define h3_stolenvictim 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values h3_stolenvictim h3_stolenvictim
 
 	label variable h3_robbevictim "K.3.4. Have you or a member of your household been victim of violent robbery?"
 	note h3_robbevictim: "K.3.4. Have you or a member of your household been victim of violent robbery?"
-	label define h3_robbevictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define h3_robbevictim 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values h3_robbevictim h3_robbevictim
-
-	label variable h3_armvictim "K.3.5. Have you or a member of your household discover guns or military equipmen"
-	note h3_armvictim: "K.3.5. Have you or a member of your household discover guns or military equipment"
-	label define h3_armvictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values h3_armvictim h3_armvictim
 
 	label variable h3_futurvictim "K.3.6. Do you fear any of these incidents may happen to you or a member of your "
 	note h3_futurvictim: "K.3.6. Do you fear any of these incidents may happen to you or a member of your household in the future?"
-	label define h3_futurvictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define h3_futurvictim 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values h3_futurvictim h3_futurvictim
 
 	label variable h3_hearphysivictim "K.3.7. Have you witnessed or heard about physical aggression in this community?"
 	note h3_hearphysivictim: "K.3.7. Have you witnessed or heard about physical aggression in this community?"
-	label define h3_hearphysivictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define h3_hearphysivictim 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values h3_hearphysivictim h3_hearphysivictim
-
-	label variable h3_hearfarmvictim "K.3.8. Have you witnessed or heard about thefts in a house, farm or business of "
-	note h3_hearfarmvictim: "K.3.8. Have you witnessed or heard about thefts in a house, farm or business of a resident of this community?"
-	label define h3_hearfarmvictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values h3_hearfarmvictim h3_hearfarmvictim
-
-	label variable h3_hearrobbevictim "K.3.9. Have you witnessed or heard about violent robberies in this community?"
-	note h3_hearrobbevictim: "K.3.9. Have you witnessed or heard about violent robberies in this community?"
-	label define h3_hearrobbevictim 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
-	label values h3_hearrobbevictim h3_hearrobbevictim
 
 	label variable h3_heardomviol "K.3.10. Have you heard or witness domestic violence in a neighbor’s household in"
 	note h3_heardomviol: "K.3.10. Have you heard or witness domestic violence in a neighbor’s household in this community?"
-	label define h3_heardomviol 1 "Yes" 0 "No" -99 "Don’t know" -97 "Refuse to answer"
+	label define h3_heardomviol 1 "Yes" 0 "No" -99 "Don't know" -97 "Refuse to say"
 	label values h3_heardomviol h3_heardomviol
 
 	label variable hh_social_1 "During the past month, did you (or your HH)"
@@ -4683,12 +4262,12 @@ if _N>0 {
 
 	label variable hh_social_2 "Today, does your family have issue being integrated with other HH of the communi"
 	note hh_social_2: "Today, does your family have issue being integrated with other HH of the community ?"
-	label define hh_social_2 1 "With a lot of difficulties" 2 "With some difficulties" 3 "No difficulties" -98 "Refuse to say" -99 "Don't know"
+	label define hh_social_2 1 "With a lot of difficulties" 2 "With some difficulties" 3 "No difficulties" -97 "Refuse to say" -99 "Don't know"
 	label values hh_social_2 hh_social_2
 
 	label variable hh_social_3 "How would you describe the relationship between member of your HH ?"
 	note hh_social_3: "How would you describe the relationship between member of your HH ?"
-	label define hh_social_3 1 "Bad" 2 "Good" 3 "Really good" -98 "Refuse to say" -99 "Don't know"
+	label define hh_social_3 1 "Bad" 2 "Good" 3 "Really good" -97 "Refuse to say" -99 "Don't know"
 	label values hh_social_3 hh_social_3
 
 	label variable h4_conflictyp "K.4.1. Did the conflict or dispute occur in the village/ community?"
@@ -4706,25 +4285,10 @@ if _N>0 {
 	label define h4_crops 1 "Yes" 0 "No"
 	label values h4_crops h4_crops
 
-	label variable h4_power "C. Power conflict / succession"
-	note h4_power: "C. Power conflict / succession"
-	label define h4_power 1 "Yes" 0 "No"
-	label values h4_power h4_power
-
 	label variable h4_inheritance "D. Conflict of inheritance"
 	note h4_inheritance: "D. Conflict of inheritance"
 	label define h4_inheritance 1 "Yes" 0 "No"
 	label values h4_inheritance h4_inheritance
-
-	label variable h4_poorrich "E. Conflict or disputes between poor people and rich people"
-	note h4_poorrich: "E. Conflict or disputes between poor people and rich people"
-	label define h4_poorrich 1 "Yes" 0 "No"
-	label values h4_poorrich h4_poorrich
-
-	label variable h4_natimigrants "F. Conflicts or disputes between native born people and migrants"
-	note h4_natimigrants: "F. Conflicts or disputes between native born people and migrants"
-	label define h4_natimigrants 1 "Yes" 0 "No"
-	label values h4_natimigrants h4_natimigrants
 
 	label variable h4_youngelder "G. Conflicts or disputes between young people and older people"
 	note h4_youngelder: "G. Conflicts or disputes between young people and older people"
@@ -4745,11 +4309,6 @@ if _N>0 {
 	note h4_political: "J. Conflict between people belonging to different political parties/groups"
 	label define h4_political 1 "Yes" 0 "No"
 	label values h4_political h4_political
-
-	label variable h4_indigmigrants "K. Conflict between indigenous people and migrants"
-	note h4_indigmigrants: "K. Conflict between indigenous people and migrants"
-	label define h4_indigmigrants 1 "Yes" 0 "No"
-	label values h4_indigmigrants h4_indigmigrants
 
 	label variable h4_otherconflict "L. Other communal conflict (Specify)"
 	note h4_otherconflict: "L. Other communal conflict (Specify)"
@@ -4774,25 +4333,10 @@ if _N>0 {
 	label define h4_cropsled 1 "Yes" 0 "No"
 	label values h4_cropsled h4_cropsled
 
-	label variable h4_powerled "C. Power conflict / succession"
-	note h4_powerled: "C. Power conflict / succession"
-	label define h4_powerled 1 "Yes" 0 "No"
-	label values h4_powerled h4_powerled
-
 	label variable h4_inheritanceled "D. Conflict of inheritance"
 	note h4_inheritanceled: "D. Conflict of inheritance"
 	label define h4_inheritanceled 1 "Yes" 0 "No"
 	label values h4_inheritanceled h4_inheritanceled
-
-	label variable h4_poorrichled "E. Conflict or disputes between poor people and rich people"
-	note h4_poorrichled: "E. Conflict or disputes between poor people and rich people"
-	label define h4_poorrichled 1 "Yes" 0 "No"
-	label values h4_poorrichled h4_poorrichled
-
-	label variable h4_natimigrantsled "F. Conflicts or disputes between native born people and migrants"
-	note h4_natimigrantsled: "F. Conflicts or disputes between native born people and migrants"
-	label define h4_natimigrantsled 1 "Yes" 0 "No"
-	label values h4_natimigrantsled h4_natimigrantsled
 
 	label variable h4_youngelderled "G. Conflicts or disputes between young people and older people"
 	note h4_youngelderled: "G. Conflicts or disputes between young people and older people"
@@ -4814,11 +4358,6 @@ if _N>0 {
 	label define h4_politicalled 1 "Yes" 0 "No"
 	label values h4_politicalled h4_politicalled
 
-	label variable h4_indigmigrantsled "K. Conflict between indigenous people and migrants"
-	note h4_indigmigrantsled: "K. Conflict between indigenous people and migrants"
-	label define h4_indigmigrantsled 1 "Yes" 0 "No"
-	label values h4_indigmigrantsled h4_indigmigrantsled
-
 	label variable h4_otherconflictled "L. (\${h4_otherconflictother})"
 	note h4_otherconflictled: "L. (\${h4_otherconflictother})"
 	label define h4_otherconflictled 1 "Yes" 0 "No"
@@ -4839,25 +4378,10 @@ if _N>0 {
 	label define h4_cropshh 1 "Yes" 0 "No"
 	label values h4_cropshh h4_cropshh
 
-	label variable h4_powerhh "C. Power conflict / succession"
-	note h4_powerhh: "C. Power conflict / succession"
-	label define h4_powerhh 1 "Yes" 0 "No"
-	label values h4_powerhh h4_powerhh
-
 	label variable h4_inheritancehh "D. Conflict of inheritance"
 	note h4_inheritancehh: "D. Conflict of inheritance"
 	label define h4_inheritancehh 1 "Yes" 0 "No"
 	label values h4_inheritancehh h4_inheritancehh
-
-	label variable h4_poorrichhh "E. Conflict or disputes between poor people and rich people"
-	note h4_poorrichhh: "E. Conflict or disputes between poor people and rich people"
-	label define h4_poorrichhh 1 "Yes" 0 "No"
-	label values h4_poorrichhh h4_poorrichhh
-
-	label variable h4_natimigrantshh "F. Conflicts or disputes between native born people and migrants"
-	note h4_natimigrantshh: "F. Conflicts or disputes between native born people and migrants"
-	label define h4_natimigrantshh 1 "Yes" 0 "No"
-	label values h4_natimigrantshh h4_natimigrantshh
 
 	label variable h4_youngelderhh "G. Conflicts or disputes between young people and older people"
 	note h4_youngelderhh: "G. Conflicts or disputes between young people and older people"
@@ -4879,11 +4403,6 @@ if _N>0 {
 	label define h4_politicalhh 1 "Yes" 0 "No"
 	label values h4_politicalhh h4_politicalhh
 
-	label variable h4_indigmigrantshh "K. Conflict between indigenous people and migrants"
-	note h4_indigmigrantshh: "K. Conflict between indigenous people and migrants"
-	label define h4_indigmigrantshh 1 "Yes" 0 "No"
-	label values h4_indigmigrantshh h4_indigmigrantshh
-
 	label variable h4_otherconflicthh "L. (\${h4_otherconflictother})"
 	note h4_otherconflicthh: "L. (\${h4_otherconflictother})"
 	label define h4_otherconflicthh 1 "Yes" 0 "No"
@@ -4904,30 +4423,15 @@ if _N>0 {
 	label define h4_cropsctact 1 "Yes" 0 "No"
 	label values h4_cropsctact h4_cropsctact
 
-	label variable h4_powerctact "C. Concerning the power conflict / succession"
-	note h4_powerctact: "C. Concerning the power conflict / succession"
-	label define h4_powerctact 1 "Yes" 0 "No"
-	label values h4_powerctact h4_powerctact
-
 	label variable h4_inheritancectact "D. Concerning the conflict of inheritance"
 	note h4_inheritancectact: "D. Concerning the conflict of inheritance"
 	label define h4_inheritancectact 1 "Yes" 0 "No"
 	label values h4_inheritancectact h4_inheritancectact
 
-	label variable h4_poorrichctact "E. Concerning the conflict or disputes between poor people and rich people"
-	note h4_poorrichctact: "E. Concerning the conflict or disputes between poor people and rich people"
-	label define h4_poorrichctact 1 "Yes" 0 "No"
-	label values h4_poorrichctact h4_poorrichctact
-
-	label variable h4_natimigrantsctact "F. Concerning the conflicts or disputes between native born people and migrants"
-	note h4_natimigrantsctact: "F. Concerning the conflicts or disputes between native born people and migrants"
-	label define h4_natimigrantsctact 1 "Yes" 0 "No"
-	label values h4_natimigrantsctact h4_natimigrantsctact
-
-	label variable h4_youngelderctact "G. Concerning the conflicts or disputes between young people and older people"
-	note h4_youngelderctact: "G. Concerning the conflicts or disputes between young people and older people"
-	label define h4_youngelderctact 1 "Yes" 0 "No"
-	label values h4_youngelderctact h4_youngelderctact
+	label variable h4_youngelderact "G. Conflicts or disputes between young people and older people"
+	note h4_youngelderact: "G. Conflicts or disputes between young people and older people"
+	label define h4_youngelderact 1 "Yes" 0 "No"
+	label values h4_youngelderact h4_youngelderact
 
 	label variable h4_religiousctact "H. Concerning the religious conflict or disputes (between people from different "
 	note h4_religiousctact: "H. Concerning the religious conflict or disputes (between people from different denominations)"
@@ -4943,11 +4447,6 @@ if _N>0 {
 	note h4_politicalctact: "J. Concerning the conflict between people belonging to different political parties/groups"
 	label define h4_politicalctact 1 "Yes" 0 "No"
 	label values h4_politicalctact h4_politicalctact
-
-	label variable h4_indigmigrantsctact "K. Concerning the conflict between indigenous people and migrants"
-	note h4_indigmigrantsctact: "K. Concerning the conflict between indigenous people and migrants"
-	label define h4_indigmigrantsctact 1 "Yes" 0 "No"
-	label values h4_indigmigrantsctact h4_indigmigrantsctact
 
 	label variable h4_otherconflictctact "L. (Concerning the \${h4_otherconflictother})"
 	note h4_otherconflictctact: "L. (Concerning the \${h4_otherconflictother})"
@@ -4969,30 +4468,15 @@ if _N>0 {
 	label define h4_cropsres 1 "Yes" 0 "No"
 	label values h4_cropsres h4_cropsres
 
-	label variable h4_powerres "C. Power conflict / succession"
-	note h4_powerres: "C. Power conflict / succession"
-	label define h4_powerres 1 "Yes" 0 "No"
-	label values h4_powerres h4_powerres
-
 	label variable h4_inheritanceres "E. Conflict of inheritance"
 	note h4_inheritanceres: "E. Conflict of inheritance"
 	label define h4_inheritanceres 1 "Yes" 0 "No"
 	label values h4_inheritanceres h4_inheritanceres
 
-	label variable h4_poorrichres "F. Conflict or disputes between poor people and rich people"
-	note h4_poorrichres: "F. Conflict or disputes between poor people and rich people"
-	label define h4_poorrichres 1 "Yes" 0 "No"
-	label values h4_poorrichres h4_poorrichres
-
-	label variable h4_natimigrantsres "G. Conflicts or disputes between native born people and migrants"
-	note h4_natimigrantsres: "G. Conflicts or disputes between native born people and migrants"
-	label define h4_natimigrantsres 1 "Yes" 0 "No"
-	label values h4_natimigrantsres h4_natimigrantsres
-
-	label variable h4_youngelderres "H. Conflicts or disputes between young people and older people"
-	note h4_youngelderres: "H. Conflicts or disputes between young people and older people"
-	label define h4_youngelderres 1 "Yes" 0 "No"
-	label values h4_youngelderres h4_youngelderres
+	label variable h4_youngelderes "G. Conflicts or disputes between young people and older people"
+	note h4_youngelderes: "G. Conflicts or disputes between young people and older people"
+	label define h4_youngelderes 1 "Yes" 0 "No"
+	label values h4_youngelderes h4_youngelderes
 
 	label variable h4_religiousres "I. Religious conflict or disputes (between people from different denominations)"
 	note h4_religiousres: "I. Religious conflict or disputes (between people from different denominations)"
@@ -5009,31 +4493,34 @@ if _N>0 {
 	label define h4_politicalres 1 "Yes" 0 "No"
 	label values h4_politicalres h4_politicalres
 
-	label variable h4_indigmigrantsres "L. Conflict between indigenous people and migrants"
-	note h4_indigmigrantsres: "L. Conflict between indigenous people and migrants"
-	label define h4_indigmigrantsres 1 "Yes" 0 "No"
-	label values h4_indigmigrantsres h4_indigmigrantsres
-
 	label variable h4_otherconflictres "M. Other communal conflict (\${h4_otherconflictother})"
 	note h4_otherconflictres: "M. Other communal conflict (\${h4_otherconflictother})"
 	label define h4_otherconflictres 1 "Yes" 0 "No"
 	label values h4_otherconflictres h4_otherconflictres
 
-	label variable trauma_cauchemars "Quand vous pensiez à la révolution ou à la guerre contre le terrorisme, est-ce q"
-	note trauma_cauchemars: "Quand vous pensiez à la révolution ou à la guerre contre le terrorisme, est-ce que vous passiez des nuits agitées, ou aviez-vous des cauchemars la nuit ?"
+	label variable trauma_cauchemars "When you thought of the revolution or the war on terror, did you have restless n"
+	note trauma_cauchemars: "When you thought of the revolution or the war on terror, did you have restless nights, or did you have nightmares at night?"
 	label define trauma_cauchemars 1 "Yes" 0 "No"
 	label values trauma_cauchemars trauma_cauchemars
 
-	label variable trauma_souvenirs "Quand vous pensiez à la révolution ou à la guerre contre le terrorisme, ressenti"
-	note trauma_souvenirs: "Quand vous pensiez à la révolution ou à la guerre contre le terrorisme, ressentiez-vous des douleurs dans la poitrine ou des maux de tête ?"
+	label variable trauma_souvenirs "When you thought of the revolution or the war on terror, did you experience ches"
+	note trauma_souvenirs: "When you thought of the revolution or the war on terror, did you experience chest pains or headaches?"
 	label define trauma_souvenirs 1 "Yes" 0 "No"
 	label values trauma_souvenirs trauma_souvenirs
 
 	label variable trauma_fin "M.8. In general, what do you do to feel better when thinking about the revolutio"
 	note trauma_fin: "M.8. In general, what do you do to feel better when thinking about the revolution or about the war ?"
 
-	label variable i2_taxesintro "Nous avons terminé notre conversation. En guise de remerciement, nous avons un p"
-	note i2_taxesintro: "Nous avons terminé notre conversation. En guise de remerciement, nous avons un petit jeton de X Dinars pour vous. Comme vous le savez, le gouvernement de la Tunisie exige que chaque citoyen paie des impôts sur son revenu ou sur l'argent qu'il reçoit. Ces ressources sont essentielles pour que le gouvernement puisse fournir des services de base tels que la sécurité, les soins de santé, l'éducation, etc. Selon la loi, le taux d'imposition actuel POUR UN REVENU DE CETTE TAILLE EST DE X%, ce qui signifie pour le cadeau que nous vous avons offert. vous seriez censé payer X Dinars en taxes. Vous pouvez décider de verser ce montant au gouvernement, à tout autre montant de votre choix ou à rien du tout. Si vous ne souhaitez rien payer, le gouvernement ne sera pas informé de votre décision ni de quoi que ce soit dont nous avons parlé aujourd'hui. Combien d'argent êtes-vous prêt à payer pour les impôts?"
+	label variable i2_taxesintro "We have finished our conversation. As a thank you, we have a small token of 10 D"
+	note i2_taxesintro: "We have finished our conversation. As a thank you, we have a small token of 10 Dinars for you. As you know, the government of Tunisia requires every citizen to pay taxes on their income or on the money they receive. These resources are essential for the government to provide basic services such as security, health care, education, etc. By law, the current tax rate FOR AN INCOME OF THIS SIZE IS 35%, which means for the gift we have given you. you would be supposed to pay 3 Dinars in taxes. You can choose to pay this amount to the government, to any other amount you want, or to nothing at all. If you do not wish to pay anything, the government will not be notified of your decision or anything that we have discussed today. How much money are you willing to pay for taxes?"
+
+	label variable i2_taxesintro_sup "Would you like to contribute more than the maximu of 10 Dinars allowed ?"
+	note i2_taxesintro_sup: "Would you like to contribute more than the maximu of 10 Dinars allowed ?"
+	label define i2_taxesintro_sup 1 "Yes" 0 "No"
+	label values i2_taxesintro_sup i2_taxesintro_sup
+
+	label variable i2_taxesintro_sup_num "How much in total would you want to contribute to the taxes effort ?"
+	note i2_taxesintro_sup_num: "How much in total would you want to contribute to the taxes effort ?"
 
 	label variable i3_personcontribut "L.2.1. Does the person want to contribute to a project?"
 	note i3_personcontribut: "L.2.1. Does the person want to contribute to a project?"
@@ -5074,13 +4561,13 @@ if _N>0 {
 	label variable j_interstopped "Why did the interview stop"
 	note j_interstopped: "Why did the interview stop"
 
-	label variable resultat "N7. Résultats de l'entretien"
-	note resultat: "N7. Résultats de l'entretien"
+	label variable resultat "N7. Interview results"
+	note resultat: "N7. Interview results"
 	label define resultat 1 "ENTRETIEN REALISE" 2 "PARTIELLEMENT COMPLETE" 3 "CHEF DE MENAGE/AUTRE PERSONNE A REFUSE D'AUTORISER L'ENTRETIEN" 4 "MENAGE VIDE" 99 "AUTRE, SPECIFIER"
 	label values resultat resultat
 
-	label variable resultat_autre "N8. Résultats de l'entretien si autre"
-	note resultat_autre: "N8. Résultats de l'entretien si autre"
+	label variable resultat_autre "N8. Results of the interview if other"
+	note resultat_autre: "N8. Results of the interview if other"
 
 	label variable a1_gpslatitude "A.1.7.(C) GPS Coordinates (latitude)"
 	note a1_gpslatitude: "A.1.7.(C) GPS Coordinates (latitude)"
@@ -5183,6 +4670,7 @@ if _rc==0 {
 		* correct field names to match Stata field names (lowercase, drop -'s and .'s)
 		replace fieldname=lower(subinstr(subinstr(fieldname,"-","",.),".","",.))
 		
+		/*
 		* format date and date/time fields (taking account of possible wildcards for repeat groups)
 		forvalues i = 1/100 {
 			if "`datetime_fields`i''" ~= "" {
@@ -5208,7 +4696,8 @@ if _rc==0 {
 				}
 			}
 		}
-
+		*/
+		
 		* write out a temp file with the commands necessary to apply each correction
 		tempfile tempdo
 		file open dofile using "`tempdo'", write replace
