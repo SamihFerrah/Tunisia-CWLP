@@ -7,120 +7,158 @@ set seed 12272020
 
 * Use full sample dataset
 
-	* Assign random number to cash grant treatment respondent
+u "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.dta", clear
 
-	g rand_trt_cash = runiform() if Intervention == "Cash Grant - Women" & Status == "Treatment"
+g Groupe = ""
 
-	* Assign random number to cash grant control respondent
 
-	g rand_ctr_cash = runiform() if Intervention == "Cash Grant - Women" & Status == "Control"
-
-	* Assign random number to follow up sample respondents
-
-	g rand_follow = runiform() if Intervention == "Follow up - TCLP"
-
-	* Assign random number to male partner of treatment participant
-
-	g rand_trt_male = runiform() if Intervention == "Cash Grant - Partenaire" & Status == "Treatment"
-
-	* Assign random number to male partner of control participant
-
-	g rand_ctr_male = runiform() if Intervention == "Cash Grant - Partenaire" & Status == "Treatment"
+	***************************************
+	* Trt cash grant women and control TCLP
+	***************************************
 	
+* Assign random number to cash grant treatment respondent and control TCLP
+
+	g rand_trt_cash_0 = runiform() if Intervention == "Cash Grants - Women" & Status == "Treatment" & beneficiaire == 0 
+	
+	sort rand_trt_cash_0, stable 
+	
+	g 		qual_trt_cash_0 = 0
+	replace qual_trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & _n <=10
+
+	replace Groupe = "Cash Grant Treatment & Control TCLP" if qual_trt_cash_0 == 1
+	
+	
+	*****************************************
+	* Trt cash grant women and treatment TCLP
+	*****************************************
+	
+* Assign random number to cash grant treatment respondent and treatment TCLP
+
+	g rand_trt_cash_1 = runiform() if Intervention == "Cash Grants - Women" & Status == "Treatment" & beneficiaire == 1
+
+	
+	sort rand_trt_cash_1, stable 
+	
+	g 		qual_trt_cash_1 = 0
+	replace qual_trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & _n <=10
+	
+	replace Groupe = "Cash Grant Treatment & Treatment TCLP" if qual_trt_cash_1 == 1
+	
+	
+	****************************************
+	* Ctr cash grant women and control TCLP
+	****************************************
+	
+* Assign random number to cash grant control respondent and control TCLP 
+
+	g rand_ctr_cash_0 = runiform() if Intervention == "Cash Grants - Women" & Status == "Control" & beneficiaire == 0 
+	
+	
+	
+	sort rand_ctr_cash_0, stable 
+	
+	g 		qual_crt_cash_0 = 0
+	replace qual_crt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Control" & _n <=5
+
+	replace Groupe = "Cash Grant Control & Control TCLP" if qual_crt_cash_0 == 1
+	
+	
+	*****************************************
+	* Ctr cash grant women and treatment TCLP
+	*****************************************
+	
+* Assign random number to cash grant control respondent and treatment TCLP
+
+	g rand_ctr_cash_1 = runiform() if Intervention == "Cash Grants - Women" & Status == "Control" & beneficiaire == 1
+	
+	sort rand_ctr_cash_1, stable 
+	
+	g 		qual_crt_cash_1 = 0
+	replace qual_crt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Control" & _n <=5
+	
+	
+	replace Groupe = "Cash Grant Control & Treatment TCLP" if qual_crt_cash_1 == 1
+	
+	**************************
+	* Follow up control TCLP
+	**************************
+	
+* Assign random number to follow up sample respondents and control TCLP
+
+	g rand_follow_0 = runiform() if Intervention == "Follow up - TCLP" & beneficiaire == 0
+	
+	sort rand_follow_0, stable 
+	
+	g 		qual_follow_0 = 0
+	replace qual_follow_0 = 1 if Intervention == "Follow up - TCLP" & beneficiaire == 0 & _n <=10
+	
+	replace Groupe = "Follow up TCLP Control" if qual_follow_0 == 1 
 	
 	
 	**************************
-	* Trt cash grant women 
+	* Follow up treatment TCLP
 	**************************
 	
-	sort rand_trt_cash, stable 
+* Assign random number to follow up sample respondents and treatment TCLP
+
+	g rand_follow_1 = runiform() if Intervention == "Follow up - TCLP" & beneficiaire == 1
 	
-	g 		qual_trt_cash = 0
-	replace qual_trt_cash = 1 if if Intervention == "Cash Grant - Women" & Status == "Treatment" & _n <=20
+	sort rand_follow_1, stable 
 	
-	**************************
-	* Ctr cash grant women 
-	**************************
+	g 		qual_follow_1 = 0
+	replace qual_follow_1 = 1 if Intervention == "Follow up - TCLP" & beneficiaire == 1 & _n <=10
 	
-	sort rand_ctr_cash, stable 
+	replace Groupe = "Follow up TCLP Treatment" if qual_follow_1 == 1
 	
-	g 		qual_crt_cash = 0
-	replace qual_crt_cash = 1 if if Intervention == "Cash Grant - Women" & Status == "Control" & _n <=10
-	
-	**************************
-	* Follow up
-	**************************
-	
-	sort rand_follow, stable 
-	
-	g 		qual_follow = 0
-	replace qual_follow = 1 if if Intervention == "Follow Up - TCLP" & _n <=10
 	
 	**************************
 	* Trt cash grant partener 
 	**************************
 	
+* Assign random number to male partner of treatment participant
+
+	g rand_trt_male = runiform() if Intervention == "Cash Grants - Women" & Status == "Treatment"
+	
 	sort rand_trt_male, stable 
 	
 	g 		qual_trt_cash_p = 0
-	replace qual_trt_cash_p = 1 if if Intervention == "Cash Grant - Partner" & Status == "Treatment" & _n <=20
+	replace qual_trt_cash_p = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & qual_trt_cash_0 == 0 & qual_trt_cash_1 == 0 & _n <=5
+
+	replace Groupe = "Cash Grant Partner Treatment" if qual_trt_cash_p == 1
+	
 	
 	**************************
 	* Ctr cash grant partener 
 	**************************
 	
+* Assign random number to male partner of control participant
+
+	g rand_ctr_male = runiform() if Intervention == "Cash Grants - Women" & Status == "Control" 
+	
 	sort rand_ctr_male, stable 
 	
 	g 		qual_crt_cash_p = 0
-	replace qual_crt_cash_p = 1 if if Intervention == "Cash Grant - Partner" & Status == "Control" & _n <=10
+	replace qual_crt_cash_p = 1 if Intervention == "Cash Grants - Women" & Status == "Control" & qual_crt_cash_1 == 0 & qual_crt_cash_1 == 0 & _n <=5 
 	
+	replace Groupe = "Cash Grant Partner Control" if qual_crt_cash_p == 1
 	
 drop rand_* 
 
 * Export selected sample 
 
-
-keep if qual_trt_cash 	== 1 | /// 
-		qual_crt_cash 	== 1 | ///
-		qual_follow 	== 1 | ///
-		qual_trt_cash_p == 1 | /// 
-		qual_crt_cash_p == 1
+keep if qual_trt_cash_0 		== 1 | /// 
+		qual_trt_cash_1 		== 1 | /// 
+		qual_crt_cash_0 		== 1 | ///
+		qual_crt_cash_1 		== 1 | ///
+		qual_follow_0	 		== 1 | ///
+		qual_follow_1	 		== 1 | ///
+		qual_trt_cash_p 		== 1 | /// 
+		qual_crt_cash_p 		== 1
 		
-		
-preserve 
-	
-	keep if qual_trt_cash == 1 
-	
-	export excel using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Qualitative Research/Liste_Qualitative_Research.xlsx", sheet("Cash Grant Women - Treatment", modify)
-	
-restore
+sort Groupe
 
-preserve 
-	
-	keep if qual_crt_cash == 1 
-	
-	export excel using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Qualitative Research/Liste_Qualitative_Research.xlsx", sheet("Cash Grant Women - Control", modify)
-	
-restore  
+order Groupe HHID Gender Nom Age Imada Adresse imada CIN Father Intervention Partenaire_Nom Telephone1 Telephone2
 
-preserve 
-	
-	keep if qual_follow == 1 
-	
-	export excel using "$home/14. Female Entrepreneurship Add on/Survey material/AssignmentQualitative Research/Liste_Qualitative_Research.xlsx", sheet("Follow UP", modify)
-	
-restore	
+keep Groupe HHID Gender Nom Age Imada Adresse imada CIN Father  Partenaire_Nom Telephone1 Telephone2
 
-preserve 
-	
-	keep if qual_trt_cash_p == 1 
-	
-	export excel using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Qualitative Research/Liste_Qualitative_Research.xlsx", sheet("Cash Grant Partner - Treatment", modify)
-	
-restore
-
-preserve 
-	
-	keep if qual_crt_cash_p == 1 
-	
-	export excel using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Qualitative Research/Liste_Qualitative_Research.xlsx", sheet("Cash Grant Partner - Control", modify)	
+export excel using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Qualitative Research/Liste_Qualitative_Research.xlsx", first(var) replace

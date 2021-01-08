@@ -45,7 +45,7 @@ preserve
 
 restore 
 
-merge 1:1 hhid using `baseline'
+merge 1:1 hhid using `baseline', update
 
 * Keep relevant variable
 
@@ -383,7 +383,7 @@ preserve
 	
 	sort order_ 
 	
-	bys grouped: g Ordre = _n
+	bys imada eligible: g Ordre = _n
 	
 	sort Imada
 

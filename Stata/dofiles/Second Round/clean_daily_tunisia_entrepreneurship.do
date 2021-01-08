@@ -178,7 +178,7 @@ preserve
 	sort Date_Sondage Description
 	* Export to excel
 	
-	export excel using "$shared/Daily Report/Update BJKA.xlsx", sheet("Probleme Completion", replace) first(var)
+	export excel using "$shared/Daily Report/Update BJKA.xlsx", sheet("Probleme Completion", modify) first(var)
 	
 restore 
 	
@@ -303,16 +303,19 @@ sa			`full'
 			
 			if _rc != 0{
 				
-				cap replace diff_detected = 1 if HHID == `code'
+				local HHID_dup_dif = "`code'"
 				
 				local diff_var "`diff_var' `var'"
 			}
 		}
 		
+		restore 
+		
 	replace Difference = "`diff_var'"
+	
 	}
 	
-	keep if diff_detected == 1 
+	keep if inlist(hhid,`HHID_dup_dif')
 	
 	keep HHID Nom a1_enumerator a1_enumerator3 Date Date3 Difference
 	

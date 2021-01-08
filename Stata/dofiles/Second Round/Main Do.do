@@ -18,7 +18,7 @@
 	* Samih2			8
 	
 	
-	global user_number  8
+	global user_number  9
 
 	* Dropbox/Box globals
 	* ---------------------
@@ -33,6 +33,14 @@
 		
 		* Location of shared folder with BJKA
 		global shared	"C:/Users/samih/Dropbox/World Bank/Tunisia IE - Shared folder"
+	}
+	
+	if $user_number == 9 {
+		global home		"C:/Users/wb553190/Dropbox/WB-Tunisia-CWLP-IE"
+		global dropbox	"C:/Users/wb553190/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
+		
+		* Location of shared folder with BJKA
+		global shared	"C:/Users/wb553190/Dropbox/World Bank/Tunisia IE - Shared folder"
 	}
 	
 		*location of the temporary data, temp;
@@ -54,6 +62,9 @@
 		}
 		if $user_number == 8{
 			global git_tunisia "C:/Users/samih/Documents/Github/Tunisia-CWLP/Stata"
+		}
+		if $user_number == 9{
+			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata"
 		}
 
 
