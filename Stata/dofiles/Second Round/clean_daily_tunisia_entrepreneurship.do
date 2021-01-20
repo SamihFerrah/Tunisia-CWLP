@@ -18,20 +18,7 @@ drop _merge
 
 ********************************************************************************
 ********************************************************************************
-* 2) APPLY CORRECTIONS FOR DUPLICATES OR ERROR IN CODE 
-********************************************************************************
-********************************************************************************
-/* 	Run correction do-files in which we apply the different correction to keep this
-	one clean from thousands line of correction
-*/
-
-do "$git_tunisia/dofiles/Second round/Corrections/duplicates_code_correction.do"
-do "$git_tunisia/dofiles/Second round/Corrections/error_code_tunisia.do"
-
-
-********************************************************************************
-********************************************************************************
-* 3) CHECK THAT ALL SURVEY SUBMITTED ARE COMLETED 
+* 2) CHECK THAT ALL SURVEY SUBMITTED ARE COMLETED 
 ********************************************************************************
 ********************************************************************************
 /* 	Define indicator for survey completeness, often the last variables mandatory
@@ -46,13 +33,56 @@ replace tot_complete = 1 if trauma_cauchemars 	!=. & 	Intervention == "Cash Gran
 														
 replace tot_complete = 1 if x9_109 				!=. & 	Intervention == "Cash Grants - Partenaire"
 
-* Generate indicator for date of interview
+cap format submissiondate  %tcDDmonCCYY
+if _rc == 0{
+    
+	gen date = dofc(submissiondate) 
+	
+	format date %td
 
-gen today = date(a1_date,"MDY",2020)
+}
+else{
+    
+	split submissiondate,parse(" ") g(date_tmp)
+	
+	g 		date_tmp12 = date_tmp1 if date_tmp2 == "déc."
+	
+	replace date_tmp12 = date_tmp1 if date_tmp2 =="févr."
+	replace date_tmp12 = date_tmp1 if date_tmp2 =="janv."
+	replace date_tmp1 = "Dec" if date_tmp2 =="déc."
+	replace date_tmp1 = "Feb" if date_tmp2 =="févr."
+	replace date_tmp1 = "Jan" if date_tmp2 =="janv."
+	replace date_tmp2 = date_tmp12 +"," if date_tmp2 == "déc." 
+	replace date_tmp2 = date_tmp12 +"," if date_tmp2 == "févr." 
+	replace date_tmp2 = date_tmp12 +"," if date_tmp2 == "janv." 
+	
+	drop date_tmp12 
+	
+	replace submissiondate = date_tmp1+" "+date_tmp2 +date_tmp3 
 
-format today %td
+	cap drop date_tmp* month_tmp day_tmp	
+	
+	rename submissiondate today_char
+	
+	gen today=date(today_char,"MDY",2017)
+	
+	format today %td
+	
+	label variable today "Date of interview"
+}
 
-label variable today "Date of interview"
+
+********************************************************************************
+********************************************************************************
+* 3) APPLY CORRECTIONS FOR DUPLICATES OR ERROR IN CODE 
+********************************************************************************
+********************************************************************************
+/* 	Run correction do-files in which we apply the different correction to keep this
+	one clean from thousands line of correction
+*/
+
+do "$git_tunisia/dofiles/Second round/Corrections/duplicates_code_correction.do"
+do "$git_tunisia/dofiles/Second round/Corrections/error_code_tunisia.do"
 
 
 
@@ -360,6 +390,9 @@ foreach var of local var_to_drop{
 	
 }
 		 
+* Save data with PII 
+
+sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
 
 ********************************************************************************
 ********************************************************************************

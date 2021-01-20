@@ -8,5 +8,5 @@
 
 * Added 7th January: ID  été saisie manuellement la première journée
 
-drop if hhid == 681 and date ==d(27dec2020)
+drop if hhid == 681 & today ==d(27dec2020)
 

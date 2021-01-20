@@ -18,7 +18,7 @@
 	* Samih2			8
 	
 	
-	global user_number  9
+	global user_number  8
 
 	* Dropbox/Box globals
 	* ---------------------
