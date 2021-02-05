@@ -141,6 +141,7 @@ foreach var of local partner_only {
 preserve 
 
 	* Import daily report 
+	
 	import excel using "$shared/Daily Report/Update BJKA.xlsx", clear first 
 	
 	cap confirm numeric variable Status
@@ -266,6 +267,7 @@ if `r(N)' > 0 {
 * Drop perfect duplicates 
 
 duplicates drop 
+
 
 * Duplicates in code among interviews
 
