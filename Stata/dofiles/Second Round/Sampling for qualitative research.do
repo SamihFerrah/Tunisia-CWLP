@@ -4,13 +4,74 @@
 ********************************************************************************
 ********************************************************************************
 set seed 12272020
+local date = c(current_date)
 
-* Use full sample dataset
+u "A:/Assignment/Full sample.dta", clear
 
-u "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.dta", clear
+drop Partenaire
 
-g Groupe 		= ""
-g Replacement   = "Non"
+g Groupe 			= ""
+g Replacement   	= "Non"
+g Ordre_Replacement = .
+
+cap drop _merge 
+
+/*
+* Fill in information with one completed during endline
+
+replace Nom 			= a1_respondentname if a1_respondentname 	!= ""
+replace Telephone1 		= a1_phonerespond	if a1_phonerespond 		!=.
+replace Partenaire_Nom 	= Nom 				if Partenaire_Nom == "" &Nom != ""
+*/
+
+* Import HH ID (for cash grant and partner)
+
+preserve 
+
+	import excel using "$home/14. Female Entrepreneurship Add on/Data/General/ID Cash HH.xlsx", clear first
+	
+	tempfile ID_HHH
+	sa 	    `ID_HHH'
+	
+restore 
+
+merge 1:1 HHID using `ID_HHH', update
+
+cap drop _merge 
+
+* Keep subset of 20 imadas 
+
+preserve
+
+	set seed 12272020
+	
+	keep imada
+
+	duplicates drop 
+
+	g rand_imada = runiform()
+
+	sort rand_imada, stable 
+
+	keep if _n < 21
+
+	keep imada
+	
+	tempfile imada_list
+	sa 		`imada_list'
+
+	decode imada, g(Imada)
+	
+	drop imada
+	
+	export excel using "A:/Assignment/Qualitative Research/Liste Imada.xlsx", replace firstrow(var)
+	
+restore 
+
+merge m:1 imada using `imada_list', keep(3)
+
+cap drop _merge 
+
 
 	***************************************
 	* Trt cash grant women and control TCLP
@@ -18,12 +79,14 @@ g Replacement   = "Non"
 	
 * Assign random number to cash grant treatment respondent and control TCLP
 
+	set seed 12272020
+	
 	g rand_trt_cash_0 = runiform() if Intervention == "Cash Grants - Women" & Status == "Treatment" & beneficiaire == 0 
 	
 	sort rand_trt_cash_0, stable 
 	
 	g 		qual_trt_cash_0 = 0
-	replace qual_trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & _n <=13
+	replace qual_trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & _n <=18
 
 	
 	replace Groupe = "Cash Grant Treatment & Control TCLP" 				 if qual_trt_cash_0 == 1 & _n <= 10 
@@ -37,33 +100,37 @@ g Replacement   = "Non"
 	
 * Assign random number to cash grant treatment respondent and treatment TCLP
 
+	set seed 12272020
+	
 	g rand_trt_cash_1 = runiform() if Intervention == "Cash Grants - Women" & Status == "Treatment" & beneficiaire == 1
 
 	
 	sort rand_trt_cash_1, stable 
 	
 	g 		qual_trt_cash_1 = 0
-	replace qual_trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & _n <=13
+	replace qual_trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & _n <=18
 	
 	replace Groupe = "Cash Grant Treatment & Treatment TCLP" 				if qual_trt_cash_1 == 1 & _n <= 10
 	replace Groupe = "Cash Grant Treatment & Treatment TCLP - Replacement"  if qual_trt_cash_1 == 1 & _n >  10
 	
 	replace Replacement = "Oui" if qual_trt_cash_1 == 1 & _n >  10 
-	
+
+		
 	****************************************
 	* Ctr cash grant women and control TCLP
 	****************************************
 	
 * Assign random number to cash grant control respondent and control TCLP 
 
-	g rand_ctr_cash_0 = runiform() if Intervention == "Cash Grants - Women" & Status == "Control" & beneficiaire == 0 
+	set seed 12272020
 	
+	g rand_ctr_cash_0 = runiform() if Intervention == "Cash Grants - Women" & Status == "Control" & beneficiaire == 0 
 	
 	
 	sort rand_ctr_cash_0, stable 
 	
 	g 		qual_crt_cash_0 = 0
-	replace qual_crt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Control" & _n <=7
+	replace qual_crt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Control" & _n <=9
 
 	replace Groupe = "Cash Grant Control & Control TCLP" 					if qual_crt_cash_0 == 1 & _n <= 5
 	replace Groupe = "Cash Grant Control & Control TCLP - Replacement"  	if qual_crt_cash_0 == 1 & _n >  5
@@ -76,18 +143,23 @@ g Replacement   = "Non"
 	
 * Assign random number to cash grant control respondent and treatment TCLP
 
+	set seed 12272020
+	
 	g rand_ctr_cash_1 = runiform() if Intervention == "Cash Grants - Women" & Status == "Control" & beneficiaire == 1
 	
 	sort rand_ctr_cash_1, stable 
 	
 	g 		qual_crt_cash_1 = 0
-	replace qual_crt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Control" & _n <=7
+	replace qual_crt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Control" & _n <=9
 	
 	
 	replace Groupe = "Cash Grant Control & Treatment TCLP" 					if qual_crt_cash_1 == 1 & _n <=  5
 	replace Groupe = "Cash Grant Control & Treatment TCLP - Replacement"  	if qual_crt_cash_1 == 1 & _n >   5
 	
-	replace Replacement = "Oui" if qual_trt_cash_1 == 1 & _n >   5
+	replace Replacement = "Oui" if qual_crt_cash_1 == 1 & _n >   5
+	
+	******************************************************
+	******************************************************
 	
 	**************************
 	* Follow up control TCLP
@@ -95,12 +167,14 @@ g Replacement   = "Non"
 	
 * Assign random number to follow up sample respondents and control TCLP
 
+	set seed 12272020
+	
 	g rand_follow_0 = runiform() if Intervention == "Follow up - TCLP" & beneficiaire == 0
 	
 	sort rand_follow_0, stable 
 	
 	g 		qual_follow_0 = 0
-	replace qual_follow_0 = 1 if Intervention == "Follow up - TCLP" & beneficiaire == 0 & _n <=11
+	replace qual_follow_0 = 1 if Intervention == "Follow up - TCLP" & beneficiaire == 0 & _n <=13
 	
 	replace Groupe = "Follow up TCLP Control" 				if qual_follow_0 == 1 & _n <=10
 	replace Groupe = "Follow up TCLP Control - Replacement" if qual_follow_0 == 1 & _n > 10
@@ -113,71 +187,149 @@ g Replacement   = "Non"
 	
 * Assign random number to follow up sample respondents and treatment TCLP
 
+	set seed 12272020
+	
 	g rand_follow_1 = runiform() if Intervention == "Follow up - TCLP" & beneficiaire == 1
 	
 	sort rand_follow_1, stable 
 	
 	g 		qual_follow_1 = 0
-	replace qual_follow_1 = 1 if Intervention == "Follow up - TCLP" & beneficiaire == 1 & _n <=11
+	replace qual_follow_1 = 1 if Intervention == "Follow up - TCLP" & beneficiaire == 1 & _n <=13
 	
 	replace Groupe = "Follow up TCLP Treatment" 			  if qual_follow_1 == 1 & _n <=10
 	replace Groupe = "Follow up TCLP Treatment - Replacement" if qual_follow_1 == 1 & _n > 10
 	
 	replace Replacement = "Oui" if qual_follow_1 == 1 & _n > 10
 	
-	**************************
-	* Trt cash grant partener 
-	**************************
+	keep if Groupe != ""
 	
-* Assign random number to male partner of treatment participant
+	bys Groupe: replace Ordre_Replacement = _n if Replacement == "Oui"
+	
+	preserve 
+		
+		keep if ID_HH ! =.
+		
+		keep ID_HH Groupe Replacement Ordre_Replacement
+		
+		cap drop _merge 
+		
+		merge 1:m ID_HH using "A:/Assignment/Full sample.dta", gen(dd)
+		
+		keep if dd == 3
+		
+		replace Groupe = Groupe + " " + "Partenaire"
+		
+		tempfile partenaire
+		sa      `partenaire'
+		
+	restore
+	
+append using `partenaire'
+	
+sort Groupe ID_HH
 
-	g rand_trt_male = runiform() if Intervention == "Cash Grants - Women" & Status == "Treatment"
-	
-	sort rand_trt_male, stable 
-	
-	g 		qual_trt_cash_p = 0
-	replace qual_trt_cash_p = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & qual_trt_cash_0 == 0 & qual_trt_cash_1 == 0 & _n <=7
+* Fill in information with one completed during endline
 
-	replace Groupe = "Cash Grant Partner Treatment" 				if qual_trt_cash_p == 1 & _n <= 5
-	replace Groupe = "Cash Grant Partner Treatment - Replacement"   if qual_trt_cash_p == 1 & _n >  5
-	
-	replace Replacement = "Oui" if qual_trt_cash_p == 1 & _n >  5
-	
-	**************************
-	* Ctr cash grant partener 
-	**************************
-	
-* Assign random number to male partner of control participant
+preserve
 
-	g rand_ctr_male = runiform() if Intervention == "Cash Grants - Women" & Status == "Control" 
+	keep HHID 
 	
-	sort rand_ctr_male, stable 
+	tempfile HHID_select
+	sa      `HHID_select'
 	
-	g 		qual_crt_cash_p = 0
-	replace qual_crt_cash_p = 1 if Intervention == "Cash Grants - Women" & Status == "Control" & qual_crt_cash_1 == 0 & qual_crt_cash_1 == 0 & _n <=7
+restore
+
+
+preserve 
 	
-	replace Groupe = "Cash Grant Partner Control" 					if qual_crt_cash_p == 1 & _n <= 5
-	replace Groupe = "Cash Grant Partner Control - Replacement"   	if qual_crt_cash_p == 1 & _n >  5
+	u "B:/clean/clean_CashXFollow_PII.dta", clear
 	
-	replace Replacement = "Oui" if qual_crt_cash_p == 1 & _n >  5
+	keep if tot_complete == 1 
 	
+	cap drop _merge 
+	
+	merge m:1 HHID using `HHID_select', keep(3)
+	
+replace Nom 			= a1_respondentname if a1_respondentname 	!= ""
+replace Telephone1 		= a1_phonerespond	if a1_phonerespond 		!=.
+
+	keep HHID Nom Telephone1 
+		
+	duplicates drop 
+		
+	tempfile new_info
+	sa 		`new_info'
+	
+restore 
+
+merge 1:1 HHID using `new_info', update keep(1 3 4 5) gen(ddd)
+
+
+
 drop rand_* 
 
-* Export selected sample 
+preserve
 
-keep if qual_trt_cash_0 		== 1 | /// 
-		qual_trt_cash_1 		== 1 | /// 
-		qual_crt_cash_0 		== 1 | ///
-		qual_crt_cash_1 		== 1 | ///
-		qual_follow_0	 		== 1 | ///
-		qual_follow_1	 		== 1 | ///
-		qual_trt_cash_p 		== 1 | /// 
-		qual_crt_cash_p 		== 1
-		
-sort Groupe Replacement
+	keep if qual_follow_0 == 1 & Replacement == "Non" | qual_follow_1 == 1 & Replacement == "Non"
+	
+	sort Groupe
 
-order Groupe Replacement HHID Gender Nom Age Imada Adresse imada CIN Father Intervention Partenaire_Nom Telephone1 Telephone2
+	order Groupe HHID Gender Nom Age Imada Adresse imada CIN Father Intervention Partenaire_Nom Telephone1 Telephone2
 
-keep Groupe Replacement HHID Gender Nom Age Imada Adresse imada CIN Father  Partenaire_Nom Telephone1 Telephone2
+	keep Groupe HHID Gender Nom Age Imada Adresse imada CIN Father  Partenaire_Nom Telephone1 Telephone2
 
-export excel using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Qualitative Research/Liste_Qualitative_Research.xlsx", first(var) replace
+	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date'.xlsx", sheet ("Follow UP TCLP") first(var) replace
+	
+restore 
+
+preserve
+
+	keep if qual_follow_0 == 1 & Replacement == "Oui" | qual_follow_1 == 1 & Replacement == "Oui"
+	
+	sort Groupe Ordre_Replacement
+
+	order Groupe Replacement Ordre_Replacement HHID Gender Nom Age Imada Adresse imada CIN Father Intervention Partenaire_Nom Telephone1 Telephone2
+
+	keep Groupe Replacement  Ordre_Replacement HHID Gender Nom Age Imada Adresse imada CIN Father  Partenaire_Nom Telephone1 Telephone2
+
+	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date'.xlsx", sheet ("Follow UP TCLP Replacement", modify) first(var) 
+	
+restore
+
+preserve
+
+	drop if qual_follow_0 == 1 | qual_follow_1 == 1
+	
+	drop if Replacement == "Oui"
+	
+	sort ID_HH Groupe 
+	
+	order Groupe ID_HH HHID Gender Nom Age Imada Adresse imada CIN Father Intervention Partenaire_Nom Telephone1 Telephone2
+
+	keep Groupe ID_HH HHID Gender Nom Age Imada Adresse imada CIN Father Partenaire_Nom Telephone1 Telephone2
+
+
+	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date'.xlsx", sheet ("Cash Grant", modify) first(var)
+	
+restore 
+
+preserve
+
+	drop if qual_follow_0 == 1 | qual_follow_1 == 1
+	
+	keep if Replacement == "Oui"
+
+	sort Groupe Ordre_Replacement
+	
+	order Groupe ID_HH HHID Ordre_Replacement Gender Nom Age Imada Adresse imada CIN Father Intervention Partenaire_Nom Telephone1 Telephone2
+
+	keep Groupe ID_HH HHID Ordre_Replacement Gender Nom Age Imada Adresse imada CIN Father Partenaire_Nom Telephone1 Telephone2
+
+	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date'.xlsx", sheet ("Cash Grant - Replacement", modify) first(var)
+	
+restore 
+	
+	
+	
+	
+	
