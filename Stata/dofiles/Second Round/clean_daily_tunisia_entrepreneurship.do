@@ -12,7 +12,7 @@ u "$vera/temp/temp_import_CashXFollow.dta", clear
  
 g HHID = hhid 
 
-merge m:1 HHID using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup)
 
 drop _merge 
 
@@ -157,8 +157,9 @@ preserve
 	* Keep last days of data collection 
 	keep if Status == 1															// Keep completed survey
 	
-	rename HHID hhid
-	rename Status Etat
+	rename HHID 	hhid
+	rename Status 	Etat
+	rename Date 	Date_complete
 	
 	keep if Etat == 1 
 	
@@ -171,7 +172,7 @@ restore
 cap drop _merge 
 
 * Merge data with completion report 
-merge m:1 hhid using `daily_completion', keep(1 3)
+merge m:1 hhid using `daily_completion'
 
 * Create indicator for missing survey
 g 		missing_survey = 0 
@@ -197,22 +198,23 @@ preserve
 	* Code to string 
 	g 		description = "Absent de la base mais signale comme complete" 		if missing_survey == 1
 	replace description = "Dans la base mais pas dans le rapport "				if outside_report == 1 
-	replace description = "Sondage incomplet" if tot_complete == 0 
+	replace description = "Sondage incomplet" 									if tot_complete == 0 
 	
 	rename a1_date 		Date_Sondage
 	rename description 	Description
 	
-	keep hhid Description Date_Sondage 
+	keep hhid Description Date_Sondage Date_complete
 	
-	order Date_Sondage hhid Description
+	order Date_Sondage Date_complete hhid Description
 	
 	sort Date_Sondage Description
 	* Export to excel
 	
-	export excel using "$shared/Daily Report/Update BJKA.xlsx", sheet("Probleme Completion", modify) first(var)
+	export excel using "$shared/Daily Report/Update BJKA.xlsx", sheet("Probleme Completion", replace) first(var)
 	
 restore 
 	
+replace tot_complete = 0 if missing_survey == 0 
 
 ********************************************************************************
 ********************************************************************************
@@ -227,10 +229,11 @@ restore
 * Merge and check that code correspond to the original assignment
 cap drop _merge 
 
-merge m:1 HHID using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.dta", gen(code_check) keep(1 3)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", gen(code_check) keep(1 3)
 
 g 		error_code = 0 
-replace error_code = 1 if code_check ==1											// If code only in master then error in code
+replace error_code = 1 if code_check ==1
+											// If code only in master then error in code
 
 drop code_check 
 
@@ -250,7 +253,7 @@ if `r(N)' > 0 {
 		rename 	(HHID a1_date a1_enumerator Nom ) ///
 				(Faux_Code Date Enqueteur Nom)
 				
-		export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Error Code", modify) first(var)
+		export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Error Code", replace) first(var)
 		
 	restore
 }
@@ -268,7 +271,6 @@ if `r(N)' > 0 {
 
 duplicates drop 
 
-
 * Duplicates in code among interviews
 
 duplicates tag HHID if tot_complete == 1 & error_code == 0, g(dup)				// Check for duplicates among completed survey
@@ -283,6 +285,8 @@ tempfile 	 full
 sa			`full'
 
 	keep if dup == 1 															// Keep duplicates variables
+	
+	export excel HHID using "$vera/temp/Duplicates.xlsx", firstrow(var) replace
 	
 	bys HHID: g order_dup = _n 													// Create duplicate order variable (doesn't really matter)
 
@@ -314,12 +318,14 @@ sa			`full'
 	drop if dup == 1 & order_dup ==2 
 	
 	merge 1:1 HHID using `dup_2'												// Merge each observation to its duplicate
-	
+
 	levelsof HHID, local (dup_to_check) 
 	
 	g diff_detected = 0															// Use to flag difference
 	
 	g Difference = ""															// Used to describe differences detected
+	
+	local HHID_dup_dif ""
 	
 	foreach code of local dup_to_check{
 		
@@ -329,13 +335,13 @@ sa			`full'
 		
 		local diff_var "Difference detected for:"
 		
+		local HHID_dup_dif = "`HHID_dup_dif' `code',"
+		
 		foreach var of local original_varname{
 	
 			cap assert `var' == `var'3
 			
 			if _rc != 0{
-				
-				local HHID_dup_dif = "`code'"
 				
 				local diff_var "`diff_var' `var'"
 			}
@@ -347,7 +353,18 @@ sa			`full'
 	
 	}
 	
-	keep if inlist(hhid,`HHID_dup_dif')
+	preserve 
+		
+		import excel using "$vera/temp/Duplicates.xlsx", clear first
+		
+		duplicates drop 
+		
+		tempfile ID 
+		sa 		`ID'
+		
+	restore 
+	
+	merge m:1 HHID using `ID', keep(3) nogen
 	
 	keep HHID Nom a1_enumerator a1_enumerator3 Date Date3 Difference
 	
@@ -444,7 +461,7 @@ drop username calc_name complete_name a1_respondentname confirm_name a1_responde
 ********************************************************************************
 
 sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_CashXFollow_noPII.dta", replace
-
+sdsd
 	
 ********************************************************************************
 ********************************************************************************
