@@ -18,7 +18,8 @@
 	* Samih2			8
 	
 	
-	global user_number  8
+	
+	global user_number  9
 
 	* Dropbox/Box globals
 	* ---------------------
@@ -43,6 +44,8 @@
 		global shared	"C:/Users/wb553190/Dropbox/World Bank/Tunisia IE - Shared folder"
 	}
 	
+	
+	
 		*location of the temporary data, temp;
 		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
 		
@@ -50,7 +53,7 @@
 		global stata   "$home/14. Female Entrepreneurship Add on/Data/Second round"
 
 		*location of the Raw data, raw;
-		global vera   "A:"
+		global vera   "B:"
 		
 		
 		
