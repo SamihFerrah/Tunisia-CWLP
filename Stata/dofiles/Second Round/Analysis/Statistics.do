@@ -81,7 +81,7 @@ cap drop conf_followup
 * Merge with assignment list to identify respondents status (and type of survey)
 
 
-merge m:1 HHID using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.dta", gen(assignment) keepusing(HHID Intervention)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", gen(assignment) keepusing(HHID Intervention)
 
 cap drop_merge 
 
