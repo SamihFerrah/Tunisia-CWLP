@@ -21,7 +21,7 @@
 	
 	
 	
-	global user_number  9
+	global user_number  10
 
 	* Dropbox/Box globals
 	* ---------------------
@@ -58,8 +58,15 @@
 		global shared	"D:\Dropbox\Tunisia IE - Shared folder" // @Varada updathe this path to the shared dropbox folder with BJKA
 	}
 	
-			
-			
+	*location of the temporary data, temp;
+		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
+		
+		*location of stata data
+		global stata   "$home/14. Female Entrepreneurship Add on/Data/Second round"
+		*location of the Raw data, raw;
+		global vera   "B:"
+	
+	
 
 		if $user_number == 7{
 			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"
@@ -71,8 +78,13 @@
 			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata"
 		}
 		if $user_number == 10{
-			global git_tunisia "D:\GitHub\Tunisia-CWLP\Stata" // @Varada update this path to the Github Stata folder
+			global git_tunisia "D:/GitHub/Tunisia-CWLP/Stata" // @Varada update this path to the Github Stata folder
 		}
+		
+		
+		
+		
+		
 
 ********************************************************************************
 ********************************************************************************
