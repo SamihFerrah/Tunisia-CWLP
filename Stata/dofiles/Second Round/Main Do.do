@@ -55,7 +55,7 @@
 		*global dropbox	"C:/Users/wb553190/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)" // @Varada you don't need that one yet
 		
 		* Location of shared folder with BJKA
-		global shared	"C:/Users/wb553190/Dropbox/World Bank/Tunisia IE - Shared folder" // @Varada updathe this path to the shared dropbox folder with BJKA
+		global shared	"D:\Dropbox\Tunisia IE - Shared folder" // @Varada updathe this path to the shared dropbox folder with BJKA
 	}
 	
 			
@@ -71,7 +71,7 @@
 			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata"
 		}
 		if $user_number == 10{
-			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata" // @Varada update this path to the Github Stata folder
+			global git_tunisia "D:\GitHub\Tunisia-CWLP\Stata" // @Varada update this path to the Github Stata folder
 		}
 
 ********************************************************************************

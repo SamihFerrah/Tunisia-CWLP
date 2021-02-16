@@ -214,7 +214,7 @@ preserve
 	
 restore 
 	
-replace tot_complete = 0 if missing_survey == 1
+replace tot_complete = 0 if missing_survey == 1 
 
 ********************************************************************************
 ********************************************************************************
@@ -273,25 +273,113 @@ duplicates drop
 
 * Duplicates in code among interviews
 
-duplicates tag HHID if tot_complete == 1, g(dup)				// Check for duplicates among completed survey
+duplicates tag HHID if tot_complete == 1 & error_code == 0, g(dup)				// Check for duplicates among completed survey
 
+count if dup != 0 & dup !=.
+
+if `r(N)' > 0 {
 	
 * Check if real duplicates (instances submitted two times)
 
-preserve
-	
-	keep if dup > 0 
-	
-	keep HHID a1_enumerator a1_date Nom a1_respondentname imada
-	
-	order HHID Nom a1_respondentname a1_enumerator a1_date imada
+tempfile 	 full 
+sa			`full'
 
-	sort HHID a1_date
+	keep if dup == 1 															// Keep duplicates variables
 	
-	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates", replace) first(var)
+	export excel HHID using "$vera/temp/Duplicates.xlsx", firstrow(var) replace
 	
-restore
+	bys HHID: g order_dup = _n 													// Create duplicate order variable (doesn't really matter)
 
+	preserve
+	
+		keep if order_dup == 2													// Keep second duplicates 
+		
+		local original_varname ""
+		
+		foreach var of varlist _all{											// Add suffix "_2" at the end of each variable name
+		
+			cap rename `var' `var'3
+			
+			local original_varname "`original_varname' `var'"
+			
+		}
+		
+		cap drop _mer*
+		
+		rename HHID3 HHID 
+		
+		tempfile 	 dup_2 				
+		sa 			`dup_2'
+		
+	restore 
+	
+	cap drop _merge 
+		
+	drop if dup == 1 & order_dup ==2 
+	
+	merge 1:1 HHID using `dup_2'												// Merge each observation to its duplicate
+
+	levelsof HHID, local (dup_to_check) 
+	
+	g diff_detected = 0															// Use to flag difference
+	
+	g Difference = ""															// Used to describe differences detected
+	
+	local HHID_dup_dif ""
+	
+	foreach code of local dup_to_check{
+		
+		preserve 
+		
+		keep if HHID == `code'
+		
+		local diff_var "Difference detected for:"
+		
+		local HHID_dup_dif = "`HHID_dup_dif' `code',"
+		
+		foreach var of local original_varname{
+	
+			cap assert `var' == `var'3
+			
+			if _rc != 0{
+				
+				local diff_var "`diff_var' `var'"
+			}
+		}
+		
+		restore 
+		
+	replace Difference = "`diff_var'"
+	
+	}
+	
+	preserve 
+		
+		import excel using "$vera/temp/Duplicates.xlsx", clear first
+		
+		duplicates drop 
+		
+		tempfile ID 
+		sa 		`ID'
+		
+	restore 
+	
+	merge m:1 HHID using `ID', keep(3) nogen
+	
+	keep HHID Nom a1_enumerator a1_enumerator3 Date Date3 Difference
+	
+	rename a1_enumerator 	Enqueteur_1 
+	rename a1_enumerator3 	Enqueteur_2
+	rename Date				Date_1
+	rename Date3			Date_2
+	
+	order HHID Nom Enqueteur_1 Enqueteur_2 Date_1 Date_2 Difference
+
+	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", modify) first(var)
+	
+u `full', clear
+
+}
 
 * Duplicates in name ?
 
