@@ -16,7 +16,7 @@
 
 	* Samih 			7
 	* Samih2			8
-	
+	* Varada            2
 	
 	
 	global user_number  9
@@ -45,6 +45,10 @@
 	}
 	
 	
+	if $user_number == 2 {
+		global home		"D:/Dropbox/Tunisia IE - Shared folder"
+		global dropbox	""
+	}
 	
 		*location of the temporary data, temp;
 		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
