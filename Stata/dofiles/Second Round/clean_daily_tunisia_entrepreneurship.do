@@ -276,16 +276,16 @@ duplicates drop
 duplicates tag HHID if tot_complete == 1 & error_code == 0, g(dup)				// Check for duplicates among completed survey
 
 preserve
-	
-	keep if dup == 1
-	
-	keep HHID Nom a1_respondentname a1_enumerator a1_date
-	
-	order HHID Nom a1_respondentname a1_enumerator a1_date
-	
-	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", modify) first(var)
-	
-restore 
+
+keep if dup > 0 
+
+keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date 
+sort hhid 
+order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date
+
+	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
+
+restore
 
 * Duplicates in name ?
 
