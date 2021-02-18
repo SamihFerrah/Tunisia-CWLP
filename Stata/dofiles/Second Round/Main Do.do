@@ -51,25 +51,13 @@
 	}
 	
 	if $user_number == 10 {
-		global home		"C:/Users/wb553190/Dropbox/WB-Tunisia-CWLP-IE" // @Varada update this path to the Dropbox folder
-		global dropbox	"C:/Users/wb553190/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)" // @Varada you don't need that one yet
+		global home		"D:/Dropbox/WB-Tunisia-CWLP-IE/" // @Varada update this path to the Dropbox folder
+		*global dropbox	"C:/Users/wb553190/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)" // @Varada you don't need that one yet
 		
 		* Location of shared folder with BJKA
-		global shared	"C:/Users/wb553190/Dropbox/World Bank/Tunisia IE - Shared folder" // @Varada updathe this path to the shared dropbox folder with BJKA
+		global shared	"D:\Dropbox\Tunisia IE - Shared folder" // @Varada updathe this path to the shared dropbox folder with BJKA
 	}
 	
-	
-		*location of the temporary data, temp;
-		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
-		
-		*location of stata data 
-		global stata   "$home/14. Female Entrepreneurship Add on/Data/Second round"
-
-		*location of the Raw data, raw;
-		global vera   "B:"
-		
-		
-		
 			
 			
 
@@ -83,7 +71,7 @@
 			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata"
 		}
 		if $user_number == 10{
-			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata" // @Varada update this path to the Github Stata folder
+			global git_tunisia "D:\GitHub\Tunisia-CWLP\Stata" // @Varada update this path to the Github Stata folder
 		}
 
 ********************************************************************************

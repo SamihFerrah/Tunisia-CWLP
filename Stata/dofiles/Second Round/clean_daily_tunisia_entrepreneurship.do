@@ -214,7 +214,7 @@ preserve
 	
 restore 
 	
-replace tot_complete = 0 if missing_survey == 1
+replace tot_complete = 0 if missing_survey == 1 
 
 ********************************************************************************
 ********************************************************************************
@@ -273,29 +273,19 @@ duplicates drop
 
 * Duplicates in code among interviews
 
-duplicates tag HHID if tot_complete == 1, g(dup)				// Check for duplicates among completed survey
-
-	
-* Check if real duplicates (instances submitted two times)
+duplicates tag HHID if tot_complete == 1 & error_code == 0, g(dup)				// Check for duplicates among completed survey
 
 preserve
 	
-	keep if dup > 0 
+	keep if dup == 1
 	
-	keep HHID a1_enumerator a1_date Nom a1_respondentname imada
+	keep HHID Nom a1_respondentname a1_enumerator a1_date
 	
-	order HHID Nom a1_respondentname a1_enumerator a1_date imada
-
-	sort HHID a1_date
+	order HHID Nom a1_respondentname a1_enumerator a1_date
 	
-	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates", replace) first(var)
+	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", modify) first(var)
 	
-	export excel using "$shared/Data Cleaning/Duplicates to Investigate `date'.xlsx", sheet("Duplicates", replace) first(var)
-	
-	
-	
-restore
-
+restore 
 
 * Duplicates in name ?
 
