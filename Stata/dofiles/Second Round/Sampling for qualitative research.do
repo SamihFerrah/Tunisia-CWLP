@@ -5,6 +5,7 @@
 ********************************************************************************
 set seed 12272020
 local date = c(current_date)
+pause on 
 
 u "A:/Assignment/Full sample.dta", clear
 
@@ -41,7 +42,8 @@ cap drop _merge
 
 * Keep subset of 20 imadas 
 
-preserve
+tempfile full 
+sa 		`full'
 
 	set seed 12272020
 	
@@ -62,11 +64,15 @@ preserve
 
 	decode imada, g(Imada)
 	
+	tab Imada
+	
+	pause
+	
 	drop imada
 	
 	export excel using "A:/Assignment/Qualitative Research/Liste Imada.xlsx", replace firstrow(var)
 	
-restore 
+u `full', clear 
 
 merge m:1 imada using `imada_list', keep(3)
 
@@ -88,12 +94,16 @@ cap drop _merge
 	g 		qual_trt_cash_0 = 0
 	replace qual_trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & _n <=18
 
+	pause
 	
 	replace Groupe = "Cash Grant Treatment & Control TCLP" 				 if qual_trt_cash_0 == 1 & _n <= 10 
 	replace Groupe = "Cash Grant Treatment & Control TCLP - Replacement" if qual_trt_cash_0 == 1 & _n >  10 
 	
 	replace Replacement = "Oui" if qual_trt_cash_0 == 1 & _n >  10 
 	
+	tab HHID if Intervention == "Cash Grants - Women" & Status == "Treatment" & _n <=18
+	
+	pause
 	*****************************************
 	* Trt cash grant women and treatment TCLP
 	*****************************************
@@ -103,7 +113,6 @@ cap drop _merge
 	set seed 12272020
 	
 	g rand_trt_cash_1 = runiform() if Intervention == "Cash Grants - Women" & Status == "Treatment" & beneficiaire == 1
-
 	
 	sort rand_trt_cash_1, stable 
 	
@@ -125,7 +134,6 @@ cap drop _merge
 	set seed 12272020
 	
 	g rand_ctr_cash_0 = runiform() if Intervention == "Cash Grants - Women" & Status == "Control" & beneficiaire == 0 
-	
 	
 	sort rand_ctr_cash_0, stable 
 	
@@ -255,6 +263,8 @@ replace Telephone1 		= a1_phonerespond	if a1_phonerespond 		!=.
 
 	keep HHID Nom Telephone1 
 		
+	rename Nom Nom2
+	
 	duplicates drop 
 		
 	tempfile new_info
@@ -264,6 +274,8 @@ restore
 
 merge 1:1 HHID using `new_info', update keep(1 3 4 5) gen(ddd)
 
+replace Nom = Nom2 if Nom == ""
+replace Nom = Nom2 if Nom == "A completer"
 
 
 drop rand_* 
@@ -278,7 +290,7 @@ preserve
 
 	keep Groupe HHID Gender Nom Age Imada Adresse imada CIN Father  Partenaire_Nom Telephone1 Telephone2
 
-	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date'.xlsx", sheet ("Follow UP TCLP") first(var) replace
+	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date' c.xlsx", sheet ("Follow UP TCLP") first(var) replace
 	
 restore 
 
@@ -292,7 +304,7 @@ preserve
 
 	keep Groupe Replacement  Ordre_Replacement HHID Gender Nom Age Imada Adresse imada CIN Father  Partenaire_Nom Telephone1 Telephone2
 
-	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date'.xlsx", sheet ("Follow UP TCLP Replacement", modify) first(var) 
+	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date' c.xlsx", sheet ("Follow UP TCLP Replacement", modify) first(var) 
 	
 restore
 
@@ -309,7 +321,7 @@ preserve
 	keep Groupe ID_HH HHID Gender Nom Age Imada Adresse imada CIN Father Partenaire_Nom Telephone1 Telephone2
 
 
-	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date'.xlsx", sheet ("Cash Grant", modify) first(var)
+	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date' c.xlsx", sheet ("Cash Grant", modify) first(var)
 	
 restore 
 
@@ -325,7 +337,7 @@ preserve
 
 	keep Groupe ID_HH HHID Ordre_Replacement Gender Nom Age Imada Adresse imada CIN Father Partenaire_Nom Telephone1 Telephone2
 
-	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date'.xlsx", sheet ("Cash Grant - Replacement", modify) first(var)
+	export excel using "A:/Assignment/Qualitative Research/Liste_Qualitative_Research `date' c.xlsx", sheet ("Cash Grant - Replacement", modify) first(var)
 	
 restore 
 	
