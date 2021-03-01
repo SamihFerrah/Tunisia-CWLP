@@ -21,7 +21,7 @@
 	
 	
 	
-	global user_number  10
+	global user_number  9
 
 	* Dropbox/Box globals
 	* ---------------------
@@ -65,8 +65,16 @@
 		global stata   "$home/14. Female Entrepreneurship Add on/Data/Second round"
 		*location of the Raw data, raw;
 		global vera   "B:"
+<<<<<<< Updated upstream
 	
 	
+=======
+		
+		
+		
+			
+			
+>>>>>>> Stashed changes
 
 		if $user_number == 7{
 			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"
