@@ -174,10 +174,6 @@ cap drop _merge
 * Merge data with completion report 
 merge m:1 hhid using `daily_completion'
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 * Create indicator for missing survey
 g 		missing_survey = 0 
 replace missing_survey = 1 if _merge == 2 
@@ -320,11 +316,16 @@ foreach var of local var_to_drop{
 	cap drop `var'
 	
 }
-		 
+	
+* Create treatment indicator for cash grant 
+
+g 		trt_cash = 0 if Intervention == "Cash Grants - Women"
+replace trt_cash = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment"
+
 * Save data with PII 
 
 sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
-dsdsd
+
 ********************************************************************************
 ********************************************************************************
 * 7) DE-IDENTIFY DATA 
