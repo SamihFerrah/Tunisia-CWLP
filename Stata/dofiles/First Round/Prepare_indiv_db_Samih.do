@@ -12,19 +12,19 @@ sort ID
 save "$stata/enquete_indiv0.dta", replace
 
 *do corrections do dataset indicated by bjka, from their checks
-do "$git_tunisia/dofiles/corr_db_bjka_Samih"
+do "$git_tunisia/Stata/dofiles/First Round/corr_db_bjka_Samih"
 
 *do redistribution of observations to right ID, for individuals in duplicata in nominative lists // after search for in which group indiv. should be classified (participant, control or dorp-out)
-do "$git_tunisia/dofiles/redistr_dup_lists_Samih"
+do "$git_tunisia/Stata/dofiles/First Round/redistr_dup_lists_Samih"
 
 *create unique id
-do "$git_tunisia/dofiles/uid_Samih"
+do "$git_tunisia/Stata/dofiles/First Round/uid_Samih"
 
 *var imada in dataset is where interview was conducted
 ren imada lieu_entrevue
 
 *label variables
-do "$git_tunisia/dofiles/label_individuals_Samih"
+do "$git_tunisia/Stata/dofiles/First Round/label_individuals_Samih"
 
 
 save "$stata/enquete_indiv.dta", replace
@@ -197,7 +197,7 @@ use "$stata/master_list0", clear
 merge m:1 NGO using "$stata/imada_NGO", keepusing (imada survey_imada) //all matched
 drop _merge
 ren imada imada_origine //imada as reported in the registration list (to distinguish from site of interview)
-do "$git_tunisia/dofiles/label_masterlist_Samih"
+do "$git_tunisia/Stata/dofiles/First Round/label_masterlist_Samih"
 save "$stata/master_list", replace
 
 *double-check duplicates between nominative lists.
