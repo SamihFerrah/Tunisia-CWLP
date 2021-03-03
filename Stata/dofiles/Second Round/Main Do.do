@@ -23,6 +23,7 @@
 	
 	global user_number  9
 
+
 	* Dropbox/Box globals
 	* ---------------------
 
@@ -56,25 +57,16 @@
 		
 		* Location of shared folder with BJKA
 		global shared	"D:\Dropbox\Tunisia IE - Shared folder" // @Varada updathe this path to the shared dropbox folder with BJKA
-	}
+	}	
 	
-	*location of the temporary data, temp;
+		*location of the temporary data, temp;
 		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
 		
 		*location of stata data
 		global stata   "$home/14. Female Entrepreneurship Add on/Data/Second round"
+    
 		*location of the Raw data, raw;
 		global vera   "B:"
-<<<<<<< Updated upstream
-	
-	
-=======
-		
-		
-		
-			
-			
->>>>>>> Stashed changes
 
 		if $user_number == 7{
 			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"

@@ -144,6 +144,8 @@ preserve
 	
 	import excel using "$shared/Daily Report/Update BJKA.xlsx", clear first 
 	
+	replace Status = "1" if Status =="Anciens codes 33"
+	
 	cap confirm numeric variable Status
 
 	if _rc !=0{
@@ -155,14 +157,18 @@ preserve
 	destring Status, replace 
 	
 	* Keep last days of data collection 
-	keep if Status == 1															// Keep completed survey
+  
+	rename HHID 	hhid
+	rename Status 	Etat
+	rename Date 	Date_complete
+	keep if Status == 1	| Status == 33 | Status == 99							// Keep completed survey
+	
+	tab HHID if Status == 33 
 	
 	rename HHID 	hhid
 	rename Status 	Etat
 	rename Date 	Date_complete
-	
-	keep if Etat == 1 
-	
+		
 	* Create temperoray file 
 	tempfile daily_completion
 	sa   	`daily_completion'
@@ -174,6 +180,7 @@ cap drop _merge
 * Merge data with completion report 
 merge m:1 hhid using `daily_completion'
 
+sdsd
 * Create indicator for missing survey
 g 		missing_survey = 0 
 replace missing_survey = 1 if _merge == 2 
@@ -285,6 +292,7 @@ keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date key
 sort hhid 
 order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date key
 
+
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
 
 restore
@@ -334,7 +342,7 @@ sa "$vera/clean/clean_CashXFollow_PII.dta", replace
 
 * 1) Define variable to be drop (Add variable below to be dropped)
 
-local deidentification 	
+local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
 
 
 * 2) Drop ID variable 
@@ -364,8 +372,6 @@ foreach PII in name gps adress location phone{
 
 */
 
-* Drop PII
-drop username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2
 
 ********************************************************************************
 ********************************************************************************
