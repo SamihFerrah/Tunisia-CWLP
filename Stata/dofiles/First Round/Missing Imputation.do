@@ -6,26 +6,27 @@
 
 
 							
-local all_individual 															// Fill this local with outcomes variables
+local all_outcomes 																// Fill this local with outcomes variables
+local all_controls
 
 
 ********************************************************************************
 ********************************************************************************
-
-* Use clean variable 
-
+* 1) Imput outcomes variables
+********************************************************************************
+********************************************************************************
 
 foreach sample in followup cash{												// Loop over different dataset 
 
 			
 	if "`sample'" == "followup"{
 		local trt_indicator		"beneficiaire"
-		local cond			""															// Empty for now but might be useful later for the heterogeneity
+		local cond			  `"& Intervention == "Follow up - TCLP""'					// Empty for now but might be useful later for the heterogeneity
 	}
 
 	if "`sample'" == "followup"{
 		local trt_indicator "trt_cash"
-		local cond			""															// Empty for now but might be useful later for the heterogeneity
+		local cond			`"& Intervention == "Cash Grants - Women""'															// Empty for now but might be useful later for the heterogeneity
 	}
 
 
@@ -167,7 +168,7 @@ local all_individual 	c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_
 
 */
 		
-	foreach variables in `all_individual' {
+	foreach variables in `all_outcomes' {
 
 			forvalue i = 0/1 {
 		
@@ -177,6 +178,45 @@ local all_individual 	c3_a_1_win c3_a_2_win c3_a_3_win c3_a_4_win c3_a_5_win c3_
 																  `variables'_`var_suffix' ==.d & `trt_indicator' == `i' `cond' | ///
 																  `variables'_`var_suffix' ==.a & `trt_indicator' == `i' `cond' | ///
 																  `variables'_`var_suffix' ==.n & `trt_indicator' == `i' `cond'
+			}
+	}
+	
+}
+
+
+********************************************************************************
+********************************************************************************
+* 2) Imput control variables 
+********************************************************************************
+********************************************************************************
+
+foreach sample in followup cash{												// Loop over different dataset 
+
+			
+	if "`sample'" == "followup"{
+		local trt_indicator		"beneficiaire"
+		local cond			  `"& Intervention == "Follow up - TCLP""'					// Empty for now but might be useful later for the heterogeneity
+	}
+
+	if "`sample'" == "followup"{
+		local trt_indicator "trt_cash"
+		local cond			`"& Intervention == "Cash Grants - Women""'															// Empty for now but might be useful later for the heterogeneity
+	}
+		
+	foreach variables in `all_controls' {
+
+			forvalue i = 0/1 {
+		
+				g     	m_`variables' = 0 
+				replace m_`variables' = 1 if `variables' ==.   `cond' | ///
+											 `variables' ==.d  `cond' | ///
+											 `variables' ==.a  `cond' | ///
+											 `variables' ==.n  `cond'
+				
+				replace `variables' = 1 if   `variables' ==.   `cond' | ///
+											 `variables' ==.d  `cond' | ///
+											 `variables' ==.a  `cond' | ///
+											 `variables' ==.n  `cond'
 			}
 	}
 	

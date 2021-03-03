@@ -1,0 +1,119 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{setspace}\onehalfspacing
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{blindtext}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{stata}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{pdflscape}
+\usepackage{subcaption}
+\captionsetup[subfigure]{labelfont=rm}
+\renewcommand\thesubfigure{(\alph{subfigure})}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black
+}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{threeparttable}
+\usepackage[skip = 0pt]{caption}
+\captionsetup{justification=centering}
+\usepackage{dcolumn}
+\usepackage{threeparttablex}
+
+\begin{document}
+
+\listoftables
+
+\pagebreak
+
+\section{Balance Test}
+
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively.
+			\end{TableNotes}
+			\begin{longtable}{l*{3}{c}}
+				\caption{Cash grants participant balance test}\label{tab:balance_cash}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{2cm}}{\centering T-C}
+				&\multicolumn{1}{p{2cm}}{\centering P-value}
+				&\multicolumn{1}{p{2cm}}{\centering N} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{3}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{Main/Balance Test Cash/Table_Balance_Individual.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+\section{Attrition Test}
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively.
+			\end{TableNotes}
+			\begin{longtable}{l*{3}{c}}
+				\caption{Cash grants participant attrition test}\label{tab:attrition_cash}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{2cm}}{\centering(1)}
+				&\multicolumn{1}{p{2cm}}{\centering (2)}
+				&\multicolumn{1}{p{2cm}}{\centering (3)} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{3}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{Main/Balance Test Cash/Table_Attrition_Individual.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+
+\end{document}

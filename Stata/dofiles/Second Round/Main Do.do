@@ -16,8 +16,6 @@
 
 	* Samih 			7
 	* Samih2			8
-	* Samih3			9
-	* Varada		   10
 	
 	
 	
@@ -30,11 +28,7 @@
 	if $user_number == 7 {
 		global home		"/Users/Samih/Dropbox/WB-Tunisia-CWLP-IE"
 		global dropbox	"/Users/Samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
-		
-		* Location of shared folder with BJKA
-		global shared	"/Users/Samih/Dropbox/World Bank/Tunisia IE - Shared folder"
 	}
-	
 	if $user_number == 8 {
 		global home		"C:/Users/Samih/Dropbox/WB-Tunisia-CWLP-IE"
 		global dropbox	"C:/Users/samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
@@ -50,24 +44,21 @@
 		* Location of shared folder with BJKA
 		global shared	"C:/Users/wb553190/Dropbox/World Bank/Tunisia IE - Shared folder"
 	}
-	
-	if $user_number == 10 {
-		global home		"D:/Dropbox/WB-Tunisia-CWLP-IE/" // @Varada update this path to the Dropbox folder
-		*global dropbox	"C:/Users/wb553190/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)" // @Varada you don't need that one yet
 		
-		* Location of shared folder with BJKA
-		global shared	"D:\Dropbox\Tunisia IE - Shared folder" // @Varada updathe this path to the shared dropbox folder with BJKA
-	}	
-	
+		* Location of baseline 
+		
+		*location of the Raw data, raw;
+		global stata_base "$dropbox/stata"
+		
 		*location of the temporary data, temp;
 		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
 		
-		*location of stata data
+		*location of stata data 
 		global stata   "$home/14. Female Entrepreneurship Add on/Data/Second round"
-    
+
 		*location of the Raw data, raw;
 		global vera   "B:"
-
+		
 		if $user_number == 7{
 			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"
 		}
@@ -77,14 +68,7 @@
 		if $user_number == 9{
 			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata"
 		}
-		if $user_number == 10{
-			global git_tunisia "D:/GitHub/Tunisia-CWLP/Stata" // @Varada update this path to the Github Stata folder
-		}
-		
-		
-		
-		
-		
+
 
 ********************************************************************************
 ********************************************************************************
