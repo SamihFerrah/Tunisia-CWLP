@@ -204,6 +204,8 @@ preserve
 	
 	g ID_HH = _n 
 	
+	export excel ID_HH HHID using "$home/14. Female Entrepreneurship Add on/Data/General/ID Cash HH.xlsx", firstrow(var) replace 
+	
 	g Nom = Partenaire_Nom 
 	
 	replace Partenaire_Nom = ""
@@ -245,7 +247,7 @@ preserve
 	
 	replace Intervention = "Cash Grants - Women" if Intervention == "Cash Grants"
 	
-	sa 	"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.dta", replace 
+	sa 	"A:/Assignment/Cash Grant Sample.dta", replace 
 	
 	keep if Intervention == "Cash Grants - Partenaire" | ///
 			Intervention == "Cash Grants - Women" & Status == "Treatment"
@@ -253,7 +255,7 @@ preserve
 			Telephone2 TCLP PSU Intervention
 	
 
-	export excel `var_export' Partenaire_Nom using 	"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.xlsx", sheet("Treatment & Partner") firstrow(var) replace
+	export excel `var_export' Partenaire_Nom using 	"A:/Assignment/Cash Grant Sample.xlsx", sheet("Treatment & Partner") firstrow(var) replace
 
 restore 
 	
@@ -279,7 +281,7 @@ preserve
 	order 	HHID Gender Nom Age Imada Adresse CIN Father Status Intervention Partenaire Partenaire_Nom Telephone1 	///
 			Telephone2 TCLP PSU Intervention
 	
-	export excel `var_export' Partenaire_Nom using 	"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.xlsx", sheet("Control", replace) firstrow(var) 
+	export excel `var_export' Partenaire_Nom using 	"A:/Assignment/Cash Grant Sample.xlsx", sheet("Control", replace) firstrow(var) 
 	
 restore 
 	
@@ -356,7 +358,7 @@ preserve
 	
 	rename sample_ Intervention 
 	
-	sa 		"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow up Sample.dta", replace
+	sa 		"A:/Assignment/Follow up Sample.dta", replace
 		
 	keep if replacement == 0
 	
@@ -365,7 +367,7 @@ preserve
 	order 	HHID Gender Nom Age Imada Adresse CIN Father Intervention Partenaire Telephone1 Telephone2	///
 			PSU 	
 	
-	export excel `var_export' using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow Up Sample.xlsx", firstrow(var) replace 
+	export excel `var_export' using "A:/Assignment/Follow Up Sample.xlsx", firstrow(var) replace 
 	
 restore 
 
@@ -373,7 +375,7 @@ restore
 
 preserve 
 	
-	u "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow up Sample.dta", clear
+	u "A:/Assignment/Follow up Sample.dta", clear
 	
 	keep if replacement == 1 
 	
@@ -391,7 +393,7 @@ preserve
 			PSU 
 	
 	export excel Imada Ordre HHID Gender Nom Age Imada Adresse CIN Father Intervention Partenaire Telephone1 Telephone2	///
-			PSU using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Replacement.xlsx", firstrow(var) replace 
+			PSU using "A:/Assignment/Replacement.xlsx", firstrow(var) replace 
 			
 restore
 
@@ -399,8 +401,8 @@ restore
 
 clear 
 
-u 				"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Follow up Sample.dta", clear
-append using  	"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Cash Grant Sample.dta"
+u 				"A:/Assignment/Follow up Sample.dta", clear
+append using  	"A:/Assignment/Cash Grant Sample.dta"
 
 bys Strata : tab Status 
 
@@ -409,9 +411,9 @@ sort Imada HH Nom
 order 	HHID Gender Nom Age Imada Adresse CIN Father Intervention Partenaire Partenaire_Nom Telephone1 Telephone2	///
 		TCLP PSU 	
 
-export excel `var_export' Partenaire_Nom using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.xlsx", firstrow(var) replace
+export excel `var_export' Partenaire_Nom using "A:/Assignment/Full Sample.xlsx", firstrow(var) replace
 
-sa 				   				"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.dta", replace 
+sa 				   				"A:/Assignment/Full Sample.dta", replace 
 	
 	
 * Export GPS csv to map respondent and help enumeratos find them 
@@ -449,7 +451,7 @@ rename HHID HHID_key
 
 destring CIN, replace 
 
-outsheet HHID_key Age Gender Nom CIN PSU treatment2 complete_* trt_cash using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/preload_tunisia_cashgrants.csv", comma replace 
+outsheet HHID_key Age Gender Nom CIN PSU treatment2 complete_* trt_cash using "A:/Assignment/preload_tunisia_cashgrants.csv", comma replace 
 
 
 
