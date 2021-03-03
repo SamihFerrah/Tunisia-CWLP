@@ -4,10 +4,13 @@
 ********************************************************************************
 ********************************************************************************
 set seed 12272020
+local date = c(current_date)
 
 * Use full sample dataset
 
-u "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Full Sample.dta", clear
+u "A:/Assignment/Full Sample.dta", clear
+
+drop if replacement == 1
 
 g Groupe = ""
 
@@ -53,14 +56,14 @@ g Groupe = ""
 	
 * Assign random number to male partner of treatment participant
 
-	g rand_trt_male = runiform() if Intervention == "Cash Grants - Women" & Status == "Treatment" & qual_trt_cash == 0
+	g rand_trt_male = runiform() if Intervention == "Cash Grants - Partenaire"
 	
 	sort rand_trt_male, stable 
 	
 	xtile decile_3 = rand_trt_male, nq(10)
 	
 	g 		qual_trt_cash_p = 0
-	replace qual_trt_cash_p = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & qual_trt_cash == 0 & decile_3 == 1
+	replace qual_trt_cash_p = 1 if Intervention == "Cash Grants - Partenaire" & decile_3 == 1
 
 	replace Groupe = "Cash Grant - Partner" if qual_trt_cash_p == 1
 
@@ -77,16 +80,16 @@ sort Groupe
 order Groupe HHID Gender Nom Age Imada Adresse imada CIN Father Intervention Partenaire_Nom Telephone1 Telephone2
 
 
-replace Nom = Partenaire_Nom if Groupe == "Cash Grant - Partner" & Partenaire_Nom != ""
-replace CIN = "" 			 if Groupe == "Cash Grant - Partner"
-replace Father = ""			 if Groupe == "Cash Grant - Partner" 
+replace Gender 	= "Male"		 if Groupe == "Cash Grant - Partner"	
+replace Nom 	= Partenaire_Nom if Groupe == "Cash Grant - Partner" & Nom == "" & Nom == "A completer"
+replace CIN 	= "" 			 if Groupe == "Cash Grant - Partner"
+replace Father 	= ""			 if Groupe == "Cash Grant - Partner" 
 
 keep Groupe HHID Gender Nom Age Imada Adresse imada Telephone1 Telephone2
 
 g hhid = HHID 
 
-sa 					"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Backcheck/Liste Backcheck.dta", replace 
-
+sa 					"A:/Assignment/Backcheck/Liste Backcheck.dta", replace 
 
 **********************************
 * EXPORT CSV TO BE PRELOADED
@@ -94,30 +97,39 @@ sa 					"$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Bac
 
 * Use cleandata 
 
-u "$vera/clean/clean_CashXFollow_PII.dta", clear
+u "B:/clean/clean_CashXFollow_PII.dta", clear
 
 keep if tot_complete == 1 
 
-keep hhid a1_enumerator today a1_respondentage a1_respondentname a1_phonerespond
+keep hhid a1_enumerator today a1_respondentage a1_respondentname a1_phonerespond Partenaire_Nom
+
+rename a1_phonerespond New_Phone
 
 * Merge with clean data to flag respondent already surveyed
 
-merge m:1 hhid using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Backcheck/Liste Backcheck.dta", keep (2 3)
+merge m:1 hhid using "A:/Assignment/Backcheck/Liste Backcheck.dta", keep (2 3)
 
+g 		Surveyed = "Oui" if _merge == 3
+replace Surveyed = "Non" if _merge == 2
+
+replace Nom 		= Partenaire_Nom   	if Groupe == "Cash Grant - Partner" & Nom == ""
 replace Nom 		= a1_respondentname if Nom == "" 
-replace Telephone1 	= a1_phonerespond 	if a1_phonerespond !=. 
 
 drop HHID 
 
-keep Groupe hhid Gender Nom Age Imada Adresse Telephone1 Telephone2 today a1_enumerator
+keep Groupe hhid Gender Nom Age Imada Adresse Telephone1 Telephone2 today a1_enumerator Surveyed New_Phone
 
-export delimited using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Backcheck/backcheck_data.csv", replace 
+export delimited using "A:/Assignment/Backcheck/backcheck_data.csv", replace 
 
 drop today a1_enumerator
 
 sort Groupe
 
-order Groupe hhid Gender Nom Age Imada Adresse Telephone1 Telephone2
+keep Groupe hhid Surveyed Gender Nom Imada Adresse New_Phone Telephone1 Telephone2
 
-export excel using "$home/14. Female Entrepreneurship Add on/Survey material/Assignment/Backcheck/Liste Backcheck.xlsx", first(var) replace
+order Groupe hhid Surveyed Gender Nom Imada Adresse New_Phone Telephone1 Telephone2
+
+sort Groupe Surveyed
+
+export excel using "A:/Assignment/Backcheck/Liste Backcheck `date'.xlsx", first(var) replace
 

@@ -157,6 +157,10 @@ preserve
 	destring Status, replace 
 	
 	* Keep last days of data collection 
+  
+	rename HHID 	hhid
+	rename Status 	Etat
+	rename Date 	Date_complete
 	keep if Status == 1	| Status == 33 | Status == 99							// Keep completed survey
 	
 	tab HHID if Status == 33 
@@ -232,6 +236,8 @@ replace tot_complete = 0 if missing_survey == 1
 * Merge and check that code correspond to the original assignment
 cap drop _merge 
 
+destring Age Telephone1 Telephone2, replace 
+
 merge m:1 HHID using "A:/Assignment/Full Sample.dta", gen(code_check) keep(1 3)
 
 g 		error_code = 0 
@@ -280,11 +286,12 @@ duplicates tag HHID if tot_complete == 1 & error_code == 0, g(dup)				// Check f
 
 preserve
 
-keep if dup > 0 
+keep if dup != 0 & dup !=.
 
-keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date 
+keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date key
 sort hhid 
-order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date
+order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date key
+
 
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
 
@@ -317,7 +324,12 @@ foreach var of local var_to_drop{
 	cap drop `var'
 	
 }
-		 
+	
+* Create treatment indicator for cash grant 
+
+g 		trt_cash = 0 if Intervention == "Cash Grants - Women"
+replace trt_cash = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment"
+
 * Save data with PII 
 
 sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
