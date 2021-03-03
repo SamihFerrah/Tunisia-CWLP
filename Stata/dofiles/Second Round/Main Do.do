@@ -21,6 +21,7 @@
 	
 	global user_number  9
 
+
 	* Dropbox/Box globals
 	* ---------------------
 
@@ -43,8 +44,7 @@
 		* Location of shared folder with BJKA
 		global shared	"C:/Users/wb553190/Dropbox/World Bank/Tunisia IE - Shared folder"
 	}
-	
-	
+		
 		* Location of baseline 
 		
 		*location of the Raw data, raw;
@@ -59,11 +59,6 @@
 		*location of the Raw data, raw;
 		global vera   "B:"
 		
-		
-		
-			
-			
-
 		if $user_number == 7{
 			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"
 		}
