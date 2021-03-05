@@ -92,47 +92,7 @@ replace attrition = 1 if _merge ==2
 
 drop _merge
 
-* Get information from TCLP endline (2016)
 
-preserve 
-
-	u "$stata_base/enquete_All3", clear
-
-	g Age = repondant_age
-	
-	generate str116 Nom = repondant_name
-	
-	replace Nom = upper(Nom)
-	replace Nom = subinstr(Nom," ","",.)
-	
-	replace Imada = upper(Imada)
-	replace Imada = subinstr(Imada," ","",.)
-
-	format Nom %116s
-	
-	tempfile baseline 
-	sa      `baseline'
-
-restore 
-
-/* We need to do two merge iteration:
-	- 1) Using imada numeric value
-	- 2) Using imada string value (for _merge 1)
-*/
-
-* Merge with info from baseline
-merge m:1 Nom imada Age using `baseline', update replace 
-
-* Replace next merge variable to missing for second merge wave
-replace Imada = "" if _merge == 3
-
-drop if _merge == 2
-
-rename _merge original_merge
-
-merge m:1 Nom Imada Age using `baseline', update replace
-
-drop if _merge == 2
 
 codebook `covariates'
 
@@ -156,7 +116,7 @@ codebook `covariates'
 	*******************************************
 
 	reg attrition trt_cash i.Strata, robust
-	
+	sdsd
 	local c_1 	: di%12.3f _b[trt_cash]
 	local se_1 	: di%12.3f _se[trt_cash]
 	local n1 	= e(N)

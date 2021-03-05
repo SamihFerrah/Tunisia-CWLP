@@ -12,10 +12,23 @@ u "$vera/temp/temp_import_CashXFollow.dta", clear
  
 g HHID = hhid 
 
-merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup replacement Partenaire)
 
 drop _merge 
 
+g 		trt_cash = 0 if Intervention == "Cash Grants - Women"
+replace trt_cash = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment"
+
+g 		trt_cash_0 = 0 if Intervention == "Cash Grants - Women"
+replace trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Non"
+
+g 		trt_cash_1 = 0 if Intervention == "Cash Grants - Women"
+replace trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Oui"
+
+label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
+label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
+label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
+	
 ********************************************************************************
 ********************************************************************************
 * 2) CHECK THAT ALL SURVEY SUBMITTED ARE COMLETED 
@@ -157,10 +170,6 @@ preserve
 	destring Status, replace 
 	
 	* Keep last days of data collection 
-  
-	rename HHID 	hhid
-	rename Status 	Etat
-	rename Date 	Date_complete
 	keep if Status == 1	| Status == 33 | Status == 99							// Keep completed survey
 	
 	tab HHID if Status == 33 
@@ -180,7 +189,6 @@ cap drop _merge
 * Merge data with completion report 
 merge m:1 hhid using `daily_completion'
 
-sdsd
 * Create indicator for missing survey
 g 		missing_survey = 0 
 replace missing_survey = 1 if _merge == 2 
@@ -286,12 +294,11 @@ duplicates tag HHID if tot_complete == 1 & error_code == 0, g(dup)				// Check f
 
 preserve
 
-keep if dup != 0 & dup !=.
+keep if dup > 0 & dup !=.
 
-keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date key
+keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date 
 sort hhid 
-order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date key
-
+order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date
 
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
 
@@ -324,34 +331,16 @@ foreach var of local var_to_drop{
 	cap drop `var'
 	
 }
-	
-* Create treatment indicator for cash grant 
+		 
+		 
+drop Status 
 
-g 		trt_cash = 0 if Intervention == "Cash Grants - Women"
-replace trt_cash = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment"
 
 * Save data with PII 
 
-sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
+sa "$vera/temp/clean_CashXFollow_PII_2.dta", replace 
 
 ********************************************************************************
-********************************************************************************
-* 7) DE-IDENTIFY DATA 
-********************************************************************************
-********************************************************************************
-
-* 1) Define variable to be drop (Add variable below to be dropped)
-
-local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
-
-
-* 2) Drop ID variable 
-
-foreach var of local deidentification {
-	
-	capture noisily drop `var' 													
-
-}
 
 * 3) Check for remaining PII variable 
 
@@ -373,15 +362,62 @@ foreach PII in name gps adress location phone{
 */
 
 
+
+********************************************************************************
+********************************************************************************
+* 9) Merge Baseline and Endline
+********************************************************************************
+********************************************************************************
+
+
+do "$git_tunisia/dofiles/Second round/Construct/Merge Baseline Endline.do"
+
+
+********************************************************************************
+********************************************************************************
+* 10) Create Attrition indicator
+********************************************************************************
+********************************************************************************
+
+
+do "$git_tunisia/dofiles/Second round/Construct/Attrition Indicator.do"
+
+
+
+
 ********************************************************************************
 ********************************************************************************
 * 8) SAVE DATA
 ********************************************************************************
 ********************************************************************************
 
+* Save data with PII 
+
+sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
+
+********************************************************************************
+* 7) DE-IDENTIFY DATA 
+********************************************************************************
+********************************************************************************
+
+* 1) Define variable to be drop (Add variable below to be dropped)
+
+local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
+
+
+* 2) Drop ID variable 
+
+foreach var of local deidentification {
+	
+	capture noisily drop `var' 													
+
+}
+
 sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_CashXFollow_noPII.dta", replace
 
-	
+
+
+/*
 ********************************************************************************
 ********************************************************************************
 * 9) Export Missingness report

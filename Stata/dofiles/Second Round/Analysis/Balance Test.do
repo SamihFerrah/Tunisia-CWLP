@@ -84,11 +84,20 @@ replace Imada = "" if _merge == 3
 
 drop if _merge == 2
 
+g identified = 1 if _merge == 3
+
 rename _merge original_merge
 
 merge m:1 Nom Imada Age using `baseline', update
 
 drop if _merge == 2
+
+replace identified = 1 if _merge > 3 
+
+keep if identified == 1 
+
+codebook `balance_indiv'
+
 
 
 	* Some re-labelling 
@@ -101,6 +110,9 @@ drop if _merge == 2
 		
 	}
 	*/
+	
+	label define trt 0 "Control" 1 "Treatment", modify 
+	label value trt_cash trt
 	
 	label var repondant_age			"Age"
 	label var repondant_sex			"Male"
@@ -116,8 +128,28 @@ drop if _merge == 2
 	label var origine_naissance_bis "Born gouvernorat"
 	label var trauma_abus			"Victim violence (1987-2010)"
 		
+		
+	*******************************************
+	* Difference
+	*******************************************
+	
+	iebaltab `balance_indiv', grpvar(trt_cash) fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Balance_Individual.tex") replace
 
-	* Balance test at the individual level 
+	********************************************
+	* Omnibus test
+	********************************************
+	
+	* Regression
+	reg trt_cash `balance_indiv' i.Strata, robust 
+	
+	* Test
+	test `balance_indiv'
+	
+	
+	
+	********************************************
+	* Balance test on individual covariates
+	********************************************
 	
 	local count_out = 0 
 	
@@ -129,7 +161,7 @@ drop if _merge == 2
 		
 		local l_`count_out' : variable label `covariates'
 				
-		reg `covariates' trt_cash missing_`covariates' i.strata, vce(cluster imada)
+		reg `covariates' trt_cash missing_`covariates' i.Strata, robust
 		
 			local c_1_`count_out' 	: di%12.3f _b[trt_cash]
 			local se_1_`count_out' 	: di%12.3f _se[trt_cash]
@@ -186,3 +218,7 @@ drop if _merge == 2
 	" 				&	 `se_1_10' & &									\\" 	_n 
 	file close Table	
 }
+
+	
+	
+	
