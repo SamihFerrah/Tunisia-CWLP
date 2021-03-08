@@ -81,10 +81,14 @@ merge m:1 Nom imada Age using `baseline', update replace
 * Replace next merge variable to missing for second merge wave
 replace Imada = "" if _merge == 3
 
+g Identified = 1 if _merge > 2
+
 drop if _merge == 2
 
 rename _merge original_merge
 
 merge m:1 Nom Imada Age using `baseline', update replace
+
+replace Identified = 1 if _merge > 2
 
 drop if _merge == 2
