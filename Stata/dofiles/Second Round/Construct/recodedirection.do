@@ -113,7 +113,7 @@
 		}
 	
 		
-		foreach var in g1_hhimportant proportion{
+		foreach var in g1_hhimportant d3_friendssecrets{
 		
 			g `var'2 = `var'
 			
@@ -138,7 +138,7 @@
 	* MISC CORRECTIONS
 	********************************************************
  
-	forvalue i = 1/3{
+	forvalue i = 1/2{
 		
 		replace b3_foodorigin`i' = .a if b3_foodorigin`i' == 0
 	
