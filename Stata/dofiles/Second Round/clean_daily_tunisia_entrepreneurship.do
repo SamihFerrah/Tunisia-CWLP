@@ -34,6 +34,8 @@ label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
 * 2) CHECK THAT ALL SURVEY SUBMITTED ARE COMLETED 
 ********************************************************************************
 ********************************************************************************
+
+
 /* 	Define indicator for survey completeness, often the last variables mandatory
 	for all respondent not being missing
 */
@@ -143,7 +145,7 @@ foreach var of local partner_only {
 
 ********************************************************************************
 ********************************************************************************
-* 1) CHECK THAT WE HAVE ALL THE DATA OF THE DAY 
+* 4) CHECK THAT WE HAVE ALL THE DATA OF THE DAY 
 ********************************************************************************
 ********************************************************************************
 /* 	Test that all data from the field is on the server: match survey data logs from the
@@ -233,7 +235,7 @@ replace tot_complete = 0 if missing_survey == 1
 
 ********************************************************************************
 ********************************************************************************
-* 4) ERROR IN CODE
+* 5) ERROR IN CODE
 ********************************************************************************
 ********************************************************************************
 
@@ -277,7 +279,7 @@ if `r(N)' > 0 {
 
 ********************************************************************************
 ********************************************************************************
-* 4) DUPLICATE TEST
+* 6) DUPLICATE TEST
 ********************************************************************************
 ********************************************************************************
 /*	Test for duplicates: since SurveyCTO/ODK data provides a number of duplicates, 
@@ -315,7 +317,36 @@ do "$git_tunisia/dofiles/Second round/Construct/label_variables.do"
 
 ********************************************************************************
 ********************************************************************************
-* 6) DROP USELESS VARIABLES (Duration notes calculates)
+* 7) Add common ID_HH (= HOUSEHOLD ID) for partner and cash grants participant
+********************************************************************************
+
+* Import HH ID (for cash grant and partner)
+
+preserve 
+
+	import excel using "$home/14. Female Entrepreneurship Add on/Data/General/ID Cash HH.xlsx", clear first
+	
+	tempfile ID_HHH
+	sa 	    `ID_HHH'
+	
+restore 
+
+cap drop _merge 
+
+merge m:1 HHID using `ID_HHH', update
+
+drop _merge
+
+* Create dummie variable to flag respondent for which we survey both 
+* female and male partner_only
+
+duplicates tag ID_HH if ID_HH !=. & tot_complete == 1, g(participant_partner)
+
+label var participant_partner "Duo: participant x partner"
+
+********************************************************************************
+********************************************************************************
+* 8) DROP USELESS VARIABLES (Duration notes calculates)
 ********************************************************************************
 ********************************************************************************
 /* 	Drop variables that only make sense for questionnaire review (duration, notes,
@@ -335,37 +366,27 @@ foreach var of local var_to_drop{
 		 
 drop Status 
 
+********************************************************************************
+********************************************************************************
+* 9) Prepare outcomes by recoding variables
+********************************************************************************
+********************************************************************************
 
-* Save data with PII 
+do "$git_tunisia/dofiles/Second round/Construct/recodedirection.do"
+
+
+********************************************************************************
+********************************************************************************
+* 10) Save temporary data with PII
+********************************************************************************
+********************************************************************************
 
 sa "$vera/temp/clean_CashXFollow_PII_2.dta", replace 
 
-********************************************************************************
-
-* 3) Check for remaining PII variable 
-
-/*
-foreach PII in name gps adress location phone{
-	
-	lookfor `PII'																// Search for possible variable to remove for deindetification purpose
-	
-	di in red "`r(varlist)'"
-	
-	* Drop variables 
-	foreach var_to_drop in `r(varlist)'{
-	
-		cap noi drop `var_to_drop'
-	
-	}
-}
-
-*/
-
-
 
 ********************************************************************************
 ********************************************************************************
-* 9) Merge Baseline and Endline
+* 11) Merge Baseline and Endline
 ********************************************************************************
 ********************************************************************************
 
@@ -375,7 +396,7 @@ do "$git_tunisia/dofiles/Second round/Construct/Merge Baseline Endline.do"
 
 ********************************************************************************
 ********************************************************************************
-* 10) Create Attrition indicator
+* 12) Create Attrition indicator
 ********************************************************************************
 ********************************************************************************
 
@@ -383,11 +404,9 @@ do "$git_tunisia/dofiles/Second round/Construct/Merge Baseline Endline.do"
 do "$git_tunisia/dofiles/Second round/Construct/Attrition Indicator.do"
 
 
-
-
 ********************************************************************************
 ********************************************************************************
-* 8) SAVE DATA
+* 13) SAVE clean data  with PII
 ********************************************************************************
 ********************************************************************************
 
@@ -396,7 +415,7 @@ do "$git_tunisia/dofiles/Second round/Construct/Attrition Indicator.do"
 sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
 
 ********************************************************************************
-* 7) DE-IDENTIFY DATA 
+* 14) DE-IDENTIFY DATA 
 ********************************************************************************
 ********************************************************************************
 
@@ -417,26 +436,6 @@ sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_C
 
 
 
-/*
-********************************************************************************
-********************************************************************************
-* 9) Export Missingness report
-********************************************************************************
-********************************************************************************
-
-do "$git_tunisia/dofiles/Second Round/Analysis/Missingness Report.do"			// Import and do basic check before saving data
-	
-	
-********************************************************************************
-********************************************************************************
-* 10) Export Data quality report
-********************************************************************************
-********************************************************************************
-
-do "$git_tunisia/dofiles/Second Round/Analysis/Statistics.do"			// Import and do basic check before saving data
-	
-	
-	
 
 
 
