@@ -16,18 +16,10 @@ pause on
 clear 
 
 
-local balance_indiv 	repondant_age repondant_mat repondant_educ				///
-						hhsize adult_num jeunes_lireecrire emploi_2013_a		///
-						formation origine_naissance origine_naissance_bis 	
-						
-local balance_coll		q0_1_c q0_2_c q0_3_c 											///
-						negevent_1 negevent_2 negevent_3 negevent_4 					///
-						negevent_5 negevent_6 negevent_7      							///
-						negevent_8 negevent_9 posevent_1 posevent_2 posevent_3      	///
-						posevent_4 posevent_5 posevent_6 posevent_7 posevent_8 prev_PWP ///
-						pop_2004_admin pop_2014_admin pop_change_admin
-
-
+local balance_indiv 	repondant_age_b repondant_educ_b			///
+						hhsize_b adult_num_b jeunes_lireecrire_b emploi_2013_a_b	///
+						formation_b origine_naissance_b origine_naissance_bis_b 	
+					
 
 ********************************************************************************
 ********************************************************************************						
@@ -40,65 +32,10 @@ u "$vera/clean/clean_CashXFollow_PII.dta", clear
 
 keep if Intervention == "Cash Grants - Women"
 
-keep Nom Imada PSU psu Age trt_cash
+* Replace treatment indicator to missing if respondent is attrited
 
-replace Nom = upper(Nom)
-replace Nom = subinstr(Nom," ","",.)
-
-encode Imada, gen(imada)
-
-replace Imada = upper(Imada)
-replace Imada = subinstr(Imada," ","",.)
-
-preserve 
-
-	u "$stata_base/enquete_All3", clear
-
-	g Age = repondant_age
-	
-	generate str116 Nom = repondant_name
-	
-	replace Nom = upper(Nom)
-	replace Nom = subinstr(Nom," ","",.)
-	
-	replace Imada = upper(Imada)
-	replace Imada = subinstr(Imada," ","",.)
-
-	format Nom %116s
-	
-	tempfile baseline 
-	sa      `baseline'
-
-restore 
-
-/* We need to do two merge iteration:
-	- 1) Using imada numeric value
-	- 2) Using imada string value (for _merge 1)
-*/
-
-* Merge with info from baseline
-merge m:1 Nom imada Age using `baseline'
-
-* Replace next merge variable to missing for second merge wave
-replace Imada = "" if _merge == 3
-
-drop if _merge == 2
-
-g identified = 1 if _merge == 3
-
-rename _merge original_merge
-
-merge m:1 Nom Imada Age using `baseline', update
-
-drop if _merge == 2
-
-replace identified = 1 if _merge > 3 
-
-keep if identified == 1 
-
-codebook `balance_indiv'
-
-
+replace trt_cash_0 = . if attrition == 1
+replace trt_cash_1 = . if attrition == 1
 
 	* Some re-labelling 
 	
@@ -111,41 +48,99 @@ codebook `balance_indiv'
 	}
 	*/
 	
-	label define trt 0 "Control" 1 "Treatment", modify 
-	label value trt_cash trt
-	
-	label var repondant_age			"Age"
-	label var repondant_sex			"Male"
-	label var repondant_mat			"Married"
-	label var repondant_educ		"Education"
-	label var hhsize				"HH size"
-	label var h_18_65				"Male 18-65 years old"
-	label var f_18_65				"Female 18-65 years old"
-	label var jeunes_lireecrire		"Illiterate adult"
-	label var emploi_2013_a			"Worked 3 month (2013)"
-	label var formation				"Professional training"
-	label var origine_naissance		"Born imada"
-	label var origine_naissance_bis "Born gouvernorat"
-	label var trauma_abus			"Victim violence (1987-2010)"
+	label var repondant_age_b			"Age"
+	label var repondant_educ_b			"Education"
+	label var hhsize_b					"HH size"
+	label var h_18_65_b					"Male 18-65 years old"
+	label var f_18_65_b					"Female 18-65 years old"
+	label var jeunes_lireecrire_b		"Illiterate adult"
+	label var emploi_2013_a_b			"Worked 3 month (2013)"
+	label var formation_b				"Professional training"
+	label var origine_naissance_b		"Born imada"
+	label var origine_naissance_bis_b	"Born gouvernorat"
+	label var trauma_abus_b				"Victim violence (1987-2010)"
 		
 		
 	*******************************************
 	* Difference
 	*******************************************
 	
-	iebaltab `balance_indiv', grpvar(trt_cash) fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Balance_Individual.tex") replace
+	forvalue i = 0/1{
+	
+		iebaltab `balance_indiv', grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Balance_Individual_`i'.tex") replace
+	
+	}
 
 	********************************************
 	* Omnibus test
 	********************************************
 	
-	* Regression
-	reg trt_cash `balance_indiv' i.Strata, robust 
-	
+	forvalue i = 0/1{
+		
+		local count_out = 0
+		
+		* Regression
+		reg trt_cash_`i' `balance_indiv' i.Strata, robust 
+		
+		local n`i' = e(N)
+		
+		foreach variables in `balance_indiv' {
+			
+			local count_out = `count_out' + 1 
+			
+			local l_`count_out' : variable label `variables'
+							
+				local c`i'_2_`count_out' 	: di%12.3f _b[`variables']
+				local se`i'_2_`count_out' 	: di%12.3f _se[`variables']
+					
+				* Compute p-value
+				local pval`i'_2_`count_out' = ttail(e(df_r),abs(_b[`variables']/_se[`variables']))*2	
+				
+				* Format local 
+				local pval`i'_2_`count_out' : di%12.3f `pval`i'_2_`count_out''
+				local se`i'_2_`count_out' = trim("`se`i'_2_`count_out''")
+				local se`i'_2_`count_out' 		 "(`se`i'_2_`count_out'')"
+				local se`i'_2_`count_out' = trim("`se`i'_2_`count_out''")
+				
+				* Add stars
+				if `pval`i'_2_`count_out'' < 0.1{
+					local s`i'_2_`count_out' "*"
+				}
+				if `pval`i'_2_`count_out'' < 0.05{
+					local s`i'_2_`count_out' "**"
+				}
+				if `pval`i'_2_`count_out'' < 0.01{
+					local s`i'_2_`count_out' "***"
+				}
+		}
+		
 	* Test
 	test `balance_indiv'
 	
+	local p`i' : di%12.3f `r(p)'
+	local f`i' : di%12.3f `r(F)'
 	
+	}
+	
+	* Export table
+	
+	file open Table using "Balance Test Cash/Table_Balance_Omni.tex", text write replace
+
+	forvalue i = 1/`count_out'{
+	
+		file write Table																																				_n ///
+		" `l_`i''					& `c0_2_`i''`s0_2_`i'' 	& `pval0_2_`count_out''	 & `c1_2_`i''`s1_2_`i'' & `pval1_2_`count_out''		\\ " 	_n ///
+		" 							&  `se0_2_`i''			& 				  	 	 &  `se1_2_`i''			&  							\\ " 	_n ///
+		
+	}
+	
+	file write Table																															_n ///
+		"\hline																															  "		_n ///
+		"Observation				& `n0'					&						&	`n1'				&							\\"		_n ///
+		"F-stat						& `f0'					&						&	`f1'				&							\\"		_n ///
+		"P-value					& `p0'					&						&	`p1'				&							\\"		_n
+	
+	file close Table
 	
 	********************************************
 	* Balance test on individual covariates
@@ -155,45 +150,49 @@ codebook `balance_indiv'
 	
 	mat def pvalue = J(11,3,.)
 	
-	foreach covariates in `balance_indiv' {
+	forvalue i = 0/1{
 		
-		local count_out = `count_out' + 1 
+		local count_out = 0 
 		
-		local l_`count_out' : variable label `covariates'
-				
-		reg `covariates' trt_cash missing_`covariates' i.Strata, robust
-		
-			local c_1_`count_out' 	: di%12.3f _b[trt_cash]
-			local se_1_`count_out' 	: di%12.3f _se[trt_cash]
-			local n_1_`count_out' 	= e(N)
-			local r2_1_`count_out' 	= e(R2)
-				
-			* Compute p-value
-			local pval_1_`count_out' = ttail(e(df_r),abs(_b[trt_cash]/_se[trt_cash]))*2	
+		foreach covariates in `balance_indiv' {
 			
-			* Format local 
-			local pval_1_`count_out' : di%12.3f `pval_1_`count_out''
-			local se_1_`count_out' = trim("`se_1_`count_out''")
-			local se_1_`count_out' 		 "(`se_1_`count_out'')"
-			local se_1_`count_out' = trim("`se_1_`count_out''")
+			local count_out = `count_out' + 1 
 			
-			* Add stars
-			if `pval_1_`count_out'' < 0.1{
-				local s_1_`count_out' "*"
-			}
-			if `pval_1_`count_out'' < 0.05{
-				local s_1_`count_out' "**"
-			}
-			if `pval_1_`count_out'' < 0.01{
-				local s_1_`count_out' "***"
-			}
-	}	
+			local l_`count_out' : variable label `covariates'
+					
+			reg `covariates' trt_cash_`i' i.Strata, robust
+			
+				local c_1_`count_out' 	: di%12.3f _b[trt_cash]
+				local se_1_`count_out' 	: di%12.3f _se[trt_cash]
+				local n_1_`count_out' 	= e(N)
+				local r2_1_`count_out' 	= e(R2)
+					
+				* Compute p-value
+				local pval_1_`count_out' = ttail(e(df_r),abs(_b[trt_cash]/_se[trt_cash]))*2	
+				
+				* Format local 
+				local pval_1_`count_out' : di%12.3f `pval_1_`count_out''
+				local se_1_`count_out' = trim("`se_1_`count_out''")
+				local se_1_`count_out' 		 "(`se_1_`count_out'')"
+				local se_1_`count_out' = trim("`se_1_`count_out''")
+				
+				* Add stars
+				if `pval_1_`count_out'' < 0.1{
+					local s_1_`count_out' "*"
+				}
+				if `pval_1_`count_out'' < 0.05{
+					local s_1_`count_out' "**"
+				}
+				if `pval_1_`count_out'' < 0.01{
+					local s_1_`count_out' "***"
+				}
+		}
+	
 	
 	* Export TeX Tables of balance test at individual level 
-	
-{
 
-	file open Table using "Balance Test Cash/Table_Balance_Individual.tex", text write replace
+
+	file open Table using "Balance Test Cash/Table_Balance_Individual_Cov_`i'.tex", text write replace
 		
 	file write Table  															_n ///
 	" `l_1'			& 	`c_1_1'`s_1_1' 		& `pval_1_1' & `n_1_1' 		\\ " 	_n ///
@@ -213,12 +212,11 @@ codebook `balance_indiv'
 	" `l_8'			& 	`c_1_7'`s_1_8' 		& `pval_1_8' & `n_1_8' 		\\ " 	_n ///
 	" 				&	 `se_1_8' & &							   		\\ " 	_n ///
 	" `l_9'			& 	`c_1_9'`s_1_9' 		& `pval_1_9' & `n_1_9' 		\\ " 	_n ///
-	" 				&	 `se_1_9' & &							   		\\ " 	_n ///
-	" `l_10'		& 	`c_1_10'`s_1_10' 	& `pval_1_10' & `n_1_10' 	\\ " 	_n ///
-	" 				&	 `se_1_10' & &									\\" 	_n 
+	" 				&	 `se_1_9' & &							   		\\ " 	_n 
+	
 	file close Table	
-}
 
+}
 	
 	
 	

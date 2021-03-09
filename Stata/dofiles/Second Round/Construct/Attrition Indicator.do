@@ -4,6 +4,54 @@
 ********************************************************************************
 ********************************************************************************
 
+*****************************************************
+* Merge with full sample to get attrition indicator
+*****************************************************
+
+
+cap destring Age Telephone*, replace 
+
+drop HHID 
+
+rename hhid HHID 
+
+preserve 
+
+	u "A:/Assignment/Full Sample.dta", clear 
+		
+	g 		trt_cash = 0 if Intervention == "Cash Grants - Women"
+	replace trt_cash = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment"
+
+	g 		trt_cash_0 = 0 if Intervention == "Cash Grants - Women"
+	replace trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Non"
+
+	g 		trt_cash_1 = 0 if Intervention == "Cash Grants - Women"
+	replace trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Oui"
+
+	label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
+	label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
+	label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
+
+	keep Intervention replacement Partenaire trt_followup HHID Strata trt_cash*
+
+	tempfile full 
+	sa 		`full'
+
+restore
+
+
+merge m:1 HHID using `full', gen(_merge2) update
+
+drop if Intervention ==""														// Not sure why but 100 observations with missing 
+
+g 		attrition = 0 
+replace attrition = 1 if _merge2 == 2
+
+
+**********************************************
+* Get attrition reason from BJKA reports 
+**********************************************
+
 preserve 
 
 	import excel using "$shared/Daily Report/Update BJKA.xlsx", clear first 
@@ -40,28 +88,21 @@ preserve
 	keep Status HHID Nom Intervention H
 	
 	rename H Treatment 
-	
-	g 		trt_cash = 0 if Intervention == "Cash Grants - Women"
-	replace trt_cash = 1 if Intervention == "Cash Grants - Women" & Treatment == "Treatment"
 
 	merge 1:1 HHID using "A:/Assignment/Follow Up Sample.dta",keepusing(TCLP replacement)
 	
-	g 		trt_followup = 0 if Intervention == "Follow up - TCLP"
-	replace trt_followup = 1 if Intervention == "Follow up - TCLP" & TCLP == "Oui"
-	
 	drop _merge
+	
+	keep Status HHID Nom Intervention TCLP Treatment
 	
 	tempfile completion
 	sa 		`completion'
 	
 restore 
 
-cap drop _merge 
+cap drop _merge Status
 
 merge m:1 HHID using `completion', update 
-
-g 		attrition = 0 
-replace attrition = 1 if _merge == 2 & replacement == 0 
 
 * Check Status of _merge == 3
 
@@ -79,40 +120,7 @@ tab replacement if _merge == 3
 
 drop if replacement == 0 & _merge == 2
 
-* Check code and Names of _merge == 1
 
-gen 	Refusal = 0
-replace Refusal = 1 	if Status == 4
-
-gen 	Dead = 0 
-replace Dead = 1 		if Status == 5
-
-gen 	Abroad = 0 
-replace Abroad = 1 		if Status == 6
-
-gen 	Moved = 0 
-replace Moved = 1 		if Status == 7 
-
-g 		Inexistant = 0
-replace Inexistant = 1 	if Status == 9
-
-foreach reason in Refusal Dead Abroad Moved Inexistant{
-
-	sum `reason' if trt_cash == 0 & Intervention == "Cash Grants - Women"
-	sum `reason' if trt_cash == 1 & Intervention == "Cash Grants - Women"
-	
-	reg `reason' trt_cash, robust
-	
-}
-
-foreach reason in Refusal Dead Abroad Moved Inexistant{
-
-	sum `reason' if trt_followup == 0 & Intervention == "Follow up - TCLP"
-	sum `reason' if trt_followup == 1 & Intervention == "Follow up - TCLP"
-	
-	reg `reason' trt_followup, robust
-	
-}
 
 
 
