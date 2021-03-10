@@ -48,9 +48,10 @@
 		
 	if $user_number == 10 {
 		global home		"D:/Dropbox/WB-Tunisia-CWLP-IE/" 
+		global dropbox 	"D:/Dropbox/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
 		
 		* Location of shared folder with BJKA
-		global shared	"D:\Dropbox\Tunisia IE - Shared folder" 
+		global shared	"D:/Dropbox/Tunisia IE - Shared folder" 
 	}	
 		
 		
@@ -79,7 +80,7 @@
 		}
 
 		if $user_number == 10{
-			global git_tunisia "D:\GitHub\Tunisia-CWLP\Stata" 
+			global git_tunisia "D:/GitHub/Tunisia-CWLP/Stata" 
 		}
 
 ********************************************************************************
@@ -140,7 +141,7 @@ if $preliminary_report == 1 {
 
 
 	do "$git_tunisia/dofiles/Second Round/Construct/Missing Imputation.do"		// Prepare outcomes and other relevant variables
-	do "$git_tunisia/dofiles//Second Round/Construct/Index Contruction.do"		// Impute missing outcomes variables 
+	do "$git_tunisia/dofiles/Second Round/Construct/Index Contruction.do"		// Impute missing outcomes variables 
 
 if $balance_test == 1{
 

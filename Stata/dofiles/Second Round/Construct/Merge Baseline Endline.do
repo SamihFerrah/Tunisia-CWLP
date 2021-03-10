@@ -48,7 +48,7 @@ replace Nom = subinstr(Nom," ","",.)
 
 preserve 
 
-	u "$stata_base/enquete_All3", clear
+	u "$stata_base/enquete_All3.dta", clear
 
 	g Age = repondant_age
 	
