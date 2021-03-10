@@ -140,7 +140,7 @@ if $preliminary_report == 1 {
 
 
 	do "$git_tunisia/dofiles/Second Round/Construct/Missing Imputation.do"		// Prepare outcomes and other relevant variables
-	do "$git_tunisia/dofiles/Second Round/Construct/Index Contruction.do"		// Impute missing outcomes variables 
+	do "$git_tunisia/dofiles/Second Round/Construct/Index Construction.do"		// Impute missing outcomes variables 
 
 if $balance_test == 1{
 
