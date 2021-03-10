@@ -47,7 +47,7 @@
 		
 		
 	if $user_number == 10 {
-		global home		"D:/Dropbox/WB-Tunisia-CWLP-IE/" 
+		global home		"D:/Dropbox/WB-Tunisia-CWLP-IE" 
 		global dropbox 	"D:/Dropbox/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
 		
 		* Location of shared folder with BJKA
@@ -91,7 +91,7 @@
 
 global importXclean_individual 	= 1
 
-global HFC					= 1
+global HFC					= 0
 
 global construct 			= 1
 
@@ -120,8 +120,7 @@ if $importXclean_individual == 1	{
 
 
 if $HFC == 1	{
-	do "$git_tunisia/dofiles/clean_weekly_tunisia_entrepreneurship.do"			// High Frequency cleaning 
-	*do "$git_tunisia/dofiles/Second Round/Construct/recodedirection.do"			// Recode Direction
+	do "$git_tunisia/dofiles/Second Round/clean_weekly_tunisia_entrepreneurship.do"			// High Frequency cleaning 
 }
 
 if $preliminary_report == 1 {
