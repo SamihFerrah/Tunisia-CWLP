@@ -121,7 +121,7 @@ if $importXclean_individual == 1	{
 
 if $HFC == 1	{
 	do "$git_tunisia/dofiles/clean_weekly_tunisia_entrepreneurship.do"			// High Frequency cleaning 
-	do "$git_tunisia/dofiles/Second Round/Construct/recodedirection.do"			// Recode Direction
+	
 }
 
 if $preliminary_report == 1 {
