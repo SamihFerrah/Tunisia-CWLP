@@ -185,7 +185,7 @@ preserve
 	rename Status 	Etat
 	rename Date 	Date_complete
 	
-	keep hhid Etat Date_complete
+	keep hhid Etat Date_complete Nom
 	
 	* Create temperoray file 
 	tempfile daily_completion
@@ -253,7 +253,7 @@ cap drop _merge
 * Merge and check that code correspond to the original assignment
 cap drop _merge 
 
-destring Age Telephone1 Telephone2, replace 
+cap destring Age Telephone1 Telephone2, replace 
 
 merge m:1 HHID using "A:/Assignment/Full Sample.dta", gen(code_check) keep(1 3) keepusing(HHID)
 
