@@ -25,6 +25,11 @@ replace trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Tre
 g 		trt_cash_1 = 0 if Intervention == "Cash Grants - Women"
 replace trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Oui"
 
+* Imput to missing if treatment of other group
+
+replace trt_cash_1 = . if trt_cash_0 == 1
+replace trt_cash_0 = . if trt_cash_1 == 1
+
 label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
 label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
 label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
@@ -179,7 +184,9 @@ preserve
 	rename HHID 	hhid
 	rename Status 	Etat
 	rename Date 	Date_complete
-		
+	
+	keep hhid Etat Date_complete Nom
+	
 	* Create temperoray file 
 	tempfile daily_completion
 	sa   	`daily_completion'
@@ -202,8 +209,6 @@ g 		outside_report = 0
 replace outside_report = 1 if _merge == 1 & tot_complete == 1 
 
 label var outside_report "Absent from report"
-
-cap drop _merge 
 
 * Export results for BJKA 
 
@@ -231,7 +236,9 @@ preserve
 	
 restore 
 	
-replace tot_complete = 0 if missing_survey == 1 
+drop if _merge == 2 
+
+cap drop _merge 
 
 ********************************************************************************
 ********************************************************************************
@@ -246,9 +253,9 @@ replace tot_complete = 0 if missing_survey == 1
 * Merge and check that code correspond to the original assignment
 cap drop _merge 
 
-destring Age Telephone1 Telephone2, replace 
+cap destring Age Telephone1 Telephone2, replace 
 
-merge m:1 HHID using "A:/Assignment/Full Sample.dta", gen(code_check) keep(1 3)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", gen(code_check) keep(1 3) keepusing(HHID)
 
 g 		error_code = 0 
 replace error_code = 1 if code_check ==1
@@ -363,7 +370,6 @@ foreach var of local var_to_drop{
 	
 }
 		 
-		 
 drop Status 
 
 ********************************************************************************
@@ -377,6 +383,16 @@ do "$git_tunisia/dofiles/Second round/Construct/recodedirection.do"
 
 ********************************************************************************
 ********************************************************************************
+* 11) Create Attrition indicator
+********************************************************************************
+********************************************************************************
+
+do "$git_tunisia/dofiles/Second round/Construct/Attrition Indicator.do"
+
+
+
+********************************************************************************
+********************************************************************************
 * 10) Save temporary data with PII
 ********************************************************************************
 ********************************************************************************
@@ -386,29 +402,20 @@ sa "$vera/temp/clean_CashXFollow_PII_2.dta", replace
 
 ********************************************************************************
 ********************************************************************************
-* 11) Merge Baseline and Endline
+* 12) Merge Baseline and Endline
 ********************************************************************************
 ********************************************************************************
 
 
 do "$git_tunisia/dofiles/Second round/Construct/Merge Baseline Endline.do"
 
-
-********************************************************************************
-********************************************************************************
-* 12) Create Attrition indicator
-********************************************************************************
-********************************************************************************
-
-
-do "$git_tunisia/dofiles/Second round/Construct/Attrition Indicator.do"
-
-
 ********************************************************************************
 ********************************************************************************
 * 13) SAVE clean data  with PII
 ********************************************************************************
 ********************************************************************************
+
+destring Strata, replace 
 
 * Save data with PII 
 

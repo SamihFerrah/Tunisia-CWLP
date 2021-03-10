@@ -86,9 +86,9 @@ global preliminary_report		= 0
 ********************************************************************************
 ********************************************************************************
 
-global balance_test 			= 1
+global balance_test 			= 0
 
-global attrition_test 			= 1
+global attrition_test 			= 0
 
 *Clean and prepare dataset
 
