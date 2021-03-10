@@ -16,10 +16,10 @@
 
 	* Samih 			7
 	* Samih2			8
+	* Varada 			10
 	
 	
-	
-	global user_number  9
+	global user_number  10
 
 
 	* Dropbox/Box globals
@@ -45,6 +45,15 @@
 		global shared	"C:/Users/wb553190/Dropbox/World Bank/Tunisia IE - Shared folder"
 	}
 		
+		
+	if $user_number == 10 {
+		global home		"D:/Dropbox/WB-Tunisia-CWLP-IE/" 
+		
+		* Location of shared folder with BJKA
+		global shared	"D:\Dropbox\Tunisia IE - Shared folder" 
+	}	
+		
+		
 		* Location of baseline 
 		
 		*location of the Raw data, raw;
@@ -69,6 +78,9 @@
 			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata"
 		}
 
+		if $user_number == 10{
+			global git_tunisia "D:\GitHub\Tunisia-CWLP\Stata" 
+		}
 
 ********************************************************************************
 ********************************************************************************
@@ -78,9 +90,9 @@
 
 global import_individual 	= 1
 
-global HFC					= 0
+global HFC					= 1
 
-global construct 			= 0 
+global construct 			= 1
 
 global preliminary_report	= 0 
 
@@ -98,15 +110,17 @@ global hfc_panel_start ""														// Enter date of last HFC
 
 if $HFC == 1	{
 	do "$git_tunisia/dofiles/clean_weekly_tunisia_entrepreneurship.do"			// High Frequency cleaning 
+	do "$git_tunisia/dofiles/Second Round/Construct/recodedirection.do"			// Recode Direction
 }
+
 
 
 * Construct data 
 
 if $construct ==1 {
 
-	do "$git_tunisia/dofiles/"													// Prepare outcomes and other relevant variables
-	do "$git_tunisia/dofiles/"													// Imput missing outcomes variables 
+	do "$git_tunisia/dofiles/Second Round/Construct/Missing Imputation.do"		// Prepare outcomes and other relevant variables
+	do "$git_tunisia/dofiles//Second Round/Construct/Index Contruction.do"		// Impute missing outcomes variables 
 	
 }
 
@@ -117,6 +131,7 @@ if $preliminary_report == 1 {
 	do "$git_tunisia/dofiles/preliminary_report.do"
 	
 }
+
 
 
 ********************************************************************************
