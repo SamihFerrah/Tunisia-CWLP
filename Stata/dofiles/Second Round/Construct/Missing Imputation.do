@@ -4,7 +4,7 @@
 ********************************************************************************
 ********************************************************************************
 
-
+#delimit ;
 							
 local all_outcomes 						c1_job_iga c1_days_nowork c1_daysnoworkunit business_hours 
 										business_profit business_newemployee business_employee 
@@ -92,7 +92,10 @@ local all_outcomes 						c1_job_iga c1_days_nowork c1_daysnoworkunit business_ho
 										h3_hearphysivictim h3_heardomviol h4_land h4_crops h4_inheritance h4_youngelder h4_religious h4_ethnic h4_political
 										h4_otherconflict h4_landhh h4_cropshh h4_inheritancehh h4_youngelderhh h4_religioushh h4_ethnichh  h4_politicalhh 
 										h4_otherconflicthh h4_landled h4_cropsled h4_inheritanceled h4_youngelderled h4_religiousled h4_ethnicled 
-										h4_politicalle h4_otherconflictled 
+										h4_politicalle h4_otherconflictled ;
+										
+										
+#delimit cr
 	
 	
 * local all_controls
@@ -106,29 +109,48 @@ local all_outcomes 						c1_job_iga c1_days_nowork c1_daysnoworkunit business_ho
 
 u "$vera/clean/clean_CashXFollow_PII.dta", clear
 
-foreach sample in followup cash{												// Loop over different dataset 
+foreach sample in cash_0 cash_1{		// followup										// Loop over different dataset 
 
 	if "`sample'" == "followup"{
 		local trt_indicator		"program"
 		local cond			  `"& Intervention == "Follow up - TCLP""'			// Empty for now but might be useful later for the heterogeneity
 	}
 
-	if "`sample'" == "cash"{
-		local trt_indicator "trt_cash"
-		local cond			`"& Intervention == "Cash Grants - Women""'			// Empty for now but might be useful later for the heterogeneity
+	if "`sample'" == "cash_0"{
+		local trt_indicator "trt_cash_0"
+		local cond			`"& Intervention == "Cash Grants - Women" & Partenaire == "Non""'			// Empty for now but might be useful later for the heterogeneity
 	}
-		
+	
+	if "`sample'" == "cash_1"{
+		local trt_indicator "trt_cash_1"
+		local cond			`"& Intervention == "Cash Grants - Women" & Partenaire == "Oui""'			// Empty for now but might be useful later for the heterogeneity
+	}
+	
 	foreach variables in `all_outcomes' {
 
+		cap confirm numeric variable `variables'								// Check variable types 
+		
+		if _rc !=0{
+		
+		 di in red "Non numeric variables: `variables'"
+		 
+		}
+		else{																	// If numeric
+		
 			forvalue i = 0/1 {
 		
-				sum     `variables'_`var_suffix' if `trt_indicator' == `i' `cond'
+				sum     `variables' if `trt_indicator' == `i' `cond'
 				
-				replace `variables'_`var_suffix' = `r(mean)' if   `variables'_`var_suffix' ==.  & `trt_indicator' == `i' `cond' | ///
-																  `variables'_`var_suffix' ==.d & `trt_indicator' == `i' `cond' | ///
-																  `variables'_`var_suffix' ==.a & `trt_indicator' == `i' `cond' | ///
-																  `variables'_`var_suffix' ==.n & `trt_indicator' == `i' `cond'
+				if `r(N)' > 0{													// If var not always missing
+				
+					replace `variables' = `r(mean)' if   `variables' ==.  & `trt_indicator' == `i' `cond' | ///
+														 `variables' ==.d & `trt_indicator' == `i' `cond' | ///
+														 `variables' ==.a & `trt_indicator' == `i' `cond' | ///
+														 `variables' ==.n & `trt_indicator' == `i' `cond'
+													 
+				}
 			}
+		}
 	}
 	
 }
