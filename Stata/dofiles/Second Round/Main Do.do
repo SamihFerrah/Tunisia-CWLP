@@ -88,48 +88,73 @@
 ********************************************************************************
 ********************************************************************************
 
-global import_individual 	= 1
+global importXclean_individual 	= 1
 
 global HFC					= 1
 
 global construct 			= 1
 
-global preliminary_report	= 0 
+global preliminary_report		= 0 
 
+********************************************************************************
+********************************************************************************
+*							ANALYSIS
+********************************************************************************
+********************************************************************************
+
+
+global balance_test 			= 0
+
+global attrition_test 			= 0
 
 *Clean and prepare dataset
 
-if $import_individual == 1	{
+if $importXclean_individual == 1	{
 	do "$git_tunisia/dofiles/Second Round/import_DIME_Tunisia_Entrepreneurship_Encrypt.do"			// Import and do basic check before saving data
 	do "$git_tunisia/dofiles/Second Round/clean_daily_tunisia_entrepreneurship.do"			// Import and do basic check before saving data
 }
 
-*High Frequency cleaning 
 
-global hfc_panel_start ""														// Enter date of last HFC 
+* Preliminary report : Missingness and Statstics
+
 
 if $HFC == 1	{
 	do "$git_tunisia/dofiles/clean_weekly_tunisia_entrepreneurship.do"			// High Frequency cleaning 
 	do "$git_tunisia/dofiles/Second Round/Construct/recodedirection.do"			// Recode Direction
 }
 
+if $preliminary_report == 1 {
+
+
+	do "$git_tunisia/dofiles/Second Round/Analysis/Missingness Report.do"
+	do "$git_tunisia/dofiles/Second Round/Analysis/Statistics.do"
+	
+}
+
 
 
 * Construct data 
 
-if $construct ==1 {
+
+* Balance test
+
 
 	do "$git_tunisia/dofiles/Second Round/Construct/Missing Imputation.do"		// Prepare outcomes and other relevant variables
 	do "$git_tunisia/dofiles//Second Round/Construct/Index Contruction.do"		// Impute missing outcomes variables 
+
+if $balance_test == 1{
+
 	
+	do "$git_tunisia/dofiles/Second Round/Analysis/Balance Test"
+
 }
 
-* Preliminary report 
+* Attrition test
 
-if $preliminary_report == 1 {
-
-	do "$git_tunisia/dofiles/preliminary_report.do"
+if $attrition_test == 1{
 	
+	do "$git_tunisia/dofiles/Second Round/Analysis/Attrition Test"
+
 }
 
 
@@ -139,3 +164,4 @@ if $preliminary_report == 1 {
 *							ANALYSIS
 ********************************************************************************
 ********************************************************************************
+
