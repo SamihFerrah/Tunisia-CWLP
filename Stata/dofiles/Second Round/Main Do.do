@@ -104,9 +104,9 @@ global preliminary_report		= 0
 ********************************************************************************
 
 
-global balance_test 			= 0
+global balance_test 			= 1
 
-global attrition_test 			= 0
+global attrition_test 			= 1
 
 *Clean and prepare dataset
 
@@ -142,6 +142,7 @@ if $preliminary_report == 1 {
 	do "$git_tunisia/dofiles/Second Round/Construct/Missing Imputation.do"		// Prepare outcomes and other relevant variables
 	do "$git_tunisia/dofiles/Second Round/Construct/Index Construction.do"		// Impute missing outcomes variables 
 
+	
 if $balance_test == 1{
 
 	

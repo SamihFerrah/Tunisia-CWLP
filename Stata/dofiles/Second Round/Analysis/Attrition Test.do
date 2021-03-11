@@ -161,7 +161,7 @@ foreach reason in Refusal Dead Abroad Moved Inexistant Other{
 		iebaltab Refusal Dead Abroad Moved Inexistant Other, grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_`i'.tex") replace
 	
 	}
-	sdsd
+	
 /*		--> ONLY FOR FOLLOW UP
 foreach reason in Refusal Dead Abroad Moved Inexistant{
 
