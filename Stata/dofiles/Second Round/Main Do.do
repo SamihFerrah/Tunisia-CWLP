@@ -14,21 +14,17 @@
 /*CB's*/
 
 
-	* Samih 			7
-	* Samih2			8
+	* Samih 			8
+	* Samih2			9
 	* Varada 			10
 	
 	
-	global user_number  10
+	global user_number  9
 
 
 	* Dropbox/Box globals
 	* ---------------------
 
-	if $user_number == 7 {
-		global home		"/Users/Samih/Dropbox/WB-Tunisia-CWLP-IE"
-		global dropbox	"/Users/Samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
-	}
 	if $user_number == 8 {
 		global home		"C:/Users/Samih/Dropbox/WB-Tunisia-CWLP-IE"
 		global dropbox	"C:/Users/samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
@@ -85,15 +81,15 @@
 
 ********************************************************************************
 ********************************************************************************
+********************************************************************************
+********************************************************************************
 *				CLEANING INDIVIDUAL LEVEL DATASET 						
 ********************************************************************************
 ********************************************************************************
 
 global importXclean_individual 	= 1
 
-global HFC					= 0
-
-global construct 			= 1
+global construct 				= 0
 
 global preliminary_report		= 0 
 
@@ -108,6 +104,11 @@ global balance_test 			= 1
 
 global attrition_test 			= 1
 
+********************************************************************************
+********************************************************************************
+********************************************************************************
+********************************************************************************
+
 *Clean and prepare dataset
 
 if $importXclean_individual == 1	{
@@ -118,13 +119,7 @@ if $importXclean_individual == 1	{
 
 * Preliminary report : Missingness and Statstics
 
-
-if $HFC == 1	{
-	do "$git_tunisia/dofiles/Second Round/clean_weekly_tunisia_entrepreneurship.do"			// High Frequency cleaning 
-}
-
 if $preliminary_report == 1 {
-
 
 	do "$git_tunisia/dofiles/Second Round/Analysis/Missingness Report.do"
 	do "$git_tunisia/dofiles/Second Round/Analysis/Statistics.do"
@@ -135,14 +130,14 @@ if $preliminary_report == 1 {
 
 * Construct data 
 
-
-* Balance test
-
+if $construct == 1{
 
 	do "$git_tunisia/dofiles/Second Round/Construct/Missing Imputation.do"		// Prepare outcomes and other relevant variables
 	do "$git_tunisia/dofiles/Second Round/Construct/Index Construction.do"		// Impute missing outcomes variables 
 
-	
+}
+
+* Balance test
 if $balance_test == 1{
 
 	
@@ -151,7 +146,6 @@ if $balance_test == 1{
 }
 
 * Attrition test
-
 if $attrition_test == 1{
 	
 	do "$git_tunisia/dofiles/Second Round/Analysis/Attrition Test"
