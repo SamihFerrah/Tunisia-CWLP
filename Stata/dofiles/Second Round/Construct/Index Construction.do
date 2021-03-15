@@ -12,7 +12,7 @@ pause on
 
 * Define sub index local
 
-local run_business 							c1_job_covid c1_descprimjob c1_descsecjob
+local run_business 							c1_job_covid // c1_descprimjob c1_descsecjob
 
 local busn_profit 							business_profit_2 business_profit
 
@@ -20,7 +20,8 @@ local busn_empl								business_newemployee business_employee business_employee_
 
 local fin_access							grant grant_oth grant_oth_who c2_borrow_all c2_borrow12 c2_borrow12n c2_borrowwho c2_borrowwho_other 			  								c2_borrowrate c2_borrowperiode c2_borrow12on c2_repaiddebt c2_depositac c2_depositacn c2_loan c2_loan_amount
 
-local emp_tol								c1_job_iga c1_days_nowork c1_daysnoworkunit c1_descprimjob c1_corebusiness c1_timeprimjob c1_jprimjoblicense 	 										c1_hoursprimjob c1_daysprimjob c1_wageprimjob c1_job_covid c1_descsecjob
+local emp_tol								c1_job_iga c1_days_nowork c1_daysnoworkunit c1_corebusiness c1_timeprimjob c1_jprimjoblicense 	 										c1_hoursprimjob c1_daysprimjob c1_wageprimjob c1_job_covid 
+// c1_descprimjob c1_descsecjob
 
 local inc_from_emp_total					c1_headincome30 c1_wageprimjob business_profit c1_wagesecjob business_profit_2
 
@@ -45,7 +46,6 @@ local hhmembers_iga							c1_headjobc 1_headjobiga  c1_othermemberswork c1_other
 local other_income							c1_incomeotheriga c1_addotherincomen 
 
 local food_exp 								b3_fooddrink houla_* ?? b3_foodorigin1 b3_foodorigin_other1 b3_foodorigin2 b3_foodorigin_other2 										   b3_mealsnumberyest b3_mealsnumber7 b3_foodtype b3_a b3_b
-
 
 local non_food_exp							b3_fooddrink_num b3_medical b3_medical_num b3_leisure b3_leisure_num b3_clothes b3_clothes_num            								  b3_publictransport b3_publictransport_num b3_elec_gas_water b3_elec_gas_water_num b3_landline_phone 											 b3_landline_phone_num b3_soap b3_soap_num b3_otherservice b3_service_other b3_otherservice_num b3_medicalexp 											 b3_medicalexpnum b3_chool_exp b3_chool_expnum 
 
@@ -76,17 +76,13 @@ local victimization							h3_landvictim h3_physivictim h3_stolenvictim h3_robbev
 local comm_confl_disp						h4_land h4_crops h4_inheritance h4_youngelder h4_religious h4_ethnic h4_political h4_otherconflict h4_landhh 											h4_cropshh h4_inheritancehh h4_youngelderhh h4_religioushh h4_ethnichh h4_politicalhh h4_otherconflicthh 											h4_landled h4_cropsled h4_inheritanceled h4_youngelderled h4_religiousled h4_ethnicled h4_politicalled 											  h4_otherconflictled
 
 
-
-
-
-																					
-
-
-											
-
 * Define local with all index
 
-local Index_ALL 
+local Index_ALL 		run_business busn_profit busn_empl fin_access emp_tol inc_from_emp_total 	///
+						women_agency women_ability_presp gbv_persp reprod_health_persp spouse_commu ///
+						hhead_iga hhead_income hhmembers_iga other_income food_exp non_food_exp		///
+						assets migration cantrill_ladder psyc_well_being wage_emp job_search 		///
+						social_life comm_life tax_contr anti_pro_soc_beh victimization comm_confl_disp
 							
 ********************************************************************************
 ********************************************************************************
@@ -95,33 +91,20 @@ local Index_ALL
 ********************************************************************************
 u "$vera/temp/clean_CashXFollow_PII_imputed.dta", clear
 
-foreach sample in followup cash{												// Loop over different dataset 
+foreach sample in cash_0 cash_1{												// Loop over different dataset 
 
 
-	if "`sample'" == "followup"{
-		local trt_indicator		"beneficiaire"
-		local cond			   `"Intervention == "Follow up - TCLP""'			// Empty for now but might be useful later for the heterogeneity
-		local spec_prefix 		"FL"
-	}
-
-	if "`sample'" == "followup"{
-		local trt_indicator "trt_cash"
+	if "`sample'" == "cash_0"{
+		local trt_indicator "trt_cash_0"
 		local cond			`"Intervention == "Cash Grants - Women""'			// Empty for now but might be useful later for the heterogeneity
-		local spec_prefix	"CGW"
+		local spec_prefix	"CGW0"
+	}
+	if "`sample'" == "cash_1"{
+		local trt_indicator "trt_cash_1"
+		local cond			`"Intervention == "Cash Grants - Women""'			// Empty for now but might be useful later for the heterogeneity
+		local spec_prefix	"CGW1"
 	}
 
-/* Apply special character for missing variables 
-
-foreach var of varlist _all{
-
-capture confirm numeric variable `var'
-	if _rc == 0{
-	cap replace `var' =.d if `var' == -98
-	cap replace `var' =.a if `var' == -98
-	cap replace `var' =.n if `var' == -99
-	}
-
-} */ 
 
 ********************************************************************************
 ********************************************************************************
@@ -148,24 +131,24 @@ capture confirm numeric variable `var'
 		
 			* Create control mean of individual outcomes
 			
-			sum `indiv_outcomes'_`var_suffix' 					if `trt_indicator' == 0 & `cond'
+			sum `indiv_outcomes'							 	if `trt_indicator' == 0 & `cond'
 			
 			
-			gen mean_`indiv_outcomes' = `r(mean)'				if `cond' 
+			gen `spec_prefix'mean_`indiv_outcomes' = `r(mean)'	if `cond' 
 			
 			* Create control standard deviaiton 
 			
-			sum `indiv_outcomes'_`var_suffix' 					if `trt_indicator' == 0 & `cond' 
+			sum `indiv_outcomes'		 						if `trt_indicator' == 0 & `cond' 
 			
-			gen sd_`indiv_outcomes' = `r(sd)' 					if `cond' 
+			gen `spec_prefix'sd_`indiv_outcomes' = `r(sd)' 		if `cond' 
 		
 			* Normalize individual outcome 
 			
-			gen norm_`indiv_outcomes' = (`indiv_outcomes'_`var_suffix' - mean_`indiv_outcomes') / sd_`indiv_outcomes' if `cond'
+			gen `spec_prefix'norm_`indiv_outcomes' = (`indiv_outcomes' - `spec_prefix'mean_`indiv_outcomes') / `spec_prefix'sd_`indiv_outcomes'
 			
 			* Fill local with variable name used later to sum all standardize outcomes
 			
-			local sum_`group_outcomes' "`sum_`group_outcomes'' norm_`indiv_outcomes'"
+			local sum_`group_outcomes' "`sum_`group_outcomes'' `spec_prefix'norm_`indiv_outcomes'"
 			
 			* Fill local with variable counter 
 			
@@ -188,43 +171,73 @@ capture confirm numeric variable `var'
 		
 		* Clean variables created
 		
-		drop mean_*
-		drop sd_*
-		drop norm_*
+		drop *mean_*
+		drop *sd_*
+		drop *norm_*
 	
 	}
 	
 	* Label index 
-
-	cap label variable `spec_prefix'home_assets				"Home assets"
-	cap label variable `spec_prefix'comms_assets			"Communication assets"
-	cap label variable `spec_prefix'productive_assets		"Productive assets"
-	cap label variable `spec_prefix'consumption_food		"Food consumtion"
-	cap label variable `spec_prefix'consumption_other		"Other consumption"
-	cap label variable `spec_prefix'lab_market_main			"Labor market"
-	*cap label variable `spec_prefix'lab_market_sec			"Labor market (other HH members)"
-	cap label variable `spec_prefix'eco_welfare				"Consumption expenditures"
+						
+	cap label variable `spec_prefix'run_business			"Run Business"
+	cap label variable `spec_prefix'busn_profit				"Profits"
+	cap label variable `spec_prefix'busn_empl				"Business employment"
+	cap label variable `spec_prefix'fin_access				"Financial access"
+	cap label variable `spec_prefix'emp_tol					"Total employment"
+	cap label variable `spec_prefix'inc_from_emp_total		"Total Wage employment"
+	cap label variable `spec_prefix'women_agency			"Women agency"
+	cap label variable `spec_prefix'women_ability_presp		"View on women ability"
+	cap label variable `spec_prefix'gbv_persp				"View on gender based violence"
+	cap label variable `spec_prefix'reprod_health_persp		"View on reproductive health"
+	cap label variable `spec_prefix'spouse_commu			"Communication"
+	cap label variable `spec_prefix'hhead_iga 				"HH head IGA"
+	cap label variable `spec_prefix'hhead_income			"HH head income"
+	cap label variable `spec_prefix'hhmembers_iga			"HH member IGA"
+	cap label variable `spec_prefix'other_income			"Other Income"
+	cap label variable `spec_prefix'food_exp				"Food expenditure"
+	cap label variable `spec_prefix'non_food_exp			"Non food expenditure"
 	cap label variable `spec_prefix'assets					"Assets owning"
-	cap label variable `spec_prefix'credit_access			"Financial inclusion"
-	cap label variable `spec_prefix'pos_coping_mechanisms	"Positive coping mechanisms"
-	cap label variable `spec_prefix'neg_coping_mechanisms	"Negative coping mechanisms"
-	cap label variable `spec_prefix'social 					"Social participation"
-	cap label variable `spec_prefix'civic					"Civic engagement"
-	cap label variable `spec_prefix'well_being				"Psychological well being"
-	cap label variable `spec_prefix'woman_empowerment		"Women's empowerment"
-	cap label variable `spec_prefix'woman_bargain			"Women's empowerment and agency"
-	cap label variable `spec_prefix'woman_violence			"Intimate partner violence"
-	cap label variable `spec_prefix'shocks					"Economic shock"
-	cap label variable `spec_prefix'social_cohesion2 		"Social Cohesion"
-	cap label variable `spec_prefix'comm_groups 			"Community Groups"
+	cap label variable `spec_prefix'migration 				"Migration"
+	cap label variable `spec_prefix'cantrill_ladder 		"Cantrill lader"
 	cap label variable `spec_prefix'civic_engag 			"Civic Engagement"
-	cap label variable `spec_prefix'initiatives 			"Local Participation"
-	cap label variable `spec_prefix'initiatives_meeting 	"Local Meeting"
-	cap label variable `spec_prefix'initiatives_acting		"Local Acting"
-	cap label variable `spec_prefix'information_sources 	"Information Sources"
-	cap label variable `spec_prefix'utopia 					"Liberal Norms"
-	cap label variable `spec_prefix'isolation 				"Isolation"	
+	cap label variable `spec_prefix'psyc_well_being 		"Well Being"
+	cap label variable `spec_prefix'wage_emp 				"Wage employment"
+	cap label variable `spec_prefix'job_search				"Job search"
+	cap label variable `spec_prefix'social_life 			"Social life"
+	cap label variable `spec_prefix'comm_life 				"Community life"
+	cap label variable `spec_prefix'anti_pro_soc_beh 		"Anti - Pro Social Behavior"	
+	cap label variable `spec_prefix'victimization 			"Victimization"	
+	cap label variable `spec_prefix'comm_confl_disp 		"Conflict"	
 
 }
+
+********************************************************************************
+********************************************************************************
+* SAVE DATA
+********************************************************************************
+********************************************************************************
+
 save "$vera/clean/clean_analysis_CashXFollow.dta", replace
+
+********************************************************************************
+********************************************************************************
+* DE-IDENTIFY DATA 
+********************************************************************************
+********************************************************************************
+
+* 1) Define variable to be drop (Add variable below to be dropped)
+
+local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
+
+
+* 2) Drop ID variable 
+
+foreach var of local deidentification {
+	
+	capture noisily drop `var' 													
+
+}
+
+sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_CashXFollow_noPII.dta", replace
+
 
