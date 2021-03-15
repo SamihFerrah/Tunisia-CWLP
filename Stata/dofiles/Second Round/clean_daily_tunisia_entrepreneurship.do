@@ -322,6 +322,7 @@ destring _all, replace
 do "$git_tunisia/dofiles/Second round/Construct/label_variables.do"
 
 
+
 ********************************************************************************
 ********************************************************************************
 * 7) Add common ID_HH (= HOUSEHOLD ID) for partner and cash grants participant
@@ -340,7 +341,7 @@ restore
 
 cap drop _merge 
 
-merge m:1 HHID using `ID_HHH', update
+merge m:1 HHID using `ID_HHH', update keep(1 3)
 
 drop _merge
 
@@ -419,27 +420,7 @@ destring Strata, replace
 
 * Save data with PII 
 
-sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
-
-********************************************************************************
-* 14) DE-IDENTIFY DATA 
-********************************************************************************
-********************************************************************************
-
-* 1) Define variable to be drop (Add variable below to be dropped)
-
-local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
-
-
-* 2) Drop ID variable 
-
-foreach var of local deidentification {
-	
-	capture noisily drop `var' 													
-
-}
-
-sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_CashXFollow_noPII.dta", replace
+sa "$vera/temp/clean_CashXFollow_PII_3.dta", replace 
 
 
 

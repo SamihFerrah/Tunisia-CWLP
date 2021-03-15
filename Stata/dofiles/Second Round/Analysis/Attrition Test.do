@@ -107,10 +107,13 @@ replace Moved = 1 		if Status == 7
 g 		Inexistant = 0
 replace Inexistant = 1 	if Status == 9
 
+g 		Other = 0 
+replace Other = 1 		if Status == 10
+
 	
 local counter = 0 
 
-foreach reason in Refusal Dead Abroad Moved Inexistant{
+foreach reason in Refusal Dead Abroad Moved Inexistant Other{
 
 	local counter = `counter' + 1 
 	
@@ -132,6 +135,8 @@ foreach reason in Refusal Dead Abroad Moved Inexistant{
 	sum `reason' 		if  trt_cash_1 == 1 
 	local m3`counter' : di%12.3f `r(mean)'
 		
+	reg `reason'	trt_cash_0
+	reg `reason'	trt_cash_1
 }
 
 	* Export summary breakdown table
@@ -144,10 +149,19 @@ foreach reason in Refusal Dead Abroad Moved Inexistant{
 	"Abroad	 	& `n13' & `m13' & `n23' & `m23'  & `n33' & `m33' \\" _n ///
 	"Moved	 	& `n14' & `m14' & `n24' & `m24'  & `n34' & `m34' \\" _n ///
 	"Inexistant & `n15' & `m15' & `n25' & `m25'  & `n35' & `m35' \\" _n ///
+	"Other		& `n16' & `m16' & `n26' & `m26'  & `n36' & `m36' \\" _n ///
 	"\hline														   " _n 
 	
 	file close Table
 
+	* Test of significance between 
+	
+	forvalue i = 0/1{
+	
+		iebaltab Refusal Dead Abroad Moved Inexistant Other, grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_`i'.tex") replace
+	
+	}
+	
 /*		--> ONLY FOR FOLLOW UP
 foreach reason in Refusal Dead Abroad Moved Inexistant{
 

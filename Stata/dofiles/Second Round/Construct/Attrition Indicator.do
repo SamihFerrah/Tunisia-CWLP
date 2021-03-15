@@ -87,13 +87,13 @@ preserve
 	
 	keep Status HHID Nom Intervention H
 	
-	rename H Treatment 
+	*rename H Treatment 
 
 	merge 1:1 HHID using "A:/Assignment/Follow Up Sample.dta",keepusing(TCLP replacement)
 	
 	drop _merge
 	
-	keep Status HHID Nom Intervention TCLP Treatment
+	keep Status HHID Nom Intervention TCLP
 	
 	tempfile completion
 	sa 		`completion'
@@ -103,6 +103,8 @@ restore
 cap drop _merge Status
 
 merge m:1 HHID using `completion', update 
+
+drop if _merge == 2
 
 * Check Status of _merge == 3
 

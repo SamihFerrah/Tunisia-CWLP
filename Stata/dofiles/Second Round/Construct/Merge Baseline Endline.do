@@ -48,7 +48,7 @@ replace Nom = subinstr(Nom," ","",.)
 
 preserve 
 
-	u "$stata_base/enquete_All3", clear
+	u "$stata_base/enquete_All3.dta", clear
 
 	g Age = repondant_age
 	
@@ -88,21 +88,4 @@ cap drop _merge
 * Merge with info from baseline
 merge m:1 Nom Age imada_str using `baseline'
 
-/*
-
-* Replace next merge variable to missing for second merge wave
-replace Imada = "" if _merge == 3
-
-replace Identified = 1 if _merge == 3
-
 drop if _merge == 2
-
-rename _merge original_merge
-
-merge m:1 Nom Imada Age using `baseline', update replace
-
-replace Identified = 1 if _merge > 2
-
-drop if _merge == 2
-
-sdsd
