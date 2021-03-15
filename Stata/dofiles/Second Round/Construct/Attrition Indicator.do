@@ -104,6 +104,8 @@ cap drop _merge Status
 
 merge m:1 HHID using `completion', update 
 
+drop if _merge == 2
+
 * Check Status of _merge == 3
 
 tab Status if _merge == 3
