@@ -4,7 +4,7 @@
 ********************************************************************************
 ********************************************************************************
 
-
+#delimit ;
 							
 
 #delimit ;
@@ -99,7 +99,7 @@ local all_outcomes 						c1_job_iga c1_days_nowork c1_daysnoworkunit business_ho
 										
 										
 #delimit cr
-	
+
 	
 	
 * local all_controls
@@ -133,8 +133,7 @@ foreach sample in cash_0 cash_1{		// followup										// Loop over different da
 	foreach variables in `all_outcomes' {
 
 		cap g `variables'_ori = `variables'										// Create original version of each outcomes (cap for the different sample)
-				
-		cap confirm numeric variable `variables'								// Check variable types 
+						cap confirm numeric variable `variables'								// Check variable types 
 		
 		if _rc !=0{
 		
@@ -148,13 +147,12 @@ foreach sample in cash_0 cash_1{		// followup										// Loop over different da
 				sum     `variables' if `trt_indicator' == `i' `cond'
 				
 				if `r(N)' > 0{													// If var not always missing
-					
+	
 					replace `variables' = `r(mean)' if   `variables' ==.  & `trt_indicator' == `i' `cond' | ///
 														 `variables' ==.d & `trt_indicator' == `i' `cond' | ///
 														 `variables' ==.a & `trt_indicator' == `i' `cond' | ///
 														 `variables' ==.n & `trt_indicator' == `i' `cond'
-												
-													 
+				 
 				}
 			}
 		}
