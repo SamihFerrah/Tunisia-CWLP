@@ -38,7 +38,7 @@ foreach sample in followup cash{												// Loop over different dataset
 		local spec_prefix	"CGW"
 	}
 
-/* Apply special character for missing variables 
+* Apply special character for missing variables 
 
 foreach var of varlist _all{
 
@@ -49,7 +49,7 @@ capture confirm numeric variable `var'
 	cap replace `var' =.n if `var' == -99
 	}
 
-} */ 
+}
 
 ********************************************************************************
 ********************************************************************************

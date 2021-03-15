@@ -76,51 +76,51 @@
 ********************************************************************************
 ********************************************************************************
 
-global importXclean_individual 	= 1
+global import_individual 	= 1
 
-global preliminary_report		= 0 
+global HFC					= 0
+
+global construct 			= 0 
+
+global preliminary_report	= 0 
+
+
+*Clean and prepare dataset
+
+if $import_individual == 1	{
+	do "$git_tunisia/dofiles/Second Round/import_DIME_Tunisia_Entrepreneurship_Encrypt.do"			// Import and do basic check before saving data
+	do "$git_tunisia/dofiles/Second Round/clean_daily_tunisia_entrepreneurship.do"			// Import and do basic check before saving data
+}
+
+*High Frequency cleaning 
+
+global hfc_panel_start ""														// Enter date of last HFC 
+
+if $HFC == 1	{
+	do "$git_tunisia/dofiles/clean_weekly_tunisia_entrepreneurship.do"			// High Frequency cleaning 
+}
+
+
+* Construct data 
+
+if $construct ==1 {
+
+	do "$git_tunisia/dofiles/"													// Prepare outcomes and other relevant variables
+	do "$git_tunisia/dofiles/"													// Imput missing outcomes variables 
+	
+}
+
+* Preliminary report 
+
+if $preliminary_report == 1 {
+
+	do "$git_tunisia/dofiles/preliminary_report.do"
+	
+}
+
 
 ********************************************************************************
 ********************************************************************************
 *							ANALYSIS
 ********************************************************************************
 ********************************************************************************
-
-global balance_test 			= 0
-
-global attrition_test 			= 0
-
-*Clean and prepare dataset
-
-if $importXclean_individual == 1	{
-	do "$git_tunisia/dofiles/Second Round/import_DIME_Tunisia_Entrepreneurship_Encrypt.do"			// Import and do basic check before saving data
-	do "$git_tunisia/dofiles/Second Round/clean_daily_tunisia_entrepreneurship.do"			// Import and do basic check before saving data
-}
-
-
-* Preliminary report : Missingness and Statstics
-
-if $preliminary_report == 1 {
-
-	do "$git_tunisia/dofiles/Second Round/Analysis/Missingness Report.do"
-	do "$git_tunisia/dofiles/Second Round/Analysis/Statistics.do"
-	
-}
-
-
-* Balance test
-
-if $balance_test == 1{
-	
-	do "$git_tunisia/dofiles/Second Round/Analysis/Balance Test"
-
-}
-
-* Attrition test
-
-if $attrition_test == 1{
-	
-	do "$git_tunisia/dofiles/Second Round/Analysis/Attrition Test"
-
-}
-

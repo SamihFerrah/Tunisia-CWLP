@@ -12,35 +12,15 @@ u "$vera/temp/temp_import_CashXFollow.dta", clear
  
 g HHID = hhid 
 
-merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup replacement Partenaire)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup)
 
 drop _merge 
 
-g 		trt_cash = 0 if Intervention == "Cash Grants - Women"
-replace trt_cash = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment"
-
-g 		trt_cash_0 = 0 if Intervention == "Cash Grants - Women"
-replace trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Non"
-
-g 		trt_cash_1 = 0 if Intervention == "Cash Grants - Women"
-replace trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Oui"
-
-* Imput to missing if treatment of other group
-
-replace trt_cash_1 = . if trt_cash_0 == 1
-replace trt_cash_0 = . if trt_cash_1 == 1
-
-label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
-label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
-label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
-	
 ********************************************************************************
 ********************************************************************************
 * 2) CHECK THAT ALL SURVEY SUBMITTED ARE COMLETED 
 ********************************************************************************
 ********************************************************************************
-
-
 /* 	Define indicator for survey completeness, often the last variables mandatory
 	for all respondent not being missing
 */
@@ -150,7 +130,7 @@ foreach var of local partner_only {
 
 ********************************************************************************
 ********************************************************************************
-* 4) CHECK THAT WE HAVE ALL THE DATA OF THE DAY 
+* 1) CHECK THAT WE HAVE ALL THE DATA OF THE DAY 
 ********************************************************************************
 ********************************************************************************
 /* 	Test that all data from the field is on the server: match survey data logs from the
@@ -177,6 +157,10 @@ preserve
 	destring Status, replace 
 	
 	* Keep last days of data collection 
+  
+	rename HHID 	hhid
+	rename Status 	Etat
+	rename Date 	Date_complete
 	keep if Status == 1	| Status == 33 | Status == 99							// Keep completed survey
 	
 	tab HHID if Status == 33 
@@ -184,9 +168,7 @@ preserve
 	rename HHID 	hhid
 	rename Status 	Etat
 	rename Date 	Date_complete
-	
-	keep hhid Etat Date_complete Nom
-	
+		
 	* Create temperoray file 
 	tempfile daily_completion
 	sa   	`daily_completion'
@@ -198,6 +180,7 @@ cap drop _merge
 * Merge data with completion report 
 merge m:1 hhid using `daily_completion'
 
+sdsd
 * Create indicator for missing survey
 g 		missing_survey = 0 
 replace missing_survey = 1 if _merge == 2 
@@ -209,6 +192,8 @@ g 		outside_report = 0
 replace outside_report = 1 if _merge == 1 & tot_complete == 1 
 
 label var outside_report "Absent from report"
+
+cap drop _merge 
 
 * Export results for BJKA 
 
@@ -236,13 +221,11 @@ preserve
 	
 restore 
 	
-drop if _merge == 2 
-
-cap drop _merge 
+replace tot_complete = 0 if missing_survey == 1 
 
 ********************************************************************************
 ********************************************************************************
-* 5) ERROR IN CODE
+* 4) ERROR IN CODE
 ********************************************************************************
 ********************************************************************************
 
@@ -253,9 +236,9 @@ cap drop _merge
 * Merge and check that code correspond to the original assignment
 cap drop _merge 
 
-cap destring Age Telephone1 Telephone2, replace 
+destring Age Telephone1 Telephone2, replace 
 
-merge m:1 HHID using "A:/Assignment/Full Sample.dta", gen(code_check) keep(1 3) keepusing(HHID)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", gen(code_check) keep(1 3)
 
 g 		error_code = 0 
 replace error_code = 1 if code_check ==1
@@ -286,7 +269,7 @@ if `r(N)' > 0 {
 
 ********************************************************************************
 ********************************************************************************
-* 6) DUPLICATE TEST
+* 4) DUPLICATE TEST
 ********************************************************************************
 ********************************************************************************
 /*	Test for duplicates: since SurveyCTO/ODK data provides a number of duplicates, 
@@ -303,11 +286,12 @@ duplicates tag HHID if tot_complete == 1 & error_code == 0, g(dup)				// Check f
 
 preserve
 
-keep if dup > 0 & dup !=.
+keep if dup != 0 & dup !=.
 
-keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date 
+keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date key
 sort hhid 
-order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date
+order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date key
+
 
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
 
@@ -324,36 +308,7 @@ do "$git_tunisia/dofiles/Second round/Construct/label_variables.do"
 
 ********************************************************************************
 ********************************************************************************
-* 7) Add common ID_HH (= HOUSEHOLD ID) for partner and cash grants participant
-********************************************************************************
-
-* Import HH ID (for cash grant and partner)
-
-preserve 
-
-	import excel using "$home/14. Female Entrepreneurship Add on/Data/General/ID Cash HH.xlsx", clear first
-	
-	tempfile ID_HHH
-	sa 	    `ID_HHH'
-	
-restore 
-
-cap drop _merge 
-
-merge m:1 HHID using `ID_HHH', update
-
-drop _merge
-
-* Create dummie variable to flag respondent for which we survey both 
-* female and male partner_only
-
-duplicates tag ID_HH if ID_HH !=. & tot_complete == 1, g(participant_partner)
-
-label var participant_partner "Duo: participant x partner"
-
-********************************************************************************
-********************************************************************************
-* 8) DROP USELESS VARIABLES (Duration notes calculates)
+* 6) DROP USELESS VARIABLES (Duration notes calculates)
 ********************************************************************************
 ********************************************************************************
 /* 	Drop variables that only make sense for questionnaire review (duration, notes,
@@ -369,60 +324,19 @@ foreach var of local var_to_drop{
 	cap drop `var'
 	
 }
-		 
-drop Status 
+	
+* Create treatment indicator for cash grant 
 
-********************************************************************************
-********************************************************************************
-* 9) Prepare outcomes by recoding variables
-********************************************************************************
-********************************************************************************
-
-do "$git_tunisia/dofiles/Second round/Construct/recodedirection.do"
-
-
-********************************************************************************
-********************************************************************************
-* 11) Create Attrition indicator
-********************************************************************************
-********************************************************************************
-
-do "$git_tunisia/dofiles/Second round/Construct/Attrition Indicator.do"
-
-
-
-********************************************************************************
-********************************************************************************
-* 10) Save temporary data with PII
-********************************************************************************
-********************************************************************************
-
-sa "$vera/temp/clean_CashXFollow_PII_2.dta", replace 
-
-
-********************************************************************************
-********************************************************************************
-* 12) Merge Baseline and Endline
-********************************************************************************
-********************************************************************************
-
-
-do "$git_tunisia/dofiles/Second round/Construct/Merge Baseline Endline.do"
-
-********************************************************************************
-********************************************************************************
-* 13) SAVE clean data  with PII
-********************************************************************************
-********************************************************************************
-
-destring Strata, replace 
+g 		trt_cash = 0 if Intervention == "Cash Grants - Women"
+replace trt_cash = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment"
 
 * Save data with PII 
 
 sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
 
 ********************************************************************************
-* 14) DE-IDENTIFY DATA 
+********************************************************************************
+* 7) DE-IDENTIFY DATA 
 ********************************************************************************
 ********************************************************************************
 
@@ -439,10 +353,54 @@ foreach var of local deidentification {
 
 }
 
+* 3) Check for remaining PII variable 
+
+/*
+foreach PII in name gps adress location phone{
+	
+	lookfor `PII'																// Search for possible variable to remove for deindetification purpose
+	
+	di in red "`r(varlist)'"
+	
+	* Drop variables 
+	foreach var_to_drop in `r(varlist)'{
+	
+		cap noi drop `var_to_drop'
+	
+	}
+}
+
+*/
+
+
+********************************************************************************
+********************************************************************************
+* 8) SAVE DATA
+********************************************************************************
+********************************************************************************
+
 sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_CashXFollow_noPII.dta", replace
 
+	
+********************************************************************************
+********************************************************************************
+* 9) Export Missingness report
+********************************************************************************
+********************************************************************************
 
+do "$git_tunisia/dofiles/Second Round/Analysis/Missingness Report.do"			// Import and do basic check before saving data
+	
+	
+********************************************************************************
+********************************************************************************
+* 10) Export Data quality report
+********************************************************************************
+********************************************************************************
 
+do "$git_tunisia/dofiles/Second Round/Analysis/Statistics.do"			// Import and do basic check before saving data
+	
+	
+	
 
 
 
