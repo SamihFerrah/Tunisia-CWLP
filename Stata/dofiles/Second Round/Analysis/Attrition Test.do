@@ -15,9 +15,20 @@ pause on
 clear 
 
 
-local covariates 		repondant_age_b repondant_educ_b								///
-						hhsize_b adult_num_b jeunes_lireecrire_b emploi_2013_a_b		///
-						formation_b origine_naissance_b origine_naissance_bis_b h_18_65 f_18_65	trauma_abus
+local covariates 		repondant_age_b repondant_educ_b									///
+						hhsize_b adult_num_b jeunes_lireecrire_b emploi_2013_a_b			///
+						formation_b origine_naissance_b origine_naissance_bis_b 			///
+						association_dummy_b association_2_b  			///
+						psy_menage_dum3_b psy_a_menage_dum3_b							///
+						initiatives_1_b initiatives_2_b 								///
+						epargne_pret_b epargne_b epargne_cb_win_b epargne_dette_b 	/// 
+						q2_1_18_win_b q2_1_19_win_b q2_1_21_win_b q2_1_16_win_b 	/// 
+						c3_a_1_win_b c3_a_2_win_b c3_a_3_win_b c3_a_4_win_b			///
+						c3_a_5_win_b c3_a_6_win_b c3_a_7_win_b c3_a_8_win_b			///
+						c3_a_9_win_b c3_a_10_win_b c3_a_11_win_b c4_win_b 			/// 
+						days_work_main_win_b 						 		///
+						inc_work_main_win_b profit_work_main_win_b 						///
+						business_q0_main_b emploi_sec_b
 						
 local balance_coll		q0_1_c q0_2_c q0_3_c 											///
 						negevent_1 negevent_2 negevent_3 negevent_4 					///
@@ -34,7 +45,7 @@ local balance_coll		q0_1_c q0_2_c q0_3_c 											///
 ********************************************************************************
 ********************************************************************************						
 	
-u "$vera/clean/clean_CashXFollow_PII.dta", clear
+u "$vera/clean/clean_analysis_CashXFollow.dta", clear
 
 keep if Intervention == "Cash Grants - Women" 
 
@@ -46,19 +57,52 @@ replace trt_cash_0 = trt_cash if trt_cash == 0
 replace trt_cash_1 = . if trt_cash_0 == 1
 replace trt_cash_0 = . if trt_cash_1 == 1
 
-codebook `covariates'
+*codebook `covariates'
 	
-label var repondant_age_b			"Age"
-label var repondant_educ_b			"Education"
-label var hhsize_b					"HH size"
-label var h_18_65_b					"Male 18-65 years old"
-label var f_18_65_b					"Female 18-65 years old"
-label var jeunes_lireecrire_b		"Illiterate adult"
-label var emploi_2013_a_b			"Worked 3 month (2013)"
-label var formation_b				"Professional training"
-label var origine_naissance_b		"Born imada"
-label var origine_naissance_bis_b	"Born gouvernorat"
-label var trauma_abus_b				"Victim violence (1987-2010)"
+	label var repondant_age_b			"Respondant age"
+	label var repondant_educ_b			"Respondant education"
+	label var hhsize_b					"HH size"
+	label var h_18_65_b					"Male 18-65 years old"
+	label var f_18_65_b					"Female 18-65 years old"
+	label var jeunes_lireecrire_b		"Number of Illiterate adult in household"
+	label var emploi_2013_a_b			"Respondent worked 3 month in 2013"
+	label var formation_b				"Respondent attended a professional training"
+	label var origine_naissance_b		"Respondent born in imada"
+	label var origine_naissance_bis_b	"Respondent born in gouvernorat"
+	label var trauma_abus_b				"Victim of violence (1987-2010)"
+	label var emploi_sec_b 				"Respondent had an IGA last 4 weeks"
+	label var business_q0_main_b		"Respondent own a business"
+	label var profit_work_main_win_b	"Profit from main IGA last month"
+	label var inc_work_main_win_b		"Income from main IGA last month"
+	label var days_work_main_win_b		"Number of days work main IGA last month"
+	label var c4_win_b					"Rent (in Dinars)"
+	label var c3_a_11_win_b				"Tobacco, coffee and tea (in Dinars)"
+	label var c3_a_10_win_b				"Seasoning (in Dinars)"
+	label var c3_a_9_win_b				"Water, Soda (in Dinars)"
+	label var c3_a_8_win_b				"Oil (in Dinars)"
+	label var c3_a_7_win_b				"Fruits (in Dinars)"
+	label var c3_a_6_win_b				"Vegetables (in Dinars)"
+	label var c3_a_5_win_b				"Egss and Diary (in Dinars)"
+	label var c3_a_4_win_b				"Meat (in Dinars)"
+	label var c3_a_3_win_b				"Fish (in Dinars)"
+	label var c3_a_2_win_b				"Pasta, Rice (in Dinars)"
+	label var c3_a_1_win_b				"Bread, Flour (in Dinars)"
+	label var q2_1_16_win_b				"Number of phone owned"
+	label var q2_1_21_win_b				"Number of horses owned"
+	label var q2_1_19_win_b				"Number of chicken owned"
+	label var q2_1_18_win_b				"Number of sheep owned"
+	label var epargne_dette_b			"Contract debt last year"
+	label var epargne_cb_win_b			"Amount saved last year"
+	label var epargne_b					"Saved money last year"
+	label var epargne_pret_b			"Lend money last year"
+	label var initiatives_2_b			"Respondent meet the Omda last 6 month"
+	label var initiatives_1_b			"Respondent participated in a townhall last 6 month"
+	label var psy_a_menage_dum3_b		"Felt accepted by other HH in community at baseline"
+	label var psy_menage_dum3_b			"Respondent had good relation with other HH member at baseline"
+	label var association_2_b			"Member of a woman association"
+	label var association_dummy_b		"Member of any local association"
+	
+
 		
 ********************************************************************************
 * 1) Descriptive attrition analysis
@@ -104,8 +148,8 @@ replace Abroad = 1 		if Status == 6
 gen 	Moved = 0 
 replace Moved = 1 		if Status == 7 
 
-g 		Inexistant = 0
-replace Inexistant = 1 	if Status == 9
+g 		Unreachable = 0
+replace Unreachable = 1 	if Status == 9
 
 g 		Other = 0 
 replace Other = 1 		if Status == 10
@@ -113,7 +157,7 @@ replace Other = 1 		if Status == 10
 	
 local counter = 0 
 
-foreach reason in Refusal Dead Abroad Moved Inexistant Other{
+foreach reason in Refusal Dead Abroad Moved Unreachable Other{
 
 	local counter = `counter' + 1 
 	
@@ -148,7 +192,7 @@ foreach reason in Refusal Dead Abroad Moved Inexistant Other{
 	"Dead	 	& `n12' & `m12' & `n22' & `m22'  & `n32' & `m32' \\" _n ///
 	"Abroad	 	& `n13' & `m13' & `n23' & `m23'  & `n33' & `m33' \\" _n ///
 	"Moved	 	& `n14' & `m14' & `n24' & `m24'  & `n34' & `m34' \\" _n ///
-	"Inexistant & `n15' & `m15' & `n25' & `m25'  & `n35' & `m35' \\" _n ///
+	"Unreachable & `n15' & `m15' & `n25' & `m25'  & `n35' & `m35' \\" _n ///
 	"Other		& `n16' & `m16' & `n26' & `m26'  & `n36' & `m36' \\" _n ///
 	"\hline														   " _n 
 	
@@ -158,10 +202,18 @@ foreach reason in Refusal Dead Abroad Moved Inexistant Other{
 	
 	forvalue i = 0/1{
 	
-		iebaltab Refusal Dead Abroad Moved Inexistant Other, grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_`i'.tex") replace
+		iebaltab Refusal Dead Abroad Moved Unreachable Other, grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_`i'.tex") replace
 	
 	}
 	
+preserve
+	
+	replace trt_cash = 2 if trt_cash_1 == 1
+	
+	iebaltab Refusal Dead Abroad Moved Unreachable Other, grpvar(trt_cash) fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment 1 @ 2 Treatment 2") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_main.tex") replace
+	
+restore 
+
 /*		--> ONLY FOR FOLLOW UP
 foreach reason in Refusal Dead Abroad Moved Inexistant{
 
@@ -388,7 +440,7 @@ foreach reason in Refusal Dead Abroad Moved Inexistant{
 {
 
 	file open Table using "Balance Test Cash/Table_Attrition_Individual.tex", text write replace
-		
+	
 	file write Table  																																_n ///
 	" Treatment						& 	`c0_1'`s0_1' & 	`c0_2'`s0_2'  & `c0_3'`s0_3' 	& 	`c1_1'`s1_1' & 	`c1_2'`s1_2'  & `c1_3'`s1_3'	\\ " 	_n ///
 	" 								&	 `se0_1'     &	 `se0_2' 	  &	 `se0_3'		&	 `se1_1'     &	 `se1_2' 	  &	 `se1_3'		\\ " 	_n 

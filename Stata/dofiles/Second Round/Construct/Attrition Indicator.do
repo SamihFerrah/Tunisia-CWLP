@@ -31,6 +31,9 @@ preserve
 	label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
 	label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
 	label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
+	
+	replace trt_cash_1 = . if trt_cash_0 == 1
+	replace trt_cash_0 = . if trt_cash_1 == 1
 
 	keep Intervention replacement Partenaire trt_followup HHID Strata trt_cash*
 
@@ -58,10 +61,8 @@ preserve
 	
 	drop if HHID == . 
 	
-	drop if _n > 4200
-	
-	replace Status = "1" if Status =="Anciens codes 33"
-	
+	drop if _n > 4201
+		
 	cap confirm numeric variable Status
 
 	if _rc !=0{
@@ -81,7 +82,9 @@ preserve
 					10 "Other"						///
 					12 "Replacement not used"		///
 					13 "Transfered to other team"	///
-					33 "Absent of dataset"
+					33 "Absent of dataset"			///
+					99 "Unreachable (moved)"		///
+					999 "Never contacted"
 					
 	label value Status A
 	

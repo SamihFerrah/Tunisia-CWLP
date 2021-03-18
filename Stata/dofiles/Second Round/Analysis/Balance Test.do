@@ -16,11 +16,35 @@ pause on
 clear 
 
 
-local balance_indiv 	repondant_age_b repondant_educ_b			///
-						hhsize_b adult_num_b jeunes_lireecrire_b emploi_2013_a_b	///
-						formation_b origine_naissance_b origine_naissance_bis_b 	
-					
+local balance_indiv 	repondant_age_b repondant_educ_b									///
+						hhsize_b adult_num_b jeunes_lireecrire_b 			///
+						formation_b origine_naissance_b origine_naissance_bis_b 			///
+						association_dummy_b association_2_b  								///
+						psy_menage_dum3_b psy_a_menage_dum3_b								///
+						initiatives_1_b initiatives_2_b 									///
+						epargne_pret_b epargne_b epargne_cb_win_b epargne_dette_b 			/// 
+						q2_1_18_win_b q2_1_19_win_b q2_1_21_win_b q2_1_16_win_b 			/// 
+						c3_a_1_win_b c3_a_2_win_b c3_a_3_win_b c3_a_4_win_b					///
+						c3_a_5_win_b c3_a_6_win_b c3_a_7_win_b c3_a_8_win_b					///
+						c3_a_9_win_b c3_a_10_win_b c3_a_11_win_b c4_win_b 					/// 
+						days_work_main_win_b 						 						///
+						inc_work_main_win_b profit_work_main_win_b 							///
+						business_q0_main_b emploi_sec_b
 
+						
+local balance_indiv_om 	repondant_age_b repondant_educ_b									///
+						hhsize_b adult_num_b jeunes_lireecrire_b emploi_2013_a_b			///
+						formation_b origine_naissance_b origine_naissance_bis_b 			///
+						association_dummy_b association_2_b  								///
+						psy_menage_dum3_b psy_a_menage_dum3_b								///
+						initiatives_1_b initiatives_2_b 									///
+						epargne_pret_b epargne_b epargne_cb_win_b epargne_dette_b 			/// 
+						q2_1_18_win_b q2_1_19_win_b q2_1_21_win_b q2_1_16_win_b 			/// 
+						c3_a_1_win_b c3_a_2_win_b c3_a_3_win_b c3_a_4_win_b					///
+						c3_a_5_win_b c3_a_6_win_b c3_a_7_win_b c3_a_8_win_b					///
+						c3_a_9_win_b c3_a_10_win_b c3_a_11_win_b c4_win_b 					/// 
+						business_q0_main_b
+						
 ********************************************************************************
 ********************************************************************************						
 * 1) Balance test at individual level 
@@ -28,14 +52,33 @@ local balance_indiv 	repondant_age_b repondant_educ_b			///
 ********************************************************************************						
 	
 
-u "$vera/clean/clean_CashXFollow_PII.dta", clear
+u "$vera/clean/clean_analysis_CashXFollow.dta", clear
 
-keep if Intervention == "Cash Grants - Women"
-
-* Replace treatment indicator to missing if respondent is attrited
+keep if Intervention == "Cash Grants - Women" & tot_complete == 1 
 
 replace trt_cash_0 = . if attrition == 1
 replace trt_cash_1 = . if attrition == 1
+	
+local balance_indiv_m ""
+
+foreach var in `balance_indiv'{
+
+	g 		m_`var'	= 0
+	replace m_`var' = 1 if `var' ==.
+	
+	replace `var' = 0 	if `var' == .
+	
+	local balance_indiv_m "`balance_indiv_m' m_`var'"
+
+
+}
+
+
+bys trt_cash_0: sum emploi_main_b days_work_main inc_work_main_win_b profit_work_main_win_b emploi_sec_b
+
+bys trt_cash_1:sum emploi_main_b days_work_main inc_work_main_win_b profit_work_main_win_b emploi_sec_b
+
+
 
 	* Some re-labelling 
 	
@@ -48,29 +91,70 @@ replace trt_cash_1 = . if attrition == 1
 	}
 	*/
 	
-	label var repondant_age_b			"Age"
-	label var repondant_educ_b			"Education"
+	label var repondant_age_b			"Respondant age"
+	label var repondant_educ_b			"Respondant education"
 	label var hhsize_b					"HH size"
 	label var h_18_65_b					"Male 18-65 years old"
 	label var f_18_65_b					"Female 18-65 years old"
-	label var jeunes_lireecrire_b		"Illiterate adult"
-	label var emploi_2013_a_b			"Worked 3 month (2013)"
-	label var formation_b				"Professional training"
-	label var origine_naissance_b		"Born imada"
-	label var origine_naissance_bis_b	"Born gouvernorat"
-	label var trauma_abus_b				"Victim violence (1987-2010)"
+	label var jeunes_lireecrire_b		"Number of Illiterate adult in household"
+	label var emploi_2013_a_b			"Respondent worked 3 month in 2013"
+	label var formation_b				"Respondent attended a professional training"
+	label var origine_naissance_b		"Respondent born in imada"
+	label var origine_naissance_bis_b	"Respondent born in gouvernorat"
+	label var trauma_abus_b				"Victim of violence (1987-2010)"
+	label var emploi_sec_b 				"Respondent had an IGA last 4 weeks"
+	label var business_q0_main_b		"Respondent own a business"
+	label var profit_work_main_win_b	"Profit from main IGA last month"
+	label var inc_work_main_win_b		"Income from main IGA last month"
+	label var days_work_main_win_b		"Number of days work main IGA last month"
+	label var c4_win_b					"Rent (in Dinars)"
+	label var c3_a_11_win_b				"Tobacco, coffee and tea (in Dinars)"
+	label var c3_a_10_win_b				"Seasoning (in Dinars)"
+	label var c3_a_9_win_b				"Water, Soda (in Dinars)"
+	label var c3_a_8_win_b				"Oil (in Dinars)"
+	label var c3_a_7_win_b				"Fruits (in Dinars)"
+	label var c3_a_6_win_b				"Vegetables (in Dinars)"
+	label var c3_a_5_win_b				"Egss and Diary (in Dinars)"
+	label var c3_a_4_win_b				"Meat (in Dinars)"
+	label var c3_a_3_win_b				"Fish (in Dinars)"
+	label var c3_a_2_win_b				"Pasta, Rice (in Dinars)"
+	label var c3_a_1_win_b				"Bread, Flour (in Dinars)"
+	label var q2_1_16_win_b				"Number of phone owned"
+	label var q2_1_21_win_b				"Number of horses owned"
+	label var q2_1_19_win_b				"Number of chicken owned"
+	label var q2_1_18_win_b				"Number of sheep owned"
+	label var epargne_dette_b			"Contract debt last year"
+	label var epargne_cb_win_b			"Amount saved last year"
+	label var epargne_b					"Saved money last year"
+	label var epargne_pret_b			"Lend money last year"
+	label var initiatives_2_b			"Respondent meet the Omda last 6 month"
+	label var initiatives_1_b			"Respondent participated in a townhall last 6 month"
+	label var psy_a_menage_dum3_b		"Felt accepted by other HH in community at baseline"
+	label var psy_menage_dum3_b			"Respondent had good relation with other HH member at baseline"
+	label var association_2_b			"Member of a woman association"
+	label var association_dummy_b		"Member of any local association"
+	
+
 		
-		
+	
 	*******************************************
 	* Difference
 	*******************************************
 	
 	forvalue i = 0/1{
-	
-		iebaltab `balance_indiv', grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Balance_Individual_`i'.tex") replace
+		
+		iebaltab `balance_indiv', grpvar(trt_cash_`i') fixedeffect(strata_cash) cov(`balance_indiv_m') normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Balance_Individual_`i'.tex") replace
 	
 	}
 
+	preserve 
+	
+	replace trt_cash = 2 if trt_cash_1 == 1
+	
+	iebaltab `balance_indiv', grpvar(trt_cash) fixedeffect(strata_cash) cov(`balance_indiv_m') normdiff pftest pttest total grplabel("0 Control @ 1 Treatment 1 @ 2 Treatment 2") rowvarlabels savetex("Balance Test Cash/Table_Balance_Individual_main.tex") replace
+	
+	restore 
+	
 	********************************************
 	* Omnibus test
 	********************************************
@@ -80,7 +164,7 @@ replace trt_cash_1 = . if attrition == 1
 		local count_out = 0
 		
 		* Regression
-		reg trt_cash_`i' `balance_indiv' i.Strata, robust 
+		reg trt_cash_`i' `balance_indiv' `balance_indiv_m', robust 
 		
 		local n`i' = e(N)
 		
@@ -90,7 +174,7 @@ replace trt_cash_1 = . if attrition == 1
 			
 			local l_`count_out' : variable label `variables'
 							
-				local c`i'_2_`count_out' 	: di%12.3f _b[`variables']
+				local c`i'_2_`count_out' 	: di%12.3f  _b[`variables']
 				local se`i'_2_`count_out' 	: di%12.3f _se[`variables']
 					
 				* Compute p-value
@@ -98,6 +182,7 @@ replace trt_cash_1 = . if attrition == 1
 				
 				* Format local 
 				local pval`i'_2_`count_out' : di%12.3f `pval`i'_2_`count_out''
+				
 				local se`i'_2_`count_out' = trim("`se`i'_2_`count_out''")
 				local se`i'_2_`count_out' 		 "(`se`i'_2_`count_out'')"
 				local se`i'_2_`count_out' = trim("`se`i'_2_`count_out''")
@@ -129,8 +214,8 @@ replace trt_cash_1 = . if attrition == 1
 	forvalue i = 1/`count_out'{
 	
 		file write Table																																				_n ///
-		" `l_`i''					& `c0_2_`i''`s0_2_`i'' 	& `pval0_2_`count_out''	 & `c1_2_`i''`s1_2_`i'' & `pval1_2_`count_out''		\\ " 	_n ///
-		" 							&  `se0_2_`i''			& 				  	 	 &  `se1_2_`i''			&  							\\ " 	_n ///
+		" `l_`i''					& `c0_2_`i''`s0_2_`i'' 	& `pval0_2_`i''	 		& `c1_2_`i''`s1_2_`i'' 	& `pval1_2_`i''				\\ " 	_n ///
+		" 							&  `se0_2_`i''			& 				  	 	&  `se1_2_`i''			&  							\\ " 	_n ///
 		
 	}
 	
@@ -160,7 +245,7 @@ replace trt_cash_1 = . if attrition == 1
 			
 			local l_`count_out' : variable label `covariates'
 					
-			reg `covariates' trt_cash_`i' i.Strata, robust
+			reg `covariates' m_`covariates' trt_cash_`i' i.strata_cash, robust
 			
 				local c_1_`count_out' 	: di%12.3f _b[trt_cash]
 				local se_1_`count_out' 	: di%12.3f _se[trt_cash]
@@ -193,26 +278,14 @@ replace trt_cash_1 = . if attrition == 1
 
 
 	file open Table using "Balance Test Cash/Table_Balance_Individual_Cov_`i'.tex", text write replace
+	
+	forvalue i = 1/`count_out'{
+	
+		file write Table																					_n ///
+		" `l_`i''					&   `c_1_`i''`s_1_`i'' 	& `pval_1_`i'' & `n_1_`i''		\\ " 	_n ///
+		" 							&    `se_1_`i''			&  										\\ " 	_n ///
 		
-	file write Table  															_n ///
-	" `l_1'			& 	`c_1_1'`s_1_1' 		& `pval_1_1' & `n_1_1' 		\\ " 	_n ///
-	" 				&	 `se_1_1' & &							   		\\ " 	_n ///
-	" `l_2'			& 	`c_1_2'`s_1_2' 		& `pval_1_2' & `n_1_2' 		\\ " 	_n ///
-	" 				&	 `se_1_2' & &							   		\\ " 	_n ///
-	" `l_3'			& 	`c_1_3'`s_1_3' 		& `pval_1_3' & `n_1_3' 		\\ " 	_n ///
-	" 				&	 `se_1_3' & &							   		\\ " 	_n ///
-	" `l_4'			& 	`c_1_4'`s_1_4' 		& `pval_1_4' & `n_1_4' 		\\ " 	_n ///
-	" 				&	 `se_1_4' & &							   		\\ " 	_n ///
-	" `l_5'			& 	`c_1_5'`s_1_5' 		& `pval_1_5' & `n_1_5' 		\\ " 	_n ///
-	" 				&	 `se_1_5' & &							   		\\ " 	_n ///
-	" `l_6'			& 	`c_1_6'`s_1_6' 		& `pval_1_6' & `n_1_6' 		\\ " 	_n ///
-	" 				&	 `se_1_6' & &							   		\\ " 	_n ///
-	" `l_7'			& 	`c_1_7'`s_1_7' 		& `pval_1_7' & `n_1_7' 		\\ " 	_n ///
-	" 				&	 `se_1_7' & &							   		\\ " 	_n ///
-	" `l_8'			& 	`c_1_7'`s_1_8' 		& `pval_1_8' & `n_1_8' 		\\ " 	_n ///
-	" 				&	 `se_1_8' & &							   		\\ " 	_n ///
-	" `l_9'			& 	`c_1_9'`s_1_9' 		& `pval_1_9' & `n_1_9' 		\\ " 	_n ///
-	" 				&	 `se_1_9' & &							   		\\ " 	_n 
+	}
 	
 	file close Table	
 

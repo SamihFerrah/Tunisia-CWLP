@@ -89,7 +89,7 @@
 
 global importXclean_individual 	= 1
 
-global construct 				= 0
+global construct 				= 1
 
 global preliminary_report		= 0 
 
@@ -100,9 +100,9 @@ global preliminary_report		= 0
 ********************************************************************************
 
 
-global balance_test 			= 0
+global balance_test 			= 1
 
-global attrition_test 			= 0
+global attrition_test 			= 1
 
 ********************************************************************************
 ********************************************************************************
@@ -132,10 +132,37 @@ if $preliminary_report == 1 {
 
 if $construct == 1{
 
+	
+	do "$git_tunisia/dofiles/Second Round/Construct/Prepare Outcomes.do"		// Prepare outcomes for analysis
+	
 	do "$git_tunisia/dofiles/Second Round/Construct/Missing Imputation.do"		// Prepare outcomes and other relevant variables
+		
 	do "$git_tunisia/dofiles/Second Round/Construct/Index Construction.do"		// Impute missing outcomes variables 
+	
+	save "$vera/clean/clean_analysis_CashXFollow.dta", replace
+	
+	********************************************************************************
+	********************************************************************************
+	* DE-IDENTIFY DATA 
+	********************************************************************************
+	********************************************************************************
 
+	* 1) Define variable to be drop (Add variable below to be dropped)
+
+	local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
+
+
+	* 2) Drop ID variable 
+
+	foreach var of local deidentification {
+		
+		capture noisily drop `var' 													
+
+	}
+
+	sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_analysis_CashXFollow_noPII.dta", replace
 }
+
 
 * Balance test
 if $balance_test == 1{

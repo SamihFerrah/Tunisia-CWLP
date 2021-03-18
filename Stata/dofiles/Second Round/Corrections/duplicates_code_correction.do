@@ -62,3 +62,36 @@ replace HHID = 39847 if key == "uuid:6ddff959-e6b6-4a0c-a443-c0b5e6b1b506"
 
 replace hhid = 39286 if key == "uuid:f37552e6-def4-48a9-aa83-e07d6f1304b6"
 replace HHID = 39286 if key == "uuid:f37552e6-def4-48a9-aa83-e07d6f1304b6"
+
+replace hhid = 10796 if key == "uuid:db4573cf-5d22-4ce3-8c62-733b3454a1fa"
+replace HHID = 10796 if key == "uuid:db4573cf-5d22-4ce3-8c62-733b3454a1fa"
+
+replace hhid = 292 if key == "uuid:91e4b651-660d-4e9f-b420-e133e1105383"
+replace HHID = 292 if key == "uuid:91e4b651-660d-4e9f-b420-e133e1105383"
+
+drop if key == "uuid:386e4ea9-d585-497f-ab87-8ab4ff345dab" & HHID == 31424
+
+drop if key == "uuid:c7312290-47bf-4ad5-b28e-69b0282e75f2" & HHID == 32770
+
+replace HHID = 39432 if key == "uuid:e351c299-0bd9-40d7-b2eb-67966117e988"
+replace hhid = 39432 if key == "uuid:e351c299-0bd9-40d7-b2eb-67966117e988"
+
+replace HHID = 39974 if key == "uuid:ef5a6d24-b5d0-4c91-9ce9-a3bd5cbb502a"
+replace hhid = 39974 if key == "uuid:ef5a6d24-b5d0-4c91-9ce9-a3bd5cbb502a"
+
+/*
+replace HHID = if key == ""
+replace hhid = if key == ""
+
+replace HHID = if key == ""
+replace hhid = if key == ""
+
+replace HHID = if key == ""
+replace hhid = if key == ""
+
+replace HHID = if key == ""
+replace hhid = if key == ""
+
+replace HHID = if key == ""
+replace hhid = if key == ""
+*/

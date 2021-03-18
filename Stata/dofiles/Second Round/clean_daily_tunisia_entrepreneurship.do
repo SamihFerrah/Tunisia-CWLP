@@ -25,10 +25,7 @@ replace trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Tre
 g 		trt_cash_1 = 0 if Intervention == "Cash Grants - Women"
 replace trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Oui"
 
-* Imput to missing if treatment of other group
 
-replace trt_cash_1 = . if trt_cash_0 == 1
-replace trt_cash_0 = . if trt_cash_1 == 1
 
 label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
 label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
@@ -164,7 +161,25 @@ preserve
 	
 	import excel using "$shared/Daily Report/Update BJKA.xlsx", clear first 
 	
-	replace Status = "1" if Status =="Anciens codes 33"
+	
+	replace Status = "999" if Status ==" "
+		
+	destring Status, replace 
+
+	label define A 	1 "Completed" 					///
+					4 "Refusal"						///
+					5 "Dead"						///
+					6 "Abroad"						///
+					7 "Other region"				///
+					9 "Doesn't exist"				///
+					10 "Other"						///
+					12 "Replacement not used"		///
+					13 "Transfered to other team"	///
+					33 "Absent of dataset"			///
+					99 "Unreachable (other region)" ///
+					999 "Never contacted"
+					
+	label value Status A
 	
 	cap confirm numeric variable Status
 
@@ -177,15 +192,14 @@ preserve
 	destring Status, replace 
 	
 	* Keep last days of data collection 
-	keep if Status == 1	| Status == 33 | Status == 99							// Keep completed survey
+	keep if Status == 1	| Status == 33 											// Keep completed survey
 	
-	tab HHID if Status == 33 
-	
-	rename HHID 	hhid
+	replace Status = 1 
+		
 	rename Status 	Etat
 	rename Date 	Date_complete
 	
-	keep hhid Etat Date_complete Nom
+	keep HHID Etat Date_complete Nom
 	
 	* Create temperoray file 
 	tempfile daily_completion
@@ -196,7 +210,7 @@ restore
 cap drop _merge 
 
 * Merge data with completion report 
-merge m:1 hhid using `daily_completion'
+merge m:1 HHID using `daily_completion'
 
 * Create indicator for missing survey
 g 		missing_survey = 0 
@@ -225,11 +239,11 @@ preserve
 	rename a1_date 		Date_Sondage
 	rename description 	Description
 	
-	keep hhid Description Date_Sondage Date_complete
+	keep HHID Description Date_Sondage Date_complete Etat
 	
-	order Date_Sondage Date_complete hhid Description
+	order Date_Sondage Date_complete HHID Description
 	
-	sort Date_Sondage Description
+	sort Date_Sondage Description 
 	* Export to excel
 	
 	export excel using "$shared/Daily Report/Update BJKA.xlsx", sheet("Probleme Completion", replace) first(var)
@@ -239,7 +253,6 @@ restore
 drop if _merge == 2 
 
 cap drop _merge 
-
 ********************************************************************************
 ********************************************************************************
 * 5) ERROR IN CODE
@@ -305,13 +318,14 @@ preserve
 
 keep if dup > 0 & dup !=.
 
-keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date 
-sort hhid 
-order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date
+keep HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu
+sort HHID 
+order HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu
 
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
 
 restore
+
 
 * Duplicates in name ?
 

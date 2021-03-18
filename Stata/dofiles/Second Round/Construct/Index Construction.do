@@ -8,8 +8,48 @@
 * 0) DEFINE LOCAL USED TO BUILD INDEX 
 ********************************************************************************
 ********************************************************************************
-pause on 
 
+** Indices 
+* --------------
+	
+* Asset index	(first principal component of the assets list, following Filmer and Pritchett 2001) 
+pca b2_assetnum_room  b2_assetnum_mattresses b2_assetnum_radio b2_assetnum_cellphone b2_assetnum_smartphone b2_assetnum_refrigerator b2_assetnum_bicycles b2_assetnum_moto b2_assetnum_chaise b2_assetnum_tablette b2_assetnum_vent b2_assetnum_clim b2_assetnum_gr b2_assetnum_nat b2_assetnum_poch b2_assetnum_table b2_assetnum_salon b2_assetnum_bibli b2_assetnum_arm b2_assetnum_ferer b2_assetnum_mach b2_assetnum_dec 	
+predict assets_total
+pca b2_assetnum19_room  b2_assetnum19_mattresses b2_assetnum19_radio b2_assetnum19_cellphone b2_assetnum19_smartphone b2_assetnum19_refrigerator b2_assetnum19_bicycles b2_assetnum19_moto b2_assetnum19_chaise b2_assetnum19_tablette b2_assetnum19_vent b2_assetnum19_clim b2_assetnum19_gr b2_assetnum19_nat b2_assetnum19_poch b2_assetnum19_table b2_assetnum19_salon b2_assetnum19_bibli b2_assetnum19_arm b2_assetnum19_ferer b2_assetnum19_mach b2_assetnum19_dec 		
+predict assets19_total
+pca d_b2_assetnum_room  d_b2_assetnum_mattresses d_b2_assetnum_radio d_b2_assetnum_cellphone d_b2_assetnum_smartphone d_b2_assetnum_refrigerator d_b2_assetnum_bicycles d_b2_assetnum_moto d_b2_assetnum_chaise d_b2_assetnum_tablette d_b2_assetnum_vent d_b2_assetnum_clim d_b2_assetnum_gr d_b2_assetnum_nat d_b2_assetnum_poch d_b2_assetnum_table d_b2_assetnum_salon d_b2_assetnum_bibli d_b2_assetnum_arm d_b2_assetnum_ferer d_b2_assetnum_mach d_b2_assetnum_dec 	
+predict assets_d
+pca d_b2_assetnum19_room  d_b2_assetnum19_mattresses d_b2_assetnum19_radio d_b2_assetnum19_cellphone d_b2_assetnum19_smartphone d_b2_assetnum19_refrigerator d_b2_assetnum19_bicycles d_b2_assetnum19_moto d_b2_assetnum19_chaise d_b2_assetnum19_tablette d_b2_assetnum19_vent d_b2_assetnum19_clim d_b2_assetnum19_gr d_b2_assetnum19_nat d_b2_assetnum19_poch d_b2_assetnum19_table d_b2_assetnum19_salon d_b2_assetnum19_bibli d_b2_assetnum19_arm d_b2_assetnum19_ferer d_b2_assetnum19_mach d_b2_assetnum19_dec 		
+predict assets19_d
+
+	
+* Anxiety index
+gen anxiety_index = (d3_shortnessbreath + d3_fearlosingcontrol + d3_worryest + d3_feelingsfear + d3_frighten + d3_feeldeceiving + ///
+					d3_solitaryactivities + d3_uncomfortabl + d3_unwilling) / 9
+
+* Depression index
+gen depression_index = 	(d3_lifethreatening + d3_distressing + d3_avoidthinking + d3_remembering + d3_lostinterest + d3_feeldetached ///
+						+ d3_oftenirritable + d3_makedecisions + d3_sleepeatinghabit + d3_depressed + d3_wrongmatter ///
+						+ d3_alcoholdrugs + d3_feltangry + d3_troubllistening + d3_wrongblame + d3_recognition ///
+						+ d3_believethink + d3_frustrated + d3_enoughsleep + d3_lotofthings + d3_nightmares ///
+						+ d3_solveproblems + d3_dependsmainly + d3_feel_helpless + d3_influence_many + d3_taking_control ///
+						+ d3_exploitedcheated + d3_have_control + d3_trust_worthy + d3_achieveanything + d3_beingaccepted) / 31
+
+* Z-scores index
+
+	foreach var in anxiety_index depression_index assets_total assets19_total assets_d assets19_d {
+	sum `var' 					if trt_cash==0 & attrition == 0 
+	gen cmean_`var'				= r(mean)	if attrition == 0 
+	gen csd_`var'				= r(sd)	if attrition == 0 
+	gen z_`var'					= (`var' - cmean_`var')/csd_`var' if  attrition == 0 
+	}
+
+	sum z_* if trt_cash==0 & attrition == 0 
+	
+	
+
+
+/*
 * Define sub index local
 
 local run_business 							c1_job_covid // c1_descprimjob c1_descsecjob
