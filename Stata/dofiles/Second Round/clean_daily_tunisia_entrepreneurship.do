@@ -31,6 +31,8 @@ label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
 label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
 label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
 	
+rename imada imada_endline 
+
 ********************************************************************************
 ********************************************************************************
 * 2) CHECK THAT ALL SURVEY SUBMITTED ARE COMLETED 
@@ -161,10 +163,11 @@ preserve
 	
 	import excel using "$shared/Daily Report/Update BJKA.xlsx", clear first 
 	
+	drop if HHID == .
 	
 	replace Status = "999" if Status ==" "
-		
-	destring Status, replace 
+	replace Status = ""	   if Status == "Rendez vous cette semaine"
+	destring Status, replace
 
 	label define A 	1 "Completed" 					///
 					4 "Refusal"						///
@@ -192,14 +195,16 @@ preserve
 	destring Status, replace 
 	
 	* Keep last days of data collection 
-	keep if Status == 1	| Status == 33 											// Keep completed survey
+	*keep if Status == 1	| Status == 33 											// Keep completed survey
 	
-	replace Status = 1 
+	*replace Status = 1 
 		
 	rename Status 	Etat
 	rename Date 	Date_complete
 	
-	keep HHID Etat Date_complete Nom
+	keep HHID Etat Date_complete Nom Intervention Telephone1 Telephone2 Nom
+	
+	rename Intervention Inter
 	
 	* Create temperoray file 
 	tempfile daily_completion
@@ -214,7 +219,7 @@ merge m:1 HHID using `daily_completion'
 
 * Create indicator for missing survey
 g 		missing_survey = 0 
-replace missing_survey = 1 if _merge == 2 
+replace missing_survey = 1 if _merge == 2 & (Etat == 1 | Etat == 33)
 
 label var missing_survey "Missing survey"
 
@@ -239,9 +244,9 @@ preserve
 	rename a1_date 		Date_Sondage
 	rename description 	Description
 	
-	keep HHID Description Date_Sondage Date_complete Etat
+	keep HHID Nom Description Date_Sondage Date_complete Etat Telephone1 Telephone2
 	
-	order Date_Sondage Date_complete HHID Description
+	order Date_Sondage Date_complete HHID Nom Description
 	
 	sort Date_Sondage Description 
 	* Export to excel

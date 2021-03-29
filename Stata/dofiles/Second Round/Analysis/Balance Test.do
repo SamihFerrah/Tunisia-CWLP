@@ -14,6 +14,7 @@ cap file close Table
 cd "$git_tunisia/outputs/Main/"
 pause on 
 clear 
+do "$git_tunisia/dofiles/Ado/stata-tex.do"
 
 
 local balance_indiv 	repondant_age_b repondant_educ_b									///
@@ -45,17 +46,97 @@ local balance_indiv_om 	repondant_age_b repondant_educ_b									///
 						c3_a_9_win_b c3_a_10_win_b c3_a_11_win_b c4_win_b 					/// 
 						business_q0_main_b
 						
+global balance 	woman_b repondant_age_b secondary_b  origine_naissance_b married_b relation_head_b relation_spouse_b relation_daughter_b relation_other_b emploi_main_b initiatives_2_b formation_b ///
+				hhsize_b children_b adults_b elderly_b conso_food_pc_b conso_nofood_pc_b conso_tot_pc_b dirtfloor_b thatched_still_b proprietaire_terre_b livestock_b /// 
+				distance_cheflieu_b distance_marche_b distance_transpublic_b distance_ecoleprim_b distance_eau_b 
+				
 ********************************************************************************
 ********************************************************************************						
 * 1) Balance test at individual level 
 ********************************************************************************
 ********************************************************************************						
-	
 
 u "$vera/clean/clean_analysis_CashXFollow.dta", clear
 
-keep if Intervention == "Cash Grants - Women" & tot_complete == 1 
+drop if tot_complete == 0 | Intervention == "Follow up - TCLP" | Intervention == "" | Intervention == "Cash Grants - Partenaire"
 
+sum 			woman_b repondant_age_b secondary_b  origine_naissance_b married_b relation_head_b relation_spouse_b relation_daughter_b relation_other_b emploi_main_b initiatives_2_b ///
+				hhsize_b children_b adults_b elderly_b conso_food_pc_b conso_nofood_pc_b conso_tot_pc_b dirtfloor_b thatched_still_b proprietaire_terre_b livestock_b /// 
+				distance_cheflieu_b distance_marche_b distance_transpublic_b distance_ecoleprim_b distance_eau_b // many missing values for variables: distance_ecolesec_b distance_dispensaire_b
+
+
+* Table balance full
+* -------------------------
+
+* Means, sd and ttests and normalized diff
+foreach var in $balance {
+forvalues x = 0/2 {
+sum `var' if group == `x'
+local sd = `r(sd)'
+local n = `r(N)'
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_mean`x') value(" `r(mean)'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_sd`x') value(" `sd'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_n`x') value(" `n'") format(%-9.0g)
+ttest `var' , by(trt_cash_`x')
+local n1=`r(N_1)'
+local n2=`r(N_2)'
+local ntot=`n1'+`n2'
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_p`x') value(" `r(p)'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_ntot`x') value(" `ntot'") format(%-9.0g)
+stddiff `var' , by(trt_cash_`x')
+matrix b = r(output)
+local ndiff = b[1,5]	
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_ndiff`x') value(" `ndiff'") format(%6.3f)
+}
+}
+* Omnibus test
+forvalues x = 0/2 {
+reg trt_cash_`x'	$balance
+test $balance
+insert_into_file using "${stata_tex}/sample_table.csv", key(omnip`x') value(" `r(p)'") format(%6.3f)
+}
+
+
+* Table balance endline sample
+* ----------------------------------------
+
+drop if attrition == 1
+
+* Means, sd and ttests and normalized diff
+foreach var in $balance {
+forvalues x = 0/2 {
+sum `var' if group == `x'
+local sd = `r(sd)'
+local n = `r(N)'
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'2_mean`x') value(" `r(mean)'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'2_sd`x') value(" `sd'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'2_n`x') value(" `n'") format(%-9.0g)
+ttest `var' , by(trt_cash_`x')
+local n1=`r(N_1)'
+local n2=`r(N_2)'
+local ntot=`n1'+`n2'
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'2_p`x') value(" `r(p)'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'2_ntot`x') value(" `ntot'") format(%-9.0g)
+stddiff `var' , by(trt_cash_`x')
+matrix b = r(output)
+local ndiff = b[1,5]	
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'2_ndiff`x') value(" `ndiff'") format(%6.3f)
+}
+}
+
+* Omnibus test
+forvalues x = 0/2 {
+reg trt_cash_`x'	$balance
+test $balance
+insert_into_file using "${stata_tex}/sample_table.csv", key(omnip`x'2) value(" `r(p)'") format(%6.3f)
+}
+
+
+table_from_tpl, t("${stata_tex}/TPL_balance.tex") r("${stata_tex}/sample_table.csv") o("${stata_tex}/balance.tex")
+table_from_tpl, t("${stata_tex}/TPL_balance2.tex") r("${stata_tex}/sample_table.csv") o("${stata_tex}/balance2.tex")
+
+
+/*
 replace trt_cash_0 = . if attrition == 1
 replace trt_cash_1 = . if attrition == 1
 	

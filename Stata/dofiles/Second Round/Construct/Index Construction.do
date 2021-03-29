@@ -13,13 +13,23 @@
 * --------------
 	
 * Asset index	(first principal component of the assets list, following Filmer and Pritchett 2001) 
+
 pca b2_assetnum_room  b2_assetnum_mattresses b2_assetnum_radio b2_assetnum_cellphone b2_assetnum_smartphone b2_assetnum_refrigerator b2_assetnum_bicycles b2_assetnum_moto b2_assetnum_chaise b2_assetnum_tablette b2_assetnum_vent b2_assetnum_clim b2_assetnum_gr b2_assetnum_nat b2_assetnum_poch b2_assetnum_table b2_assetnum_salon b2_assetnum_bibli b2_assetnum_arm b2_assetnum_ferer b2_assetnum_mach b2_assetnum_dec 	
+
 predict assets_total
-pca b2_assetnum19_room  b2_assetnum19_mattresses b2_assetnum19_radio b2_assetnum19_cellphone b2_assetnum19_smartphone b2_assetnum19_refrigerator b2_assetnum19_bicycles b2_assetnum19_moto b2_assetnum19_chaise b2_assetnum19_tablette b2_assetnum19_vent b2_assetnum19_clim b2_assetnum19_gr b2_assetnum19_nat b2_assetnum19_poch b2_assetnum19_table b2_assetnum19_salon b2_assetnum19_bibli b2_assetnum19_arm b2_assetnum19_ferer b2_assetnum19_mach b2_assetnum19_dec 		
+
+pca b2_assetnum19_room  b2_assetnum19_mattresses b2_assetnum19_radio b2_assetnum19_cellphone b2_assetnum19_smartphone b2_assetnum19_refrigerator b2_assetnum19_bicycles b2_assetnum19_moto b2_assetnum19_chaise b2_assetnum19_tablette b2_assetnum19_vent b2_assetnum19_clim b2_assetnum19_gr b2_assetnum19_nat b2_assetnum19_poch b2_assetnum19_table b2_assetnum19_salon b2_assetnum19_bibli b2_assetnum19_arm b2_assetnum19_ferer b2_assetnum19_mach b2_assetnum19_dec 	
+	
 predict assets19_total
-pca d_b2_assetnum_room  d_b2_assetnum_mattresses d_b2_assetnum_radio d_b2_assetnum_cellphone d_b2_assetnum_smartphone d_b2_assetnum_refrigerator d_b2_assetnum_bicycles d_b2_assetnum_moto d_b2_assetnum_chaise d_b2_assetnum_tablette d_b2_assetnum_vent d_b2_assetnum_clim d_b2_assetnum_gr d_b2_assetnum_nat d_b2_assetnum_poch d_b2_assetnum_table d_b2_assetnum_salon d_b2_assetnum_bibli d_b2_assetnum_arm d_b2_assetnum_ferer d_b2_assetnum_mach d_b2_assetnum_dec 	
+
+* Total number of assets
+pca d_b2_assetnum_room  d_b2_assetnum_mattresses d_b2_assetnum_radio d_b2_assetnum_cellphone d_b2_assetnum_smartphone d_b2_assetnum_refrigerator d_b2_assetnum_bicycles d_b2_assetnum_moto d_b2_assetnum_chaise d_b2_assetnum_tablette d_b2_assetnum_vent d_b2_assetnum_clim d_b2_assetnum_gr d_b2_assetnum_nat d_b2_assetnum_poch d_b2_assetnum_table d_b2_assetnum_salon d_b2_assetnum_bibli d_b2_assetnum_arm d_b2_assetnum_ferer d_b2_assetnum_mach d_b2_assetnum_dec 
+	
 predict assets_d
-pca d_b2_assetnum19_room  d_b2_assetnum19_mattresses d_b2_assetnum19_radio d_b2_assetnum19_cellphone d_b2_assetnum19_smartphone d_b2_assetnum19_refrigerator d_b2_assetnum19_bicycles d_b2_assetnum19_moto d_b2_assetnum19_chaise d_b2_assetnum19_tablette d_b2_assetnum19_vent d_b2_assetnum19_clim d_b2_assetnum19_gr d_b2_assetnum19_nat d_b2_assetnum19_poch d_b2_assetnum19_table d_b2_assetnum19_salon d_b2_assetnum19_bibli d_b2_assetnum19_arm d_b2_assetnum19_ferer d_b2_assetnum19_mach d_b2_assetnum19_dec 		
+
+* Number of assets obtained in 2019
+pca d_b2_assetnum19_room  d_b2_assetnum19_mattresses d_b2_assetnum19_radio d_b2_assetnum19_cellphone d_b2_assetnum19_smartphone d_b2_assetnum19_refrigerator d_b2_assetnum19_bicycles d_b2_assetnum19_moto d_b2_assetnum19_chaise d_b2_assetnum19_tablette d_b2_assetnum19_vent d_b2_assetnum19_clim d_b2_assetnum19_gr d_b2_assetnum19_nat d_b2_assetnum19_poch d_b2_assetnum19_table d_b2_assetnum19_salon d_b2_assetnum19_bibli d_b2_assetnum19_arm d_b2_assetnum19_ferer d_b2_assetnum19_mach d_b2_assetnum19_dec 	
+	
 predict assets19_d
 
 	
@@ -37,16 +47,65 @@ gen depression_index = 	(d3_lifethreatening + d3_distressing + d3_avoidthinking 
 
 * Z-scores index
 
-	foreach var in anxiety_index depression_index assets_total assets19_total assets_d assets19_d {
+foreach var in anxiety_index depression_index assets_total assets19_total assets_d assets19_d {
+	
 	sum `var' 					if trt_cash==0 & attrition == 0 
 	gen cmean_`var'				= r(mean)	if attrition == 0 
 	gen csd_`var'				= r(sd)	if attrition == 0 
 	gen z_`var'					= (`var' - cmean_`var')/csd_`var' if  attrition == 0 
-	}
 
-	sum z_* if trt_cash==0 & attrition == 0 
+}
+
+sum z_* if trt_cash==0 & attrition == 0 
 	
 	
+* Create second version of index (with a subset of variables)
+
+egen 	anxiety_index2 = rowtotal(d3_shortnessbreath d3_fearlosingcontrol d3_worryest d3_feelingsfear d3_frighten)
+replace anxiety_index2 = anxiety_index2/5
+
+egen 	ptsd_index = rowtotal(d3_lifethreatening d3_distressing d3_avoidthinking d3_remembering) 
+replace ptsd_index = ptsd_index/4
+
+egen 	depression2_index = rowtotal(d3_lostinterest d3_feeldetached d3_oftenirritable d3_makedecisions d3_sleepeatinghabit d3_depressed d3_feltangry d3_believethink)
+
+replace depression2_index = depression2_index/8
+
+egen 	lackselfeff_index = rowtotal(d3_wrongmatter d3_recognition d3_lotofthings d3_solveproblems d3_dependsmainly ///
+									 d3_feel_helpless d3_influence_many d3_taking_control d3_exploitedcheated 		///
+									 d3_have_control d3_achieveanything)
+									 
+replace lackselfeff_index = lackselfeff_index/11
+
+** Agency index 
+	
+foreach var in	x9_1 x9_2 x9_3 x9_4 x9_5 x9_6 x9_7 x9_largepurchase x9_dailypurchase x9_borrow x9_lend  {
+
+				replace `var' = 0 if `var' == 1
+				replace `var' = 1 if `var' == 2 | `var' == 3
+				
+}
+				
+foreach var in	x9_wifepersonal x9_occupation x9_workplace x9_workhours x9_participation {
+
+				replace `var' = 0 if `var' == 1 | `var' == 2
+				replace `var' = 1 if `var' == 3
+				
+}
+
+gen agency_index =	(x9_1 + x9_2 + x9_3 + x9_4 + x9_5 + x9_6 + x9_7 + x9_largepurchase + x9_dailypurchase + x9_wifepersonal + ///
+				x9_borrow + x9_lend + x9_occupation + x9_workplace + x9_workhours + x9_participation) / 16
+			
+
+foreach var in agency_index anxiety_index2 ptsd_index depression2_index lackselfeff_index {
+
+	sum `var' 					if trt_cash==0
+	gen cmean_`var'				= r(mean)
+	gen csd_`var'				= r(sd)
+	gen z_`var'					= (`var' - cmean_`var')/csd_`var'
+
+}
+
 
 
 /*

@@ -17,67 +17,86 @@
 	* Samih 			8
 	* Samih2			9
 	* Varada 			10
+	* Replication 		11
 	
 	
-	global user_number  9
+	global user_number  11
 
 
 	* Dropbox/Box globals
 	* ---------------------
 
 	if $user_number == 8 {
+	
+		* Dropbox folder 
 		global home		"C:/Users/Samih/Dropbox/WB-Tunisia-CWLP-IE"
 		global dropbox	"C:/Users/samih/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
 		
 		* Location of shared folder with BJKA
 		global shared	"C:/Users/samih/Dropbox/World Bank/Tunisia IE - Shared folder"
+		
+		* Github folder 
+		global git_tunisia "C:/Users/samih/Documents/Github/Tunisia-CWLP/Stata"
+
 	}
 	
 	if $user_number == 9 {
+	
+		* Dropbox folder
 		global home		"C:/Users/wb553190/Dropbox/WB-Tunisia-CWLP-IE"
 		global dropbox	"C:/Users/wb553190/Dropbox/World Bank/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
 		
 		* Location of shared folder with BJKA
 		global shared	"C:/Users/wb553190/Dropbox/World Bank/Tunisia IE - Shared folder"
+		
+		* Github folder
+		global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata"
 	}
 		
 		
 	if $user_number == 10 {
+	
+		* Dropbox folder
 		global home		"D:/Dropbox/WB-Tunisia-CWLP-IE" 
 		global dropbox 	"D:/Dropbox/Tunisia CWLP/2.TUNISIA/01.Data/02_DataWork_Sarah (FO Replicate)"
 		
 		* Location of shared folder with BJKA
 		global shared	"D:/Dropbox/Tunisia IE - Shared folder" 
-	}	
+		
+		* Github folder
+		global git_tunisia "D:/GitHub/Tunisia-CWLP/Stata" 
+	}
+	
+	
+	
+	if $user_number == 11 {
+	
+		* Dropbox folder
+		global home		"C:/Users/wb553190/Dropbox/World Bank/Code Peer Review 2021 (Tunisia IE)"					// Here goes the path to the dropbox folder with the non PII data  
+		
+		* Github folder
+			
+		global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata" // Here goes the path to the github folder 
+		
+	}
 		
 		
 		* Location of baseline 
 		
-		*location of the Raw data, raw;
+		* Location of the Raw data, raw;
 		global stata_base "$dropbox/stata"
 		
-		*location of the temporary data, temp;
+		* Location of the temporary data, temp;
 		global rando "$home/14. Female Entrepreneurship Add on/Data/Randomization/Datawork/01_rando"
 		
-		*location of stata data 
+		* Location of stata data 
 		global stata   "$home/14. Female Entrepreneurship Add on/Data/Second round"
 
-		*location of the Raw data, raw;
+		* Location of the Raw data, raw;
 		global vera   "B:"
 		
-		if $user_number == 7{
-			global git_tunisia "/Users/Samih/Desktop/Work/Git/Tunisia-CWLP/Stata"
-		}
-		if $user_number == 8{
-			global git_tunisia "C:/Users/samih/Documents/Github/Tunisia-CWLP/Stata"
-		}
-		if $user_number == 9{
-			global git_tunisia "C:/Users/wb553190/OneDrive - WBG/Documents/Github/Tunisia-CWLP/Stata"
-		}
-
-		if $user_number == 10{
-			global git_tunisia "D:/GitHub/Tunisia-CWLP/Stata" 
-		}
+		* For outputs 
+		global stata_tex "$git_tunisia/outputs/Second Round/Report"
 
 ********************************************************************************
 ********************************************************************************
@@ -87,7 +106,7 @@
 ********************************************************************************
 ********************************************************************************
 
-global importXclean_individual 	= 1
+global importXclean_individual 	= 0
 
 global construct 				= 1
 
@@ -100,14 +119,18 @@ global preliminary_report		= 0
 ********************************************************************************
 
 
-global balance_test 			= 1
+global balance_test 			= 0
 
-global attrition_test 			= 1
+global attrition_test 			= 0
+
+global endline_report			= 0
 
 ********************************************************************************
 ********************************************************************************
 ********************************************************************************
 ********************************************************************************
+
+do "$git_tunisia/dofiles/Ado/stata-tex.do"
 
 *Clean and prepare dataset
 
@@ -160,7 +183,12 @@ if $construct == 1{
 
 	}
 
-	sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_analysis_CashXFollow_noPII.dta", replace
+	if $user_number == 11{														// Save in db folder replication 
+		sa "$home/clean_analysis_CashXFollow_noPII.dta", replace
+	}
+	else {
+		sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_analysis_CashXFollow_noPII.dta", replace
+	}
 }
 
 
@@ -177,6 +205,14 @@ if $attrition_test == 1{
 	
 	do "$git_tunisia/dofiles/Second Round/Analysis/Attrition Test"
 
+}
+
+* Endline report
+
+if $endline_report == 1{
+
+	do "$git_tunisia/dofiles/Second Round/Analysis/Analysis Endline Report.do"
+	
 }
 
 

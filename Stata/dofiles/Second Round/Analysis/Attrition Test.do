@@ -39,6 +39,20 @@ local balance_coll		q0_1_c q0_2_c q0_3_c 											///
 
 
 
+** Prepare treatment variables
+sum trt_*
+replace trt_cash_0 = 0 if trt_cash_0 == .
+replace trt_cash_1 = 0 if trt_cash_1 == .
+replace trt_cash_0 = . if trt_cash_1 == 1
+replace trt_cash_1 = . if trt_cash_0 == 1
+gen trt_cash_2 = 0 if trt_cash_0 == 1
+replace trt_cash_2 = 1 if trt_cash_1 == 1
+sum trt_* trt_cash_2
+gen group = 0 if trt_cash == 0
+replace group = 1 if  trt_cash_0 == 1
+replace group = 2 if  trt_cash_1 == 1 
+
+
 ********************************************************************************
 ********************************************************************************						
 * 1) ATTRITION test at individual level 
@@ -47,6 +61,43 @@ local balance_coll		q0_1_c q0_2_c q0_3_c 											///
 	
 u "$vera/clean/clean_analysis_CashXFollow.dta", clear
 
+* Table Attrition 
+* ----------------------
+
+egen attrition2 = rowtotal(Dead Moved Refusal Other)
+// gen Submitted = 1 if attrition == 1 & attrition2 == 0
+// replace Submitted = 0 if Submitted == .
+replace Other = 1 if attrition == 1 & attrition2 == 0 // submitted forms
+
+global attri attrition attrition2 Dead Moved Refusal Other
+
+foreach var in $attri {
+forvalues x = 0/2 {
+sum `var' if group == `x'
+local sd = `r(sd)'
+local n = `r(N)'
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_mean`x') value(" `r(mean)'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_sd`x') value(" `sd'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_n`x') value(" `n'") format(%-9.0g)
+ttest `var' , by(trt_cash_`x')
+local n1=`r(N_1)'
+local n2=`r(N_2)'
+local ntot=`n1'+`n2'
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_p`x') value(" `r(p)'") format(%6.3f)
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_ntot`x') value(" `ntot'") format(%-9.0g)
+stddiff `var' , by(trt_cash_`x')
+matrix b = r(output)
+local ndiff = b[1,5]	
+insert_into_file using "${stata_tex}/sample_table.csv", key(`var'_ndiff`x') value(" `ndiff'") format(%6.3f)
+}
+}
+
+
+table_from_tpl, t("${stata_tex}/TPL_attrition.tex") r("${stata_tex}/sample_table.csv") o("${stata_tex}/attrition.tex")
+
+
+
+/*
 keep if Intervention == "Cash Grants - Women" 
 
 destring Strata, replace
@@ -134,30 +185,9 @@ local perc3 = `n3'/500
 	
 	file close Table 
 	
-* Check code and Names of _merge == 1
-
-gen 	Refusal = 0
-replace Refusal = 1 	if Status == 4
-
-gen 	Dead = 0 
-replace Dead = 1 		if Status == 5
-
-gen 	Abroad = 0 
-replace Abroad = 1 		if Status == 6
-
-gen 	Moved = 0 
-replace Moved = 1 		if Status == 7 
-
-g 		Unreachable = 0
-replace Unreachable = 1 	if Status == 9
-
-g 		Other = 0 
-replace Other = 1 		if Status == 10
-
-	
 local counter = 0 
 
-foreach reason in Refusal Dead Abroad Moved Unreachable Other{
+foreach reason in Refusal Dead Moved Other{
 
 	local counter = `counter' + 1 
 	
@@ -190,10 +220,8 @@ foreach reason in Refusal Dead Abroad Moved Unreachable Other{
 	file write Table  									_n ///
 	"Refusal 	& `n11' & `m11' & `n21' & `m21'  & `n31' & `m31' \\" _n ///
 	"Dead	 	& `n12' & `m12' & `n22' & `m22'  & `n32' & `m32' \\" _n ///
-	"Abroad	 	& `n13' & `m13' & `n23' & `m23'  & `n33' & `m33' \\" _n ///
-	"Moved	 	& `n14' & `m14' & `n24' & `m24'  & `n34' & `m34' \\" _n ///
-	"Unreachable & `n15' & `m15' & `n25' & `m25'  & `n35' & `m35' \\" _n ///
-	"Other		& `n16' & `m16' & `n26' & `m26'  & `n36' & `m36' \\" _n ///
+	"Moved	 	& `n13' & `m13' & `n23' & `m23'  & `n33' & `m33' \\" _n ///
+	"Other	 	& `n14' & `m14' & `n24' & `m24'  & `n34' & `m34' \\" _n ///
 	"\hline														   " _n 
 	
 	file close Table
@@ -202,7 +230,7 @@ foreach reason in Refusal Dead Abroad Moved Unreachable Other{
 	
 	forvalue i = 0/1{
 	
-		iebaltab Refusal Dead Abroad Moved Unreachable Other, grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_`i'.tex") replace
+		iebaltab Refusal Dead Moved Other, grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_`i'.tex") replace
 	
 	}
 	
@@ -210,7 +238,7 @@ preserve
 	
 	replace trt_cash = 2 if trt_cash_1 == 1
 	
-	iebaltab Refusal Dead Abroad Moved Unreachable Other, grpvar(trt_cash) fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment 1 @ 2 Treatment 2") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_main.tex") replace
+	iebaltab Refusal Dead Moved Other, grpvar(trt_cash) fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment 1 @ 2 Treatment 2") rowvarlabels savetex("Balance Test Cash/Table_Attri_Diff_Breakdown_main.tex") replace
 	
 restore 
 

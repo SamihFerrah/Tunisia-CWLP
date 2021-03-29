@@ -79,13 +79,24 @@ replace hhid = 39432 if key == "uuid:e351c299-0bd9-40d7-b2eb-67966117e988"
 replace HHID = 39974 if key == "uuid:ef5a6d24-b5d0-4c91-9ce9-a3bd5cbb502a"
 replace hhid = 39974 if key == "uuid:ef5a6d24-b5d0-4c91-9ce9-a3bd5cbb502a"
 
+
+drop if HHID == 1194 & key == "uuid:59bd6025-16b1-4950-a879-b90d1819adf4"
+
+replace HHID = 30654 if key == "uuid:c48fb60a-7ba9-48ed-b5b8-f99ab0c79b7c"
+replace hhid = 30654 if key == "uuid:c48fb60a-7ba9-48ed-b5b8-f99ab0c79b7c"
+
+drop if HHID == 31937 & key == "uuid:cf65218e-c983-4ddb-968b-d64df5de4d32"
+
+replace HHID = 39108 if key == "uuid:66042087-c142-4eea-8f6f-4a77134c6d96"
+replace hhid = 39108 if key == "uuid:66042087-c142-4eea-8f6f-4a77134c6d96"
+
+drop if HHID == 39340 & key == "uuid:0e0eee9b-103c-437c-ae37-65611cf69395"
+
+drop if HHID == 39584 & key == "uuid:e9f56d63-3298-46d0-b963-24435034091b"
+
+drop if HHID == 39607 & key == "uuid:ba5c6b16-bc35-411e-a2ea-3a6f5372d4a4"
+
 /*
-replace HHID = if key == ""
-replace hhid = if key == ""
-
-replace HHID = if key == ""
-replace hhid = if key == ""
-
 replace HHID = if key == ""
 replace hhid = if key == ""
 

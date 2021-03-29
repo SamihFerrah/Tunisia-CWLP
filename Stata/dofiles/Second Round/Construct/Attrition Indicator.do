@@ -67,6 +67,7 @@ preserve
 
 	if _rc !=0{
 		
+		replace Status = ""	   if Status == "Rendez vous cette semaine"
 		replace Status = subinstr(Status," ","",.)
 		
 	}
@@ -124,6 +125,20 @@ tab replacement if _merge == 3
 * Drop replacement not used 
 
 drop if replacement == 0 & _merge == 2
+
+* Check code and Names of _merge == 1
+
+gen 	Refusal = 0
+replace Refusal = 1 	if Status == 4
+
+gen 	Dead = 0 
+replace Dead = 1 		if Status == 5
+
+gen 	Moved = 0 
+replace Moved = 1 		if Status == 7 | Status == 6 | Status == 9 
+
+g 		Other = 0 
+replace Other = 1 		if Status == 10 | Status == .
 
 
 

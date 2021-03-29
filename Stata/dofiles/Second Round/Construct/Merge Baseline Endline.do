@@ -50,7 +50,15 @@ local all_individual	emploi_main days_work_main_win hours_work_main_win inc_work
 						association_dummy comite_c comite_c_menage conflit_dispute_in conflit_dispute_out 				///
 						migration_cm_q1 migration_q1 security_dummy														///
 						association_7 association_8 securite_1 securite_2 securite_3 securite_4							///
-						securite_5 securite_6
+						securite_5 securite_6 c3_a_1 c3_a_2 c3_a_3 c3_a_4 c3_a_5 c3_a_6 c3_a_7 							///
+						c3_a_8 c3_a_9 c3_a_10 c3_a_11 c4 c5 c6 c7 c8 c9 c11 c12 c13 c14 c15 c16 c18 					///
+						q2_1_2 q2_1_3 q2_1_4 q2_1_5 q2_1_6 q2_1_7 q2_1_8 q2_1_9 q2_1_10									///
+						q2_1_11 q2_1_12 q2_1_13 q2_1_14 q2_1_15 q2_1_16 q2_1_17 q2_1_18 q2_1_19 						///
+						q2_1_20 q2_1_21 q2_1_22 epargne_dette_cb epargne epargne_cb enfant_moins5 enfant_1317 			///
+						enfant_primaire toit mur sol proprietaire_terre distance_eau distance_marche					/// 
+						distance_transpublic distance_ecoleprim distance_ecolesec distance_dispensaire 					///
+						distance_cheflieu repondant_sex repondant_mat repondant_rel
+						
 			
 global all_outcomes ""
 
@@ -69,7 +77,6 @@ u "$vera/temp/clean_CashXFollow_PII_2.dta", clear
 * Merge with rand info for completing Nom Imada Age values 
 
 cap drop _merge
-cap drop imada
 cap drop Nom 
 cap drop Age 
 cap drop Imada
@@ -136,3 +143,79 @@ drop if _merge == 2
 * Generate Strata variable 
 
 egen strata_cash = group(TCLP_trt imada) if Intervention == "Cash Grants - Women"
+
+gen 	moved_imada = 0 
+replace moved_imada = 1 if imada != imada_endline
+
+label var moved_imada "Moved Imada"
+
+* Cleaning baseline
+* --------------------
+
+	* Prepare conso
+	foreach var in 	c3_a_1_b c3_a_2_b c3_a_3_b c3_a_4_b c3_a_5_b c3_a_6_b c3_a_7_b c3_a_8_b c3_a_9_b c3_a_10_b c3_a_11_b  {
+			replace `var'=`var'/7
+			}
+	foreach var in 	c4_b c5_b c6_b c7_b c8_b c9_b  {
+			replace `var' = `var'/30
+			}
+	foreach var in 	c11_b c12_b c13_b c14_b c15_b c16_b c18_b {
+			replace `var' = `var'/365
+			}		
+	egen conso_food_b = rowtotal(c3_a_1_b c3_a_2_b c3_a_3_b c3_a_4_b c3_a_5_b c3_a_6_b c3_a_7_b c3_a_8_b c3_a_9_b c3_a_10_b c3_a_11_b)
+	gen conso_food_pc_b = conso_food_b/hhsize_b
+	egen conso_nofood_b = rowtotal(c4_b c5_b c6_b c7_b c8_b c9_b c11_b c12_b c13_b c14_b c15_b c16_b c18_b)
+	gen conso_nofood_pc_b = conso_nofood_b/hhsize_b
+	egen conso_tot_b = rowtotal(conso_food_b conso_nofood_b)
+	egen conso_tot_pc_b = rowtotal(conso_food_pc_b conso_nofood_pc_b)
+	
+
+	** Winsorization
+	foreach var in		distance_eau_b distance_marche_b distance_transpublic_b distance_ecoleprim_b distance_ecolesec_b distance_dispensaire_b distance_cheflieu_b ///
+						conso_food_b conso_food_pc_b conso_nofood_b conso_nofood_pc_b conso_tot_b conso_tot_pc_b {	
+						tab `var'
+						count if `var' > 0
+						local n = (`r(N)'*10)/100 // 10% of positive values
+						di `n'
+						local n_rounded = round(`n',1) // round
+						di `n_rounded'
+						winsor `var' , gen(w_`var') h(`n_rounded')
+						tab w_`var'
+						drop `var'
+						rename w_`var' `var'
+						}
+						
+	** Positive values
+	foreach var in		distance_eau_b distance_marche_b distance_transpublic_b distance_ecoleprim_b distance_ecolesec_b distance_dispensaire_b {
+						replace `var' = `var'*(-1)
+						}
+	
+	** Prepare respondent var
+	gen relation_head_b = 1 if repondant_rel_b == 1
+	gen relation_spouse_b = 1 if repondant_rel_b == 2
+	gen relation_daughter_b = 1 if repondant_rel_b == 3
+	gen relation_other_b = 1 if repondant_rel_b != 1 & repondant_rel_b != 2 & repondant_rel_b != 3
+	foreach var in relation_head_b relation_spouse_b relation_daughter_b relation_other_b {
+	replace `var' = 0 if `var' == .
+	}
+	gen woman_b = 1 if repondant_sex == 0
+	replace woman_b = 0 if woman_b == .
+	gen secondary_b = 1 if repondant_educ_b == 4 | repondant_educ_b == 5 | repondant_educ_b == 6
+	replace secondary_b = 0 if secondary_b == .
+	gen married_b = 1 if repondant_mat_b == 1
+	replace married_b = 0 if married_b == .
+
+	** Prepare demo var 
+	egen children_b = rowtotal(enfant_moins5 enfant_1317 enfant_primaire)
+	egen adults_b = rowtotal(h_18_65_b f_18_65_b)
+	gen elderly_b = hhsize_b-(adults_b+children_b)
+	
+	** Household var
+	gen dirtfloor_b = 1 if sol == 1
+	replace dirtfloor_b = 0 if dirtfloor_b == .
+	gen thatched_still_b = 1 if toit == 1 | toit == 2 | toit == 3 | toit == 4
+	replace thatched_still_b = 0 if thatched_still_b == .
+	egen livestock_b = rowtotal(q2_1_18_win_b q2_1_19_win_b q2_1_20_win_b q2_1_21_win_b q2_1_22_win_b)
+	replace livestock_b = 1 if livestock_b > 0
+
+	
