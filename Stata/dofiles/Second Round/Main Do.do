@@ -20,7 +20,7 @@
 	* Replication 		11
 	
 	
-	global user_number  11
+	global user_number  9
 
 
 	* Dropbox/Box globals
@@ -106,7 +106,7 @@
 ********************************************************************************
 ********************************************************************************
 
-global importXclean_individual 	= 0
+global importXclean_individual 	= 1
 
 global construct 				= 1
 

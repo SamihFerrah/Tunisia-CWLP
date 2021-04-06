@@ -4,9 +4,9 @@
 ********************************************************************************
 ********************************************************************************
 
-* u "$vera/temp/clean_CashXFollow_PII_3.dta", clear 							// Commented out for replication purpose 
+u "$vera/temp/clean_CashXFollow_PII_3.dta", clear 							// Commented out for replication purpose 
 
-  u "$home/clean_CashXFollow_PII_3.dta", clear
+ *u "$home/clean_CashXFollow_PII_3.dta", clear
 
 ** Cleaning
 * ---------------------

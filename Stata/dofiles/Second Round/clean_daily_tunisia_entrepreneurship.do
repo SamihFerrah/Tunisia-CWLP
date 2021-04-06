@@ -165,8 +165,8 @@ preserve
 	
 	drop if HHID == .
 	
-	replace Status = "999" if Status ==" "
-	replace Status = ""	   if Status == "Rendez vous cette semaine"
+	cap replace Status = "999" if Status ==" "
+	cap replace Status = ""	   if Status == "Rendez vous cette semaine"
 	destring Status, replace
 
 	label define A 	1 "Completed" 					///
@@ -323,9 +323,10 @@ preserve
 
 keep if dup > 0 & dup !=.
 
-keep HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu
+keep HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu key
 sort HHID 
-order HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu
+order HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu key
+
 
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
 

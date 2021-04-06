@@ -96,6 +96,18 @@ drop if HHID == 39584 & key == "uuid:e9f56d63-3298-46d0-b963-24435034091b"
 
 drop if HHID == 39607 & key == "uuid:ba5c6b16-bc35-411e-a2ea-3a6f5372d4a4"
 
+drop if HHID == 34867 & key == "uuid:dda1892a-4b85-4056-bc97-e00e9c62645a"
+
+drop if HHID == 39701 & key == "uuid:fcadaacc-467f-4c28-8957-1576d8a0c29b"
+
+drop if HHID == 39111 & key == "uuid:55ff94c3-0776-4db1-8287-ffe01ac3d892"
+
+drop if HHID == 39827 & key == "uuid:1637ffac-3208-414e-96df-76f7698f40a4"
+
+drop if HHID == 39171 & key == "uuid:e30a5b16-ba49-4a34-a82b-4ce38e95666c"
+
+drop if HHID == 39974 & key == "uuid:ef5a6d24-b5d0-4c91-9ce9-a3bd5cbb502a"
+
 /*
 replace HHID = if key == ""
 replace hhid = if key == ""
@@ -105,4 +117,4 @@ replace hhid = if key == ""
 
 replace HHID = if key == ""
 replace hhid = if key == ""
-*/
+

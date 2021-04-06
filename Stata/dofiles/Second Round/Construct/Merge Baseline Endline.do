@@ -108,8 +108,16 @@ preserve
 	replace Nom = subinstr(Nom," ","",.)
 
 	format Nom %116s
-		
-	keep `balance_coll' `balance_indiv' $all_outcomes B_f_* programs Nom Imada Age imada
+	
+	g 		tclp_workers =. 
+	replace tclp_workers = 0 if control == 1
+	replace tclp_workers = 1 if parti 	== 1 
+	replace tclp_workers = 1 if desist  == 1 
+	
+	g 		tclp_eligible = 0
+	replace tclp_eligible = 1 if control == 1 | parti == 1 | desist == 1 
+	
+	keep `balance_coll' `balance_indiv' $all_outcomes B_f_* programs Nom Imada Age imada tclp_workers tclp_eligible
 	
 	rename * *_b 
 	
@@ -146,7 +154,6 @@ egen strata_cash = group(TCLP_trt imada) if Intervention == "Cash Grants - Women
 
 gen 	moved_imada = 0 
 replace moved_imada = 1 if imada != imada_endline
-
 label var moved_imada "Moved Imada"
 
 * Cleaning baseline
