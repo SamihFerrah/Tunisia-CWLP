@@ -1,56 +1,176 @@
-clear all
-set more off
-set maxvar 10000
-version 15 
+********************************************************************************
+********************************************************************************
+*					ANALYSIS ENDLINE REPORT TUNISIA IE
+********************************************************************************
+********************************************************************************
 
 
-// ssc install winsor 
+********************************************************************************
+********************************************************************************
+global outcomes	z_anxiety_index2 covid_lost_job covid_new_job covid_change_inc_1 covid_change_inc_2 covid_change_inc_3 covid_concerned_1_1 covid_concerned_1_2 covid_concerned_1_3 covid_concerned_1_4 covid_concerned_1_5 covid_concerned_2_1 covid_concerned_2_2 covid_concerned_2_3 covid_concerned_2_4 covid_concerned_2_5
 
-	******************
-	*    Users :     *
-	* -------------- *
-	* Jules		1	 *
-	* Other1	2	 *
-	* Other2	3	 *
-	******************
-	
-	global user_number  1
+* Income generating activity
+global iga_0 c1_headjob c1_headjob_t c1_
+global iga_1 
 
-* Dropbox globals
-* ---------------------
-		
-	if $user_number == 1 {
-		global dropbox "C:/Users/Jules/Dropbox"
-	}		
-	
-	if $user_number == 2 {
-		global dropbox ""
-	}
-			
-	if $user_number == 3 {
-		global dropbox ""
-	}
-	
+* Female agency 
+global fem_0 
+global fem_1 
+global fem_2 
 
-	
-* Subfolder globals
-* -----------------
-global output			"$git_tunisia/outputs/Main/outputs/Report"
-global stata_tex		"../../outputs/Report"
+* Household income generating activities
+global biga_0
+global biga_1
+global biga_2 
+global biga_3 
+global biga_4 
+global biga_5 
+
+* Livestock 
+global liv_0
+global liv_1 
+global liv_2 
+global liv_3 
+
+* Consumption 
+global con_0 
+global con_1 
+global con_2 
+
+* Asset index
+global ass_0 
+global ass_1 
+
+* Subjective well being
+global sub_0 
+global sub_1 
+
+* Migration 
+global mig_0 
+global mig_1 
+global mig_2 
+global mig_3 
+
+* Shocks
+global sho_0 
+global sho_1 
+
+* COVID-19
+global cov_0 
+global cov_1 
+global cov_2 
+global cov_3
 
 
+
+if "`outcome'" == "iga_0"{	
+	local title "Woman income generating activities"
+}
+if "`outcome'" == "iga_1"{
+	local title "Woman financial outcomes"
+}
+if "`outcome'" == "fem_o"{
+	local title ""
+}
+if "`outcome'" == "fem_1"{
+	local title "Woman involved in the following household decisions:"
+}
+if "`outcome'" == "fem_2"{
+	local title "Woman decides for the following personal decisions:"
+}
+if "`outcome'" == "biga_0"{
+	local title "\textbf{Household head IGA}"
+}
+if "`outcome'" == "biga_1"{
+	local title "\textbf{Other household members IGA}"
+}
+if "`outcome'" == "biga_2"{
+	local title "\textbf{Agriculture}"
+}
+if "`outcome'" == "biga_3"{
+	local title "From January 2019 to the present day"
+}
+if "`outcome'" == "biga_4"{
+	local title "Agricultural production in 2019"
+}
+if "`outcome'" == "biga_5"{
+	local title ""
+}
+if "`outcome'" == "liv_0"{
+	local title "\textbf{Stock} \\ Extensive margin"
+}
+if "`outcome'" == "liv_1"{
+	local title "Intensive margin"
+}
+if "`outcome'" == "liv_2"{
+	local title "\textbf{Inflow (since January 2019)} \\  Extensive margin"
+}
+if "`outcome'" == "liv_3"{
+	local title "Intensive margin"
+}
+if "`outcome'" == "con_0"{
+	local title "Total consumption"
+}
+if "`outcome'" == "con_1"{
+	local title "Food consumption"
+}
+if "`outcome'" == "con_2"{
+	local title "Non-food consumption"
+}
+if "`outcome'" == "ass_0"{
+	local title "Stock"
+}
+if "`outcome'" == "ass_1"{
+	local title "Inflow (since Janauary 2019)"
+}
+if "`outcome'" == "sub_0"{
+	local title "Cantril\'s ladder (codes:1-10, where 10 it the top of the ladder)"
+}
+if "`outcome'" == "sub_1"{
+	local title "Psychological well-being"
+}
+if "`outcome'" == "mig_0"{
+	local title "Household migration"
+}
+if "`outcome'" == "mig_1"{
+	local title "Migration reasons"
+}
+if "`outcome'" == "mig_2"{
+	local title "Migration intentions (respondent)"
+}
+if "`outcome'" == "mig_3"{
+	local title "Migration intentions (other members)"
+}
+if "`outcome'" == "sho_0"{
+	local title "Negative shock (dummy, last two year)"
+}
+if "`outcome'" == "sho_1"{
+	local title "Coping strategy to face the shock (dummy)"
+}
+if "`outcome'" == "cov_0"{
+	local title ""
+}
+if "`outcome'" == "cov_1"{
+	local title "Household income toay vs. before the coronavirus epidemic"
+}
+if "`outcome'" == "cov_2"{
+	local title "How concerned are you that you or any family member could contract COVID in the next 12 months"
+}
+if "`outcome'" == "cov_3"{
+	local title "How concerned are you that you or any family member could lose your job or business in the next 12 months"
+}
+
+
+
+********************************************************************************
+********************************************************************************
 
 use "${data}/clean_analysis_CashXFollow_noPII.dta" , clear
  
 drop if attrition == 1 | tot_complete == 0 | Intervention == "Follow up - TCLP" | Intervention == "" | Intervention == "Cash Grants - Partenaire"
 
 
-** Analysis
-* ------------------------
-
-
-global outcomes	z_anxiety_index2 covid_lost_job covid_new_job covid_change_inc_1 covid_change_inc_2 covid_change_inc_3 covid_concerned_1_1 covid_concerned_1_2 covid_concerned_1_3 covid_concerned_1_4 covid_concerned_1_5 covid_concerned_2_1 covid_concerned_2_2 covid_concerned_2_3 covid_concerned_2_4 covid_concerned_2_5
- /* moved_imada  does_livestock chemicals hh_income b4_death b4_disease b4_business b4_debts b4_village b4_ngogov b4_sales z_ptsd_index z_depression2_index z_lackselfeff_index ///
+moved_imada  does_livestock chemicals hh_income b4_death b4_disease b4_business b4_debts b4_village b4_ngogov b4_sales z_ptsd_index z_depression2_index z_lackselfeff_index ///
 				c1_job_iga c1_job_iga_1 c1_job_iga_2 c1_job_iga_3 c1_job_covid business_profit ///
 				business_employee c3_haveskills c1_wageprimjob total_employement c2_borrow_all c2_borrow12 ///
 				c2_borrow12n c2_repaiddebt c2_eliipsav c2_eliipsavn c2_depositac c2_depositacn c2_loan ///
