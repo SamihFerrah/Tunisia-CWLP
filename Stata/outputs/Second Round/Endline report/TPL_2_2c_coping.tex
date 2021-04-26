@@ -1,0 +1,84 @@
+
+\begin{tabular}{p{10cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1cm}}
+\hline\hline
+\addlinespace
+					&	& & Eq (1) & \multicolumn{3}{c}{Eq (2)}   \\  \cmidrule(lr){4-4} \cmidrule(lr){5-7} 
+                  &          (1)   &         (2)   &         (3)   & (4) & (5) & (6) & (7) \\
+                  &  Control Mean  & Control SD & Treatment & T1: Cash only  & T2: Cash \& Dialogue & T1 $=$ T2 & N   \\
+\addlinespace
+\hline
+\addlinespace
+\textbf{Negative shock (dummy, last two years)} \\
+~~~~ Death of a household member &  $$b4_death_cmean$$ & $$b4_death_csd$$ & $$b4_death_t_starbeta$$ & $$b4_death_t0_starbeta$$ & $$b4_death_t1_starbeta$$ & $$b4_death_test$$ & $$b4_death_t1_n$$	\\	
+& & & ($$b4_death_t_se$$)  & ($$b4_death_t0_se$$) & ($$b4_death_t1_se$$)  \\
+%~~~~ Death of household head &  $$b4_sufferevent_1_cmean$$ & $$b4_sufferevent_1_csd$$ & $$b4_sufferevent_1_t_starbeta$$ & $$b4_sufferevent_1_t0_starbeta$$ & $$b4_sufferevent_1_t1_starbeta$$ & $$b4_sufferevent_1_test$$ & $$b4_sufferevent_1_t1_n$$	\\	
+%& & & ($$b4_sufferevent_1_t_se$$)  & ($$b4_sufferevent_1_t0_se$$) & ($$b4_sufferevent_1_t1_se$$)  \\
+%~~~~ Death of other household members &  $$b4_sufferevent_2_cmean$$ & $$b4_sufferevent_2_csd$$ & $$b4_sufferevent_2_t_starbeta$$ & $$b4_sufferevent_2_t0_starbeta$$ & $$b4_sufferevent_2_t1_starbeta$$ & $$b4_sufferevent_2_test$$ & $$b4_sufferevent_2_t1_n$$	\\	
+%& & & ($$b4_sufferevent_2_t_se$$)  & ($$b4_sufferevent_2_t0_se$$) & ($$b4_sufferevent_2_t1_se$$)  \\
+~~~~ Disease of a household member &  $$b4_disease_cmean$$ & $$b4_disease_csd$$ & $$b4_disease_t_starbeta$$ & $$b4_disease_t0_starbeta$$ & $$b4_disease_t1_starbeta$$ & $$b4_disease_test$$ & $$b4_disease_t1_n$$	\\	
+& & & ($$b4_disease_t_se$$)  & ($$b4_disease_t0_se$$) & ($$b4_disease_t1_se$$)  \\
+%~~~~ Serious illness of household head &  $$b4_sufferevent_3_cmean$$ & $$b4_sufferevent_3_csd$$ & $$b4_sufferevent_3_t_starbeta$$ & $$b4_sufferevent_3_t0_starbeta$$ & $$b4_sufferevent_3_t1_starbeta$$ & $$b4_sufferevent_3_test$$ & $$b4_sufferevent_3_t1_n$$	\\	
+%& & & ($$b4_sufferevent_3_t_se$$)  & ($$b4_sufferevent_3_t0_se$$) & ($$b4_sufferevent_3_t1_se$$)  \\
+%~~~~ Serious illness of other household members &  $$b4_sufferevent_4_cmean$$ & $$b4_sufferevent_4_csd$$ & $$b4_sufferevent_4_t_starbeta$$ & $$b4_sufferevent_4_t0_starbeta$$ & $$b4_sufferevent_4_t1_starbeta$$ & $$b4_sufferevent_4_test$$ & $$b4_sufferevent_4_t1_n$$	\\	
+%& & & ($$b4_sufferevent_4_t_se$$)  & ($$b4_sufferevent_4_t0_se$$) & ($$b4_sufferevent_4_t1_se$$)  \\
+%~~~~  Job loss or business failure &  $$b4_sufferevent_5_cmean$$ & $$b4_sufferevent_5_csd$$ & $$b4_sufferevent_5_t_starbeta$$ & $$b4_sufferevent_5_t0_starbeta$$ & $$b4_sufferevent_5_t1_starbeta$$ & $$b4_sufferevent_5_test$$ & $$b4_sufferevent_5_t1_n$$	\\	
+%& & & ($$b4_sufferevent_5_t_se$$)  & ($$b4_sufferevent_5_t0_se$$) & ($$b4_sufferevent_5_t1_se$$)  \\
+~~~~ Job loss, failed or bad business &  $$b4_business_cmean$$ & $$b4_business_csd$$ & $$b4_business_t_starbeta$$ & $$b4_business_t0_starbeta$$ & $$b4_business_t1_starbeta$$ & $$b4_business_test$$ & $$b4_business_t1_n$$	\\	
+& & & ($$b4_business_t_se$$)  & ($$b4_business_t0_se$$) & ($$b4_business_t1_se$$)  \\
+~~~~ Loss of livelihood due to unexpected large expenses &  $$b4_sufferevent_8_cmean$$ & $$b4_sufferevent_8_csd$$ & $$b4_sufferevent_8_t_starbeta$$ & $$b4_sufferevent_8_t0_starbeta$$ & $$b4_sufferevent_8_t1_starbeta$$ & $$b4_sufferevent_8_test$$ & $$b4_sufferevent_8_t1_n$$	\\	
+& & & ($$b4_sufferevent_8_t_se$$)  & ($$b4_sufferevent_8_t0_se$$) & ($$b4_sufferevent_8_t1_se$$)  \\
+~~~~ Loss of livelihood due to natural disasters &  $$b4_sufferevent_6_cmean$$ & $$b4_sufferevent_6_csd$$ & $$b4_sufferevent_6_t_starbeta$$ & $$b4_sufferevent_6_t0_starbeta$$ & $$b4_sufferevent_6_t1_starbeta$$ & $$b4_sufferevent_6_test$$ & $$b4_sufferevent_6_t1_n$$	\\	
+& & & ($$b4_sufferevent_6_t_se$$)  & ($$b4_sufferevent_6_t0_se$$) & ($$b4_sufferevent_6_t1_se$$)  \\
+%~~~~ Failed or bad business (or harvest for farmers) &  $$b4_sufferevent_7_cmean$$ & $$b4_sufferevent_7_csd$$ & $$b4_sufferevent_7_t_starbeta$$ & $$b4_sufferevent_7_t0_starbeta$$ & $$b4_sufferevent_7_t1_starbeta$$ & $$b4_sufferevent_7_test$$ & $$b4_sufferevent_7_t1_n$$	\\	
+%& & & ($$b4_sufferevent_7_t_se$$)  & ($$b4_sufferevent_7_t0_se$$) & ($$b4_sufferevent_7_t1_se$$)  \\
+%~~~~ Confiscation of your fields  &  $$b4_sufferevent_9_cmean$$ & $$b4_sufferevent_9_csd$$ & $$b4_sufferevent_9_t_starbeta$$ & $$b4_sufferevent_9_t0_starbeta$$ & $$b4_sufferevent_9_t1_starbeta$$ & $$b4_sufferevent_9_test$$ & $$b4_sufferevent_9_t1_n$$	\\	
+%& & & ($$b4_sufferevent_9_t_se$$)  & ($$b4_sufferevent_9_t0_se$$) & ($$b4_sufferevent_9_t1_se$$)  \\
+~~~~ Theft &  $$b4_sufferevent_99_cmean$$ & $$b4_sufferevent_99_csd$$ & $$b4_sufferevent_99_t_starbeta$$ & $$b4_sufferevent_99_t0_starbeta$$ & $$b4_sufferevent_99_t1_starbeta$$ & $$b4_sufferevent_99_test$$ & $$b4_sufferevent_99_t1_n$$	\\	
+& & & ($$b4_sufferevent_99_t_se$$)  & ($$b4_sufferevent_99_t0_se$$) & ($$b4_sufferevent_99_t1_se$$)  \\
+\addlinespace
+\textbf{Coping strategy to face the shock (dummy)} \\
+~~~~ Reduced the number of meals &  $$b4_facesufferevent_1_cmean$$ & $$b4_facesufferevent_1_csd$$ & $$b4_facesufferevent_1_t_starbeta$$ & $$b4_facesufferevent_1_t0_starbeta$$ & $$b4_facesufferevent_1_t1_starbeta$$ & $$b4_facesufferevent_1_test$$ & $$b4_facesufferevent_1_t1_n$$	\\	
+& & & ($$b4_facesufferevent_1_t_se$$)  & ($$b4_facesufferevent_1_t0_se$$) & ($$b4_facesufferevent_1_t1_se$$)  \\
+~~~~ Took children out of school &  $$b4_facesufferevent_2_cmean$$ & $$b4_facesufferevent_2_csd$$ & $$b4_facesufferevent_2_t_starbeta$$ & $$b4_facesufferevent_2_t0_starbeta$$ & $$b4_facesufferevent_2_t1_starbeta$$ & $$b4_facesufferevent_2_test$$ & $$b4_facesufferevent_2_t1_n$$	\\	
+& & & ($$b4_facesufferevent_2_t_se$$)  & ($$b4_facesufferevent_2_t0_se$$) & ($$b4_facesufferevent_2_t1_se$$)  \\
+~~~~ Sending children to friends &  $$b4_facesufferevent_7_cmean$$ & $$b4_facesufferevent_7_csd$$ & $$b4_facesufferevent_7_t_starbeta$$ & $$b4_facesufferevent_7_t0_starbeta$$ & $$b4_facesufferevent_7_t1_starbeta$$ & $$b4_facesufferevent_7_test$$ & $$b4_facesufferevent_7_t1_n$$	\\	
+& & & ($$b4_facesufferevent_7_t_se$$)  & ($$b4_facesufferevent_7_t0_se$$) & ($$b4_facesufferevent_7_t1_se$$)  \\
+~~~~ Debts (friends, neighbors, cooperatives) & $$b4_debts_cmean$$ & $$b4_debts_csd$$ & $$b4_debts_t_starbeta$$ & $$b4_debts_t0_starbeta$$ & $$b4_debts_t1_starbeta$$ & $$b4_debts_test$$ & $$b4_debts_t1_n$$	\\	
+& & & ($$b4_debts_t_se$$)  & ($$b4_debts_t0_se$$) & ($$b4_debts_t1_se$$)  \\
+
+%~~~~ Debts to friends &  $$b4_facesufferevent_3_cmean$$ & $$b4_facesufferevent_3_csd$$ & $$b4_facesufferevent_3_t_starbeta$$ & $$b4_facesufferevent_3_t0_starbeta$$ & $$b4_facesufferevent_3_t1_starbeta$$ & $$b4_facesufferevent_3_test$$ & $$b4_facesufferevent_3_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_3_t_se$$)  & ($$b4_facesufferevent_3_t0_se$$) & ($$b4_facesufferevent_3_t1_se$$)  \\
+%~~~~ Debts to cooperatives &  $$b4_facesufferevent_4_cmean$$ & $$b4_facesufferevent_4_csd$$ & $$b4_facesufferevent_4_t_starbeta$$ & $$b4_facesufferevent_4_t0_starbeta$$ & $$b4_facesufferevent_4_t1_starbeta$$ & $$b4_facesufferevent_4_test$$ & $$b4_facesufferevent_4_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_4_t_se$$)  & ($$b4_facesufferevent_4_t0_se$$) & ($$b4_facesufferevent_4_t1_se$$)  \\
+%~~~~ Debts to neighbors &  $$b4_facesufferevent_5_cmean$$ & $$b4_facesufferevent_5_csd$$ & $$b4_facesufferevent_5_t_starbeta$$ & $$b4_facesufferevent_5_t0_starbeta$$ & $$b4_facesufferevent_5_t1_starbeta$$ & $$b4_facesufferevent_5_test$$ & $$b4_facesufferevent_5_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_5_t_se$$)  & ($$b4_facesufferevent_5_t0_se$$) & ($$b4_facesufferevent_5_t1_se$$)  \\
+~~~~ Help from the community (chief, mosque, other) &  $$b4_village_cmean$$ & $$b4_village_csd$$ & $$b4_village_t_starbeta$$ & $$b4_village_t0_starbeta$$ & $$b4_village_t1_starbeta$$ & $$b4_village_test$$ & $$b4_village_t1_n$$	\\	
+& & & ($$b4_village_t_se$$)  & ($$b4_village_t0_se$$) & ($$b4_village_t1_se$$)  \\
+~~~~ Help from family members outside the village &  $$b4_facesufferevent_6_cmean$$ & $$b4_facesufferevent_6_csd$$ & $$b4_facesufferevent_6_t_starbeta$$ & $$b4_facesufferevent_6_t0_starbeta$$ & $$b4_facesufferevent_6_t1_starbeta$$ & $$b4_facesufferevent_6_test$$ & $$b4_facesufferevent_6_t1_n$$	\\	
+& & & ($$b4_facesufferevent_6_t_se$$)  & ($$b4_facesufferevent_6_t0_se$$) & ($$b4_facesufferevent_6_t1_se$$)  \\
+%~~~~ Help from community members &  $$b4_facesufferevent_8_cmean$$ & $$b4_facesufferevent_8_csd$$ & $$b4_facesufferevent_8_t_starbeta$$ & $$b4_facesufferevent_8_t0_starbeta$$ & $$b4_facesufferevent_8_t1_starbeta$$ & $$b4_facesufferevent_8_test$$ & $$b4_facesufferevent_8_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_8_t_se$$)  & ($$b4_facesufferevent_8_t0_se$$) & ($$b4_facesufferevent_8_t1_se$$)  \\
+%~~~~ Help from the village chief &  $$b4_facesufferevent_9_cmean$$ & $$b4_facesufferevent_9_csd$$ & $$b4_facesufferevent_9_t_starbeta$$ & $$b4_facesufferevent_9_t0_starbeta$$ & $$b4_facesufferevent_9_t1_starbeta$$ & $$b4_facesufferevent_9_test$$ & $$b4_facesufferevent_9_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_9_t_se$$)  & ($$b4_facesufferevent_9_t0_se$$) & ($$b4_facesufferevent_9_t1_se$$)  \\
+%~~~~ Church, mosque help &  $$b4_facesufferevent_10_cmean$$ & $$b4_facesufferevent_10_csd$$ & $$b4_facesufferevent_10_t_starbeta$$ & $$b4_facesufferevent_10_t0_starbeta$$ & $$b4_facesufferevent_10_t1_starbeta$$ & $$b4_facesufferevent_10_test$$ & $$b4_facesufferevent_10_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_10_t_se$$)  & ($$b4_facesufferevent_10_t0_se$$) & ($$b4_facesufferevent_10_t1_se$$)  \\
+~~~~ Government or NGO support &  $$b4_ngogov_cmean$$ & $$b4_ngogov_csd$$ & $$b4_ngogov_t_starbeta$$ & $$b4_ngogov_t0_starbeta$$ & $$b4_ngogov_t1_starbeta$$ & $$b4_ngogov_test$$ & $$b4_ngogov_t1_n$$	\\	
+& & & ($$b4_ngogov_t_se$$)  & ($$b4_ngogov_t0_se$$) & ($$b4_ngogov_t1_se$$)  \\
+%~~~~ NGO support &  $$b4_facesufferevent_11_cmean$$ & $$b4_facesufferevent_11_csd$$ & $$b4_facesufferevent_11_t_starbeta$$ & $$b4_facesufferevent_11_t0_starbeta$$ & $$b4_facesufferevent_11_t1_starbeta$$ & $$b4_facesufferevent_11_test$$ & $$b4_facesufferevent_11_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_11_t_se$$)  & ($$b4_facesufferevent_11_t0_se$$) & ($$b4_facesufferevent_11_t1_se$$)  \\
+%~~~~ Government assistance &  $$b4_facesufferevent_12_cmean$$ & $$b4_facesufferevent_12_csd$$ & $$b4_facesufferevent_12_t_starbeta$$ & $$b4_facesufferevent_12_t0_starbeta$$ & $$b4_facesufferevent_12_t1_starbeta$$ & $$b4_facesufferevent_12_test$$ & $$b4_facesufferevent_12_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_12_t_se$$)  & ($$b4_facesufferevent_12_t0_se$$) & ($$b4_facesufferevent_12_t1_se$$)  \\
+~~~~ Sale of household goods, fields, cattle &  $$b4_sales_cmean$$ & $$b4_sales_csd$$ & $$b4_sales_t_starbeta$$ & $$b4_sales_t0_starbeta$$ & $$b4_sales_t1_starbeta$$ & $$b4_sales_test$$ & $$b4_sales_t1_n$$	\\	
+& & & ($$b4_sales_t_se$$)  & ($$b4_sales_t0_se$$) & ($$b4_sales_t1_se$$)  \\
+%~~~~ Sale of household goods, fields &  $$b4_facesufferevent_13_cmean$$ & $$b4_facesufferevent_13_csd$$ & $$b4_facesufferevent_13_t_starbeta$$ & $$b4_facesufferevent_13_t0_starbeta$$ & $$b4_facesufferevent_13_t1_starbeta$$ & $$b4_facesufferevent_13_test$$ & $$b4_facesufferevent_13_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_13_t_se$$)  & ($$b4_facesufferevent_13_t0_se$$) & ($$b4_facesufferevent_13_t1_se$$)  \\
+%~~~~ Cattle sale &  $$b4_facesufferevent_14_cmean$$ & $$b4_facesufferevent_14_csd$$ & $$b4_facesufferevent_14_t_starbeta$$ & $$b4_facesufferevent_14_t0_starbeta$$ & $$b4_facesufferevent_14_t1_starbeta$$ & $$b4_facesufferevent_14_test$$ & $$b4_facesufferevent_14_t1_n$$	\\	
+%& & & ($$b4_facesufferevent_14_t_se$$)  & ($$b4_facesufferevent_14_t0_se$$) & ($$b4_facesufferevent_14_t1_se$$)  \\
+~~~~ Used the savings &  $$b4_facesufferevent_15_cmean$$ & $$b4_facesufferevent_15_csd$$ & $$b4_facesufferevent_15_t_starbeta$$ & $$b4_facesufferevent_15_t0_starbeta$$ & $$b4_facesufferevent_15_t1_starbeta$$ & $$b4_facesufferevent_15_test$$ & $$b4_facesufferevent_15_t1_n$$	\\	
+& & & ($$b4_facesufferevent_15_t_se$$)  & ($$b4_facesufferevent_15_t0_se$$) & ($$b4_facesufferevent_15_t1_se$$)  \\
+~~~~ Other &  $$b4_facesufferevent_99_cmean$$ & $$b4_facesufferevent_99_csd$$ & $$b4_facesufferevent_99_t_starbeta$$ & $$b4_facesufferevent_99_t0_starbeta$$ & $$b4_facesufferevent_99_t1_starbeta$$ & $$b4_facesufferevent_99_test$$ & $$b4_facesufferevent_99_t1_n$$	\\	
+& & & ($$b4_facesufferevent_99_t_se$$)  & ($$b4_facesufferevent_99_t0_se$$) & ($$b4_facesufferevent_99_t1_se$$)  \\
+~~~~ Nothing, just suffered &  $$b4_facesufferevent_0_cmean$$ & $$b4_facesufferevent_0_csd$$ & $$b4_facesufferevent_0_t_starbeta$$ & $$b4_facesufferevent_0_t0_starbeta$$ & $$b4_facesufferevent_0_t1_starbeta$$ & $$b4_facesufferevent_0_test$$ & $$b4_facesufferevent_0_t1_n$$	\\	
+& & & ($$b4_facesufferevent_0_t_se$$)  & ($$b4_facesufferevent_0_t0_se$$) & ($$b4_facesufferevent_0_t1_se$$)  \\
+\hline
+\end{tabular}

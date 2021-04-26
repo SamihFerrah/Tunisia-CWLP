@@ -44,233 +44,41 @@
 
 \section{Balance Test}
 
-\begin{table}[H]\centering\caption{Balance test comparing cash grant participant without their partner against pure control group}
-\resizebox{\textwidth}{!}{\input{Main/Balance Test Cash/Table_Balance_Individual_0.tex}}
+\begin{table}[H]\centering\caption{Balance test using randomized sample (keeping attrited respondent)}
+
+\begin{tabular}{p{8cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}}
+\hline\hline
+\addlinespace
+&          (1)   &         (2)   &         (3)   & \multicolumn{3}{c}{T-test p-values}  & \multicolumn{3}{c}{Normalized differences}   \\  \cmidrule(lr){5-7} \cmidrule(lr){8-10} 
+& Control group	& Treatment group 1 & Treatment group 2   & (1)-(2) & (1)-(3) & (2)-(3) & (1)-(2) & (1)-(3) & (2)-(3) \\
+\hline\hline
+\addlinespace
+\input{Second Round/Endline report/balance.tex}
+\end{tabular}
 \end{table}
 
-\begin{table}[H]\centering\caption{Balance test comparing cash grant participant with their partner against pure control group}
-	\resizebox{\textwidth}{!}{\input{Main/Balance Test Cash/Table_Balance_Individual_1.tex}}
+\begin{table}[H]\centering\caption{Balance test using final sample (excluding attrited respondents)}
+	
+	\begin{tabular}{p{8cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}}
+		\hline\hline
+		\addlinespace
+		&          (1)   &         (2)   &         (3)   & \multicolumn{3}{c}{T-test p-values}  & \multicolumn{3}{c}{Normalized differences}   \\  \cmidrule(lr){5-7} \cmidrule(lr){8-10} 
+		& Control group	& Treatment group 1 & Treatment group 2   & (1)-(2) & (1)-(3) & (2)-(3) & (1)-(2) & (1)-(3) & (2)-(3) \\
+		\hline\hline
+		\addlinespace
+		\input{Second Round/Endline report/balance2.tex}
+	\end{tabular}
 \end{table}
 
-\begin{center}
-	{\tiny \tabcolsep=1pt  % hold it local
-		\begin{ThreePartTable}
-			\begin{TableNotes}[flushleft]
-				\tiny
-				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively.
-			\end{TableNotes}
-			\begin{longtable}{l*{4}{c}}
-				\caption{OLS regression of the treatment indicator on the full list of control variables}\label{tab:balance_omni}					\\
-				\toprule
-				% FIRST HEAD
-				\hline 
-				&\multicolumn{1}{p{2cm}}{\centering Treatment 1}
-				&\multicolumn{1}{p{2cm}}{\centering P-value}
-				&\multicolumn{1}{p{2cm}}{\centering Treatment 2}
-				&\multicolumn{1}{p{2cm}}{\centering P-value} \\
-				\hline 
-				\endfirsthead
-				\hline
-				% SECOND PAGE HEAD
-				\endhead
-				% FOOT NOTE ON THE FIRST PAGE
-				\hline
-				\multicolumn{2}{r}{{Continued on next page}} \\
-				\endfoot
-				
-				% BODY OF THE TABLE
-				\bottomrule
-				\insertTableNotes
-				\endlastfoot
-				\input{Main/Balance Test Cash/Table_Balance_Omni.tex}
-			\end{longtable}
-		\end{ThreePartTable}
-	}
-\end{center}
-
-\begin{center}
-	{\tiny \tabcolsep=1pt  % hold it local
-		\begin{ThreePartTable}
-			\begin{TableNotes}[flushleft]
-				\tiny
-				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively.
-			\end{TableNotes}
-			\begin{longtable}{l*{4}{c}}
-				\caption{Difference in covariates between cash grant participant (without partner) and control group}\label{tab:balance_indiv_0}				\\
-				\toprule
-				% FIRST HEAD
-				\hline 
-				&\multicolumn{1}{p{2cm}}{\centering T-C}
-				&\multicolumn{1}{p{2cm}}{\centering P-value}
-				&\multicolumn{1}{p{2cm}}{\centering N} \\
-				\hline 
-				\endfirsthead
-				\hline
-				% SECOND PAGE HEAD
-				\endhead
-				% FOOT NOTE ON THE FIRST PAGE
-				\hline
-				\multicolumn{2}{r}{{Continued on next page}} \\
-				\endfoot
-				
-				% BODY OF THE TABLE
-				\bottomrule
-				\insertTableNotes
-				\endlastfoot
-				\input{Main/Balance Test Cash/Table_Balance_Individual_Cov_0.tex}
-			\end{longtable}
-		\end{ThreePartTable}
-	}
-\end{center}
-
-\begin{center}
-	{\tiny \tabcolsep=1pt  % hold it local
-		\begin{ThreePartTable}
-			\begin{TableNotes}[flushleft]
-				\tiny
-				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively.
-			\end{TableNotes}
-			\begin{longtable}{l*{4}{c}}
-				\caption{Difference in covariates between cash grant participant (with partner) and control group}\label{tab:balance_indiv_1}					\\
-				\toprule
-				% FIRST HEAD
-				\hline 
-				&\multicolumn{1}{p{2cm}}{\centering T-C}
-				&\multicolumn{1}{p{2cm}}{\centering P-value}
-				&\multicolumn{1}{p{2cm}}{\centering N} \\
-				\hline 
-				\endfirsthead
-				\hline
-				% SECOND PAGE HEAD
-				\endhead
-				% FOOT NOTE ON THE FIRST PAGE
-				\hline
-				\multicolumn{2}{r}{{Continued on next page}} \\
-				\endfoot
-				
-				% BODY OF THE TABLE
-				\bottomrule
-				\insertTableNotes
-				\endlastfoot
-				\input{Main/Balance Test Cash/Table_Balance_Individual_Cov_1.tex}
-			\end{longtable}
-		\end{ThreePartTable}
-	}
-\end{center}
-
-\section{Attrition Test}
-
-\begin{center}
-	{\tiny \tabcolsep=1pt  % hold it local
-		\begin{ThreePartTable}
-			\begin{TableNotes}[flushleft]
-				\tiny
-				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively.
-			\end{TableNotes}
-			\begin{longtable}{l*{3}{c}}
-				\caption{Number of attrited respondent in each treatment arms}\label{tab:attrition_cash_num}					\\
-				\toprule
-				% FIRST HEAD
-				\hline 
-				&\multicolumn{1}{p{2cm}}{\centering Number}
-				&\multicolumn{1}{p{2cm}}{\centering Percentage} \\
-				\hline 
-				\endfirsthead
-				\hline
-				% SECOND PAGE HEAD
-				\endhead
-				% FOOT NOTE ON THE FIRST PAGE
-				\hline
-				\multicolumn{2}{r}{{Continued on next page}} \\
-				\endfoot
-				
-				% BODY OF THE TABLE
-				\bottomrule
-				\insertTableNotes
-				\endlastfoot
-				\input{Main/Balance Test Cash/Table_Attrition_Number.tex}
-			\end{longtable}
-		\end{ThreePartTable}
-	}
-\end{center}
-
-\begin{center}
-	{\tiny \tabcolsep=1pt  % hold it local
-		\begin{ThreePartTable}
-			\begin{TableNotes}[flushleft]
-				\tiny
-				\item \textit{Notes 1}:\textit{Treatment 1} denote cash grant participant invited to the financial training without their partners. \textit{Treatment 2} denote cash grant participants invited to the financial training with their partners.
-				\item \textit{Notes 2}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively.
-			\end{TableNotes}
-			\begin{longtable}{l*{7}{c}}
-				\caption{Breakdown of attrition by treatment arms and reason}\label{tab:attrition_cash_reason}					\\
-				\toprule
-				% FIRST HEAD
-				\hline 
-				\multicolumn{1}{c}{}&
-				\multicolumn{2}{c}{Control}&
-				\multicolumn{2}{c}{Treatment 1}&
-				\multicolumn{2}{c}{Treatment 2} \\ 
-				\cmidrule(r){2-3}\cmidrule(r){4-5}\cmidrule(l){6-7}
-				& {N} & {\%} & {N} & {\%} & {N} & {\%} \\ 
-				\midrule
-				\endfirsthead
-				\hline
-				% SECOND PAGE HEAD
-				\endhead
-				% FOOT NOTE ON THE FIRST PAGE
-				\hline
-				\multicolumn{3}{r}{{Continued on next page}} \\
-				\endfoot
-				
-				% BODY OF THE TABLE
-				\bottomrule
-				\insertTableNotes
-				\endlastfoot
-				\input{Main/Balance Test Cash/Table_Attrition_Breakdown.tex}
-			\end{longtable}
-		\end{ThreePartTable}
-	}
-\end{center}
-
-\pagebreak
-
-\begin{center}
-	{\tiny \tabcolsep=1pt  % hold it local
-		\begin{ThreePartTable}
-			\begin{TableNotes}[flushleft]
-				\tiny
-				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively.
-			\end{TableNotes}
-			\begin{longtable}{l*{7}{c}}
-				\caption{Attrition test of significance difference between treatment arms}\label{tab:attrition_cash}					\\
-				\toprule
-				% FIRST HEAD
-				\hline 
-				\multicolumn{1}{c}{}&
-				\multicolumn{3}{c}{Treatment 1}&
-				\multicolumn{3}{c}{Treatment 2}& \\
-				\cmidrule(r){2-4}\cmidrule(r){5-7}
-				& {(1)} & {(2)} & {(3)} & {(1)} & {(2)} & {(3)} \\ 
-				\hline 
-				\endfirsthead
-				\hline
-				% SECOND PAGE HEAD
-				\endhead
-				% FOOT NOTE ON THE FIRST PAGE
-				\hline
-				\multicolumn{3}{r}{{Continued on next page}} \\
-				\endfoot
-				
-				% BODY OF THE TABLE
-				\bottomrule
-				\insertTableNotes
-				\endlastfoot
-				\input{Main/Balance Test Cash/Table_Attrition_Individual.tex}
-			\end{longtable}
-		\end{ThreePartTable}
-	}
-\end{center}
-
-
+\begin{table}[H]\centering\caption{Attrition test}
+	
+	\begin{tabular}{p{8cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}>{\centering\arraybackslash}p{1.25cm}}
+		\hline\hline
+		\addlinespace
+		&          (1)   &         (2)   &         (3)   & \multicolumn{3}{c}{T-test p-values}  & \multicolumn{3}{c}{Normalized differences}   \\  \cmidrule(lr){5-7} \cmidrule(lr){8-10} 
+		& Control group	& Treatment group 1 & Treatment group 2   & (1)-(2) & (1)-(3) & (2)-(3) & (1)-(2) & (1)-(3) & (2)-(3) \\
+		\hline\hline
+		\input{Second Round/Endline report/attrition.tex}
+	\end{tabular}
+\end{table}
 \end{document}

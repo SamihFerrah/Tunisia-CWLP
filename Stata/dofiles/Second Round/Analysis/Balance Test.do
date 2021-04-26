@@ -11,212 +11,368 @@
 ********************************************************************************
 ********************************************************************************
 cap file close Table
-cd "$git_tunisia/outputs/Main/"
+cd "$git_tunisia/outputs/Second Round/Endline report"
 pause on 
 clear 
 
 
-local balance_indiv 	repondant_age_b repondant_educ_b			///
-						hhsize_b adult_num_b jeunes_lireecrire_b emploi_2013_a_b	///
-						formation_b origine_naissance_b origine_naissance_bis_b 	
-					
 
+						
+global balance_0 	repondant_age_b secondary_b  origine_naissance_b married_b 				///
+					emploi_main_b formation_b 
+
+global balance_1	relation_head_b relation_spouse_b relation_daughter_b relation_other_b 			///			
+					
+global balance_2 	hhsize_b children_b adults_b elderly_b 
+
+global balance_3 	conso_food_pc_b conso_nofood_pc_b conso_tot_pc_b dirtfloor_b thatched_still_b	///
+					proprietaire_terre_b livestock_b
+
+global balance_4 	distance_cheflieu_b distance_marche_b distance_transpublic_b distance_ecoleprim_b distance_eau_b 
+				
 ********************************************************************************
 ********************************************************************************						
 * 1) Balance test at individual level 
 ********************************************************************************
 ********************************************************************************						
-	
 
-u "$vera/clean/clean_CashXFollow_PII.dta", clear
+u "$vera/clean/clean_analysis_CashXFollow.dta", clear
 
-keep if Intervention == "Cash Grants - Women"
+drop if tot_complete == 0 | Intervention == "Follow up - TCLP" | Intervention == "" | Intervention == "Cash Grants - Partenaire"
 
-* Replace treatment indicator to missing if respondent is attrited
+sum 			woman_b repondant_age_b secondary_b  origine_naissance_b married_b relation_head_b relation_spouse_b relation_daughter_b relation_other_b emploi_main_b initiatives_2_b ///
+				hhsize_b children_b adults_b elderly_b conso_food_pc_b conso_nofood_pc_b conso_tot_pc_b dirtfloor_b thatched_still_b proprietaire_terre_b livestock_b /// 
+				distance_cheflieu_b distance_marche_b distance_transpublic_b distance_ecoleprim_b distance_eau_b // many missing values for variables: distance_ecolesec_b distance_dispensaire_b
 
-replace trt_cash_0 = . if attrition == 1
-replace trt_cash_1 = . if attrition == 1
 
-	* Some re-labelling 
-	
-	/*
-	* Drop label
-	foreach covariates in `balance_indiv'{
-		
-		label var `covariates' drop
-		
+* Special label var to add indent in Latex Table 
+label var woman_b 					"Female"
+label var repondant_age_b 			"Age"
+label var secondary_b  				"Completed secondary school"
+label var origine_naissance_b 		"Born in this imada"
+label var married_b 				"Married"
+label var emploi_main_b 			"Had an IGA in the last month"
+label var initiatives_2_b 			""
+label var formation_b				"Attend a professional training"
+label var hhsize_b 					"Household size"
+label var children_b 				"Number of children ($<$18)"
+label var adults_b 					"Number of adults (18-65)"
+label var elderly_b					"Number of elders ($>$65)"
+label var conso_food_pc_b 			"Daily food consumption per capita (in Dinars)"
+label var conso_nofood_pc_b 		"Daily non food consumption per capita (in Dinars)"
+label var conso_tot_pc_b 			"Daily consumption per capita (in Dinars)"
+label var dirtfloor_b 				"Has dirt floor"
+label var thatched_still_b			"Has thatched or steel roof"
+label var proprietaire_terre_b 		"Owns land"
+label var livestock_b				"Has livestock"
+label var relation_head_b 			"~~~~ Head"
+label var relation_spouse_b			"~~~~ Spouse of the head"
+label var relation_daughter_b		"~~~~ Daughter of the head"
+label var relation_other_b			"~~~~ Other"
+label var distance_cheflieu_b 		"~~~~ Headquarter"
+label var distance_marche_b 		"~~~~ Food market"	
+label var distance_transpublic_b 	"~~~~ Public transportation station"
+label var distance_ecoleprim_b 		"~~~~ Primary school"
+label var distance_eau_b 			"~~~~ Water sourc"
+
+* Table balance full
+* -------------------------
+
+* Means, sd and ttests and normalized diff
+
+file open Table using "balance.tex", text write replace
+
+foreach balance in balance_0 balance_1 balance_2 balance_3 balance_4{
+
+	if "`balance'" == "balance_0"{
+		local title "\textbf{Respondent variables}"
 	}
-	*/
-	
-	label var repondant_age_b			"Age"
-	label var repondant_educ_b			"Education"
-	label var hhsize_b					"HH size"
-	label var h_18_65_b					"Male 18-65 years old"
-	label var f_18_65_b					"Female 18-65 years old"
-	label var jeunes_lireecrire_b		"Illiterate adult"
-	label var emploi_2013_a_b			"Worked 3 month (2013)"
-	label var formation_b				"Professional training"
-	label var origine_naissance_b		"Born imada"
-	label var origine_naissance_bis_b	"Born gouvernorat"
-	label var trauma_abus_b				"Victim violence (1987-2010)"
-		
-		
-	*******************************************
-	* Difference
-	*******************************************
-	
-	forvalue i = 0/1{
-	
-		iebaltab `balance_indiv', grpvar(trt_cash_`i') fixedeffect(Strata) normdiff pftest pttest total grplabel("0 Control @ 1 Treatment") rowvarlabels savetex("Balance Test Cash/Table_Balance_Individual_`i'.tex") replace
-	
+	if "`balance'" == "balance_1"{
+		local title "Status in the household"
 	}
-
-	********************************************
-	* Omnibus test
-	********************************************
+	if "`balance'" == "balance_2"{
+		local title "\addlinespace \textbf{Household demographics}"
+	}
+	if "`balance'" == "balance_3"{
+		local title "\addlinespace \textbf{Household living conditions}"
+	}
+	if "`balance'" == "balance_4"{
+		local title "Walking distance (in minutes, one way)"
+	}
 	
-	forvalue i = 0/1{
+	
+	file write Table																							_n ///
+	"`title' 																							\\ "	_n
 		
-		local count_out = 0
+foreach var in $`balance' {
 		
-		* Regression
-		reg trt_cash_`i' `balance_indiv' i.Strata, robust 
+		local l_var : variable label `var'
 		
-		local n`i' = e(N)
+		* Summary stat
+		sum `var' if group == 0
+		local me0 	: di%12.3f `r(mean)'
+		local sd0 	: di%12.3f `r(sd)'
+		local n0 	= `r(N)'
+	
+		sum `var' if group == 1
+		local me1 	: di%12.3f `r(mean)'
+		local sd1 	: di%12.3f `r(sd)'
+		local n1 	= `r(N)'
 		
-		foreach variables in `balance_indiv' {
-			
-			local count_out = `count_out' + 1 
-			
-			local l_`count_out' : variable label `variables'
-							
-				local c`i'_2_`count_out' 	: di%12.3f _b[`variables']
-				local se`i'_2_`count_out' 	: di%12.3f _se[`variables']
-					
-				* Compute p-value
-				local pval`i'_2_`count_out' = ttail(e(df_r),abs(_b[`variables']/_se[`variables']))*2	
-				
-				* Format local 
-				local pval`i'_2_`count_out' : di%12.3f `pval`i'_2_`count_out''
-				local se`i'_2_`count_out' = trim("`se`i'_2_`count_out''")
-				local se`i'_2_`count_out' 		 "(`se`i'_2_`count_out'')"
-				local se`i'_2_`count_out' = trim("`se`i'_2_`count_out''")
-				
-				* Add stars
-				if `pval`i'_2_`count_out'' < 0.1{
-					local s`i'_2_`count_out' "*"
-				}
-				if `pval`i'_2_`count_out'' < 0.05{
-					local s`i'_2_`count_out' "**"
-				}
-				if `pval`i'_2_`count_out'' < 0.01{
-					local s`i'_2_`count_out' "***"
-				}
+		sum `var' if group == 2
+		local me2 	: di%12.3f `r(mean)'
+		local sd2 	: di%12.3f `r(sd)'
+		local n2 	= `r(N)'
+		
+		
+		* T-test
+		ttest `var' , by(trt_cash_0)
+		local p0	= `r(p)'
+		local p0	: di%12.3f `p0'
+		local n10	=`r(N_1)'
+		local n20	=`r(N_2)'
+		local ntot0	=`n1'+`n2'
+		
+		ttest `var' , by(trt_cash_1)
+		local p1	: di%12.3f `r(p)'
+		local n11	=`r(N_1)'
+		local n21	=`r(N_2)'
+		local ntot1	=`n1'+`n2'
+		
+		ttest `var' , by(trt_cash_2)
+		local p2	: di%12.3f `r(p)'
+		local n12 	=`r(N_1)'
+		local n22 	=`r(N_2)'
+		local ntot2	=`n1'+`n2'
+		
+		* Add parantheses around standard error
+		
+		forvalue i = 0/2{
+			local sd`i' = trim("`sd`i''")
+			local sd`i' = "(`sd`i'')"
+			local sd`i' = trim("`sd`i''")
+		
 		}
 		
-	* Test
-	test `balance_indiv'
-	
-	local p`i' : di%12.3f `r(p)'
-	local f`i' : di%12.3f `r(F)'
-	
-	}
-	
-	* Export table
-	
-	file open Table using "Balance Test Cash/Table_Balance_Omni.tex", text write replace
-
-	forvalue i = 1/`count_out'{
-	
-		file write Table																																				_n ///
-		" `l_`i''					& `c0_2_`i''`s0_2_`i'' 	& `pval0_2_`count_out''	 & `c1_2_`i''`s1_2_`i'' & `pval1_2_`count_out''		\\ " 	_n ///
-		" 							&  `se0_2_`i''			& 				  	 	 &  `se1_2_`i''			&  							\\ " 	_n ///
-		
-	}
-	
-	file write Table																															_n ///
-		"\hline																															  "		_n ///
-		"Observation				& `n0'					&						&	`n1'				&							\\"		_n ///
-		"F-stat						& `f0'					&						&	`f1'				&							\\"		_n ///
-		"P-value					& `p0'					&						&	`p1'				&							\\"		_n
-	
-	file close Table
-	
-	********************************************
-	* Balance test on individual covariates
-	********************************************
-	
-	local count_out = 0 
-	
-	mat def pvalue = J(11,3,.)
-	
-	forvalue i = 0/1{
-		
-		local count_out = 0 
-		
-		foreach covariates in `balance_indiv' {
+		* Add stars indication 
+		forvalue i = 0/2{
 			
-			local count_out = `count_out' + 1 
+			local s`i' ""
 			
-			local l_`count_out' : variable label `covariates'
-					
-			reg `covariates' trt_cash_`i' i.Strata, robust
-			
-				local c_1_`count_out' 	: di%12.3f _b[trt_cash]
-				local se_1_`count_out' 	: di%12.3f _se[trt_cash]
-				local n_1_`count_out' 	= e(N)
-				local r2_1_`count_out' 	= e(R2)
-					
-				* Compute p-value
-				local pval_1_`count_out' = ttail(e(df_r),abs(_b[trt_cash]/_se[trt_cash]))*2	
+			if `p`i'' < 0.10{
 				
-				* Format local 
-				local pval_1_`count_out' : di%12.3f `pval_1_`count_out''
-				local se_1_`count_out' = trim("`se_1_`count_out''")
-				local se_1_`count_out' 		 "(`se_1_`count_out'')"
-				local se_1_`count_out' = trim("`se_1_`count_out''")
+				local s`i' "*"
 				
-				* Add stars
-				if `pval_1_`count_out'' < 0.1{
-					local s_1_`count_out' "*"
-				}
-				if `pval_1_`count_out'' < 0.05{
-					local s_1_`count_out' "**"
-				}
-				if `pval_1_`count_out'' < 0.01{
-					local s_1_`count_out' "***"
-				}
+			}
+			
+			if `p`i'' < 0.05{
+				
+				local s`i' "**"
+				
+			}
+			
+			if `p`i'' < 0.01{
+				
+				local s`i' "***"
+				
+			}
+		
 		}
-	
-	
-	* Export TeX Tables of balance test at individual level 
-
-
-	file open Table using "Balance Test Cash/Table_Balance_Individual_Cov_`i'.tex", text write replace
 		
-	file write Table  															_n ///
-	" `l_1'			& 	`c_1_1'`s_1_1' 		& `pval_1_1' & `n_1_1' 		\\ " 	_n ///
-	" 				&	 `se_1_1' & &							   		\\ " 	_n ///
-	" `l_2'			& 	`c_1_2'`s_1_2' 		& `pval_1_2' & `n_1_2' 		\\ " 	_n ///
-	" 				&	 `se_1_2' & &							   		\\ " 	_n ///
-	" `l_3'			& 	`c_1_3'`s_1_3' 		& `pval_1_3' & `n_1_3' 		\\ " 	_n ///
-	" 				&	 `se_1_3' & &							   		\\ " 	_n ///
-	" `l_4'			& 	`c_1_4'`s_1_4' 		& `pval_1_4' & `n_1_4' 		\\ " 	_n ///
-	" 				&	 `se_1_4' & &							   		\\ " 	_n ///
-	" `l_5'			& 	`c_1_5'`s_1_5' 		& `pval_1_5' & `n_1_5' 		\\ " 	_n ///
-	" 				&	 `se_1_5' & &							   		\\ " 	_n ///
-	" `l_6'			& 	`c_1_6'`s_1_6' 		& `pval_1_6' & `n_1_6' 		\\ " 	_n ///
-	" 				&	 `se_1_6' & &							   		\\ " 	_n ///
-	" `l_7'			& 	`c_1_7'`s_1_7' 		& `pval_1_7' & `n_1_7' 		\\ " 	_n ///
-	" 				&	 `se_1_7' & &							   		\\ " 	_n ///
-	" `l_8'			& 	`c_1_7'`s_1_8' 		& `pval_1_8' & `n_1_8' 		\\ " 	_n ///
-	" 				&	 `se_1_8' & &							   		\\ " 	_n ///
-	" `l_9'			& 	`c_1_9'`s_1_9' 		& `pval_1_9' & `n_1_9' 		\\ " 	_n ///
-	" 				&	 `se_1_9' & &							   		\\ " 	_n 
-	
-	file close Table	
-
+		
+		* Normalize difference 
+		stddiff `var' , by(trt_cash_0)
+		matrix b = r(output)		
+		local ndiff0 = b[1,5]	
+		local ndiff0 : di%12.3f `ndiff0'
+		
+		stddiff `var' , by(trt_cash_1)
+		matrix b = r(output)		
+		local ndiff1 = b[1,5]
+		local ndiff1 : di%12.3f `ndiff1'
+		
+		stddiff `var' , by(trt_cash_2)
+		matrix b = r(output)		
+		local ndiff2 = b[1,5]
+		local ndiff2 : di%12.3f `ndiff2'
+		
+		file write Table																							_n ///
+		"`l_var' & `me0' & `me1' & `me2' & `p0'`s0' & `p1'`s1' & `p2'`s2' & `ndiff0' & `ndiff1' & `ndiff2'	\\"		_n ///
+		"		 & `sd0' & `sd1' & `sd2' &      	&     	   &          &          &          &        	\\"		_n
+		
+	}
 }
+
+* Omnibus Test
+
+	reg trt_cash_0	$balance_0 $balance_1 $balance_2 $balance_3
+	test $balance_0 $balance_1 $balance_2 $balance_3
+	local p0 : di%12.3f `r(p)'
+	
+	reg trt_cash_1	$balance_0 $balance_1 $balance_2 $balance_3
+	test $balance_0 $balance_1 $balance_2 $balance_3
+	local p1 : di%12.3f `r(p)'
+	
+	reg trt_cash_2	$balance_0 $balance_1 $balance_2 $balance_3
+	test $balance_0 $balance_1 $balance_2 $balance_3
+	local p2 : di%12.3f `r(p)'
+	
+	file write Table																								_n ///
+	"\hline																										 "	_n ///
+	"Omnibus F-test p-value & . & . & . & `p0' & `p1' & `p2' & . & . & . 									   \\" 	_n ///
+	"Observations  & `n0' & `n1' & `n2' & `ntot0' & `ntot1' & `ntot2' & `ntot0' & `ntot1' & `ntot2' 		   \\"	_n ///
+	"\addlinespace																								 "	_n ///
+	"\hline																										 "  _n 
+	
+file close Table
+
+* Table balance endline sample
+* ----------------------------------------
+
+drop if attrition == 1
+
+file open Table using "balance2.tex", text write replace
+
+foreach balance in balance_0 balance_1 balance_2 balance_3 balance_4{
+
+	if "`balance'" == "balance_0"{
+		local title "\textbf{Respondent variables}"
+	}
+	if "`balance'" == "balance_1"{
+		local title "Status in the household"
+	}
+	if "`balance'" == "balance_2"{
+		local title "\addlinespace \textbf{Household demographics}"
+	}
+	if "`balance'" == "balance_3"{
+		local title "\addlinespace \textbf{Household living conditions}"
+	}
+	if "`balance'" == "balance_4"{
+		local title "Walking distance (in minutes, one way)"
+	}
 	
 	
+	file write Table																							_n ///
+	"`title' 																							\\ "	_n
+		
+foreach var in $`balance' {
+		
+		local l_var : variable label `var'
+		
+		* Summary stat
+		sum `var' if group == 0
+		local me0 	: di%12.3f `r(mean)'
+		local sd0 	: di%12.3f `r(sd)'
+		local n0 	= `r(N)'
 	
+		sum `var' if group == 1
+		local me1 	: di%12.3f `r(mean)'
+		local sd1 	: di%12.3f `r(sd)'
+		local n1 	= `r(N)'
+		
+		sum `var' if group == 2
+		local me2 	: di%12.3f `r(mean)'
+		local sd2 	: di%12.3f `r(sd)'
+		local n2 	= `r(N)'
+		
+		
+		* T-test
+		ttest `var' , by(trt_cash_0)
+		local p0	= `r(p)'
+		local p0	: di%12.3f `p0'
+		local n10	=`r(N_1)'
+		local n20	=`r(N_2)'
+		local ntot0	=`n1'+`n2'
+		
+		ttest `var' , by(trt_cash_1)
+		local p1	: di%12.3f `r(p)'
+		local n11	=`r(N_1)'
+		local n21	=`r(N_2)'
+		local ntot1	=`n1'+`n2'
+		
+		ttest `var' , by(trt_cash_2)
+		local p2	: di%12.3f `r(p)'
+		local n12 	=`r(N_1)'
+		local n22 	=`r(N_2)'
+		local ntot2	=`n1'+`n2'
+		
+		* Add parantheses around standard error
+		
+		forvalue i = 0/2{
+			local sd`i' = trim("`sd`i''")
+			local sd`i' = "(`sd`i'')"
+			local sd`i' = trim("`sd`i''")
+		
+		}
+		
+		* Add stars indication 
+		forvalue i = 0/2{
+			
+			local s`i' ""
+			
+			if `p`i'' < 0.10{
+				
+				local s`i' "*"
+				
+			}
+			
+			if `p`i'' < 0.05{
+				
+				local s`i' "**"
+				
+			}
+			
+			if `p`i'' < 0.01{
+				
+				local s`i' "***"
+				
+			}
+		
+		}
+		
+		
+		* Normalize difference 
+		stddiff `var' , by(trt_cash_0)
+		matrix b = r(output)		
+		local ndiff0 = b[1,5]	
+		local ndiff0 : di%12.3f `ndiff0'
+		
+		stddiff `var' , by(trt_cash_1)
+		matrix b = r(output)		
+		local ndiff1 = b[1,5]
+		local ndiff1 : di%12.3f `ndiff1'
+		
+		stddiff `var' , by(trt_cash_2)
+		matrix b = r(output)		
+		local ndiff2 = b[1,5]
+		local ndiff2 : di%12.3f `ndiff2'
+		
+		file write Table																							_n ///
+		"`l_var' & `me0' & `me1' & `me2' & `p0'`s0' & `p1'`s1' & `p2'`s2' & `ndiff0' & `ndiff1' & `ndiff2'	\\"		_n ///
+		"		 & `sd0' & `sd1' & `sd2' &      	&     	   &          &          &          &        	\\"		_n
+		
+	}
+}
+
+* Omnibus Test
+
+	reg trt_cash_0	$balance_0 $balance_1 $balance_2 $balance_3
+	test $balance_0 $balance_1 $balance_2 $balance_3
+	local p0 : di%12.3f `r(p)'
+	
+	reg trt_cash_1	$balance_0 $balance_1 $balance_2 $balance_3
+	test $balance_0 $balance_1 $balance_2 $balance_3
+	local p1 : di%12.3f `r(p)'
+	
+	reg trt_cash_2	$balance_0 $balance_1 $balance_2 $balance_3
+	test $balance_0 $balance_1 $balance_2 $balance_3
+	local p2 : di%12.3f `r(p)'
+	
+	file write Table																								_n ///
+	"\hline																										 "	_n ///
+	"Omnibus F-test p-value & . & . & . & `p0' & `p1' & `p2' & . & . & . 									   \\" 	_n ///
+	"Observations  & `n0' & `n1' & `n2' & `ntot0' & `ntot1' & `ntot2' & `ntot0' & `ntot1' & `ntot2' 		   \\"	_n ///
+	"\addlinespace																								 "	_n ///
+	"\hline																										 "  _n 
+
+

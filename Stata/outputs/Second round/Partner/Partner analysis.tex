@@ -1,0 +1,322 @@
+\documentclass[10pt,a4paper, margin=1in]{article}
+\usepackage{setspace}\onehalfspacing
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{blindtext}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{stata}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{pdflscape}
+\usepackage{subcaption}
+\captionsetup[subfigure]{labelfont=rm}
+\renewcommand\thesubfigure{(\alph{subfigure})}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black
+}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{threeparttable}
+\usepackage[skip = 0pt]{caption}
+\captionsetup{justification=centering}
+\usepackage{dcolumn}
+\usepackage{threeparttablex}
+
+\begin{document}
+
+\tableofcontents
+
+\listoftables
+\listoffigures
+
+\pagebreak
+
+\section{Main regression}
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively. P-value not adjusted for multiple hypothesis testing. Robust standard errors.
+			\end{TableNotes}
+			\begin{longtable}{l*{5}{c}}
+				\caption{Participation to gender dialogue effect on men's view on woman empowerment and agency.}\label{tab:balance_omni}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{1cm}}{\centering Control mean}
+				&\multicolumn{1}{p{1cm}}{\centering Control st.d}
+				&\multicolumn{1}{p{2cm}}{\centering Participation}
+				&\multicolumn{1}{p{1cm}}{\centering P-value}
+				&\multicolumn{1}{p{1cm}}{\centering N} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{2}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{partner_trt_effect.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+\section{Detailed regression}
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively. P-value not adjusted for multiple hypothesis testing. Robust standard errors.
+			\end{TableNotes}
+			\begin{longtable}{l*{5}{c}}
+				\caption{Participation to gender dialogue effect on men's view on gender role.}\label{tab:balance_omni}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{1cm}}{\centering Control mean}
+				&\multicolumn{1}{p{1cm}}{\centering Control st.d}
+				&\multicolumn{1}{p{2cm}}{\centering Participation}
+				&\multicolumn{1}{p{1cm}}{\centering P-value}
+				&\multicolumn{1}{p{1cm}}{\centering N} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{2}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{partner_trt_effect_gender_role_index.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively. P-value not adjusted for multiple hypothesis testing. Robust standard errors.
+			\end{TableNotes}
+			\begin{longtable}{l*{5}{c}}
+				\caption{Participation to gender dialogue effect on men's view on woman perceived abilities.}\label{tab:balance_omni}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{1cm}}{\centering Control mean}
+				&\multicolumn{1}{p{1cm}}{\centering Control st.d}
+				&\multicolumn{1}{p{2cm}}{\centering Participation}
+				&\multicolumn{1}{p{1cm}}{\centering P-value}
+				&\multicolumn{1}{p{1cm}}{\centering N} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{2}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{partner_trt_effect_abilities_index.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively. P-value not adjusted for multiple hypothesis testing. Robust standard errors.
+			\end{TableNotes}
+			\begin{longtable}{l*{5}{c}}
+				\caption{Participation to gender dialogue effect on men's view on gender based violence.}\label{tab:balance_omni}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{1cm}}{\centering Control mean}
+				&\multicolumn{1}{p{1cm}}{\centering Control st.d}
+				&\multicolumn{1}{p{2cm}}{\centering Participation}
+				&\multicolumn{1}{p{1cm}}{\centering P-value}
+				&\multicolumn{1}{p{1cm}}{\centering N} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{2}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{partner_trt_effect_views_index.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively. P-value not adjusted for multiple hypothesis testing. Robust standard errors.
+			\end{TableNotes}
+			\begin{longtable}{l*{5}{c}}
+				\caption{Participation to gender dialogue effect on men's view on reproductive health.}\label{tab:balance_omni}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{1cm}}{\centering Control mean}
+				&\multicolumn{1}{p{1cm}}{\centering Control st.d}
+				&\multicolumn{1}{p{2cm}}{\centering Participation}
+				&\multicolumn{1}{p{1cm}}{\centering P-value}
+				&\multicolumn{1}{p{1cm}}{\centering N} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{2}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{partner_trt_effect_reproductive_index.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively. P-value not adjusted for multiple hypothesis testing. Robust standard errors.
+			\end{TableNotes}
+			\begin{longtable}{l*{5}{c}}
+				\caption{Participation to gender dialogue effect on men's view on household resources allocation.}\label{tab:balance_omni}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{1cm}}{\centering Control mean}
+				&\multicolumn{1}{p{1cm}}{\centering Control st.d}
+				&\multicolumn{1}{p{2cm}}{\centering Participation}
+				&\multicolumn{1}{p{1cm}}{\centering P-value}
+				&\multicolumn{1}{p{1cm}}{\centering N} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{2}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{partner_trt_effect_bargaining_index.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+\begin{center}
+	{\tiny \tabcolsep=1pt  % hold it local
+		\begin{ThreePartTable}
+			\begin{TableNotes}[flushleft]
+				\tiny
+				\item \textit{Notes}:*, **, and *** denote statistical significance at 10\%, 5\%, and 1\%, respectively. P-value not adjusted for multiple hypothesis testing. Robust standard errors.
+			\end{TableNotes}
+			\begin{longtable}{l*{5}{c}}
+				\caption{Participation to gender dialogue effect on quality of communication.}\label{tab:balance_omni}					\\
+				\toprule
+				% FIRST HEAD
+				\hline 
+				&\multicolumn{1}{p{1cm}}{\centering Control mean}
+				&\multicolumn{1}{p{1cm}}{\centering Control st.d}
+				&\multicolumn{1}{p{2cm}}{\centering Participation}
+				&\multicolumn{1}{p{1cm}}{\centering P-value}
+				&\multicolumn{1}{p{1cm}}{\centering N} \\
+				\hline 
+				\endfirsthead
+				\hline
+				% SECOND PAGE HEAD
+				\endhead
+				% FOOT NOTE ON THE FIRST PAGE
+				\hline
+				\multicolumn{2}{r}{{Continued on next page}} \\
+				\endfoot
+				
+				% BODY OF THE TABLE
+				\bottomrule
+				\insertTableNotes
+				\endlastfoot
+				\input{partner_trt_effect_communication_index.tex}
+			\end{longtable}
+		\end{ThreePartTable}
+	}
+\end{center}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4623,9 +4623,6 @@ if _N>0 {
 	* save data to Stata format
 	save "`dtafile'", replace
 
-	* show codebook and notes
-	codebook
-	notes list
 }
 
 disp

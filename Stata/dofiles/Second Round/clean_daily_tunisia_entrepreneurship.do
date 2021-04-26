@@ -12,7 +12,7 @@ u "$vera/temp/temp_import_CashXFollow.dta", clear
  
 g HHID = hhid 
 
-merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup replacement Partenaire)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup replacement Partenaire ID_HH2 Partenaire_Nom CIN) update
 
 drop _merge 
 
@@ -25,15 +25,13 @@ replace trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Tre
 g 		trt_cash_1 = 0 if Intervention == "Cash Grants - Women"
 replace trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Oui"
 
-* Imput to missing if treatment of other group
-
-replace trt_cash_1 = . if trt_cash_0 == 1
-replace trt_cash_0 = . if trt_cash_1 == 1
 
 label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
 label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
 label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
 	
+rename imada imada_endline 
+
 ********************************************************************************
 ********************************************************************************
 * 2) CHECK THAT ALL SURVEY SUBMITTED ARE COMLETED 
@@ -105,6 +103,33 @@ do "$git_tunisia/dofiles/Second round/Corrections/duplicates_code_correction.do"
 do "$git_tunisia/dofiles/Second round/Corrections/error_code_tunisia.do"
 
 
+********************************************************************************
+********************************************************************************
+* 4) Get treatment status of partner (0 = no participation to financial training)
+********************************************************************************
+********************************************************************************
+
+preserve 
+
+	keep if Intervention == "Cash Grants - Women" & Status == "Treatment"
+	
+	keep if ID_HH2 !=. 
+	
+	keep trt_cash_0 trt_cash_1 ID_HH2
+	
+	duplicates drop 
+
+	rename trt_cash_0 trt_cash_part_0
+	rename trt_cash_1 trt_cash_part_1
+	
+	tempfile partner_trt
+	sa 		`partner_trt'
+	
+restore 
+
+merge m:1 ID_HH2 using `partner_trt'
+
+replace trt_cash_part_1 = . if Intervention != "Cash Grants - Partenaire"
 
 ********************************************************************************
 ********************************************************************************
@@ -164,7 +189,28 @@ preserve
 	
 	import excel using "$shared/Daily Report/Update BJKA.xlsx", clear first 
 	
-	replace Status = "1" if Status =="Anciens codes 33"
+	drop if HHID == .
+	
+	cap replace Status = "999" if Status ==" "
+	cap replace Status = ""	   if Status == "Rendez vous cette semaine"
+	cap replace Status = 10 if Status == 100
+	
+	destring Status, replace
+
+	label define A 	1 "Completed" 					///
+					4 "Refusal"						///
+					5 "Dead"						///
+					6 "Abroad"						///
+					7 "Other region"				///
+					9 "Doesn't exist"				///
+					10 "Other"						///
+					12 "Replacement not used"		///
+					13 "Transfered to other team"	///
+					33 "Absent of dataset"			///
+					99 "Unreachable (other region)" ///
+					999 "Never contacted"
+					
+	label value Status A
 	
 	cap confirm numeric variable Status
 
@@ -177,15 +223,16 @@ preserve
 	destring Status, replace 
 	
 	* Keep last days of data collection 
-	keep if Status == 1	| Status == 33 | Status == 99							// Keep completed survey
+	*keep if Status == 1	| Status == 33 											// Keep completed survey
 	
-	tab HHID if Status == 33 
-	
-	rename HHID 	hhid
+	*replace Status = 1 
+		
 	rename Status 	Etat
 	rename Date 	Date_complete
 	
-	keep hhid Etat Date_complete Nom
+	keep HHID Etat Date_complete Nom Intervention Telephone1 Telephone2 Nom
+	
+	rename Intervention Inter
 	
 	* Create temperoray file 
 	tempfile daily_completion
@@ -196,11 +243,14 @@ restore
 cap drop _merge 
 
 * Merge data with completion report 
-merge m:1 hhid using `daily_completion'
+merge m:1 HHID using `daily_completion'
+
+* Correct BJKA entry error 
+replace Etat = 1 if _merge == 3 
 
 * Create indicator for missing survey
 g 		missing_survey = 0 
-replace missing_survey = 1 if _merge == 2 
+replace missing_survey = 1 if _merge == 2 & (Etat == 1 | Etat == 33)
 
 label var missing_survey "Missing survey"
 
@@ -225,11 +275,11 @@ preserve
 	rename a1_date 		Date_Sondage
 	rename description 	Description
 	
-	keep hhid Description Date_Sondage Date_complete
+	keep HHID Nom Description Date_Sondage Date_complete Etat Telephone1 Telephone2
 	
-	order Date_Sondage Date_complete hhid Description
+	order Date_Sondage Date_complete HHID Nom Description
 	
-	sort Date_Sondage Description
+	sort Date_Sondage Description 
 	* Export to excel
 	
 	export excel using "$shared/Daily Report/Update BJKA.xlsx", sheet("Probleme Completion", replace) first(var)
@@ -239,7 +289,6 @@ restore
 drop if _merge == 2 
 
 cap drop _merge 
-
 ********************************************************************************
 ********************************************************************************
 * 5) ERROR IN CODE
@@ -305,13 +354,21 @@ preserve
 
 keep if dup > 0 & dup !=.
 
-keep hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date 
-sort hhid 
-order hhid a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date
+count
+
+if `r(N)' > 0{
+
+keep HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada_endline psu key
+sort HHID 
+order HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada_endline psu key
+
 
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
 
+}
+
 restore
+
 
 * Duplicates in name ?
 
@@ -340,7 +397,7 @@ restore
 
 cap drop _merge 
 
-merge m:1 HHID using `ID_HHH', update
+merge m:1 HHID using `ID_HHH', update keep(1 3)
 
 drop _merge
 
@@ -419,27 +476,7 @@ destring Strata, replace
 
 * Save data with PII 
 
-sa "$vera/clean/clean_CashXFollow_PII.dta", replace 
-
-********************************************************************************
-* 14) DE-IDENTIFY DATA 
-********************************************************************************
-********************************************************************************
-
-* 1) Define variable to be drop (Add variable below to be dropped)
-
-local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
-
-
-* 2) Drop ID variable 
-
-foreach var of local deidentification {
-	
-	capture noisily drop `var' 													
-
-}
-
-sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/cleandata/clean_CashXFollow_noPII.dta", replace
+sa "$vera/temp/clean_CashXFollow_PII_3.dta", replace 
 
 
 

@@ -31,6 +31,9 @@ preserve
 	label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
 	label var trt_cash_0 "Cash Grant Treatment (Partenaire == 0)"
 	label var trt_cash_1 "Cash Grant Treatment (Partenaire == 1)"
+	
+	replace trt_cash_1 = . if trt_cash_0 == 1
+	replace trt_cash_0 = . if trt_cash_1 == 1
 
 	keep Intervention replacement Partenaire trt_followup HHID Strata trt_cash*
 
@@ -58,17 +61,18 @@ preserve
 	
 	drop if HHID == . 
 	
-	drop if _n > 4200
-	
-	replace Status = "1" if Status =="Anciens codes 33"
-	
+	drop if _n > 4201
+		
 	cap confirm numeric variable Status
 
 	if _rc !=0{
 		
+		replace Status = ""	   if Status == "Rendez vous cette semaine"
 		replace Status = subinstr(Status," ","",.)
 		
 	}
+	
+	replace Status = 10 if Status == 100
 	
 	destring Status, replace 
 	
@@ -81,19 +85,21 @@ preserve
 					10 "Other"						///
 					12 "Replacement not used"		///
 					13 "Transfered to other team"	///
-					33 "Absent of dataset"
+					33 "Absent of dataset"			///
+					99 "Unreachable (moved)"		///
+					999 "Never contacted"
 					
 	label value Status A
 	
 	keep Status HHID Nom Intervention H
 	
-	rename H Treatment 
+	*rename H Treatment 
 
 	merge 1:1 HHID using "A:/Assignment/Follow Up Sample.dta",keepusing(TCLP replacement)
 	
 	drop _merge
 	
-	keep Status HHID Nom Intervention TCLP Treatment
+	keep Status HHID Nom Intervention TCLP
 	
 	tempfile completion
 	sa 		`completion'
@@ -103,6 +109,11 @@ restore
 cap drop _merge Status
 
 merge m:1 HHID using `completion', update 
+
+replace Status = 1 	if _merge == 3 
+replace Status = 10 if attrition == 1	& Status == 1										// Replce to other for entry error from BJKA  
+
+drop if _merge == 2
 
 * Check Status of _merge == 3
 
@@ -119,6 +130,20 @@ tab replacement if _merge == 3
 * Drop replacement not used 
 
 drop if replacement == 0 & _merge == 2
+
+* Check code and Names of _merge == 1
+
+gen 	Refusal = 0
+replace Refusal = 1 	if Status == 4
+
+gen 	Dead = 0 
+replace Dead = 1 		if Status == 5
+
+gen 	Moved = 0 
+replace Moved = 1 		if Status == 7 | Status == 6 | Status == 9 
+
+g 		Other = 0 
+replace Other = 1 		if Status == 10 | Status == .
 
 
 
