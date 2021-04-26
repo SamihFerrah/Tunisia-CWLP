@@ -193,6 +193,8 @@ preserve
 	
 	cap replace Status = "999" if Status ==" "
 	cap replace Status = ""	   if Status == "Rendez vous cette semaine"
+	cap replace Status = 10 if Status == 100
+	
 	destring Status, replace
 
 	label define A 	1 "Completed" 					///
@@ -242,6 +244,9 @@ cap drop _merge
 
 * Merge data with completion report 
 merge m:1 HHID using `daily_completion'
+
+* Correct BJKA entry error 
+replace Etat = 1 if _merge == 3 
 
 * Create indicator for missing survey
 g 		missing_survey = 0 
@@ -353,9 +358,9 @@ count
 
 if `r(N)' > 0{
 
-keep HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu key
+keep HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada_endline psu key
 sort HHID 
-order HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu key
+order HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada_endline psu key
 
 
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)

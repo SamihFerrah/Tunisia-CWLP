@@ -14,30 +14,30 @@
 	
 * Asset index	(first principal component of the assets list, following Filmer and Pritchett 2001) 
 
-pca b2_assetnum_room  b2_assetnum_mattresses b2_assetnum_radio b2_assetnum_cellphone b2_assetnum_smartphone b2_assetnum_refrigerator b2_assetnum_bicycles b2_assetnum_moto b2_assetnum_chaise b2_assetnum_tablette b2_assetnum_vent b2_assetnum_clim b2_assetnum_gr b2_assetnum_nat b2_assetnum_poch b2_assetnum_table b2_assetnum_salon b2_assetnum_bibli b2_assetnum_arm b2_assetnum_ferer b2_assetnum_mach b2_assetnum_dec if Intervention == "Cash Grants - Women"
+pca b2_assetnum_room  b2_assetnum_mattresses b2_assetnum_radio b2_assetnum_cellphone b2_assetnum_smartphone b2_assetnum_refrigerator b2_assetnum_bicycles b2_assetnum_moto b2_assetnum_chaise b2_assetnum_tablette b2_assetnum_vent b2_assetnum_clim b2_assetnum_gr b2_assetnum_nat b2_assetnum_poch b2_assetnum_table b2_assetnum_salon b2_assetnum_bibli b2_assetnum_arm b2_assetnum_ferer b2_assetnum_mach b2_assetnum_dec if Intervention == "Cash Grants - Women" & attrition == 0
 
-predict assets_total if Intervention == "Cash Grants - Women"
+predict assets_total if Intervention == "Cash Grants - Women" & attrition == 0
 
-pca b2_assetnum19_room  b2_assetnum19_mattresses b2_assetnum19_radio b2_assetnum19_cellphone b2_assetnum19_smartphone b2_assetnum19_refrigerator b2_assetnum19_bicycles b2_assetnum19_moto b2_assetnum19_chaise b2_assetnum19_tablette b2_assetnum19_vent b2_assetnum19_clim b2_assetnum19_gr b2_assetnum19_nat b2_assetnum19_poch b2_assetnum19_table b2_assetnum19_salon b2_assetnum19_bibli b2_assetnum19_arm b2_assetnum19_ferer b2_assetnum19_mach b2_assetnum19_dec if Intervention == "Cash Grants - Women"
+pca b2_assetnum19_room  b2_assetnum19_mattresses b2_assetnum19_radio b2_assetnum19_cellphone b2_assetnum19_smartphone b2_assetnum19_refrigerator b2_assetnum19_bicycles b2_assetnum19_moto b2_assetnum19_chaise b2_assetnum19_tablette b2_assetnum19_vent b2_assetnum19_clim b2_assetnum19_gr b2_assetnum19_nat b2_assetnum19_poch b2_assetnum19_table b2_assetnum19_salon b2_assetnum19_bibli b2_assetnum19_arm b2_assetnum19_ferer b2_assetnum19_mach b2_assetnum19_dec if Intervention == "Cash Grants - Women" & attrition == 0
 	
 predict assets19_total
 
 * Total number of assets
-pca d_b2_assetnum_room  d_b2_assetnum_mattresses d_b2_assetnum_radio d_b2_assetnum_cellphone d_b2_assetnum_smartphone d_b2_assetnum_refrigerator d_b2_assetnum_bicycles d_b2_assetnum_moto d_b2_assetnum_chaise d_b2_assetnum_tablette d_b2_assetnum_vent d_b2_assetnum_clim d_b2_assetnum_gr d_b2_assetnum_nat d_b2_assetnum_poch d_b2_assetnum_table d_b2_assetnum_salon d_b2_assetnum_bibli d_b2_assetnum_arm d_b2_assetnum_ferer d_b2_assetnum_mach d_b2_assetnum_dec if Intervention == "Cash Grants - Women"
+pca d_b2_assetnum_room  d_b2_assetnum_mattresses d_b2_assetnum_radio d_b2_assetnum_cellphone d_b2_assetnum_smartphone d_b2_assetnum_refrigerator d_b2_assetnum_bicycles d_b2_assetnum_moto d_b2_assetnum_chaise d_b2_assetnum_tablette d_b2_assetnum_vent d_b2_assetnum_clim d_b2_assetnum_gr d_b2_assetnum_nat d_b2_assetnum_poch d_b2_assetnum_table d_b2_assetnum_salon d_b2_assetnum_bibli d_b2_assetnum_arm d_b2_assetnum_ferer d_b2_assetnum_mach d_b2_assetnum_dec if Intervention == "Cash Grants - Women" & attrition == 0
 	
-predict assets_d if Intervention == "Cash Grants - Women"
+predict assets_d if Intervention == "Cash Grants - Women" & attrition == 0
 
 * Number of assets obtained in 2019
-pca d_b2_assetnum19_room  d_b2_assetnum19_mattresses d_b2_assetnum19_radio d_b2_assetnum19_cellphone d_b2_assetnum19_smartphone d_b2_assetnum19_refrigerator d_b2_assetnum19_bicycles d_b2_assetnum19_moto d_b2_assetnum19_chaise d_b2_assetnum19_tablette d_b2_assetnum19_vent d_b2_assetnum19_clim d_b2_assetnum19_gr d_b2_assetnum19_nat d_b2_assetnum19_poch d_b2_assetnum19_table d_b2_assetnum19_salon d_b2_assetnum19_bibli d_b2_assetnum19_arm d_b2_assetnum19_ferer d_b2_assetnum19_mach d_b2_assetnum19_dec if Intervention == "Cash Grants - Women"
+pca d_b2_assetnum19_room  d_b2_assetnum19_mattresses d_b2_assetnum19_radio d_b2_assetnum19_cellphone d_b2_assetnum19_smartphone d_b2_assetnum19_refrigerator d_b2_assetnum19_bicycles d_b2_assetnum19_moto d_b2_assetnum19_chaise d_b2_assetnum19_tablette d_b2_assetnum19_vent d_b2_assetnum19_clim d_b2_assetnum19_gr d_b2_assetnum19_nat d_b2_assetnum19_poch d_b2_assetnum19_table d_b2_assetnum19_salon d_b2_assetnum19_bibli d_b2_assetnum19_arm d_b2_assetnum19_ferer d_b2_assetnum19_mach d_b2_assetnum19_dec if Intervention == "Cash Grants - Women" & attrition == 0
 	
-predict assets19_d
+predict assets19_d if Intervention == "Cash Grants - Women" & attrition == 0
 
 	
 * Anxiety index
 egen anxiety_index = rowtotal(d3_shortnessbreath d3_fearlosingcontrol d3_worryest d3_feelingsfear d3_frighten d3_feeldeceiving ///
-							  d3_solitaryactivities d3_uncomfortabl d3_unwilling) if Intervention == "Cash Grants - Women", missing
+							  d3_solitaryactivities d3_uncomfortabl d3_unwilling) if Intervention == "Cash Grants - Women" & attrition == 0, missing
 						
-replace anxiety_index = anxiety_index/ 9 if Intervention == "Cash Grants - Women"
+replace anxiety_index = anxiety_index/ 9 if Intervention == "Cash Grants - Women" & attrition == 0
 
 * Depression index
 egen depression_index = rowtotal(d3_lifethreatening d3_distressing d3_avoidthinking d3_remembering d3_lostinterest d3_feeldetached ///
@@ -45,18 +45,18 @@ egen depression_index = rowtotal(d3_lifethreatening d3_distressing d3_avoidthink
 								 d3_alcoholdrugs  d3_feltangry  d3_troubllistening  d3_wrongblame  d3_recognition ///
 								 d3_believethink  d3_frustrated  d3_enoughsleep  d3_lotofthings  d3_nightmares ///
 							     d3_solveproblems  d3_dependsmainly  d3_feel_helpless  d3_influence_many  d3_taking_control ///
-								 d3_exploitedcheated  d3_have_control  d3_trust_worthy  d3_achieveanything  d3_beingaccepted) if Intervention == "Cash Grants - Women", missing 
+								 d3_exploitedcheated  d3_have_control  d3_trust_worthy  d3_achieveanything  d3_beingaccepted) if Intervention == "Cash Grants - Women" & attrition == 0, missing 
 			
-replace depression_index = depression_index/ 31 if Intervention == "Cash Grants - Women"
+replace depression_index = depression_index/ 31 if Intervention == "Cash Grants - Women" & attrition == 0
 
 * Z-scores index
 
 foreach var in anxiety_index depression_index assets_total assets19_total assets_d assets19_d {
 	
-	sum `var' 					if trt_cash==0 & attrition == 0 						& Intervention == "Cash Grants - Women"
-	gen cmean_`var'				= r(mean)	if attrition == 0 							& Intervention == "Cash Grants - Women"
-	gen csd_`var'				= r(sd)	if attrition == 0 								& Intervention == "Cash Grants - Women"
-	gen z_`var'					= (`var' - cmean_`var')/csd_`var' if  attrition == 0 	& Intervention == "Cash Grants - Women"
+	sum `var' 					if trt_cash==0 & attrition == 0 						& Intervention == "Cash Grants - Women" & attrition == 0
+	gen cmean_`var'				= r(mean)	if attrition == 0 							& Intervention == "Cash Grants - Women" & attrition == 0
+	gen csd_`var'				= r(sd)	if attrition == 0 								& Intervention == "Cash Grants - Women" & attrition == 0
+	gen z_`var'					= (`var' - cmean_`var')/csd_`var' if  attrition == 0 	& Intervention == "Cash Grants - Women" & attrition == 0
 
 }
 
@@ -65,21 +65,21 @@ sum z_* if trt_cash==0 & attrition == 0
 	
 * Create second version of index (with a subset of variables)
 
-egen 	anxiety_index2 = rowtotal(d3_shortnessbreath d3_fearlosingcontrol d3_worryest d3_feelingsfear d3_frighten) if Intervention == "Cash Grants - Women", missing 
-replace anxiety_index2 = anxiety_index2/5	if Intervention == "Cash Grants - Women"
+egen 	anxiety_index2 = rowtotal(d3_shortnessbreath d3_fearlosingcontrol d3_worryest d3_feelingsfear d3_frighten) if Intervention == "Cash Grants - Women" & attrition == 0, missing 
+replace anxiety_index2 = anxiety_index2/5	if Intervention == "Cash Grants - Women" & attrition == 0
 
-egen 	ptsd_index = rowtotal(d3_lifethreatening d3_distressing d3_avoidthinking d3_remembering) if Intervention == "Cash Grants - Women", missing
+egen 	ptsd_index = rowtotal(d3_lifethreatening d3_distressing d3_avoidthinking d3_remembering) if Intervention == "Cash Grants - Women" & attrition == 0, missing
 replace ptsd_index = ptsd_index/4	if Intervention == "Cash Grants - Women"
 
-egen 	depression2_index = rowtotal(d3_lostinterest d3_feeldetached d3_oftenirritable d3_makedecisions d3_sleepeatinghabit d3_depressed d3_feltangry d3_believethink) if Intervention == "Cash Grants - Women", missing
+egen 	depression2_index = rowtotal(d3_lostinterest d3_feeldetached d3_oftenirritable d3_makedecisions d3_sleepeatinghabit d3_depressed d3_feltangry d3_believethink) if Intervention == "Cash Grants - Women" & attrition == 0, missing
 
-replace depression2_index = depression2_index/8 if Intervention == "Cash Grants - Women"
+replace depression2_index = depression2_index/8 if Intervention == "Cash Grants - Women" & attrition == 0
 
 egen 	lackselfeff_index = rowtotal(d3_wrongmatter d3_recognition d3_lotofthings d3_solveproblems d3_dependsmainly ///
 									 d3_feel_helpless d3_influence_many d3_taking_control d3_exploitedcheated 		///
-									 d3_have_control d3_achieveanything) if Intervention == "Cash Grants - Women", missing
+									 d3_have_control d3_achieveanything) if Intervention == "Cash Grants - Women" & attrition == 0, missing
 									 
-replace lackselfeff_index = lackselfeff_index/11 if Intervention == "Cash Grants - Women"
+replace lackselfeff_index = lackselfeff_index/11 if Intervention == "Cash Grants - Women" & attrition == 0
 
 ** Agency index 
 	
@@ -98,17 +98,17 @@ foreach var in	x9_wifepersonal x9_occupation x9_workplace x9_workhours x9_partic
 }
 
 egen agency_index =	rowtotal(x9_1  x9_2  x9_3  x9_4  x9_5  x9_6  x9_7  x9_largepurchase  x9_dailypurchase  x9_wifepersonal  ///
-							 x9_borrow  x9_lend  x9_occupation  x9_workplace  x9_workhours  x9_participation) if Intervention == "Cash Grants - Women", missing
+							 x9_borrow  x9_lend  x9_occupation  x9_workplace  x9_workhours  x9_participation) if Intervention == "Cash Grants - Women" & attrition == 0, missing
 							 
-replace agency_index = agency_index/ 16 if Intervention == "Cash Grants - Women"
+replace agency_index = agency_index/ 16 if Intervention == "Cash Grants - Women" & attrition == 0
 			
 			
 
 foreach var in agency_index anxiety_index2 ptsd_index depression2_index lackselfeff_index {
 
-	sum `var' 					if trt_cash==0 									& Intervention == "Cash Grants - Women"
-	gen cmean_`var'				= r(mean) 										if Intervention == "Cash Grants - Women"
-	gen csd_`var'				= r(sd)											if Intervention == "Cash Grants - Women"
+	sum `var' 					if trt_cash==0 & attrition == 0					& Intervention == "Cash Grants - Women"  & attrition == 0
+	gen cmean_`var'				= r(mean) 										if Intervention == "Cash Grants - Women" & attrition == 0
+	gen csd_`var'				= r(sd)											if Intervention == "Cash Grants - Women" & attrition == 0
 	gen z_`var'					= (`var' - cmean_`var')/csd_`var'
 
 }
@@ -127,15 +127,15 @@ local gender_role 	x1_mghome x1_mgkids x1_mgdecisions x1_mgrights1 x1_mgleader1 
 	
 codebook `gender_role' if Intervention == "Cash Grants - Partenaire" & tot_complete == 1
 
-egen 	gender_role = rowtotal(`gender_role') 	if Intervention == "Cash Grants - Partenaire", missing
-replace gender_role = gender_role / 31			if Intervention == "Cash Grants - Partenaire"
+egen 	gender_role = rowtotal(`gender_role') 	if Intervention == "Cash Grants - Partenaire" & attrition == 0, missing
+replace gender_role = gender_role / 31			if Intervention == "Cash Grants - Partenaire" & attrition == 0
 
 * Men's perspective on women abilities
 local abilities		x1_leader6_1 x1_leader6_2 x1_leader6_3 x1_leader6_4 x1_leader6_5 			///
 					x1_leader6_6 x1_leader6_7 x1_leader6_8 x1_leader6_9 x1_leader6_10
 
-egen 	abilities = rowtotal(`abilities')		if Intervention == "Cash Grants - Partenaire", missing
-replace abilities = abilities / 10				if Intervention == "Cash Grants - Partenaire"
+egen 	abilities = rowtotal(`abilities')		if Intervention == "Cash Grants - Partenaire" & attrition == 0, missing
+replace abilities = abilities / 10				if Intervention == "Cash Grants - Partenaire" & attrition == 0
 
 					
 * Men's view on GBV
@@ -143,37 +143,37 @@ local views			x2_hwtolerate x2_goesout x2_refuseshave x2_neglectsif x2_burnsf 		
 					x2_arguesshe x2_refusescook x2_doesinfid x2_contraceptive x2_drinksalcohol	///
 					x2_refusesclean x2_dowry
 
-egen 	views = rowtotal(`views')				if Intervention == "Cash Grants - Partenaire", missing
-replace views = views / 12						if Intervention == "Cash Grants - Partenaire"
+egen 	views = rowtotal(`views')				if Intervention == "Cash Grants - Partenaire" & attrition == 0, missing
+replace views = views / 12						if Intervention == "Cash Grants - Partenaire" & attrition == 0
 					
 *Men's perspecitves on sexuality and reproductive health
 local reproductive 	x6_sxmore x6_sxtalk x6_sxready x6_gay x6_friend x8_pregn x8_contra 			///
 					x8_suggcontr x8_childresp x8_fatherchild x8_childdeci x8_contratype
 
-egen 	reproductive = rowtotal(`reproductive')	if Intervention == "Cash Grants - Partenaire", missing
-replace reproductive = reproductive / 12		if Intervention == "Cash Grants - Partenaire"
+egen 	reproductive = rowtotal(`reproductive')	if Intervention == "Cash Grants - Partenaire" & attrition == 0, missing
+replace reproductive = reproductive / 12		if Intervention == "Cash Grants - Partenaire" & attrition == 0
 			
 *Men's perspecitves on woman autonomy and intra HH bargaining
 local bargaining 	x9_1 x9_2 x9_3 x9_4 x9_5 x9_6 x9_7 x9_largepurchase x9_dailypurchase 		///
 					x9_wifepersonal x9_borrow x9_lend x9_occupation x9_workplace x9_workhours 	///
 					x9_participation x9_moneycontrol 
 						
-egen 	bargaining = rowtotal(`bargaining')		if Intervention == "Cash Grants - Partenaire", missing
-replace bargaining = bargaining / 17			if Intervention == "Cash Grants - Partenaire"
+egen 	bargaining = rowtotal(`bargaining')		if Intervention == "Cash Grants - Partenaire" & attrition == 0, missing
+replace bargaining = bargaining / 17			if Intervention == "Cash Grants - Partenaire" & attrition == 0
 
 
 * Quality of communication
 local communication  x9_103 x9_104 x9_105 x9_106 x9_107 x9_108 x9_109	// Removed because consistantly missing
 
-egen 	communication = rowtotal(`communication')	if Intervention == "Cash Grants - Partenaire", missing
-replace communication = communication / 9			if Intervention == "Cash Grants - Partenaire"
+egen 	communication = rowtotal(`communication')	if Intervention == "Cash Grants - Partenaire" & attrition == 0, missing
+replace communication = communication / 7			if Intervention == "Cash Grants - Partenaire" & attrition == 0
 
 foreach var in gender_role abilities views reproductive bargaining communication {
 
-	sum `var' 					if trt_cash_part_1 ==0 & Intervention == "Cash Grants - Partenaire"
+	sum `var' 					if trt_cash_part_1 ==0 & Intervention == "Cash Grants - Partenaire" & attrition == 0
 	gen cmean_`var'				= r(mean)
 	gen csd_`var'				= r(sd)
-	gen z_`var'					= (`var' - cmean_`var')/csd_`var' if Intervention == "Cash Grants - Partenaire"
+	gen z_`var'					= (`var' - cmean_`var')/csd_`var' if Intervention == "Cash Grants - Partenaire" & attrition == 0
 
 }
 
