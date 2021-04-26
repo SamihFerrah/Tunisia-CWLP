@@ -20,7 +20,7 @@
 	* Replication 		11
 	
 	
-	global user_number  9
+	global user_number  8
 
 
 	* Dropbox/Box globals
@@ -159,7 +159,7 @@ if $construct == 1{
 	do "$git_tunisia/dofiles/Second Round/Construct/Prepare Outcomes.do"		// Prepare outcomes for analysis
 	
 	do "$git_tunisia/dofiles/Second Round/Construct/Missing Imputation.do"		// Prepare outcomes and other relevant variables
-		
+
 	do "$git_tunisia/dofiles/Second Round/Construct/Index Construction.do"		// Impute missing outcomes variables 
 	
 	save "$vera/clean/clean_analysis_CashXFollow.dta", replace

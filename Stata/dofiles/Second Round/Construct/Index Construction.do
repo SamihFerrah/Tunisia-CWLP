@@ -96,6 +96,7 @@ foreach var in	x9_wifepersonal x9_occupation x9_workplace x9_workhours x9_partic
 gen agency_index =	(x9_1 + x9_2 + x9_3 + x9_4 + x9_5 + x9_6 + x9_7 + x9_largepurchase + x9_dailypurchase + x9_wifepersonal + ///
 				x9_borrow + x9_lend + x9_occupation + x9_workplace + x9_workhours + x9_participation) / 16
 			
+			
 
 foreach var in agency_index anxiety_index2 ptsd_index depression2_index lackselfeff_index {
 
@@ -105,6 +106,89 @@ foreach var in agency_index anxiety_index2 ptsd_index depression2_index lackself
 	gen z_`var'					= (`var' - cmean_`var')/csd_`var'
 
 }
+
+
+
+* Male partner index
+
+* Men's perspecitves on gender role
+local gender_role 	x1_mghome x1_mgkids x1_mgdecisions x1_mgrights1 x1_mgleader1 x1_mgleader2 	///
+					x1_mgschlwork x1_mgill x1_mgopinion x1_mgpity x1_mgwork x1_mgedu 			///
+					x1_mgdomestic x1_mgobey x1_mgspeak x1_mgcapacity x1_eduopp x1_boysfood 		///
+					x1_coupledu x1_leader3 x1_mgrights2 x1_mgequality x1_mgfriends 				///
+					x1_mgfreetime_men x1_mg_freetime_women x1_mg_womenopi x1_mg_marry 			///
+					x1_participation x1_leader4 x1_leader5 x9_daughwork
+	
+codebook `gender_role' if Intervention == "Cash Grants - Partenaire" & tot_complete == 1
+
+egen 	gender_role = rowtotal(`gender_role') 	if Intervention == "Cash Grants - Partenaire", missing
+replace gender_role = gender_role / 31			if Intervention == "Cash Grants - Partenaire"
+
+* Men's perspective on women abilities
+local abilities		x1_leader6_1 x1_leader6_2 x1_leader6_3 x1_leader6_4 x1_leader6_5 			///
+					x1_leader6_6 x1_leader6_7 x1_leader6_8 x1_leader6_9 x1_leader6_10
+
+egen 	abilities = rowtotal(`abilities')		if Intervention == "Cash Grants - Partenaire", missing
+replace abilities = abilities / 10				if Intervention == "Cash Grants - Partenaire"
+
+					
+* Men's view on GBV
+local views			x2_hwtolerate x2_goesout x2_refuseshave x2_neglectsif x2_burnsf 			///
+					x2_arguesshe x2_refusescook x2_doesinfid x2_contraceptive x2_drinksalcohol	///
+					x2_refusesclean x2_dowry
+
+egen 	views = rowtotal(`views')				if Intervention == "Cash Grants - Partenaire", missing
+replace views = views / 12						if Intervention == "Cash Grants - Partenaire"
+					
+*Men's perspecitves on sexuality and reproductive health
+local reproductive 	x6_sxmore x6_sxtalk x6_sxready x6_gay x6_friend x8_pregn x8_contra 			///
+					x8_suggcontr x8_childresp x8_fatherchild x8_childdeci x8_contratype
+
+egen 	reproductive = rowtotal(`reproductive')	if Intervention == "Cash Grants - Partenaire", missing
+replace reproductive = reproductive / 12		if Intervention == "Cash Grants - Partenaire"
+			
+*Men's perspecitves on woman autonomy and intra HH bargaining
+local bargaining 	x9_1 x9_2 x9_3 x9_4 x9_5 x9_6 x9_7 x9_largepurchase x9_dailypurchase 		///
+					x9_wifepersonal x9_borrow x9_lend x9_occupation x9_workplace x9_workhours 	///
+					x9_participation x9_moneycontrol 
+						
+egen 	bargaining = rowtotal(`bargaining')		if Intervention == "Cash Grants - Partenaire", missing
+replace bargaining = bargaining / 17			if Intervention == "Cash Grants - Partenaire"
+
+
+* Quality of communication
+local communication x9_101 x9_102 x9_103 x9_104 x9_105 x9_106 x9_107 x9_108 x9_109
+
+egen 	communication = rowtotal(`communication')	if Intervention == "Cash Grants - Partenaire", missing
+replace communication = communication / 9			if Intervention == "Cash Grants - Partenaire"
+
+foreach var in gender_role abilities views reproductive bargaining communication {
+
+	sum `var' 					if trt_cash_part_1 ==0 & Intervention == "Cash Grants - Partenaire"
+	gen cmean_`var'				= r(mean)
+	gen csd_`var'				= r(sd)
+	gen z_`var'					= (`var' - cmean_`var')/csd_`var' if Intervention == "Cash Grants - Partenaire"
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

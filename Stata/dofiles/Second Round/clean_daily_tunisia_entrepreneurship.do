@@ -12,7 +12,7 @@ u "$vera/temp/temp_import_CashXFollow.dta", clear
  
 g HHID = hhid 
 
-merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup replacement Partenaire)
+merge m:1 HHID using "A:/Assignment/Full Sample.dta", keep(1 3) keepusing(Status Intervention trt_followup replacement Partenaire ID_HH2 Partenaire_Nom CIN) update
 
 drop _merge 
 
@@ -24,7 +24,6 @@ replace trt_cash_0 = 1 if Intervention == "Cash Grants - Women" & Status == "Tre
 
 g 		trt_cash_1 = 0 if Intervention == "Cash Grants - Women"
 replace trt_cash_1 = 1 if Intervention == "Cash Grants - Women" & Status == "Treatment" & Partenaire == "Oui"
-
 
 
 label var trt_cash	 "Cash Grant Treatment (Partenaire == 0)"
@@ -104,6 +103,33 @@ do "$git_tunisia/dofiles/Second round/Corrections/duplicates_code_correction.do"
 do "$git_tunisia/dofiles/Second round/Corrections/error_code_tunisia.do"
 
 
+********************************************************************************
+********************************************************************************
+* 4) Get treatment status of partner (0 = no participation to financial training)
+********************************************************************************
+********************************************************************************
+
+preserve 
+
+	keep if Intervention == "Cash Grants - Women" & Status == "Treatment"
+	
+	keep if ID_HH2 !=. 
+	
+	keep trt_cash_0 trt_cash_1 ID_HH2
+	
+	duplicates drop 
+
+	rename trt_cash_0 trt_cash_part_0
+	rename trt_cash_1 trt_cash_part_1
+	
+	tempfile partner_trt
+	sa 		`partner_trt'
+	
+restore 
+
+merge m:1 ID_HH2 using `partner_trt'
+
+replace trt_cash_part_1 = . if Intervention != "Cash Grants - Partenaire"
 
 ********************************************************************************
 ********************************************************************************
@@ -323,12 +349,18 @@ preserve
 
 keep if dup > 0 & dup !=.
 
+count
+
+if `r(N)' > 0{
+
 keep HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu key
 sort HHID 
 order HHID a1_enumerator Nom a1_respondentname a1_respondentname_corr a1_date imada psu key
 
 
 	export excel using "$shared/Data Cleaning/Cleaning_Issue_Tunisia_Entrepreneurship.xlsx", sheet("Duplicates Code", replace) first(var)
+
+}
 
 restore
 
@@ -340,7 +372,6 @@ restore
 destring _all, replace 
 
 do "$git_tunisia/dofiles/Second round/Construct/label_variables.do"
-
 
 
 ********************************************************************************
