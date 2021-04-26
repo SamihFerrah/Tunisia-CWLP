@@ -72,6 +72,8 @@ preserve
 		
 	}
 	
+	replace Status = 10 if Status == 100
+	
 	destring Status, replace 
 	
 	label define A 	1 "Completed" 					///
@@ -107,6 +109,9 @@ restore
 cap drop _merge Status
 
 merge m:1 HHID using `completion', update 
+
+replace Status = 1 	if _merge == 3 
+replace Status = 10 if attrition == 1	& Status == 1										// Replce to other for entry error from BJKA  
 
 drop if _merge == 2
 
