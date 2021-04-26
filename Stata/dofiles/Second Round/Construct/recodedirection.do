@@ -30,33 +30,13 @@
  **********************************************************************
  * RECODE VARIABLE IN THE SAME SENSE 
  **********************************************************************
-
-	* Agreeness scale
-	local agreensess x1_agreerole x1_mgrights2 x1_mgequality x1_mgfriends x1_mgfreetime_men ///
-					 x1_mg_freetime_women x1_mg_womenopi x1_mg_marry x1_participation 		///
-					 x1_leader4 x1_leader5 x1_leader9 x1_leader10 x1_participation2 		///
-					 x1_participation3 x6_sxmore x6_sxtalk x6_sxready x6_gay x6_friend 		///
-					 x7_tough x7_insult x8_pregn x8_contra x8_suggcontr x8_childresp 		///
-					 x8_fatherchild x8_childdeci x8_contratype
-
+							
+	
 	label define agree 	1 "Totally disagree" 	///
 						2 "Disagree"			///
 						3 "Agree"				///
 						4 "Totally agree"
 						
-	foreach var in `agreeness'{
-	
-		g `var'2 = `var'
-		
-		replace `var'2 = 4 if `var' == 1
-		replace `var'2 = 3 if `var' == 2
-		replace `var'2 = 2 if `var' == 3
-		replace `var'2 = 1 if `var' == 4
-		
-		label val `var' agree
-	
-	}
-	
 	* Add english label to var using caracteristic type
 	
 	local caracteristic d2_thinkwrong d2_resisttempta d2_postponing d2_tooquickly 		///
@@ -165,3 +145,47 @@
 		
 	}
  
+
+********************************************************************************
+* RECODE PARTNER VARIABLE SO THAT A HIGHER VALUE INDICATE A BETTER OUTCOME
+********************************************************************************
+
+* Select one yes no to revert 
+local yesnoreverse 	x1_mghome x1_mgkids x1_mgdecisions x1_mgschlwork x1_mgill x1_mgopinion 			///
+					x1_mgpity x1_mgwork x1_mgedu x1_mgdomestic x1_mgobey x1_mgspeak x1_mgcapacity 	///
+					x1_eduopp x1_boysfood x1_coupledu x2_goesout x2_refuseshave x2_neglectsif 		///
+					x2_burnsf x2_arguesshe x2_refusescook x2_doesinfid x2_contraceptive 			///
+					x2_drinksalcohol x2_refusesclean x2_dowry x2_hwtolerate
+
+foreach var of local yesnoreverse{
+    
+	g ori_`var' = `var'
+	
+	replace `var' = 0 if ori_`var' == 1 
+	replace `var' = 1 if ori_`var' == 0 
+	
+	
+}
+
+
+*Agreeness to revert
+local agreeneessreverse 	x1_mgfriends x1_mgfreetime_men x1_mg_freetime_women x1_mg_womenopi 	///
+							x1_mg_marry x1_participation x1_leader4 x1_leader5 x1_leader9 		///
+							x1_leader10 x1_participation2 x1_participation3 x6_friend 			///
+							x8_suggcontr x8_childresp x8_fatherchild x8_childdeci x8_contratype
+
+foreach var of local agreeneessreverse{
+    
+	g ori_`var' = `var'
+	
+	replace `var' = 1 if ori_`var' == 4
+	replace `var' = 2 if ori_`var' == 3
+	replace `var' = 3 if ori_`var' == 2
+	replace `var' = 4 if ori_`var' == 1
+	
+	
+}
+
+g 		x9_moneycontrol_d = 0
+replace x9_moneycontrol_d = 1 if x9_moneycontrol == 1
+

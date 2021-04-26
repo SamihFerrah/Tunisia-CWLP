@@ -157,7 +157,7 @@ replace bargaining = bargaining / 17			if Intervention == "Cash Grants - Partena
 
 
 * Quality of communication
-local communication x9_101 x9_102 x9_103 x9_104 x9_105 x9_106 x9_107 x9_108 x9_109
+local communication  x9_103 x9_104 x9_105 x9_106 x9_107 x9_108 x9_109	// Removed because consistantly missing
 
 egen 	communication = rowtotal(`communication')	if Intervention == "Cash Grants - Partenaire", missing
 replace communication = communication / 9			if Intervention == "Cash Grants - Partenaire"
