@@ -75,7 +75,7 @@ global all 		c1_job_iga c1_job_iga_1 c1_job_iga_2 c1_job_iga_3 c1_job_covid busi
 			replace `var'=0 if `var'==.
 	}
 	
-save "$vera/temp/clean_CashXFollow_PII_imputed.dta", replace
+save "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_CashXFollow_PII_imputed.dta", replace
 
 	
 /*

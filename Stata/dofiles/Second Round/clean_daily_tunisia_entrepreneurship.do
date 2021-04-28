@@ -474,10 +474,29 @@ do "$git_tunisia/dofiles/Second round/Construct/Merge Baseline Endline.do"
 
 destring Strata, replace 
 
+********************************************************************************
+********************************************************************************
+* DE-IDENTIFY DATA 
+********************************************************************************
+********************************************************************************
+
+* 1) Define variable to be drop (Add variable below to be dropped)
+
+local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
+
+
+* 2) Drop ID variable 
+
+foreach var of local deidentification {
+		
+	capture noisily drop `var' 													
+
+}
+	
 * Save data with PII 
 
-sa "$vera/temp/clean_CashXFollow_PII_3.dta", replace 
-
+*sa "$vera/temp/clean_CashXFollow_noPII_3.dta", replace 
+sa "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_CashXFollow_noPII_3.dta", replace
 
 
 

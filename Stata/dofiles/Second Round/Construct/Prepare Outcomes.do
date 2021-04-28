@@ -4,7 +4,7 @@
 ********************************************************************************
 ********************************************************************************
 
-u "$vera/temp/clean_CashXFollow_PII_3.dta", clear 							// Commented out for replication purpose 
+u "$home/14. Female Entrepreneurship Add on/Data/Second Round/tempdata/clean_CashXFollow_noPII_3.dta", clear 							// Commented out for replication purpose 
 
  *u "$home/clean_CashXFollow_PII_3.dta", clear
 
@@ -331,6 +331,18 @@ foreach var in	`winsor2'{
 
 }
 
+
+* Prepare variables for diff abilities
+
+forvalue i = 1 /10{
+	
+	g diff_abilities_`i' = x1_leader6_`i' - x1_leader7_`i'
+	
+	local l_var : variable label x1_leader6_`i'
+	
+	label var diff_abilities_`i' "`l_var'"
+		
+}
 
 
 * Remove x9_clothing x9_ornaments x9_chores

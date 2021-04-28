@@ -164,25 +164,6 @@ if $construct == 1{
 	
 	save "$vera/clean/clean_analysis_CashXFollow.dta", replace
 	
-	********************************************************************************
-	********************************************************************************
-	* DE-IDENTIFY DATA 
-	********************************************************************************
-	********************************************************************************
-
-	* 1) Define variable to be drop (Add variable below to be dropped)
-
-	local deidentification 	"username calc_name complete_name a1_respondentname confirm_name a1_respondentname_corr Nom Father devicephonenum Telephone1 Telephone2"
-
-
-	* 2) Drop ID variable 
-
-	foreach var of local deidentification {
-		
-		capture noisily drop `var' 													
-
-	}
-
 	if $user_number == 11{														// Save in db folder replication 
 		sa "$home/clean_analysis_CashXFollow_noPII.dta", replace
 	}
