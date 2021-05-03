@@ -408,6 +408,8 @@ duplicates tag ID_HH if ID_HH !=. & tot_complete == 1, g(participant_partner)
 
 label var participant_partner "Duo: participant x partner"
 
+replace Nom = a1_respondentname if a1_respondentname != ""
+replace Nom = a1_respondentname_corr if a1_respondentname_corr != ""
 ********************************************************************************
 ********************************************************************************
 * 8) DROP USELESS VARIABLES (Duration notes calculates)
@@ -473,7 +475,7 @@ do "$git_tunisia/dofiles/Second round/Construct/Merge Baseline Endline.do"
 ********************************************************************************
 
 destring Strata, replace 
-
+sasa
 ********************************************************************************
 ********************************************************************************
 * DE-IDENTIFY DATA 
